@@ -1,0 +1,86 @@
+#include "../Headers/Render.h"
+
+System_Render::System_Render(ComponentBank* bank, SDL_Window* window)
+                  : System(bank, "Rendering System")
+{
+    this->window = window;
+}
+
+System_Render::~System_Render()
+{
+    //Destroy window	
+    SDL_DestroyWindow(window);
+    window = NULL;
+
+    //Quit SDL subsystems
+    SDL_Quit();
+}
+
+bool System_Render::init()
+{    
+    //Create context
+    context = SDL_GL_CreateContext( window );
+    if( context == NULL )
+    {
+        printf( "OpenGL context could not be created! SDL Error: %s\n", SDL_GetError() );
+        return false;
+    }
+    else
+    {
+        //Use Vsync
+        if( SDL_GL_SetSwapInterval( 1 ) < 0 )
+        {
+            printf( "Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError() );
+        }
+
+        //Initialize OpenGL
+        if( !initGL() )
+        {
+            printf( "Unable to initialize OpenGL!\n" );
+            return false;
+        }
+    }
+                        
+    return true;
+}
+
+bool System_Render::initGL()
+{
+    GLenum error = GL_NO_ERROR;
+
+    //Initialize Projection Matrix
+    glMatrixMode( GL_PROJECTION );
+    glLoadIdentity();
+    gluPerspective(45.0f,(GLfloat)640/(GLfloat)480,0.1f,100.0f);
+    //Check for error
+    error = glGetError();
+    if( error != GL_NO_ERROR )
+    {
+        printf( "Error initializing OpenGL! %s\n", gluErrorString( error ) );
+        return false;
+    }
+
+    //Initialize Modelview Matrix
+    glMatrixMode( GL_MODELVIEW );
+    
+    //Check for error
+    error = glGetError();
+    if( error != GL_NO_ERROR )
+    {
+        printf( "Error initializing OpenGL! %s\n", gluErrorString( error ) );
+        return false;
+    }
+
+    //Initialize clear color
+    glClearColor( 0.f, 0.f, 0.f, 1.f );
+
+    //Check for error
+    error = glGetError();
+    if( error != GL_NO_ERROR )
+    {
+        printf( "Error initializing OpenGL! %s\n", gluErrorString( error ) );
+        return false;
+    }
+
+    return true;
+}
