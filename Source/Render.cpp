@@ -32,7 +32,7 @@ bool System_Render::init()
     }
     //Initialize OpenGL
     if(!initGL()) {
-        printf("Unable to initialize OpenGL!\n");
+        printf("Unable to initialize graphics!\n");
         return false;
     }
     //Use Vsync
@@ -43,6 +43,7 @@ bool System_Render::init()
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="InitGL">
+
 bool System_Render::initGL()
 {
     glewExperimental = GL_TRUE; 
@@ -60,8 +61,8 @@ bool System_Render::initGL()
     glBindVertexArray(VertexArrayID);
 
     // Create and compile our GLSL program from the shaders
-    programID = loadShaders("redTri.vert",
-                            "redTri.frag");
+    programID = loadShaders("Assets/Shaders/redTri.vert",
+                            "Assets/Shaders/redTri.frag");
     
     // If shader compilation / linking didn't work, fail.
     if (programID == GL_FALSE) return false;
@@ -79,39 +80,22 @@ bool System_Render::initGL()
                 glm::vec3(0,0,0), // and looks at the origin
                 glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
             );
+    
     // Model matrix : an identity matrix (model will be at the origin)
     Model = glm::mat4(1.0f);
+    
     // Our ModelViewProjection : multiplication of our 3 matrices
     MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
     
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
-
 }
+
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Tick">
 void System_Render::tick()
 {
-    /*
-    //Handle events on queue
-    while( SDL_PollEvent( &e ) != 0 )
-    {
-            //User requests quit
-            if( e.type == SDL_QUIT )
-            {
-                    quit = true;
-            }
-            //Handle keypress with current mouse position
-            else if( e.type == SDL_TEXTINPUT )
-            {
-                    int x = 0, y = 0;
-                    SDL_GetMouseState( &x, &y );
-                    //handleKeys( e.text.text[ 0 ], x, y );
-            }
-    }
-     * */
-
     // Clear the screen
     glClear( GL_COLOR_BUFFER_BIT );
 

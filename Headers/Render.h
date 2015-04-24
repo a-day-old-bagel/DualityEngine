@@ -19,11 +19,12 @@
 #include "MeshRepository.h"
 #include "TextureRepository.h"
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Class Definition">
+
 class System_Render : public System
 {
 private:
     //<editor-fold defaultstate="collapsed" desc="Members">
+    
     // Window pointer passed in
     SDL_Window* window = NULL;
     // Context created in this class
@@ -46,13 +47,16 @@ private:
     glm::mat4 Model;
     glm::mat4 MVP;
     GLfloat g_vertex_buffer_data[9] = { 
-        -2.f, -2.f, 0.0f,
-         2.f, -2.f, 0.0f,
-         0.0f,  2.f, 0.0f
+        -0.8, -0.8, 0.0f,
+         0.8, -0.8, 0.0f,
+         0.0f, 0.8, 0.0f
     };
+    
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Methods">
+    
     bool initGL();
+    
     //</editor-fold>
     
 public:
@@ -63,7 +67,6 @@ public:
     bool init() override;
     //</editor-fold>
 };
-//</editor-fold>
 
 #endif
 
