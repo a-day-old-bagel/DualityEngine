@@ -102,11 +102,9 @@ void System_Render::tick()
     // Use our shader
     glUseProgram(programID);
 
-
     // Send our transformation to the currently bound shader, 
     // in the "MVP" uniform
     glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-
 
     // 1rst attribute buffer : vertices
     glEnableVertexAttribArray(0);
