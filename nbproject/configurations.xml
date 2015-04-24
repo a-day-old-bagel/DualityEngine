@@ -1,0 +1,605 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configurationDescriptor version="95">
+  <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
+    <logicalFolder name="f3" displayName="Assets" projectFiles="true">
+      <logicalFolder name="f2" displayName="Models" projectFiles="true">
+        <logicalFolder name="f1" displayName="Cereal" projectFiles="true">
+          <itemPath>Assets/Models/Cereal/CerealBowlObjFromBlenderSep.mtl</itemPath>
+          <itemPath>Assets/Models/Cereal/CerealBowlObjFromBlenderSep.mtl~</itemPath>
+          <itemPath>Assets/Models/Cereal/CerealBowlObjFromBlenderSep.obj</itemPath>
+          <itemPath>Assets/Models/Cereal/Groundco.jpg</itemPath>
+          <itemPath>Assets/Models/Cereal/Transluc.jpg</itemPath>
+          <itemPath>Assets/Models/Cereal/_1.jpg</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f2" displayName="MetalCube" projectFiles="true">
+          <itemPath>Assets/Models/MetalCube/metal.jpg</itemPath>
+          <itemPath>Assets/Models/MetalCube/metalCube.mtl</itemPath>
+          <itemPath>Assets/Models/MetalCube/metalCube.mtl~</itemPath>
+          <itemPath>Assets/Models/MetalCube/metalCube.obj</itemPath>
+          <itemPath>Assets/Models/MetalCube/metalCube.obj~</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f3" displayName="Spider" projectFiles="true">
+          <itemPath>Assets/Models/Spider/SpiderTex.jpg</itemPath>
+          <itemPath>Assets/Models/Spider/drkwood2.jpg</itemPath>
+          <itemPath>Assets/Models/Spider/engineflare1.jpg</itemPath>
+          <itemPath>Assets/Models/Spider/spider.mtl</itemPath>
+          <itemPath>Assets/Models/Spider/spider.obj</itemPath>
+          <itemPath>Assets/Models/Spider/wal67ar_small.jpg</itemPath>
+          <itemPath>Assets/Models/Spider/wal69ar_small.jpg</itemPath>
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="Shaders" projectFiles="true">
+        <itemPath>Assets/Shaders/debug.frag</itemPath>
+        <itemPath>Assets/Shaders/debug.vert</itemPath>
+        <itemPath>Assets/Shaders/foo.frag</itemPath>
+        <itemPath>Assets/Shaders/foo.vert</itemPath>
+        <itemPath>Assets/Shaders/lighting.fs</itemPath>
+        <itemPath>Assets/Shaders/lighting.vs</itemPath>
+        <itemPath>Assets/Shaders/lighting2.fs</itemPath>
+        <itemPath>Assets/Shaders/redTri.frag</itemPath>
+        <itemPath>Assets/Shaders/redTri.vert</itemPath>
+        <itemPath>Assets/Shaders/simple.frag</itemPath>
+        <itemPath>Assets/Shaders/simple.vert</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="f1" displayName="Headers" projectFiles="true">
+      <logicalFolder name="f6" displayName="Admin" projectFiles="true">
+        <itemPath>Headers/ComponentBank.h</itemPath>
+        <itemPath>Headers/Engine.h</itemPath>
+        <itemPath>Headers/Game.h</itemPath>
+        <itemPath>Headers/Settings.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="Asset Management" projectFiles="true">
+        <logicalFolder name="f1" displayName="Graphics" projectFiles="true">
+          <logicalFolder name="f1" displayName="Meshes" projectFiles="true">
+            <itemPath>Headers/MeshRepository.h</itemPath>
+            <itemPath>Headers/lighting_technique.h</itemPath>
+            <itemPath>Headers/loadMesh.h</itemPath>
+            <itemPath>Headers/mesh.h</itemPath>
+            <itemPath>Headers/technique.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f3" displayName="Shaders" projectFiles="true">
+            <itemPath>Headers/ShaderRepository.h</itemPath>
+            <itemPath>Headers/loadShaders.h</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f2" displayName="Textures" projectFiles="true">
+            <itemPath>Headers/TextureRepository.h</itemPath>
+            <itemPath>Headers/loadTexture.h</itemPath>
+            <itemPath>Headers/texture.h</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="f2" displayName="Sound" projectFiles="true">
+          <itemPath>Headers/SoundRepository.h</itemPath>
+        </logicalFolder>
+        <itemPath>Headers/FileIO.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="Components" projectFiles="true">
+        <itemPath>Headers/AmbientLight.h</itemPath>
+        <itemPath>Headers/Component.h</itemPath>
+        <itemPath>Headers/Control.h</itemPath>
+        <itemPath>Headers/DirectionalLight.h</itemPath>
+        <itemPath>Headers/Model.h</itemPath>
+        <itemPath>Headers/Motion.h</itemPath>
+        <itemPath>Headers/PointLight.h</itemPath>
+        <itemPath>Headers/Soul.h</itemPath>
+        <itemPath>Headers/Spatial.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f4" displayName="Systems" projectFiles="true">
+        <logicalFolder name="f1" displayName="Utilities" projectFiles="true">
+          <itemPath>Headers/ControlDelegateBag.h</itemPath>
+          <itemPath>Headers/Delegate.h</itemPath>
+        </logicalFolder>
+        <itemPath>Headers/PhysCollide.h</itemPath>
+        <itemPath>Headers/PhysMove.h</itemPath>
+        <itemPath>Headers/Render.h</itemPath>
+        <itemPath>Headers/RenderOld.h</itemPath>
+        <itemPath>Headers/System.h</itemPath>
+        <itemPath>Headers/UserControl.h</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="f2" displayName="Source" projectFiles="true">
+      <logicalFolder name="f2" displayName="Admin" projectFiles="true">
+        <itemPath>Source/ComponentBank.cpp</itemPath>
+        <itemPath>Source/Engine.cpp</itemPath>
+        <itemPath>Source/Game.cpp</itemPath>
+        <itemPath>Source/main.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="Asset Management" projectFiles="true">
+        <logicalFolder name="f1" displayName="Graphics" projectFiles="true">
+          <logicalFolder name="f2" displayName="Meshes" projectFiles="true">
+            <itemPath>Source/lighting_technique.cpp</itemPath>
+            <itemPath>Source/mesh.cpp</itemPath>
+            <itemPath>Source/technique.cpp</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f1" displayName="Shaders" projectFiles="true">
+            <itemPath>Source/ShaderRepository.cpp</itemPath>
+            <itemPath>Source/loadShaders.cpp</itemPath>
+          </logicalFolder>
+          <logicalFolder name="f3" displayName="Textures" projectFiles="true">
+            <itemPath>Source/texture.cpp</itemPath>
+          </logicalFolder>
+        </logicalFolder>
+        <logicalFolder name="f2" displayName="Sound" projectFiles="true">
+        </logicalFolder>
+        <itemPath>Source/FileIO.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="Entities" projectFiles="true">
+        <logicalFolder name="f1" displayName="3dObjects" projectFiles="true">
+          <itemPath>Source/Box.cpp</itemPath>
+        </logicalFolder>
+        <logicalFolder name="f2" displayName="Cameras" projectFiles="true">
+        </logicalFolder>
+        <logicalFolder name="f3" displayName="Lights" projectFiles="true">
+        </logicalFolder>
+      </logicalFolder>
+      <logicalFolder name="f4" displayName="Systems" projectFiles="true">
+        <itemPath>Source/PhysCollide.cpp</itemPath>
+        <itemPath>Source/PhysMove.cpp</itemPath>
+        <itemPath>Source/Render.cpp</itemPath>
+        <itemPath>Source/RenderOld.cpp</itemPath>
+        <itemPath>Source/System.cpp</itemPath>
+        <itemPath>Source/UserControl.cpp</itemPath>
+      </logicalFolder>
+    </logicalFolder>
+    <logicalFolder name="f4" displayName="zOtherJunk" projectFiles="true">
+      <itemPath>/home/adayoldbagel/NetBeansProjects/32_text_input_and_clipboard_handling/32_text_input_and_clipboard_handling.cpp</itemPath>
+      <itemPath>redTriMain.cpp</itemPath>
+      <itemPath>Source/tutorial33.cpp</itemPath>
+    </logicalFolder>
+    <logicalFolder name="TestFiles"
+                   displayName="Test Files"
+                   projectFiles="false"
+                   kind="TEST_LOGICAL_FOLDER">
+    </logicalFolder>
+    <logicalFolder name="ExternalFiles"
+                   displayName="Important Files"
+                   projectFiles="false"
+                   kind="IMPORTANT_FILES_FOLDER">
+      <itemPath>Makefile</itemPath>
+    </logicalFolder>
+  </logicalFolder>
+  <projectmakefile>Makefile</projectmakefile>
+  <confs>
+    <conf name="Debug" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <ccTool>
+          <incDir>
+            <pElem>Headers</pElem>
+            <pElem>Source</pElem>
+            <pElem>Assets/Shaders</pElem>
+            <pElem>/usr/include/SDL2</pElem>
+            <pElem>/usr/local/include/SDL2</pElem>
+          </incDir>
+          <commandLine>-std=c++11 `pkg-config --cflags glew ImageMagick++ assimp freetype2`</commandLine>
+        </ccTool>
+        <linkerTool>
+          <commandLine>`pkg-config --libs sdl2 gl glew ImageMagick++ assimp freetype2 fontconfig `</commandLine>
+        </linkerTool>
+      </compileType>
+      <item path="/home/adayoldbagel/NetBeansProjects/32_text_input_and_clipboard_handling/32_text_input_and_clipboard_handling.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/CerealBowlObjFromBlenderSep.mtl"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/CerealBowlObjFromBlenderSep.mtl~"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/CerealBowlObjFromBlenderSep.obj"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/Groundco.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/Transluc.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/_1.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/MetalCube/metal.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/MetalCube/metalCube.mtl"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/MetalCube/metalCube.mtl~"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/MetalCube/metalCube.obj"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/MetalCube/metalCube.obj~"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/SpiderTex.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/drkwood2.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/engineflare1.jpg"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/spider.mtl" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/spider.obj" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/wal67ar_small.jpg"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/wal69ar_small.jpg"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Shaders/debug.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/debug.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/foo.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/foo.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/lighting.fs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/lighting.vs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/lighting2.fs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/redTri.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/redTri.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/simple.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/simple.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/AmbientLight.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Component.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ComponentBank.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Control.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ControlDelegateBag.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Delegate.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/DirectionalLight.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Engine.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/FileIO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Game.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/MeshRepository.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Model.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Motion.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/PhysCollide.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/PhysMove.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/PointLight.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Render.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/RenderOld.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Settings.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ShaderRepository.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Soul.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/SoundRepository.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Spatial.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/System.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/TextureRepository.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/UserControl.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/lighting_technique.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/loadMesh.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/loadShaders.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/loadTexture.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/mesh.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/technique.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/texture.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Source/Box.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/ComponentBank.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Engine.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/FileIO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Game.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/PhysCollide.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/PhysMove.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Render.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/ShaderRepository.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/System.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/UserControl.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/lighting_technique.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/loadShaders.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/mesh.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/technique.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/texture.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/tutorial33.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="redTriMain.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+    <conf name="Release" type="1">
+      <toolsSet>
+        <compilerSet>default</compilerSet>
+        <dependencyChecking>true</dependencyChecking>
+        <rebuildPropChanged>false</rebuildPropChanged>
+      </toolsSet>
+      <compileType>
+        <cTool>
+          <developmentMode>5</developmentMode>
+        </cTool>
+        <ccTool>
+          <developmentMode>5</developmentMode>
+        </ccTool>
+        <fortranCompilerTool>
+          <developmentMode>5</developmentMode>
+        </fortranCompilerTool>
+        <asmTool>
+          <developmentMode>5</developmentMode>
+        </asmTool>
+      </compileType>
+      <item path="/home/adayoldbagel/NetBeansProjects/32_text_input_and_clipboard_handling/32_text_input_and_clipboard_handling.cpp"
+            ex="false"
+            tool="1"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/CerealBowlObjFromBlenderSep.mtl"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/CerealBowlObjFromBlenderSep.mtl~"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/CerealBowlObjFromBlenderSep.obj"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/Groundco.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/Transluc.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Cereal/_1.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/MetalCube/metal.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/MetalCube/metalCube.mtl"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/MetalCube/metalCube.mtl~"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/MetalCube/metalCube.obj"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/MetalCube/metalCube.obj~"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/SpiderTex.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/drkwood2.jpg" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/engineflare1.jpg"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/spider.mtl" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/spider.obj" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/wal67ar_small.jpg"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Models/Spider/wal69ar_small.jpg"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
+      <item path="Assets/Shaders/debug.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/debug.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/foo.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/foo.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/lighting.fs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/lighting.vs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/lighting2.fs" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/redTri.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/redTri.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/simple.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/simple.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/AmbientLight.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Component.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ComponentBank.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Control.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ControlDelegateBag.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Delegate.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/DirectionalLight.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Engine.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/FileIO.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Game.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/MeshRepository.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Model.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Motion.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/PhysCollide.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/PhysMove.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/PointLight.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Render.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/RenderOld.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Settings.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ShaderRepository.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Soul.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/SoundRepository.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Spatial.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/System.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/TextureRepository.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/UserControl.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/lighting_technique.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/loadMesh.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/loadShaders.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/loadTexture.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/mesh.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/technique.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/texture.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Source/Box.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/ComponentBank.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Engine.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/FileIO.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Game.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/PhysCollide.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/PhysMove.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Render.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/ShaderRepository.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/System.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/UserControl.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/lighting_technique.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/loadShaders.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/mesh.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/technique.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/texture.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/tutorial33.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="redTriMain.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+    </conf>
+  </confs>
+</configurationDescriptor>
