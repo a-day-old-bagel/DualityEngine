@@ -8,10 +8,14 @@
 #ifndef TEXTUREREPOSITORY_H
 #define	TEXTUREREPOSITORY_H
 
-class TextureRepository
-{
-    
-};
+namespace DualityEngine {
+
+    class TextureRepository
+    {
+
+    };
+
+}
 
 #endif	/* TEXTUREREPOSITORY_H */
 

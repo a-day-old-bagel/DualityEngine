@@ -1,6 +1,8 @@
 #include "../Headers/FileIO.h"
 
-bool ReadFile(const char* pFileName, std::string& outFile)
+using namespace DualityEngine;
+
+bool DualityEngine::ReadFile(const char* pFileName, std::string& outFile)
 {
     std::ifstream f(pFileName);
     

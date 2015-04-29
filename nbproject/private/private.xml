@@ -7,14 +7,9 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/mesh.h</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/technique.h</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Render.cpp</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/technique.cpp</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/mesh.cpp</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/lighting_technique.h</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/lighting_technique.cpp</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Render.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/ComponentBank.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Game.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/ComponentBank.cpp</file>
         </group>
     </open-files>
 </project-private>

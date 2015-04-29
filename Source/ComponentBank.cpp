@@ -4,207 +4,117 @@
 
 #include "../Headers/ComponentBank.h"
 
+using namespace DualityEngine;
+
 /* CONSTRUCTOR */
-ComponentBank::ComponentBank()
-{
+ComponentBank::ComponentBank(){
     nextID = 0;
 }
 
 /* CONSTRUCTOR FOR LOADING SAVED STATES */
-ComponentBank::ComponentBank(IDnumber startingID)
-{
+ComponentBank::ComponentBank(IDnumber startingID){
     nextID = startingID;
 }
 
-ComponentBank::~ComponentBank()
-{
-    for (auto model : components_model)
-        deleteModel(model.first);
-    for (auto motion : components_motion)
-        deleteMotion(motion.first);
-    for (auto spatial : components_spatial)
-        deleteSpatial(spatial.first);
-    for (auto control : components_control)
-        deleteControl(control.first);
-    for (auto soul : components_soul)
-        deleteSoul(soul.first);
-    for (auto pointLight : components_pointLight)
-        deletePointLight(pointLight.first);
-    for (auto directionalLight : components_directionalLight)
-        deleteDirectionalLight(directionalLight.first);
-    for (auto ambientLight : components_ambientLight)
-        deleteAmbientLight(ambientLight.first);
+ComponentBank::~ComponentBank(){
+    
 }
 
 /* COMPONENT POINTER GETTERS */
-Model* ComponentBank::getModelPtr(const IDnumber &ID)
-{
-    return components_model.at(ID);
+Model* ComponentBank::getModelPtr(const IDnumber &ID){
+    return &(components_model.at(ID));
 }
-Motion* ComponentBank::getMotionPtr(const IDnumber &ID)
-{
-    return components_motion.at(ID);
+Motion* ComponentBank::getMotionPtr(const IDnumber &ID){
+    return &(components_motion.at(ID));
 }
-Spatial* ComponentBank::getSpatialPtr(const IDnumber &ID)
-{
-    return components_spatial.at(ID);
+Spatial* ComponentBank::getSpatialPtr(const IDnumber &ID){
+    return &(components_spatial.at(ID));
 }
-Control* ComponentBank::getControlPtr(const IDnumber &ID)
-{
-    return components_control.at(ID);
+Control* ComponentBank::getControlPtr(const IDnumber &ID){
+    return &(components_control.at(ID));
 }
-Soul* ComponentBank::getSoulPtr(const IDnumber &ID)
-{
-    return components_soul.at(ID);
+Soul* ComponentBank::getSoulPtr(const IDnumber &ID){
+    return &(components_soul.at(ID));
 }
-PointLight* ComponentBank::getPointLightPtr(const IDnumber &ID)
-{
-    return components_pointLight.at(ID);
+PointLight* ComponentBank::getPointLightPtr(const IDnumber &ID){
+    return &(components_pointLight.at(ID));
 }
-DirectionalLight* ComponentBank::getDirectionalLightPtr(const IDnumber &ID)
-{
-    return components_directionalLight.at(ID);
+DirectionalLight* ComponentBank::getDirectionalLightPtr(const IDnumber &ID){
+    return &(components_directionalLight.at(ID));
 }
-AmbientLight* ComponentBank::getAmbientLightPtr(const IDnumber &ID)
-{
-    return components_ambientLight.at(ID);
+AmbientLight* ComponentBank::getAmbientLightPtr(const IDnumber &ID){
+    return &(components_ambientLight.at(ID));
 }
     
 /* COMPONENT CREATION */
-void ComponentBank::addModel(IDnumber ID)
-{
-    Model* model = new Model();
-    components_model.emplace(ID, model);
-    model = NULL;
+void ComponentBank::addModel(IDnumber ID){
+    components_model.emplace(std::make_pair(ID, Model{ }));
 }
-void ComponentBank::addMotion(IDnumber ID, double velX, double velY, double velZ, double anvX, double anvY, double anvZ)
-{
-    Motion* motion = new Motion();
-    
-    motion->velRegular.x = velX;
-    motion->velRegular.y = velY;
-    motion->velRegular.z = velZ;
-    motion->velAngular.x = anvX;
-    motion->velAngular.y = anvY;
-    motion->velAngular.z = anvZ;
-    
-    components_motion.emplace(ID, motion);
-    motion = NULL;
+void ComponentBank::addMotion(IDnumber ID, double velX, double velY, double velZ,
+                                           double anvX, double anvY, double anvZ){
+    components_motion.emplace(std::make_pair(ID, Motion{
+        {velX, velY, velZ}, {anvX, anvY, anvZ}}));
 }
-void ComponentBank::addSpatial(IDnumber ID, double posX, double posY, double posZ, double rotX, double rotY, double rotZ)
-{
-    Spatial* spatial = new Spatial();
-    
-    spatial->position.x = posX;
-    spatial->position.y = posX;
-    spatial->position.z = posX;
-    spatial->rotation.x = rotX;
-    spatial->rotation.y = rotY;
-    spatial->rotation.z = rotZ;
-    
-    components_spatial.emplace(ID, spatial);
-    spatial = NULL;
+void ComponentBank::addSpatial(IDnumber ID, double posX, double posY, double posZ,
+                                            double rotX, double rotY, double rotZ){
+    components_spatial.emplace(std::make_pair(ID, Spatial{
+        {posX, posY, posZ}, {rotX, rotY, rotZ}}));
 }
-void ComponentBank::addControl(IDnumber ID)
-{
-    Control* control = new Control();
-    components_control.emplace(ID, control);
-    control = NULL;
+void ComponentBank::addControl(IDnumber ID){
+    components_control.emplace(std::make_pair(ID, Control{ }));
 }
-void ComponentBank::addSoul(IDnumber ID, const char* name, componentFlag components)
-{
-    Soul* soul = new Soul();
-    
-    soul->name = name;
-    soul->components = components;
-    
-    components_soul.emplace(ID, soul);
-    soul = NULL;
+void ComponentBank::addSoul(IDnumber ID, const char* name, componentFlag components){    
+    components_soul.emplace(std::make_pair(ID, Soul{
+        name, components, defaultState}));
 }
-void ComponentBank::addPointLight(IDnumber ID, double posX, double posY, double posZ, colorByte red, colorByte green, colorByte blue)
-{
-    PointLight* pointLight = new PointLight();
-    
-    pointLight->color.r = red;
-    pointLight->color.g = green;
-    pointLight->color.b = blue;
-    
-    components_pointLight.emplace(ID, pointLight);
-    pointLight = NULL;
+void ComponentBank::addPointLight(IDnumber ID, double posX, double posY, double posZ,
+                                  colorByte red, colorByte green, colorByte blue){    
+    components_pointLight.emplace(std::make_pair(ID, PointLight{
+        {red, green, blue}, {posX, posY, posZ}}));
 }
-void ComponentBank::addDirectionalLight(IDnumber ID, double rotX, double rotY, double rotZ, colorByte red, colorByte green, colorByte blue)
-{
-    DirectionalLight* directionalLight = new DirectionalLight();
-    
-    directionalLight->color.r = red;
-    directionalLight->color.g = green;
-    directionalLight->color.b = blue;
-    
-    components_directionalLight.emplace(ID, directionalLight);
-    directionalLight = NULL;
+void ComponentBank::addDirectionalLight(IDnumber ID, double rotX, double rotY, double rotZ,
+                                        colorByte red, colorByte green, colorByte blue){    
+    components_directionalLight.emplace(std::make_pair(ID, DirectionalLight{
+        {red, green, blue}, {rotX, rotY, rotZ}}));
 }
-void ComponentBank::addAmbientLight(IDnumber ID, colorByte red, colorByte green, colorByte blue)
-{
-    AmbientLight* ambientLight = new AmbientLight();
-    
-    ambientLight->color.r = red;
-    ambientLight->color.g = green;
-    ambientLight->color.b = blue;
-    
-    components_ambientLight.emplace(ID, ambientLight);
-    ambientLight = NULL;
+void ComponentBank::addAmbientLight(IDnumber ID, colorByte red, colorByte green, colorByte blue){    
+    components_ambientLight.emplace(std::make_pair(ID, AmbientLight{
+        {red, green, blue}}));
 }
 
 /* COMPONENT DELETION */
-void ComponentBank::deleteModel(const IDnumber &ID)
-{
-    delete components_model.at(ID);
-    components_model.at(ID) = NULL;
+void ComponentBank::deleteModel(const IDnumber &ID){
+    components_model.erase(ID);
 }
-void ComponentBank::deleteMotion(const IDnumber &ID)
-{
-    delete components_motion.at(ID);
-    components_motion.at(ID) = NULL;
+void ComponentBank::deleteMotion(const IDnumber &ID){
+    components_motion.erase(ID);
 }
-void ComponentBank::deleteSpatial(const IDnumber &ID)
-{
-    delete components_spatial.at(ID);
-    components_spatial.at(ID) = NULL;
+void ComponentBank::deleteSpatial(const IDnumber &ID){
+    components_spatial.erase(ID);
 }
-void ComponentBank::deleteControl(const IDnumber &ID)
-{
-    delete components_control.at(ID);
-    components_control.at(ID) = NULL;
+void ComponentBank::deleteControl(const IDnumber &ID){
+    components_control.erase(ID);
 }
-void ComponentBank::deleteSoul(const IDnumber &ID)
-{
-    delete components_soul.at(ID);
-    components_soul.at(ID) = NULL;
+void ComponentBank::deleteSoul(const IDnumber &ID){
+    components_soul.erase(ID);
 }
-void ComponentBank::deletePointLight(const IDnumber &ID)
-{
-    delete components_pointLight.at(ID);
-    components_pointLight.at(ID) = NULL;
+void ComponentBank::deletePointLight(const IDnumber &ID){
+    components_pointLight.erase(ID);
 }
-void ComponentBank::deleteDirectionalLight(const IDnumber &ID)
-{
-    delete components_directionalLight.at(ID);
-    components_directionalLight.at(ID) = NULL;
+void ComponentBank::deleteDirectionalLight(const IDnumber &ID){
+    components_directionalLight.erase(ID);
 }
-void ComponentBank::deleteAmbientLight(const IDnumber &ID)
-{
-    delete components_ambientLight.at(ID);
-    components_ambientLight.at(ID) = NULL;
+void ComponentBank::deleteAmbientLight(const IDnumber &ID){
+    components_ambientLight.erase(ID);
 }
 
-std::string ComponentBank::getName(IDnumber &ID)
-{
-    return components_soul.at(ID)->name;
+/* CONVENIENCE GETTERS */
+std::string ComponentBank::getName(IDnumber &ID){
+    return components_soul.at(ID).name;
 }
-std::string ComponentBank::nameComponents(IDnumber &ID)
-{
+std::string ComponentBank::nameComponents(IDnumber &ID){
     std::ostringstream output;
-    componentFlag components = components_soul.at(ID)->components;
+    componentFlag components = components_soul.at(ID).components;
     if (components & MODEL)
         output << "MODEL ";
     if (components & SPATIAL)
@@ -220,7 +130,7 @@ std::string ComponentBank::nameComponents(IDnumber &ID)
     if (components & LDIRECT)
         output << "LDIRECT ";
     if (components & LPOINT)
-        output << "LPOINT ";    
+        output << "LPOINT ";
     
     return output.str();
 }

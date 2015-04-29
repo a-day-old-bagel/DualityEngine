@@ -8,6 +8,9 @@
 #ifndef SOUNDREPOSITORY_H
 #define	SOUNDREPOSITORY_H
 
+namespace DualityEngine {
+    
+}
 
 
 #endif	/* SOUNDREPOSITORY_H */

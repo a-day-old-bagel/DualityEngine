@@ -10,17 +10,21 @@
 
 #include <string>
 
-class MeshRepository
-{
-private:
-    //hash of meshes
-public:
- //   Mesh* getMesh(std::string key)
-//    {
-//        //return hash[string]
-//        return new Mesh{}; // temporary to assuage compiler
-//    }
-};
+namespace DualityEngine {
+
+    class MeshRepository
+    {
+    private:
+        //hash of meshes
+    public:
+     //   Mesh* getMesh(std::string key)
+    //    {
+    //        //return hash[string]
+    //        return new Mesh{}; // temporary to assuage compiler
+    //    }
+    };
+
+}
 
 #endif	/* MESHREPOSITORY_H */
 

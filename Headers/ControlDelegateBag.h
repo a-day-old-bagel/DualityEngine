@@ -11,11 +11,15 @@
 
 #include "Delegate.h"
 
-struct DelegateBag
-{
-    VoidDelegate menu;
-    VoidDelegate quit;
-};
+namespace DualityEngine {
+
+    struct DelegateBag
+    {
+        VoidDelegate menu;
+        VoidDelegate quit;
+    };
+
+}
 
 #endif	/* CONTROLDELEGATEBAG_H */
 

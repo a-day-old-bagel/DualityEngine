@@ -10,17 +10,19 @@
 
 #include <vector>
 
-#include "Component.h"
+namespace DualityEngine {
 
-struct Model : Component
-{
-    //Mesh* mesh;
-    /*
-     * GLuint* shaders;
-     * Type* textures;
-     * GLuint etc
-     */
-};
+    struct Model
+    {
+        //Mesh* mesh;
+        /*
+         * GLuint* shaders;
+         * Type* textures;
+         * GLuint etc
+         */
+    };
+
+}
 
 #endif	/* MODEL_H */
 

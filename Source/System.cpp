@@ -4,6 +4,8 @@
 
 #include "../Headers/System.h"
 
+using namespace DualityEngine;
+
 System::System(ComponentBank* bank, std::string name)
 {
     this->bank = bank;

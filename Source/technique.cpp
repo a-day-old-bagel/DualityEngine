@@ -25,6 +25,8 @@
 #include "../Headers/FileIO.h"
 #include "../Headers/technique.h"
 
+using namespace DualityEngine;
+
 Technique::Technique()
 {
     m_shaderProg = 0;

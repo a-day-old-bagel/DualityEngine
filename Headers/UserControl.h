@@ -9,26 +9,26 @@
 #ifndef USERCONTROL_H
 #define	USERCONTROL_H
 
-//<editor-fold>
-
 #include <SDL.h>
 #include "System.h"
 #include <glm/glm.hpp>
 #include "ControlDelegateBag.h"
 
-class System_UserControl : public System
-{
-private:
-    DelegateBag* delegates;
-    SDL_Event sdlEvent;
-public:
-    System_UserControl(ComponentBank* bank, DelegateBag* delegates);
-    ~System_UserControl();
-    void tick() override;
-    bool init() override;
-};
+namespace DualityEngine {
 
-//</editor-fold>
+    class System_UserControl : public System
+    {
+    private:
+        DelegateBag* delegates;
+        SDL_Event sdlEvent;
+    public:
+        System_UserControl(ComponentBank* bank, DelegateBag* delegates);
+        ~System_UserControl();
+        void tick() override;
+        bool init() override;
+    };
+
+}
 
 #endif	/* USERCONTROL_H */
 

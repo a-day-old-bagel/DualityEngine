@@ -4,6 +4,8 @@
 
 #include "../Headers/ComponentBank.h"
 
+using namespace DualityEngine;
+
 IDnumber ComponentBank::createBox(double posX, double posY, double posZ,
                                   double rotX, double rotY, double rotZ,
                                   double velX, double velY, double velZ,

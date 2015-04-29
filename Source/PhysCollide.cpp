@@ -1,5 +1,7 @@
 #include "../Headers/PhysCollide.h"
 
+using namespace DualityEngine;
+
 System_PhysCollide::System_PhysCollide(ComponentBank* bank)
                          : System(bank, "Physics Collision System")
 {

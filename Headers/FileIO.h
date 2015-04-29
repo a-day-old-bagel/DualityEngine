@@ -11,6 +11,10 @@
 #include <string>
 #include <fstream>
 
-bool ReadFile(const char* pFileName, std::string& outFile);
+namespace DualityEngine {
+
+    bool ReadFile(const char* pFileName, std::string& outFile);
+
+}
 
 #endif	/* FILEIO_H */

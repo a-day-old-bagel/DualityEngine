@@ -7,6 +7,8 @@
 
 #include "../Headers/Engine.h"
 
+using namespace DualityEngine;
+
 //<editor-fold defaultstate="collapsed" desc="Constructor">
 SystemEngine::SystemEngine(SDL_Thread** thread, std::string name)
 {
@@ -31,7 +33,7 @@ void SystemEngine::addSystem(System* system)
 //<editor-fold defaultstate="collapsed" desc="Engage">
 void SystemEngine::engage()
 {
-    *workThread = SDL_CreateThread (workThreadFunction, threadData.threadName.c_str(),
+    *workThread = SDL_CreateThread (EngineThreadFunction, threadData.threadName.c_str(),
                                     (void*) &threadData);
     
 //    threadData.systemsToExecute[0]->init();
@@ -45,7 +47,7 @@ void SystemEngine::engage()
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Work Thread Function">
-int workThreadFunction(void* data)
+int DualityEngine::EngineThreadFunction(void* data)
 {
     System* system;
     ThreadData* threadData = (ThreadData*)data;

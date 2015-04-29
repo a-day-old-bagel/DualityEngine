@@ -11,6 +11,8 @@
 #include <unordered_map>
 #include "loadShaders.h"
 
+namespace DualityEngine {
+
 class ShaderRepository
 {
 private:
@@ -20,6 +22,8 @@ public:
                             const char* vertFile, const char* fragFile);
     GLuint getShaderProgram(const char* name);
 };
+
+}
 
 #endif	/* SHADERREPOSITORY_H */
 

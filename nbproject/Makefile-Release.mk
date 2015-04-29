@@ -35,7 +35,6 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/59032511/32_text_input_and_clipboard_handling.o \
 	${OBJECTDIR}/Source/Box.o \
 	${OBJECTDIR}/Source/ComponentBank.o \
 	${OBJECTDIR}/Source/Engine.o \
@@ -53,9 +52,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Source/main.o \
 	${OBJECTDIR}/Source/mesh.o \
 	${OBJECTDIR}/Source/technique.o \
-	${OBJECTDIR}/Source/texture.o \
-	${OBJECTDIR}/Source/tutorial33.o \
-	${OBJECTDIR}/redTriMain.o
+	${OBJECTDIR}/Source/texture.o
 
 
 # C Compiler Flags
@@ -81,11 +78,6 @@ LDLIBSOPTIONS=
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dualityengine: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dualityengine ${OBJECTFILES} ${LDLIBSOPTIONS}
-
-${OBJECTDIR}/_ext/59032511/32_text_input_and_clipboard_handling.o: /home/adayoldbagel/NetBeansProjects/32_text_input_and_clipboard_handling/32_text_input_and_clipboard_handling.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/59032511
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_ext/59032511/32_text_input_and_clipboard_handling.o /home/adayoldbagel/NetBeansProjects/32_text_input_and_clipboard_handling/32_text_input_and_clipboard_handling.cpp
 
 ${OBJECTDIR}/Source/Box.o: Source/Box.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
@@ -176,16 +168,6 @@ ${OBJECTDIR}/Source/texture.o: Source/texture.cpp
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/texture.o Source/texture.cpp
-
-${OBJECTDIR}/Source/tutorial33.o: Source/tutorial33.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Source
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/tutorial33.o Source/tutorial33.cpp
-
-${OBJECTDIR}/redTriMain.o: redTriMain.cpp 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/redTriMain.o redTriMain.cpp
 
 # Subprojects
 .build-subprojects:

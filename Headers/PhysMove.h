@@ -11,14 +11,18 @@
 #include "System.h"
 #include <glm/glm.hpp>
 
-class System_PhysMove : public System
-{
-public:
-    System_PhysMove(ComponentBank* bank);
-    ~System_PhysMove();
-    void tick() override;
-    bool init() override;
-};
+namespace DualityEngine {
+
+    class System_PhysMove : public System
+    {
+    public:
+        System_PhysMove(ComponentBank* bank);
+        ~System_PhysMove();
+        void tick() override;
+        bool init() override;
+    };
+
+}
 
 #endif	/* PHYSMOVE_H */
 

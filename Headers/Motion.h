@@ -9,13 +9,16 @@
 #define	MOTION_H
 
 #include <glm/glm.hpp>
-#include "Component.h"
 
-struct Motion : Component
-{
-    glm::vec3 velRegular = {0, 0, 0};
-    glm::vec3 velAngular = {0, 0, 0};
-};
+namespace DualityEngine {
+
+    struct Motion
+    {
+        glm::vec3 velRegular;
+        glm::vec3 velAngular;
+    };
+
+}
 
 #endif	/* MOTION_H */
 

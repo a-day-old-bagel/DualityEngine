@@ -11,14 +11,18 @@
 #include "System.h"
 #include <glm/glm.hpp>
 
-class System_PhysCollide : public System
-{
-public:
-    System_PhysCollide(ComponentBank* bank);
-    ~System_PhysCollide();
-    void tick() override;
-    bool init() override;
-};
+namespace DualityEngine {
+
+    class System_PhysCollide : public System
+    {
+    public:
+        System_PhysCollide(ComponentBank* bank);
+        ~System_PhysCollide();
+        void tick() override;
+        bool init() override;
+    };
+
+}
 
 #endif	/* PHYSCOLLIDE_H */
 

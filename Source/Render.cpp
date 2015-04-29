@@ -3,6 +3,8 @@
  ****************************************************************/
 #include "../Headers/Render.h"
 
+using namespace DualityEngine;
+
 //<editor-fold defaultstate="collapsed" desc="Constructor">
 System_Render::System_Render(ComponentBank* bank, SDL_Window* window)
                   : System(bank, "Rendering System") 

@@ -9,13 +9,16 @@
 #define	SPATIAL_H
 
 #include <glm/glm.hpp>
-#include "Component.h"
 
-struct Spatial : Component
-{
-    glm::vec3 position = {0, 0, 0};
-    glm::vec3 rotation = {0, 0, 0};
-};
+namespace DualityEngine {
+
+    struct Spatial
+    {
+        glm::vec3 position;
+        glm::vec3 rotation;
+    };
+
+}
 
 #endif	/* SPATIAL_H */
 

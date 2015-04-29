@@ -9,14 +9,17 @@
 #define	SOUL_H
 
 #include <string>
-#include "Component.h"
 
-struct Soul : Component
-{
-    std::string name            = "nameless";
-    componentFlag components    = 0;
-    stateFlag state             = 0;
-};
+namespace DualityEngine {
+
+    struct Soul
+    {
+        std::string name;
+        componentFlag components;
+        stateFlag state;
+    };
+
+}
 
 #endif	/* STATE_H */
 

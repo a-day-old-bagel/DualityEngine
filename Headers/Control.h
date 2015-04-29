@@ -8,12 +8,14 @@
 #ifndef CONTROL_H
 #define	CONTROL_H
 
-#include "Component.h"
+namespace DualityEngine {
 
-struct Control : Component
-{
-    
-};
+    struct Control
+    {
+
+    };
+
+}
 
 #endif	/* CONTROL_H */
 

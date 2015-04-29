@@ -9,12 +9,15 @@
 #define	AMBIENTLIGHT_H
 
 #include <glm/glm.hpp>
-#include "Component.h"
 
-struct AmbientLight : Component
-{
-    glm::vec3 color = {50, 50, 50};
-};
+namespace DualityEngine {
+
+    struct AmbientLight
+    {
+        glm::vec3 color;
+    };
+
+}
 
 #endif	/* AMBIENTLIGHT_H */
 

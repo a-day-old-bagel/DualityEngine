@@ -8,6 +8,8 @@
 
 #include "../Headers/UserControl.h"
 
+using namespace DualityEngine;
+
 //<editor-fold>
 
 System_UserControl::System_UserControl(ComponentBank* bank, DelegateBag* delegates) : System(bank, "Control System")

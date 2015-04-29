@@ -1,5 +1,7 @@
 #include "../Headers/PhysMove.h"
 
+using namespace DualityEngine;
+
 System_PhysMove::System_PhysMove(ComponentBank* bank)
                          : System(bank, "Physics Movement System")
 {

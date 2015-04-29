@@ -1,5 +1,7 @@
 #include "../Headers/ShaderRepository.h"
 
+using namespace DualityEngine;
+
 void ShaderRepository::storeShaderProgram(const char* name,
                                           const char* vertFile,
                                           const char* fragFile)

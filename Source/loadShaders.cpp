@@ -4,7 +4,9 @@
 
 #include "../Headers/loadShaders.h"
 
-GLuint loadShaders(const char * vertex_file_path,const char * fragment_file_path)
+using namespace DualityEngine;
+
+GLuint DualityEngine::loadShaders(const char * vertex_file_path,const char * fragment_file_path)
 {
     //<editor-fold defaultstate="collapsed" desc="Set up variables">
     
