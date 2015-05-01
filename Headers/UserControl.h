@@ -25,7 +25,7 @@ namespace DualityEngine {
         System_UserControl(ComponentBank* bank, DelegateBag* delegates);
         ~System_UserControl();
         void tick() override;
-        bool init() override;
+        bool init(std::stringstream& output) override;
     };
 
 }

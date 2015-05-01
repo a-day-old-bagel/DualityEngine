@@ -13,7 +13,7 @@ System_PhysMove::~System_PhysMove()
     
 }
 
-bool System_PhysMove::init()
+bool System_PhysMove::init(std::stringstream& output)
 {
     return true;
 }

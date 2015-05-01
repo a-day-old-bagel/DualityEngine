@@ -32,7 +32,7 @@ namespace DualityEngine {
         std::string getName();
         void discoverID (IDnumber ID);
         void scrutinizeID (IDnumber ID);
-        virtual bool init(){}
+        virtual bool init(std::stringstream& output){}
         virtual void tick(){}
         void pause();
         void resume();

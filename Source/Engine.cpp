@@ -47,6 +47,8 @@ void SystemEngine::engage()
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Work Thread Function">
+#define THREAD_BEGIN_BLOCK_OUTPUT std::endl << threadData->threadName << " output begins =========================================\n\n"
+#define THREAD_END_BLOCK_OUTPUT std::endl << threadData->threadName << " output ends =========================================\n\n"
 int DualityEngine::EngineThreadFunction(void* data)
 {
     System* system;
@@ -57,13 +59,15 @@ int DualityEngine::EngineThreadFunction(void* data)
     bool escape = false;   
     
     // Initialization of each system running on this thread
-    *output << "=========================================\n";
+    *output << THREAD_BEGIN_BLOCK_OUTPUT;
     for (int i = 0; i < systems->size(); i++)
     {
-        *output << "Beginning initialization of " << systems->at(i)->getName() << "...\n\n";
-        if (!(systems->at(i)->init()))
+        *output << "Beginning initialization of " << systems->at(i)->getName() << "...\n";
+        if (!(systems->at(i)->init(*output)))
         {
-            *output << systems->at(i)->getName() << " failed to initialize! Terminating " << threadData->threadName << "!\n";
+            *output << systems->at(i)->getName() << " failed to initialize! Terminating "
+                    << threadData->threadName << "!\n" << THREAD_END_BLOCK_OUTPUT;
+            std::cout << output->str();
             return -1;
         }
         else
@@ -74,7 +78,7 @@ int DualityEngine::EngineThreadFunction(void* data)
     *output << threadData->threadName << " is entering an engine loop running the following systems:\n";
     for (int i = 0; i < systems->size(); i++)
         *output << "    " << i + 1 << ". " << systems->at(i)->getName() << std::endl;
-    *output << "=========================================\n\n";
+    *output << THREAD_END_BLOCK_OUTPUT;
     
     // Output the thread's reports to console.
     std::cout << output->str();
@@ -98,7 +102,7 @@ int DualityEngine::EngineThreadFunction(void* data)
                 system->tick();
         }
     }
-    *output << "Terminating " << threadData->threadName << " engine loop.\n\n";
+    *output << "Terminating " << threadData->threadName << " engine loop and finishing thread.\n\n";
     
     // Output the thread's reports to standard out.
     std::cout << output->str();

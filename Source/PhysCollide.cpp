@@ -13,7 +13,7 @@ System_PhysCollide::~System_PhysCollide()
     
 }
 
-bool System_PhysCollide::init()
+bool System_PhysCollide::init(std::stringstream& output)
 {
     return true;
 }

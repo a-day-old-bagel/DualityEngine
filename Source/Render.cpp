@@ -24,34 +24,40 @@ System_Render::~System_Render()
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Init">
-bool System_Render::init()
+bool System_Render::init(std::stringstream& engineOut)
 {    
     //Create context
     context = SDL_GL_CreateContext(window);
     if(context == NULL) {
-        printf("OpenGL context was not created! SDL Error: %s\n", SDL_GetError());
+        //throw("OpenGL context was not created! SDL Error: %s\n", SDL_GetError());
+        engineOut << "OpenGL context was not created! SDL Error: " << SDL_GetError() << std::endl;
+//        printf("OpenGL context was not created! SDL Error: %s\n", SDL_GetError());
         return false;
     }
     //Initialize OpenGL
-    if(!initGL()) {
-        printf("Unable to initialize graphics!\n");
+//    try { initGL(); }
+//    catch (const char* errorString){
+//        throw("Unable to initialize graphics\n%s", errorString);
+//    }
+    if(!initGL(engineOut)) {
+        engineOut << "Unable to initialize graphics!" << std::endl;
         return false;
     }
     //Use Vsync
     if(SDL_GL_SetSwapInterval(1) < 0) {
-        printf("Warning: Unable to set VSync! SDL Error: %s\n", SDL_GetError());
+        engineOut << "Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
     }    
     return true;
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="InitGL">
 
-bool System_Render::initGL()
+bool System_Render::initGL(std::stringstream& engineOut)
 {
     glewExperimental = GL_TRUE; 
     GLenum glewError = glewInit();
     if(glewError != GLEW_OK) {
-        printf("Could not initialize GLEW! %s\n", glewGetErrorString(glewError));
+        engineOut << "Could not initialize GLEW! " << glewGetErrorString(glewError) << std::endl;
         return false;
     }
     

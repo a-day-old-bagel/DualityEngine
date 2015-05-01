@@ -57,7 +57,7 @@ namespace DualityEngine {
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Methods">
 
-        bool initGL();
+        bool initGL(std::stringstream& engineOut);
 
         //</editor-fold>
 
@@ -66,7 +66,7 @@ namespace DualityEngine {
         System_Render(ComponentBank* bank, SDL_Window* window);
         ~System_Render();
         void tick() override;    
-        bool init() override;
+        bool init(std::stringstream& output) override;
         //</editor-fold>
     };
 

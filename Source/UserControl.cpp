@@ -23,7 +23,7 @@ System_UserControl::~System_UserControl()
     delegates = NULL;
 }
 
-bool System_UserControl::init()
+bool System_UserControl::init(std::stringstream& output)
 {
     return true;
 }

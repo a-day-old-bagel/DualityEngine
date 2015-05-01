@@ -19,7 +19,7 @@ namespace DualityEngine {
         System_PhysCollide(ComponentBank* bank);
         ~System_PhysCollide();
         void tick() override;
-        bool init() override;
+        bool init(std::stringstream& output) override;
     };
 
 }
