@@ -59,8 +59,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-std=c++11 `pkg-config --cflags glew ImageMagick++ assimp freetype2` 
-CXXFLAGS=-std=c++11 `pkg-config --cflags glew ImageMagick++ assimp freetype2` 
+CCFLAGS=-std=c++11 `pkg-config --cflags glew assimp freetype2` 
+CXXFLAGS=-std=c++11 `pkg-config --cflags glew assimp freetype2` 
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -77,7 +77,7 @@ LDLIBSOPTIONS=
 
 ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dualityengine: ${OBJECTFILES}
 	${MKDIR} -p ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}
-	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dualityengine ${OBJECTFILES} ${LDLIBSOPTIONS} `pkg-config --libs sdl2 gl glew ImageMagick++ assimp freetype2 fontconfig `
+	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dualityengine ${OBJECTFILES} ${LDLIBSOPTIONS} `pkg-config --libs sdl2 gl glew assimp freetype2 fontconfig `
 
 ${OBJECTDIR}/Source/Box.o: Source/Box.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source

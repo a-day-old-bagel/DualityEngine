@@ -14,6 +14,10 @@ namespace DualityEngine {
 
     struct PointLight
     {
+        PointLight(const colorByte &red, const colorByte &green, const colorByte &blue, const double &posX, const double &posY, const double &posZ){
+            color = {red, green, blue};
+            position = {posX, posY, posZ};
+        }
         glm::vec3 color;
         glm::vec3 position;
     };

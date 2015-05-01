@@ -12,6 +12,9 @@ namespace DualityEngine {
 
     struct Control
     {
+        Control(){
+            
+        }
 
     };
 

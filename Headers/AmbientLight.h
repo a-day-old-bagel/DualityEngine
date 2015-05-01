@@ -14,6 +14,9 @@ namespace DualityEngine {
 
     struct AmbientLight
     {
+        AmbientLight(const colorByte &red, const colorByte &green, const colorByte &blue){
+            color = {red, green, blue};
+        }
         glm::vec3 color;
     };
 

@@ -10,6 +10,9 @@
 
 namespace DualityEngine {
 
+    // Define to switch on the variadic templated functions in componentBank.
+    #define VARIADIC_ENABLED
+    
     // Some useful defines
     #define POINTER_DELETE(p) if (p) { delete p; p = NULL; }
     #define ARRAY_COUNT(p) (sizeof(p)/sizeof(p[0]))
@@ -22,12 +25,17 @@ namespace DualityEngine {
     #define componentFlag   uint_fast16_t
     #define stateFlag       uint_fast8_t
     #define colorByte       uint_fast8_t
+    #define scoreNumber     int_fast16_t
+
+    #define NULL_ID 0
+    #define START_ID 1
 
     /*****************************************
      * The state component will include an int
      * whose bits are flags that store whether
      * or not the entity has a given component
      *****************************************/
+    const componentFlag defaultComponents = 0;
     enum componentFlags : componentFlag
     {
         SPATIAL         = 0x1,      // Bit 1

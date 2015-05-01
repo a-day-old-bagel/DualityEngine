@@ -14,6 +14,9 @@ namespace DualityEngine {
 
     struct Model
     {
+        Model(){
+            
+        }
         //Mesh* mesh;
         /*
          * GLuint* shaders;

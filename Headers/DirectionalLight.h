@@ -14,8 +14,12 @@ namespace DualityEngine {
 
     struct DirectionalLight
     {
+        DirectionalLight(const colorByte &red, const colorByte &green, const colorByte &blue, const double &dirX, const double &dirY, const double &dirZ){
+            color = {red, green, blue};
+            direction = {dirX, dirY, dirZ};
+        }
         glm::vec3 color;
-        glm::vec3 rotation;
+        glm::vec3 direction;
     };
 
 }

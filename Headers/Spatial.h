@@ -14,6 +14,10 @@ namespace DualityEngine {
 
     struct Spatial
     {
+        Spatial(const double &posX, const double &posY, const double &posZ, const double &rotX, const double &rotY, const double &rotZ){
+            position = {posX, posY, posZ};
+            rotation = {rotX, rotY, rotZ};
+        }
         glm::vec3 position;
         glm::vec3 rotation;
     };

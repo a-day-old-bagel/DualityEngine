@@ -14,6 +14,9 @@ namespace DualityEngine {
 
     struct Soul
     {
+        Soul(const char* name, const componentFlag &flags, const stateFlag &states){
+            this->name = name; components = flags; state = states;
+        }
         std::string name;
         componentFlag components;
         stateFlag state;

@@ -36,14 +36,14 @@ namespace DualityEngine {
         //</editor-fold>    
         //<editor-fold defaultstate="collapsed" desc="Components that reference the assets">
 
-        ComponentBank* bank; // holds all the game data, stored as collections of components
+        ComponentBank bank; // holds all the game data, stored as collections of components
 
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Systems to operate on the components and draw from the assets">
 
         // A system to render all graphical components (manages openGL calls)
         System_Render* renderingSystem;
-        // A system to move all spatial components according to motion components
+        // A system to update all spatial components according to motion components
         System_PhysMove* physicsMoveSystem;
         // A system to check collisions between all spatial components according to collision components
         System_PhysCollide* physicsCollisionSystem;

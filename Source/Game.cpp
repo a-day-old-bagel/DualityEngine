@@ -96,16 +96,21 @@ bool Game::NewGame()
     initializeEngines();
     if (!startEngines()) return false;
     
-    IDnumber boxID = bank->createBox(0, 0, 0,
-                                     0, 0, 0,
-                                     0, 0, 0,
-                                     0, 0, 0);
+    IDnumber boxID = bank.createBox("box",
+                                    0, 0, 0,
+                                    0, 0, 0,
+                                    0, 0, 0,
+                                    0, 0, 0);
     
-    bank->addControl(boxID);
+    bank.addControl(boxID);
+    bank.addPointLight(boxID, 200, 90, 230, 0, 0, 0);
     
     std::cout << "\nbox ID: " << boxID
-              << "\nbox name: " << bank->getName(boxID)
-              << "\nbox comps: " << bank->nameComponents(boxID) << std::endl;
+              << "\nbox name: " << bank.getName(boxID)
+              << "\nbox comps: " << bank.listComponents(boxID) << std::endl;
+    
+    bank.addModel(10);      //Should fail
+    bank.addModel(boxID);   //Should fail
     
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);
@@ -190,15 +195,15 @@ bool Game::initializeSDLwindow()
  *************************************/
 bool Game::initializeECS()
 {
-    bank = new ComponentBank();   
-    renderingSystem = new System_Render(bank, window);
-    physicsMoveSystem = new System_PhysMove(bank);
-    physicsCollisionSystem = new System_PhysCollide(bank);
+    bank = ComponentBank();   
+    renderingSystem = new System_Render(&bank, window);
+    physicsMoveSystem = new System_PhysMove(&bank);
+    physicsCollisionSystem = new System_PhysCollide(&bank);
     
     controlDelegates = new DelegateBag;
     controlDelegates->menu = DELEGATE(&Game::Menu, *this);
     controlDelegates->quit = DELEGATE(&Game::Quit, *this);
-    userControlSystem = new System_UserControl(bank, controlDelegates);
+    userControlSystem = new System_UserControl(&bank, controlDelegates);
     
     return true;
 }
@@ -285,7 +290,7 @@ bool Game::killEngines()
 void Game::nullifyPointers()
 {
     window = NULL;
-    bank = NULL;
+    //bank = NULL;
     controlDelegates = NULL;
     
     renderingSystem = NULL;
@@ -306,7 +311,7 @@ void Game::nullifyPointers()
 void Game::freeMemory()
 {
     POINTER_DELETE(controlDelegates);    
-    POINTER_DELETE(bank);
+    //POINTER_DELETE(bank);
     
     POINTER_DELETE(renderingSystem);
     POINTER_DELETE(physicsMoveSystem);
