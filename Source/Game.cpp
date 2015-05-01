@@ -96,7 +96,7 @@ bool Game::NewGame()
     initializeEngines();
     if (!startEngines()) return false;
     
-    IDnumber boxID = bank.createBox("box",
+    IDNUM boxID = bank.createBox("box",
                                     0, 0, 0,
                                     0, 0, 0,
                                     0, 0, 0,

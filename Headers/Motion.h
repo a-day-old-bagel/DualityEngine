@@ -14,7 +14,7 @@ namespace DualityEngine {
 
     struct Motion
     {
-        Motion(const double &velX, const double &velY, const double &velZ, const double &anvX, const double &anvY, const double &anvZ){
+        Motion(const FLOAT &velX, const FLOAT &velY, const FLOAT &velZ, const FLOAT &anvX, const FLOAT &anvY, const FLOAT &anvZ){
             velLinear = {velX, velY, velZ};
             velAngular = {anvX, anvY, anvZ};
         }

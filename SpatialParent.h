@@ -17,10 +17,10 @@ namespace DualityEngine {
     
     struct SpatialParent
     {
-        SpatialParent(const IDnumber &ref){
+        SpatialParent(const IDNUM &ref){
             entityRef = ref;
         }
-        IDnumber entityRef;
+        IDNUM entityRef;
     };
 }
 

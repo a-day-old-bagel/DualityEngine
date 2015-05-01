@@ -26,87 +26,87 @@ namespace DualityEngine {
 
     class ComponentBank
     {
-        IDnumber nextID;
+        IDNUM nextID;
 
-        std::unordered_map<IDnumber, Soul>              components_soul;
-        std::unordered_map<IDnumber, Model>             components_model;
-        std::unordered_map<IDnumber, Motion>            components_motion;
-        std::unordered_map<IDnumber, Spatial>           components_spatial;
-        std::unordered_map<IDnumber, Control>           components_control;
-        std::unordered_map<IDnumber, PointLight>        components_pointLight;
-        std::unordered_map<IDnumber, DirectionalLight>  components_directionalLight;
-        std::unordered_map<IDnumber, AmbientLight>      components_ambientLight;
+        std::unordered_map<IDNUM, Soul>              components_soul;
+        std::unordered_map<IDNUM, Model>             components_model;
+        std::unordered_map<IDNUM, Motion>            components_motion;
+        std::unordered_map<IDNUM, Spatial>           components_spatial;
+        std::unordered_map<IDNUM, Control>           components_control;
+        std::unordered_map<IDNUM, PointLight>        components_pointLight;
+        std::unordered_map<IDNUM, DirectionalLight>  components_directionalLight;
+        std::unordered_map<IDNUM, AmbientLight>      components_ambientLight;
         
         /* COMPONENT CREATION */
-        bool tryAddFlagToSoul(const componentFlag &flag,const IDnumber &ID);
+        bool tryAddFlagToSoul(const COMPFLAG &flag,const IDNUM &ID);
         #ifdef VARIADIC_ENABLED
         template<class componentType, typename ... types>
-        bool tryAddComponent(const IDnumber &ID, const char* compName, std::unordered_map<IDnumber, componentType> &table, const types& ... args);
+        bool tryAddComponent(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table, const types& ... args);
         #else
-        void errComponentAlreadyExists(const char* compName, const IDnumber &ID);
+        void errComponentAlreadyExists(const char* compName, const IDNUM &ID);
         #endif
-        bool addSoul(const IDnumber &ID, const char* name);
+        bool addSoul(const IDNUM &ID, const char* name);
         
         /* COMPONENT DELETION */
-        void deleteSoul(const IDnumber &ID);
+        void deleteSoul(const IDNUM &ID);
 
     public:
         // Constructor for new states
         ComponentBank();
         // Constructor for loading saved states
-        ComponentBank(const IDnumber &startingID);
+        ComponentBank(const IDNUM &startingID);
         // Destructor
         ~ComponentBank();
 
         /* COMPONENT POINTER GETTERS */
-        Soul* getSoulPtr(const IDnumber &ID);
-        Model* getModelPtr(const IDnumber &ID);
-        Motion* getMotionPtr(const IDnumber &ID);
-        Spatial* getSpatialPtr(const IDnumber &ID);
-        Control* getControlPtr(const IDnumber &ID);
-        PointLight* getPointLightPtr(const IDnumber &ID);
-        DirectionalLight* getDirectionalLightPtr(const IDnumber &ID);
-        AmbientLight* getAmbientLightPtr(const IDnumber &ID);
+        Soul* getSoulPtr(const IDNUM &ID);
+        Model* getModelPtr(const IDNUM &ID);
+        Motion* getMotionPtr(const IDNUM &ID);
+        Spatial* getSpatialPtr(const IDNUM &ID);
+        Control* getControlPtr(const IDNUM &ID);
+        PointLight* getPointLightPtr(const IDNUM &ID);
+        DirectionalLight* getDirectionalLightPtr(const IDNUM &ID);
+        AmbientLight* getAmbientLightPtr(const IDNUM &ID);
 
         /* COMPONENT CREATION */
-        void addModel(const IDnumber &ID);
-        void addMotion(const IDnumber &ID, const double &velX, const double &velY, const double &velZ,
-                                           const double &anvX, const double &anvY, const double &anvZ);
-        void addSpatial(const IDnumber &ID, const double &posX, const double &posY, const double &posZ,
-                                            const double &rotX, const double &rotY, const double &rotZ);
-        void addControl(const IDnumber &ID);
-        void addPointLight(const IDnumber &ID, const colorByte &red, const colorByte &green, const colorByte &blue,
-                                  const double &posX, const double &posY, const double &posZ);
-        void addDirectionalLight(const IDnumber &ID, const colorByte &red, const colorByte &green, const colorByte &blue,
-                                        const double &rotX, const double &rotY, const double &rotZ);
-        void addAmbientLight(const IDnumber &ID, const colorByte &red, const colorByte &green, const colorByte &blue);
+        void addModel(const IDNUM &ID);
+        void addMotion(const IDNUM &ID, const FLOAT &velX, const FLOAT &velY, const FLOAT &velZ,
+                                           const FLOAT &anvX, const FLOAT &anvY, const FLOAT &anvZ);
+        void addSpatial(const IDNUM &ID, const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ,
+                                            const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ);
+        void addControl(const IDNUM &ID);
+        void addPointLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue,
+                                  const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ);
+        void addDirectionalLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue,
+                                        const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ);
+        void addAmbientLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue);
 
         /* COMPONENT DELETION */
-        void deleteModel(const IDnumber &ID);
-        void deleteMotion(const IDnumber &ID);
-        void deleteSpatial(const IDnumber &ID);
-        void deleteControl(const IDnumber &ID);
-        void deletePointLight(const IDnumber &ID);
-        void deleteDirectionalLight(const IDnumber &ID);
-        void deleteAmbientLight(const IDnumber &ID);
+        void deleteModel(const IDNUM &ID);
+        void deleteMotion(const IDNUM &ID);
+        void deleteSpatial(const IDNUM &ID);
+        void deleteControl(const IDNUM &ID);
+        void deletePointLight(const IDNUM &ID);
+        void deleteDirectionalLight(const IDNUM &ID);
+        void deleteAmbientLight(const IDNUM &ID);
 
         /* ENTITY CREATION */
-        IDnumber generateID();
-        IDnumber createEntity(const char* name);
-        bool     notifySystems(const IDnumber &ID);
-        IDnumber createBox(const char* name,
-                           const double posX, const double posY, const double posZ,
-                           const double rotX, const double rotY, const double rotZ,
-                           const double velX, const double velY, const double velZ,
-                           const double anvX, const double anvY, const double anvZ);
+        IDNUM generateID();
+        IDNUM createEntity(const char* name);
+        bool  notifySystemsOfAdditions(const IDNUM &ID);
+        IDNUM createBox(const char* name,
+                           const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ,
+                           const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ,
+                           const FLOAT &velX, const FLOAT &velY, const FLOAT &velZ,
+                           const FLOAT &anvX, const FLOAT &anvY, const FLOAT &anvZ);
         
         /* ENTITY DELETION */
-        bool deleteEntity(const IDnumber &ID);  // orphans children
-        bool purgeEntity(const IDnumber &ID);   // deletes children too.
+        bool deleteEntity(const IDNUM &ID);  // orphans children
+        bool purgeEntity(const IDNUM &ID);   // deletes children too.
 
         /* CONVENIENCE GETTERS */
-        std::string getName(IDnumber &ID);
-        std::string listComponents(IDnumber &ID);
+        std::string getName(IDNUM &ID);
+        std::string listComponents(IDNUM &ID);
     };
 
 }

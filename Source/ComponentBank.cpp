@@ -12,7 +12,7 @@ ComponentBank::ComponentBank(){
 }
 
 /* CONSTRUCTOR FOR LOADING SAVED STATES */
-ComponentBank::ComponentBank(const IDnumber &startingID){
+ComponentBank::ComponentBank(const IDNUM &startingID){
     nextID = startingID;
 }
 
@@ -21,33 +21,33 @@ ComponentBank::~ComponentBank(){
 }
 
 /* COMPONENT POINTER GETTERS */
-Model* ComponentBank::getModelPtr(const IDnumber &ID){
+Model* ComponentBank::getModelPtr(const IDNUM &ID){
     return &(components_model.at(ID));
 }
-Motion* ComponentBank::getMotionPtr(const IDnumber &ID){
+Motion* ComponentBank::getMotionPtr(const IDNUM &ID){
     return &(components_motion.at(ID));
 }
-Spatial* ComponentBank::getSpatialPtr(const IDnumber &ID){
+Spatial* ComponentBank::getSpatialPtr(const IDNUM &ID){
     return &(components_spatial.at(ID));
 }
-Control* ComponentBank::getControlPtr(const IDnumber &ID){
+Control* ComponentBank::getControlPtr(const IDNUM &ID){
     return &(components_control.at(ID));
 }
-Soul* ComponentBank::getSoulPtr(const IDnumber &ID){
+Soul* ComponentBank::getSoulPtr(const IDNUM &ID){
     return &(components_soul.at(ID));
 }
-PointLight* ComponentBank::getPointLightPtr(const IDnumber &ID){
+PointLight* ComponentBank::getPointLightPtr(const IDNUM &ID){
     return &(components_pointLight.at(ID));
 }
-DirectionalLight* ComponentBank::getDirectionalLightPtr(const IDnumber &ID){
+DirectionalLight* ComponentBank::getDirectionalLightPtr(const IDNUM &ID){
     return &(components_directionalLight.at(ID));
 }
-AmbientLight* ComponentBank::getAmbientLightPtr(const IDnumber &ID){
+AmbientLight* ComponentBank::getAmbientLightPtr(const IDNUM &ID){
     return &(components_ambientLight.at(ID));
 }
     
 /* COMPONENT CREATION */
-bool ComponentBank::tryAddFlagToSoul(const componentFlag &flag,const IDnumber &ID){
+bool ComponentBank::tryAddFlagToSoul(const COMPFLAG &flag,const IDNUM &ID){
     try{
         components_soul.at(ID).components |= flag;
     } catch(const std::out_of_range& oorException) {
@@ -58,7 +58,7 @@ bool ComponentBank::tryAddFlagToSoul(const componentFlag &flag,const IDnumber &I
 }
 #ifdef VARIADIC_ENABLED
 template<class componentType, typename ... types>
-bool ComponentBank::tryAddComponent(const IDnumber &ID, const char* compName, std::unordered_map<IDnumber, componentType> &table, const types& ... args){
+bool ComponentBank::tryAddComponent(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table, const types& ... args){
     if ((table.emplace(std::piecewise_construct, std::forward_as_tuple(ID), std::forward_as_tuple(args...))).second == false){
         printf("Could not add %s component at ID %lu: %s component already exists at that ID.\n", compName, ID, compName);
         return false;
@@ -66,11 +66,11 @@ bool ComponentBank::tryAddComponent(const IDnumber &ID, const char* compName, st
     return true;
 }
 #else
-void ComponentBank::errComponentAlreadyExists(const char* compName, const IDnumber &ID){
+void ComponentBank::errComponentAlreadyExists(const char* compName, const IDNUM &ID){
     printf("Could not add %s component at ID %lu: %s component already exists at that ID.\n", compName, ID, compName);
 }
 #endif
-bool ComponentBank::addSoul(const IDnumber &ID, const char* name){
+bool ComponentBank::addSoul(const IDNUM &ID, const char* name){
     #ifdef VARIADIC_ENABLED
     return tryAddComponent(ID, "soul", components_soul, name, defaultComponents, defaultState);
     #else    
@@ -83,7 +83,7 @@ bool ComponentBank::addSoul(const IDnumber &ID, const char* name){
     }
     #endif
 }
-void ComponentBank::addModel(const IDnumber &ID){
+void ComponentBank::addModel(const IDNUM &ID){
     if (tryAddFlagToSoul(MODEL, ID)){
         #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "model", components_model);
@@ -94,8 +94,8 @@ void ComponentBank::addModel(const IDnumber &ID){
         #endif
     }
 }
-void ComponentBank::addMotion(const IDnumber &ID, const double &velX, const double &velY, const double &velZ,
-                                           const double &anvX, const double &anvY, const double &anvZ){
+void ComponentBank::addMotion(const IDNUM &ID, const FLOAT &velX, const FLOAT &velY, const FLOAT &velZ,
+                                           const FLOAT &anvX, const FLOAT &anvY, const FLOAT &anvZ){
     if (tryAddFlagToSoul(MOTION, ID))
         #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "motion", components_motion, velX, velY, velZ, anvX, anvY, anvZ);
@@ -105,8 +105,8 @@ void ComponentBank::addMotion(const IDnumber &ID, const double &velX, const doub
             errComponentAlreadyExists("motion", ID);
         #endif
 }
-void ComponentBank::addSpatial(const IDnumber &ID, const double &posX, const double &posY, const double &posZ,
-                                            const double &rotX, const double &rotY, const double &rotZ){
+void ComponentBank::addSpatial(const IDNUM &ID, const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ,
+                                            const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ){
     if (tryAddFlagToSoul(SPATIAL, ID))
         #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "spatial", components_spatial, posX, posY, posZ, rotX, rotY, rotZ);
@@ -116,7 +116,7 @@ void ComponentBank::addSpatial(const IDnumber &ID, const double &posX, const dou
             errComponentAlreadyExists("spatial", ID);
         #endif
 }
-void ComponentBank::addControl(const IDnumber &ID){
+void ComponentBank::addControl(const IDNUM &ID){
     if (tryAddFlagToSoul(CONTROL, ID))
         #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "control", components_control);
@@ -126,8 +126,8 @@ void ComponentBank::addControl(const IDnumber &ID){
             errComponentAlreadyExists("control", ID);
         #endif
 }
-void ComponentBank::addPointLight(const IDnumber &ID, const colorByte &red, const colorByte &green, const colorByte &blue,
-                                  const double &posX, const double &posY, const double &posZ){
+void ComponentBank::addPointLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue,
+                                  const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ){
     if (tryAddFlagToSoul(LPOINT, ID))
         #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "point light", components_pointLight, red, green, blue, posX, posY, posZ);
@@ -137,8 +137,8 @@ void ComponentBank::addPointLight(const IDnumber &ID, const colorByte &red, cons
             errComponentAlreadyExists("point light", ID);
         #endif
 }
-void ComponentBank::addDirectionalLight(const IDnumber &ID, const colorByte &red, const colorByte &green, const colorByte &blue,
-                                        const double &rotX, const double &rotY, const double &rotZ){
+void ComponentBank::addDirectionalLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue,
+                                        const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ){
     if (tryAddFlagToSoul(LDIRECT, ID))
         #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "directional light", components_directionalLight, red, green, blue, rotX, rotY, rotZ);
@@ -148,7 +148,7 @@ void ComponentBank::addDirectionalLight(const IDnumber &ID, const colorByte &red
             errComponentAlreadyExists("directional light", ID);
         #endif
 }
-void ComponentBank::addAmbientLight(const IDnumber &ID, const colorByte &red, const colorByte &green, const colorByte &blue){    
+void ComponentBank::addAmbientLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue){    
     if (tryAddFlagToSoul(LAMBIENT, ID))
         #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "ambient light", components_ambientLight, red, green, blue);
@@ -160,44 +160,44 @@ void ComponentBank::addAmbientLight(const IDnumber &ID, const colorByte &red, co
 }
 
 /* COMPONENT DELETION */
-void ComponentBank::deleteSoul(const IDnumber &ID){
+void ComponentBank::deleteSoul(const IDNUM &ID){
     components_soul.erase(ID);
 }
-void ComponentBank::deleteModel(const IDnumber &ID){
+void ComponentBank::deleteModel(const IDNUM &ID){
     components_model.erase(ID);
     components_soul.at(ID).components &= ~MODEL;
 }
-void ComponentBank::deleteMotion(const IDnumber &ID){
+void ComponentBank::deleteMotion(const IDNUM &ID){
     components_motion.erase(ID);
     components_soul.at(ID).components &= ~MOTION;
 }
-void ComponentBank::deleteSpatial(const IDnumber &ID){
+void ComponentBank::deleteSpatial(const IDNUM &ID){
     components_spatial.erase(ID);
     components_soul.at(ID).components &= ~SPATIAL;
 }
-void ComponentBank::deleteControl(const IDnumber &ID){
+void ComponentBank::deleteControl(const IDNUM &ID){
     components_control.erase(ID);
     components_soul.at(ID).components &= ~CONTROL;
 }
-void ComponentBank::deletePointLight(const IDnumber &ID){
+void ComponentBank::deletePointLight(const IDNUM &ID){
     components_pointLight.erase(ID);
     components_soul.at(ID).components &= ~LPOINT;
 }
-void ComponentBank::deleteDirectionalLight(const IDnumber &ID){
+void ComponentBank::deleteDirectionalLight(const IDNUM &ID){
     components_directionalLight.erase(ID);
     components_soul.at(ID).components &= ~LDIRECT;
 }
-void ComponentBank::deleteAmbientLight(const IDnumber &ID){
+void ComponentBank::deleteAmbientLight(const IDNUM &ID){
     components_ambientLight.erase(ID);
     components_soul.at(ID).components &= ~LAMBIENT;
 }
 
 /* ENTITY CREATION */
-IDnumber ComponentBank::generateID(){
+IDNUM ComponentBank::generateID(){
     return nextID++;
 }
-IDnumber ComponentBank::createEntity(const char* name){
-    IDnumber ID = generateID();
+IDNUM ComponentBank::createEntity(const char* name){
+    IDNUM ID = generateID();
     if (addSoul(ID, name))
         return ID;
     else {
@@ -205,17 +205,17 @@ IDnumber ComponentBank::createEntity(const char* name){
         return NULL_ID;        
     }    
 }
-bool ComponentBank::notifySystems(const IDnumber &ID){
+bool ComponentBank::notifySystemsOfAdditions(const IDNUM &ID){
     return true;
 }
 
 /* CONVENIENCE GETTERS */
-std::string ComponentBank::getName(IDnumber &ID){
+std::string ComponentBank::getName(IDNUM &ID){
     return components_soul.at(ID).name;
 }
-std::string ComponentBank::listComponents(IDnumber &ID){
+std::string ComponentBank::listComponents(IDNUM &ID){
     std::ostringstream output;
-    componentFlag components = components_soul.at(ID).components;
+    COMPFLAG components = components_soul.at(ID).components;
     if (components & MODEL)
         output << "MODEL ";
     if (components & SPATIAL)

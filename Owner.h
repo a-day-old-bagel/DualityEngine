@@ -17,10 +17,10 @@ namespace DualityEngine {
     
     struct Owner
     {
-        Owner(const IDnumber &ref){
+        Owner(const IDNUM &ref){
             entityRef = ref;
         }
-        IDnumber entityRef;
+        IDNUM entityRef;
     };
 }
 

@@ -14,7 +14,7 @@ namespace DualityEngine {
 
     struct DirectionalLight
     {
-        DirectionalLight(const colorByte &red, const colorByte &green, const colorByte &blue, const double &dirX, const double &dirY, const double &dirZ){
+        DirectionalLight(const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue, const FLOAT &dirX, const FLOAT &dirY, const FLOAT &dirZ){
             color = {red, green, blue};
             direction = {dirX, dirY, dirZ};
         }

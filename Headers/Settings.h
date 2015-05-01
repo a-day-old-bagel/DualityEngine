@@ -20,12 +20,13 @@ namespace DualityEngine {
     #define INVALID_VALUE_32 0xFFFFFFFF
 
     // These define the types we'll be using
-    #define IDnumber        uint_fast32_t
-    #define RepoKeyNumber   uint_fast16_t
-    #define componentFlag   uint_fast16_t
-    #define stateFlag       uint_fast8_t
-    #define colorByte       uint_fast8_t
-    #define scoreNumber     int_fast16_t
+    #define IDNUM           uint_fast32_t
+    #define REPOKEYNUM      uint_fast16_t
+    #define COMPFLAG        uint_fast16_t
+    #define STATEFLAG       uint_fast8_t
+    #define COLORBYTE       uint_fast8_t
+    #define SCORENUM        int_fast16_t
+    #define FLOAT           double
 
     #define NULL_ID 0
     #define START_ID 1
@@ -35,8 +36,8 @@ namespace DualityEngine {
      * whose bits are flags that store whether
      * or not the entity has a given component
      *****************************************/
-    const componentFlag defaultComponents = 0;
-    enum componentFlags : componentFlag
+    const COMPFLAG defaultComponents = 0;
+    enum componentFlags : COMPFLAG
     {
         SPATIAL         = 0x1,      // Bit 1
         MOTION          = 0x2,      // Bit 2
@@ -54,8 +55,8 @@ namespace DualityEngine {
      * states, such as whether or not the
      * entity is experiencing a collision.
      *****************************************/
-    const stateFlag defaultState = 0;
-    enum stateFlags : stateFlag
+    const STATEFLAG defaultState = 0;
+    enum stateFlags : STATEFLAG
     {
         ACTIVE          = 0x1,      // Bit 1
         REMOVAL         = 0x2,      // Bit 2

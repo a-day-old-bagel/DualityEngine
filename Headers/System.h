@@ -20,8 +20,8 @@ namespace DualityEngine {
     {
     private:
         std::string name;
-        std::vector<IDnumber> registeredIDs;
-        componentFlag requiredComponents;
+        std::vector<IDNUM> registeredIDs;
+        COMPFLAG requiredComponents;
         ComponentBank* bank;
         bool escape = false;
         bool paused = false;
@@ -30,8 +30,8 @@ namespace DualityEngine {
         System(ComponentBank* bank, std::string name);
         ~System();
         std::string getName();
-        void discoverID (IDnumber ID);
-        void scrutinizeID (IDnumber ID);
+        void discoverID (IDNUM ID);
+        void scrutinizeID (IDNUM ID);
         virtual bool init(std::stringstream& output){}
         virtual void tick(){}
         void pause();

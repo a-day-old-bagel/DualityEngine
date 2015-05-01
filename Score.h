@@ -16,8 +16,8 @@ namespace DualityEngine {
     struct Score
     {
         Score(){ score = 0; }
-        Score(const scoreNumber &score){ this->score = score; }
-        scoreNumber score;
+        Score(const SCORENUM &score){ this->score = score; }
+        SCORENUM score;
     };
 }
 

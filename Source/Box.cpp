@@ -6,20 +6,20 @@
 
 using namespace DualityEngine;
 
-IDnumber ComponentBank::createBox(const char* name,
-                                  double posX, double posY, double posZ,
-                                  double rotX, double rotY, double rotZ,
-                                  double velX, double velY, double velZ,
-                                  double anvX, double anvY, double anvZ)
+IDNUM ComponentBank::createBox(const char* name,
+                                  const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ,
+                                  const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ,
+                                  const FLOAT &velX, const FLOAT &velY, const FLOAT &velZ,
+                                  const FLOAT &anvX, const FLOAT &anvY, const FLOAT &anvZ)
 {
-    IDnumber newEntityID = createEntity(name);
+    IDNUM newEntityID = createEntity(name);
     if (newEntityID != NULL_ID){
     
         addModel   (newEntityID);
         addMotion  (newEntityID, velX, velY, velZ, anvX, anvY, anvZ);
         addSpatial (newEntityID, posX, posY, posZ, rotX, rotY, rotZ);
 
-        notifySystems(newEntityID);    
+        notifySystemsOfAdditions(newEntityID);    
     }
     
     return newEntityID;
