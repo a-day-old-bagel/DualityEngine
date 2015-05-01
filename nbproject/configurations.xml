@@ -171,7 +171,7 @@
             <pElem>/usr/include/SDL2</pElem>
             <pElem>/usr/local/include/SDL2</pElem>
           </incDir>
-          <commandLine>-std=c++11 `pkg-config --cflags glew assimp freetype2`</commandLine>
+          <commandLine>-O3 -std=c++11 `pkg-config --cflags glew assimp freetype2`</commandLine>
         </ccTool>
         <linkerTool>
           <commandLine>`pkg-config --libs sdl2 gl glew assimp freetype2 fontconfig `</commandLine>

@@ -112,6 +112,20 @@ bool Game::NewGame()
     bank.addModel(10);      //Should fail
     bank.addModel(boxID);   //Should fail
     
+    
+    Uint32 startTime = SDL_GetTicks();
+    
+    for (int i = 0; i < 1000000; i++){
+        IDNUM newEntID = bank.createEntity("benchmark entity");
+        bank.addModel(newEntID);
+        bank.addControl(newEntID);
+        bank.addSpatial(newEntID, 2, 3, 4, 5, 6, 7);
+    }
+    
+    std::cout << "Time: " << SDL_GetTicks() - startTime << std::endl;
+    
+    Quit();
+    
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);
     SDL_WaitThread(graphicsThread, NULL);

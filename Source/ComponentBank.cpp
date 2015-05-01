@@ -21,6 +21,9 @@ ComponentBank::~ComponentBank(){
 }
 
 /* COMPONENT POINTER GETTERS */
+Soul* ComponentBank::getSoulPtr(const IDNUM &ID){
+    return &(components_soul.at(ID));
+}
 Model* ComponentBank::getModelPtr(const IDNUM &ID){
     return &(components_model.at(ID));
 }
@@ -33,9 +36,6 @@ Spatial* ComponentBank::getSpatialPtr(const IDNUM &ID){
 Control* ComponentBank::getControlPtr(const IDNUM &ID){
     return &(components_control.at(ID));
 }
-Soul* ComponentBank::getSoulPtr(const IDNUM &ID){
-    return &(components_soul.at(ID));
-}
 PointLight* ComponentBank::getPointLightPtr(const IDNUM &ID){
     return &(components_pointLight.at(ID));
 }
@@ -46,7 +46,14 @@ AmbientLight* ComponentBank::getAmbientLightPtr(const IDNUM &ID){
     return &(components_ambientLight.at(ID));
 }
     
-/* COMPONENT CREATION */
+/*******************************************************************************
+ * COMPONENT CREATION SECTION
+ ******************************************************************************/
+/*******************************************************************************
+ * TRY ADD FLAG TO SOUL
+ * if soul component exists at given ID, given component bit flag is OR'ed to
+ * that soul's component flags.  Otherwise an error message is output.
+ ******************************************************************************/
 bool ComponentBank::tryAddFlagToSoul(const COMPFLAG &flag,const IDNUM &ID){
     try{
         components_soul.at(ID).components |= flag;
@@ -56,7 +63,19 @@ bool ComponentBank::tryAddFlagToSoul(const COMPFLAG &flag,const IDNUM &ID){
     }
     return true;
 }
-#ifdef VARIADIC_ENABLED
+/*******************************************************************************
+ * TRY ADD COMPONENT [VARIADIC TEMPLATED]
+ * adds a component of type 'componentType' to the appropriate collection at 'ID',
+ * initializing it with the given arguments, as long as a component of that
+ * type doesn't already exist at that ID.  In that case, an error message is output.
+ * 
+ * format for a call is:
+ * tryAddComponent([ID at which to add the component],
+ * [string describing the component, like "model" or "motion"],
+ * [collection to which to add the component, like 'components_model'],
+ *      and now whatever arguments the component in question takes...
+ * [arg0], [arg1], ... ,[lastArg]);
+ ******************************************************************************/
 template<class componentType, typename ... types>
 bool ComponentBank::tryAddComponent(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table, const types& ... args){
     if ((table.emplace(std::piecewise_construct, std::forward_as_tuple(ID), std::forward_as_tuple(args...))).second == false){
@@ -65,98 +84,68 @@ bool ComponentBank::tryAddComponent(const IDNUM &ID, const char* compName, std::
     }
     return true;
 }
-#else
-void ComponentBank::errComponentAlreadyExists(const char* compName, const IDNUM &ID){
-    printf("Could not add %s component at ID %lu: %s component already exists at that ID.\n", compName, ID, compName);
-}
-#endif
+/*******************************************************************************
+ * ADD SOUL
+ * is a little different than the rest below because it doesn't need to add any
+ * flags to a soul component (for obvious reasons). You won't need to call it
+ * anyway - it's private and wrapped into "createEntity."
+ ******************************************************************************/
 bool ComponentBank::addSoul(const IDNUM &ID, const char* name){
-    #ifdef VARIADIC_ENABLED
     return tryAddComponent(ID, "soul", components_soul, name, defaultComponents, defaultState);
-    #else    
-    if ((components_soul.emplace(std::piecewise_construct, std::forward_as_tuple(ID),
-        std::forward_as_tuple(name, defaultComponents, defaultState))).second == true)
-        return true;
-    else {
-        errComponentAlreadyExists("soul", ID);
-        return false;
-    }
-    #endif
 }
+/*******************************************************************************
+ * ADD [COMPONENT] FUNCTIONS:
+ * all of these are formatted the same way, but still separate so that they can
+ * be unwrapped at compile time instead of run time (performance thing).
+ * Anyway, this is how you lay out a function for adding a given component:
+ * 
+ * step0: call "tryAddFlagToSoul" passing the component enumerator and desired ID.
+ * if this returns true, it means that there exists a soul component with that ID,
+ * and that the bit flag you gave it has been OR'ed to that soul's 'componentFlags.'
+ * This is a necessary condition to add components, so if it returns true, move
+ * on to:
+ * 
+ * step1: call "tryAddComponent" passing the desired ID, a string describing the
+ * component (for error output), the collection in which to insert the component
+ * (make sure these all match up), and finally whatever arguments the component
+ * takes in its constructor.  This last bit is possible thanks to variadic
+ * templates, as seen in the declaration of "tryAddComponent".
+ * If there's already a component of that type at the given ID, an error message
+ * will be output, and the add will be ineffective.
+ * 
+ * And that's it - two steps. Just follow the format of the below if you're confused.
+ ******************************************************************************/
 void ComponentBank::addModel(const IDNUM &ID){
-    if (tryAddFlagToSoul(MODEL, ID)){
-        #ifdef VARIADIC_ENABLED
+    if (tryAddFlagToSoul(MODEL, ID))
         tryAddComponent(ID, "model", components_model);
-        #else    
-        if ((components_model.emplace(std::piecewise_construct, std::forward_as_tuple(ID),
-        std::forward_as_tuple())).second == false)
-            errComponentAlreadyExists("model", ID);
-        #endif
-    }
 }
 void ComponentBank::addMotion(const IDNUM &ID, const FLOAT &velX, const FLOAT &velY, const FLOAT &velZ,
                                            const FLOAT &anvX, const FLOAT &anvY, const FLOAT &anvZ){
     if (tryAddFlagToSoul(MOTION, ID))
-        #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "motion", components_motion, velX, velY, velZ, anvX, anvY, anvZ);
-        #else    
-        if ((components_motion.emplace(std::piecewise_construct, std::forward_as_tuple(ID),
-        std::forward_as_tuple(velX, velY, velZ, anvX, anvY, anvZ))).second == false)
-            errComponentAlreadyExists("motion", ID);
-        #endif
 }
 void ComponentBank::addSpatial(const IDNUM &ID, const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ,
                                             const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ){
     if (tryAddFlagToSoul(SPATIAL, ID))
-        #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "spatial", components_spatial, posX, posY, posZ, rotX, rotY, rotZ);
-        #else    
-        if ((components_spatial.emplace(std::piecewise_construct, std::forward_as_tuple(ID),
-        std::forward_as_tuple(posX, posY, posZ, rotX, rotY, rotZ))).second == false)
-            errComponentAlreadyExists("spatial", ID);
-        #endif
 }
 void ComponentBank::addControl(const IDNUM &ID){
     if (tryAddFlagToSoul(CONTROL, ID))
-        #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "control", components_control);
-        #else    
-        if ((components_control.emplace(std::piecewise_construct, std::forward_as_tuple(ID),
-        std::forward_as_tuple())).second == false)
-            errComponentAlreadyExists("control", ID);
-        #endif
 }
 void ComponentBank::addPointLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue,
                                   const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ){
     if (tryAddFlagToSoul(LPOINT, ID))
-        #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "point light", components_pointLight, red, green, blue, posX, posY, posZ);
-        #else    
-        if ((components_pointLight.emplace(std::piecewise_construct, std::forward_as_tuple(ID),
-        std::forward_as_tuple(red, green, blue, posX, posY, posZ))).second == false)
-            errComponentAlreadyExists("point light", ID);
-        #endif
 }
 void ComponentBank::addDirectionalLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue,
                                         const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ){
     if (tryAddFlagToSoul(LDIRECT, ID))
-        #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "directional light", components_directionalLight, red, green, blue, rotX, rotY, rotZ);
-        #else    
-        if ((components_directionalLight.emplace(std::piecewise_construct, std::forward_as_tuple(ID),
-        std::forward_as_tuple(red, green, blue, rotX, rotY, rotZ))).second == false)
-            errComponentAlreadyExists("directional light", ID);
-        #endif
 }
 void ComponentBank::addAmbientLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue){    
     if (tryAddFlagToSoul(LAMBIENT, ID))
-        #ifdef VARIADIC_ENABLED
         tryAddComponent(ID, "ambient light", components_ambientLight, red, green, blue);
-        #else    
-        if ((components_ambientLight.emplace(std::piecewise_construct, std::forward_as_tuple(ID),
-        std::forward_as_tuple(red, green, blue))).second == false)
-            errComponentAlreadyExists("ambient light", ID);
-        #endif
 }
 
 /* COMPONENT DELETION */

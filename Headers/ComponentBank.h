@@ -39,16 +39,15 @@ namespace DualityEngine {
         
         /* COMPONENT CREATION */
         bool tryAddFlagToSoul(const COMPFLAG &flag,const IDNUM &ID);
-        #ifdef VARIADIC_ENABLED
         template<class componentType, typename ... types>
         bool tryAddComponent(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table, const types& ... args);
-        #else
-        void errComponentAlreadyExists(const char* compName, const IDNUM &ID);
-        #endif
         bool addSoul(const IDNUM &ID, const char* name);
         
         /* COMPONENT DELETION */
         void deleteSoul(const IDNUM &ID);
+        
+        /* ENTITY CREATION */
+        IDNUM generateID();
 
     public:
         // Constructor for new states
@@ -91,7 +90,6 @@ namespace DualityEngine {
         void deleteAmbientLight(const IDNUM &ID);
 
         /* ENTITY CREATION */
-        IDNUM generateID();
         IDNUM createEntity(const char* name);
         bool  notifySystemsOfAdditions(const IDNUM &ID);
         IDNUM createBox(const char* name,

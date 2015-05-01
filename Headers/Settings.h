@@ -9,9 +9,6 @@
 #define	SETTINGS_H
 
 namespace DualityEngine {
-
-    // Define to switch on the variadic templated functions in componentBank.
-    #define VARIADIC_ENABLED
     
     // Some useful defines
     #define POINTER_DELETE(p) if (p) { delete p; p = NULL; }
