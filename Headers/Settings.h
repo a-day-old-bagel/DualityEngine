@@ -44,6 +44,10 @@ namespace DualityEngine {
         LAMBIENT        = 0x20,
         LDIRECT         = 0x40,
         LPOINT          = 0x80,
+        SPATCHILD       = 0x100,
+        SPATPARENT      = 0x200,
+        OWNER           = 0x400,
+        SCORE           = 0x800,
     };
 
     /*****************************************

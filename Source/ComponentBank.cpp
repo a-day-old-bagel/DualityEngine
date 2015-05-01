@@ -20,30 +20,53 @@ ComponentBank::~ComponentBank(){
     
 }
 
-/* COMPONENT POINTER GETTERS */
+/*******************************************************************************
+ * COMPONENT POINTER GETTERS SECTION - I KNOW THESE ARE A BAD IDEA.
+ ******************************************************************************/
+template<class componentType>
+componentType* getComponentPtr(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table){
+    try {
+        return &(table.at(ID));
+    }  catch(const std::out_of_range& oorException) {
+        printf("No %s component exists with ID %lu.", compName, ID);
+        return NULL;
+    }
+}
 Soul* ComponentBank::getSoulPtr(const IDNUM &ID){
-    return &(components_soul.at(ID));
+    return getComponentPtr(ID, "soul", components_soul);
 }
 Model* ComponentBank::getModelPtr(const IDNUM &ID){
-    return &(components_model.at(ID));
+    return getComponentPtr(ID, "model", components_model);
 }
 Motion* ComponentBank::getMotionPtr(const IDNUM &ID){
-    return &(components_motion.at(ID));
+    return getComponentPtr(ID, "motion", components_motion);
 }
 Spatial* ComponentBank::getSpatialPtr(const IDNUM &ID){
-    return &(components_spatial.at(ID));
+    return getComponentPtr(ID, "spatial", components_spatial);
+}
+SpatialChild* ComponentBank::getSpatialChildPtr(const uint_fast32_t& ID){
+    return getComponentPtr(ID, "spatial child", components_spatialChild);
+}
+SpatialParent* ComponentBank::getSpatialParentPtr(const uint_fast32_t& ID){
+    return getComponentPtr(ID, "spatial parent", components_spatialParent);
 }
 Control* ComponentBank::getControlPtr(const IDNUM &ID){
-    return &(components_control.at(ID));
+    return getComponentPtr(ID, "control", components_control);
 }
 PointLight* ComponentBank::getPointLightPtr(const IDNUM &ID){
-    return &(components_pointLight.at(ID));
+    return getComponentPtr(ID, "point light", components_pointLight);
 }
 DirectionalLight* ComponentBank::getDirectionalLightPtr(const IDNUM &ID){
-    return &(components_directionalLight.at(ID));
+    return getComponentPtr(ID, "directional light", components_directionalLight);
 }
 AmbientLight* ComponentBank::getAmbientLightPtr(const IDNUM &ID){
-    return &(components_ambientLight.at(ID));
+    return getComponentPtr(ID, "ambient light", components_ambientLight);
+}
+Owner* ComponentBank::getOwnerPtr(const uint_fast32_t& ID){
+    return getComponentPtr(ID, "owner", components_owner);
+}
+Score* ComponentBank::getScorePtr(const uint_fast32_t& ID){
+    return getComponentPtr(ID, "score", components_score);
 }
     
 /*******************************************************************************
@@ -54,7 +77,7 @@ AmbientLight* ComponentBank::getAmbientLightPtr(const IDNUM &ID){
  * if soul component exists at given ID, given component bit flag is OR'ed to
  * that soul's component flags.  Otherwise an error message is output.
  ******************************************************************************/
-bool ComponentBank::tryAddFlagToSoul(const COMPFLAG &flag,const IDNUM &ID){
+bool ComponentBank::tryAddFlagToSoul(const COMPFLAG &flag, const IDNUM &ID){
     try{
         components_soul.at(ID).components |= flag;
     } catch(const std::out_of_range& oorException) {
@@ -129,6 +152,14 @@ void ComponentBank::addSpatial(const IDNUM &ID, const FLOAT &posX, const FLOAT &
     if (tryAddFlagToSoul(SPATIAL, ID))
         tryAddComponent(ID, "spatial", components_spatial, posX, posY, posZ, rotX, rotY, rotZ);
 }
+void ComponentBank::addSpatialChild(const uint_fast32_t& ID, const uint_fast32_t& refID){
+    if (tryAddFlagToSoul(SPATCHILD, ID))
+        tryAddComponent(ID, "spatial child", components_spatialChild, refID);
+}
+void ComponentBank::addSpatialParent(const uint_fast32_t& ID, const uint_fast32_t& refID){
+    if (tryAddFlagToSoul(SPATPARENT, ID))
+        tryAddComponent(ID, "spatial parent", components_spatialParent, refID);
+}
 void ComponentBank::addControl(const IDNUM &ID){
     if (tryAddFlagToSoul(CONTROL, ID))
         tryAddComponent(ID, "control", components_control);
@@ -147,44 +178,121 @@ void ComponentBank::addAmbientLight(const IDNUM &ID, const COLORBYTE &red, const
     if (tryAddFlagToSoul(LAMBIENT, ID))
         tryAddComponent(ID, "ambient light", components_ambientLight, red, green, blue);
 }
-
-/* COMPONENT DELETION */
-void ComponentBank::deleteSoul(const IDNUM &ID){
-    components_soul.erase(ID);
+void ComponentBank::addOwner(const uint_fast32_t& ID, const uint_fast32_t& refID){
+    if (tryAddFlagToSoul(OWNER, ID))
+        tryAddComponent(ID, "owner", components_owner, refID);
 }
+void ComponentBank::addScore(const uint_fast32_t& ID){
+    if (tryAddFlagToSoul(SCORE, ID))
+        tryAddComponent(ID, "score", components_score);
+}
+
+/*******************************************************************************
+ * COMPONENT DELETION SECTION
+ ******************************************************************************/
+/*******************************************************************************
+ * TRY REMOVE FLAG FROM SOUL
+ * tries to AND a NOT-flag onto the component flags of the soul at ID.
+ * if there isn't a soul there, it outputs an error message.
+ ******************************************************************************/
+void ComponentBank::tryRemoveFlagFromSoul(const COMPFLAG &flag, const IDNUM &ID){
+    try{
+        components_soul.at(ID).components &= ~flag;
+    } catch(const std::out_of_range& oorException) {
+        printf("Cannot remove component flag at ID %lu: no soul exists at that ID\n", ID);
+    }
+}
+/*******************************************************************************
+ * TRY REMOVE COMPONENT [TEMPLATED]
+ * tries to call erase on the collection 'table' of a component of type
+ * 'componentType' at ID 'ID'. Outputs a message if there's no component there.
+ ******************************************************************************/
+template<class componentType>
+bool ComponentBank::tryRemoveComponent(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table){
+    if (table.erase(ID) == 0){
+        printf("Could not remove %s component at ID %lu: no such component exists.\n", compName, ID);
+        return false;
+    }
+    return true;
+}
+/*******************************************************************************
+ * DELETE SOUL
+ * just like the below functions, except doesn't need to clean any flags.
+ * it's private, and wrapped by "deleteEntity."
+ ******************************************************************************/
+bool ComponentBank::deleteSoul(const IDNUM &ID){
+    return tryRemoveComponent(ID, "soul", components_soul);
+}
+/*******************************************************************************
+ * DELETE [COMPONENT] FUNCTIONS:
+ * OK, pretty straightforward like the create component functions above.  First
+ * try to remove the actual component from it's collection, then if that worked,
+ * try to erase the flag from that entity's soul.
+ * 
+ * This will work in the case
+ * that a component has somehow been orphaned (the corresponding soul has been
+ * deleted).  It will not work in the case that there's no actual component, but
+ * the soul still has a flag for some reason. To make this work in both cases,
+ * just call both methods without any of the "if" nonsense.  However, this will
+ * cause double error messages to be output in most of the failure cases.
+ ******************************************************************************/
 void ComponentBank::deleteModel(const IDNUM &ID){
-    components_model.erase(ID);
-    components_soul.at(ID).components &= ~MODEL;
+    if (tryRemoveComponent(ID, "model", components_model))
+        tryRemoveFlagFromSoul(MODEL, ID);
 }
 void ComponentBank::deleteMotion(const IDNUM &ID){
-    components_motion.erase(ID);
-    components_soul.at(ID).components &= ~MOTION;
+    if (tryRemoveComponent(ID, "motion", components_motion))
+        tryRemoveFlagFromSoul(MOTION, ID);
 }
 void ComponentBank::deleteSpatial(const IDNUM &ID){
-    components_spatial.erase(ID);
-    components_soul.at(ID).components &= ~SPATIAL;
+    if (tryRemoveComponent(ID, "spatial", components_spatial))
+        tryRemoveFlagFromSoul(SPATIAL, ID);
+}
+void ComponentBank::deleteSpatialChild(const uint_fast32_t& ID){
+    if (tryRemoveComponent(ID, "spatial child", components_spatialChild))
+        tryRemoveFlagFromSoul(SPATCHILD, ID);
+}
+void ComponentBank::deleteSpatialParent(const uint_fast32_t& ID){
+    if (tryRemoveComponent(ID, "spatial parent", components_spatialParent))
+        tryRemoveFlagFromSoul(SPATPARENT, ID);
 }
 void ComponentBank::deleteControl(const IDNUM &ID){
-    components_control.erase(ID);
-    components_soul.at(ID).components &= ~CONTROL;
+    if (tryRemoveComponent(ID, "control", components_control))
+        tryRemoveFlagFromSoul(CONTROL, ID);
 }
 void ComponentBank::deletePointLight(const IDNUM &ID){
-    components_pointLight.erase(ID);
-    components_soul.at(ID).components &= ~LPOINT;
+    if (tryRemoveComponent(ID, "point light", components_pointLight))
+        tryRemoveFlagFromSoul(LPOINT, ID);
 }
 void ComponentBank::deleteDirectionalLight(const IDNUM &ID){
-    components_directionalLight.erase(ID);
-    components_soul.at(ID).components &= ~LDIRECT;
+    if (tryRemoveComponent(ID, "directional light", components_directionalLight))
+        tryRemoveFlagFromSoul(LDIRECT, ID);
 }
 void ComponentBank::deleteAmbientLight(const IDNUM &ID){
-    components_ambientLight.erase(ID);
-    components_soul.at(ID).components &= ~LAMBIENT;
+    if (tryRemoveComponent(ID, "ambient light", components_ambientLight))
+        tryRemoveFlagFromSoul(LAMBIENT, ID);
+}
+void ComponentBank::deleteOwner(const uint_fast32_t& ID){
+    if (tryRemoveComponent(ID, "owner", components_owner))
+        tryRemoveFlagFromSoul(OWNER, ID);
+}
+void ComponentBank::deleteScore(const uint_fast32_t& ID){
+    if (tryRemoveComponent(ID, "score", components_score))
+        tryRemoveFlagFromSoul(SCORE, ID);
 }
 
-/* ENTITY CREATION */
+/*******************************************************************************
+ * ENTITY CREATION SECTION
+ ******************************************************************************/
+/*******************************************************************************
+ * GENERATE ID
+ ******************************************************************************/
 IDNUM ComponentBank::generateID(){
     return nextID++;
 }
+/*******************************************************************************
+ * CREATE ENTITY
+ ******************************************************************************/
 IDNUM ComponentBank::createEntity(const char* name){
     IDNUM ID = generateID();
     if (addSoul(ID, name))
@@ -194,17 +302,88 @@ IDNUM ComponentBank::createEntity(const char* name){
         return NULL_ID;        
     }    
 }
+/*******************************************************************************
+ * NOTIFY SYSTEMS OF ADDITIONS
+ ******************************************************************************/
 bool ComponentBank::notifySystemsOfAdditions(const IDNUM &ID){
     return true;
 }
 
-/* CONVENIENCE GETTERS */
+/*******************************************************************************
+ * ENTITY DELETION SECTION
+ ******************************************************************************/
+/*******************************************************************************
+ * DELETE ENTITY
+ * first attempts to remove all non-soul components with ID 'ID', then
+ * REMOVES THE ENTITY'S SOUL!!!! <- this is the main reason I named it "soul."
+ ******************************************************************************/
+bool ComponentBank::deleteEntity(const uint_fast32_t& ID){
+    COMPFLAG flags;
+    std::string name;
+    try {
+        flags = components_soul.at(ID).components;
+        name = components_soul.at(ID).name;
+    } catch(const std::out_of_range& oorException) {
+        printf("Could not delete entity: No soul component exists at ID %lu.", ID);
+        return false;
+    }
+    
+    try {
+        
+    if (flags & MODEL) deleteModel(ID);
+    if (flags & MOTION) deleteMotion(ID);
+    if (flags & SPATIAL) deleteSpatial(ID);
+    if (flags & SPATCHILD) deleteSpatialChild(ID);
+    if (flags & SPATPARENT) deleteSpatialParent(ID);
+    if (flags & CONTROL) deleteControl(ID);
+    if (flags & LPOINT) deletePointLight(ID);
+    if (flags & LDIRECT) deleteDirectionalLight(ID);
+    if (flags & LAMBIENT) deleteAmbientLight(ID);
+    if (flags & OWNER) deleteOwner(ID);
+    if (flags & SCORE) deleteScore(ID);
+    
+    deleteSoul(ID);
+    
+    } catch(...) {
+        printf("Something went wrong upon attempting to delete entity %s ( ID %lu )!", name.c_str(), ID);
+    }
+    
+    printf("Entity '%s' ( ID %lu ) has been destroyed.", name.c_str(), ID);
+}
+/*******************************************************************************
+ * PURGE ENTITY
+ * this should not only delete the entity, but also delete any entities that are
+ * spatial children of it.
+ ******************************************************************************/
+bool ComponentBank::purgeEntity(const uint_fast32_t& ID){
+    deleteEntity(ID);
+}
+/*******************************************************************************
+ * NOTIFY SYSTEMS OF DELETIONS
+ ******************************************************************************/
+bool ComponentBank::notifySystemsOfDeletions(const uint_fast32_t& ID){
+    return true;
+}
+/*******************************************************************************
+ * CONVENIENCE GETTERS SECTION
+ ******************************************************************************/
 std::string ComponentBank::getName(IDNUM &ID){
-    return components_soul.at(ID).name;
+    try {
+        return components_soul.at(ID).name;
+    } catch(const std::out_of_range& oorException) {
+        printf("No entity exists with ID %lu.", ID);
+        return "";
+    }
 }
 std::string ComponentBank::listComponents(IDNUM &ID){
+    COMPFLAG components;
+    try {
+        components = components_soul.at(ID).components;
+    } catch(const std::out_of_range& oorException) {
+        printf("No entity exists with ID %lu.", ID);
+        return "";
+    }
     std::ostringstream output;
-    COMPFLAG components = components_soul.at(ID).components;
     if (components & MODEL)
         output << "MODEL ";
     if (components & SPATIAL)

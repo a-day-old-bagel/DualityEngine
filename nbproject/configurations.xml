@@ -77,13 +77,14 @@
         <itemPath>Headers/DirectionalLight.h</itemPath>
         <itemPath>Headers/Model.h</itemPath>
         <itemPath>Headers/Motion.h</itemPath>
-        <itemPath>Owner.h</itemPath>
+        <itemPath>Headers/Owner.h</itemPath>
         <itemPath>Headers/PointLight.h</itemPath>
-        <itemPath>Score.h</itemPath>
+        <itemPath>Headers/Score.h</itemPath>
         <itemPath>Headers/Soul.h</itemPath>
         <itemPath>Headers/Spatial.h</itemPath>
-        <itemPath>SpatialChild.h</itemPath>
+        <itemPath>Headers/SpatialChild.h</itemPath>
         <itemPath>SpatialParent.h</itemPath>
+        <itemPath>Headers/SpatialParent.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f4" displayName="Systems" projectFiles="true">
         <logicalFolder name="f1" displayName="Utilities" projectFiles="true">
@@ -274,6 +275,8 @@
       </item>
       <item path="Headers/Motion.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Owner.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/PhysCollide.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/PhysMove.h" ex="false" tool="3" flavor2="0">
@@ -284,6 +287,8 @@
       </item>
       <item path="Headers/RenderOld.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Score.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Settings.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/ShaderRepository.h" ex="false" tool="3" flavor2="0">
@@ -293,6 +298,10 @@
       <item path="Headers/SoundRepository.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Spatial.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/SpatialChild.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/SpatialParent.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/System.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -315,10 +324,6 @@
       <item path="Headers/technique.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/texture.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Owner.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Score.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Source/Box.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -355,8 +360,6 @@
       <item path="Source/technique.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/texture.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SpatialChild.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SpatialParent.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -478,6 +481,8 @@
       </item>
       <item path="Headers/Motion.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Owner.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/PhysCollide.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/PhysMove.h" ex="false" tool="3" flavor2="0">
@@ -488,6 +493,8 @@
       </item>
       <item path="Headers/RenderOld.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Score.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Settings.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/ShaderRepository.h" ex="false" tool="3" flavor2="0">
@@ -497,6 +504,10 @@
       <item path="Headers/SoundRepository.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Spatial.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/SpatialChild.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/SpatialParent.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/System.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -519,10 +530,6 @@
       <item path="Headers/technique.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/texture.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Owner.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Score.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Source/Box.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -559,8 +566,6 @@
       <item path="Source/technique.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/texture.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="SpatialChild.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="SpatialParent.h" ex="false" tool="3" flavor2="0">
       </item>

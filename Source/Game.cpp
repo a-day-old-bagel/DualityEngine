@@ -30,7 +30,8 @@ Game::~Game()
 /**************************************
  * BEGIN
  * called once from where the game is
- * instantiated.
+ * instantiated. Maybe will bring up a
+ * main menu at some point...
  *************************************/
 bool Game::Begin()
 {
@@ -86,8 +87,7 @@ void Game::Menu()
 //<editor-fold defaultstate="collapsed" desc="New Game">
 /**************************************
  * NEW GAME : Game Initializer
- * sets up game, waits for five seconds,
- * then exits game (this is for testing)
+ * sets up game
  *************************************/
 bool Game::NewGame()
 {    
@@ -110,21 +110,12 @@ bool Game::NewGame()
               << "\nbox comps: " << bank.listComponents(boxID) << std::endl;
     
     bank.addModel(10);      //Should fail
-    bank.addModel(boxID);   //Should fail
+    bank.addModel(boxID);   //Should fail 
     
+    bank.deleteEntity(boxID);
     
-    Uint32 startTime = SDL_GetTicks();
-    
-    for (int i = 0; i < 1000000; i++){
-        IDNUM newEntID = bank.createEntity("benchmark entity");
-        bank.addModel(newEntID);
-        bank.addControl(newEntID);
-        bank.addSpatial(newEntID, 2, 3, 4, 5, 6, 7);
-    }
-    
-    std::cout << "Time: " << SDL_GetTicks() - startTime << std::endl;
-    
-    Quit();
+    std::cout << "\nget box name after delete:\n";
+    std::cout << bank.getName(boxID) << std::endl;
     
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);

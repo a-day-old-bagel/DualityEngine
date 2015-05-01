@@ -11,7 +11,7 @@
 #ifndef OWNER_H
 #define	OWNER_H
 
-#include "Headers/Settings.h"
+#include "Settings.h"
 
 namespace DualityEngine {
     

@@ -9,7 +9,7 @@
 #ifndef SCORE_H
 #define	SCORE_H
 
-#include "Headers/Settings.h"
+#include "Settings.h"
 
 namespace DualityEngine {
     
