@@ -47,8 +47,8 @@ void SystemEngine::engage()
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Work Thread Function">
-#define THREAD_BEGIN_BLOCK_OUTPUT std::endl << threadData->threadName << " output begins =========================================\n\n"
-#define THREAD_END_BLOCK_OUTPUT std::endl << threadData->threadName << " output ends =========================================\n\n"
+#define THREAD_BEGIN_BLOCK_OUTPUT std::endl << "@============@  " << threadData->threadName << " initialization output BEGINS  @============@\n\n"
+#define THREAD_END_BLOCK_OUTPUT std::endl << "@============@  " << threadData->threadName << " initialization output ENDS  @============@\n\n"
 int DualityEngine::EngineThreadFunction(void* data)
 {
     System* system;
@@ -75,7 +75,7 @@ int DualityEngine::EngineThreadFunction(void* data)
     }
     
     // Printout of what's running on this thread
-    *output << threadData->threadName << " is entering an engine loop running the following systems:\n";
+    *output << threadData->threadName << " is entering main loop running the following systems:\n";
     for (int i = 0; i < systems->size(); i++)
         *output << "    " << i + 1 << ". " << systems->at(i)->getName() << std::endl;
     *output << THREAD_END_BLOCK_OUTPUT;
@@ -102,7 +102,7 @@ int DualityEngine::EngineThreadFunction(void* data)
                 system->tick();
         }
     }
-    *output << "Terminating " << threadData->threadName << " engine loop and finishing thread.\n\n";
+    *output << "Terminating " << threadData->threadName << "\n\n";
     
     // Output the thread's reports to standard out.
     std::cout << output->str();

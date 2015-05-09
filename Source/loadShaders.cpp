@@ -6,118 +6,121 @@
 
 using namespace DualityEngine;
 
-GLuint DualityEngine::loadShaders(const char * vertex_file_path,const char * fragment_file_path)
+GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFilePath, std::stringstream& engineOut)
 {
     //<editor-fold defaultstate="collapsed" desc="Set up variables">
     
-    printf("\n"); // Just some spacing for console output.
+    engineOut << std::endl; // Just some spacing for console output.
     
     // Create the empty shaders
-    GLuint VertexShaderID = glCreateShader(GL_VERTEX_SHADER);
-    GLuint FragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
-    GLuint ProgramID = glCreateProgram();
+    GLuint vertShaderID = glCreateShader(GL_VERTEX_SHADER);
+    GLuint fragShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+    GLuint progID = glCreateProgram();
     
     // These are for validating shaders and checking errors
-    GLint Result = GL_FALSE;
-    int InfoLogLength;
+    GLint result = GL_FALSE;
+    int infoLogLength;
     
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Read the shader source files">
     
-    std::string VertexShaderCode;
-    std::ifstream VertexShaderStream(vertex_file_path, std::ios::in);
-    if(VertexShaderStream.is_open()) {
-            std::string Line = "";
-            while(getline(VertexShaderStream, Line))
-                    VertexShaderCode += "\n" + Line;
-            VertexShaderStream.close();
+    std::string vertShaderCode;
+    std::ifstream vertShaderStream(vertFilePath, std::ios::in);
+    if(vertShaderStream.is_open()) {
+        std::string Line = "";
+        while(getline(vertShaderStream, Line))
+                vertShaderCode += "\n" + Line;
+        vertShaderStream.close();
     } else {
-            printf("Cannot find %s.\n", vertex_file_path);
-            return GL_FALSE;
+        engineOut << "Cannot open " << vertFilePath << std::endl;
+        return GL_FALSE;
     }
 
-    std::string FragmentShaderCode;
-    std::ifstream FragmentShaderStream(fragment_file_path, std::ios::in);
-    if(FragmentShaderStream.is_open()) {
-            std::string Line = "";
-            while(getline(FragmentShaderStream, Line))
-                    FragmentShaderCode += "\n" + Line;
-            FragmentShaderStream.close();
+    std::string fragShaderCode;
+    std::ifstream fragShaderStream(fragFilePath, std::ios::in);
+    if(fragShaderStream.is_open()) {
+        std::string Line = "";
+        while(getline(fragShaderStream, Line))
+                fragShaderCode += "\n" + Line;
+        fragShaderStream.close();
     } else {
-            printf("Cannot find %s.\n", fragment_file_path);
-            return GL_FALSE;
+        engineOut << "Cannot open " << fragFilePath << std::endl;
+        return GL_FALSE;
     }
     
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Compile each shader">
     
     // Compile Vertex Shader
-    printf("Compiling vertex shader : %s", vertex_file_path);
-    char const * VertexSourcePointer = VertexShaderCode.c_str();
-    glShaderSource(VertexShaderID, 1, &VertexSourcePointer , NULL);
-    glCompileShader(VertexShaderID);
+    engineOut << "Compiling vertex shader : " << vertFilePath;
+    char const * vertSourcePointer = vertShaderCode.c_str();
+    glShaderSource(vertShaderID, 1, &vertSourcePointer , NULL);
+    glCompileShader(vertShaderID);
 
     // Check Vertex Shader
-    glGetShaderiv(VertexShaderID, GL_COMPILE_STATUS, &Result);
-    glGetShaderiv(VertexShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if (InfoLogLength > 0) {
-            std::vector<char> VertexShaderErrorMessage(InfoLogLength + 1);
-            glGetShaderInfoLog(VertexShaderID, InfoLogLength, NULL, &VertexShaderErrorMessage[0]);
-            printf("\n%s", &VertexShaderErrorMessage[0]);
+    glGetShaderiv(vertShaderID, GL_COMPILE_STATUS, &result);
+    glGetShaderiv(vertShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+    if (infoLogLength > 0) {
+        std::vector<char> vertShaderErrorMessage(infoLogLength + 1);
+        glGetShaderInfoLog(vertShaderID, infoLogLength, NULL, &vertShaderErrorMessage[0]);
+        //printf("\n%s", &VertexShaderErrorMessage[0]);
+        engineOut << std::endl << &vertShaderErrorMessage[0];
     }
-    if (Result == GL_FALSE) {
-        printf("%s SHADER DID NOT COMPILE!\n\n", vertex_file_path);
+    if (result == GL_FALSE) {
+        engineOut << vertFilePath << " SHADER DID NOT COMPILE!\n\n";
         return GL_FALSE;
     } else {
-        printf("%s compiled successfully.\n\n", vertex_file_path);
+        engineOut << vertFilePath << " compiled successfully.\n\n";
     }
 
     // Compile Fragment Shader
-    printf("Compiling fragment shader : %s", fragment_file_path);
-    char const * FragmentSourcePointer = FragmentShaderCode.c_str();
-    glShaderSource(FragmentShaderID, 1, &FragmentSourcePointer , NULL);
-    glCompileShader(FragmentShaderID);
+    engineOut << "Compiling fragment shader : " << fragFilePath;
+    char const * fragSourcePointer = fragShaderCode.c_str();
+    glShaderSource(fragShaderID, 1, &fragSourcePointer , NULL);
+    glCompileShader(fragShaderID);
 
     // Check Fragment Shader
-    glGetShaderiv(FragmentShaderID, GL_COMPILE_STATUS, &Result);
-    glGetShaderiv(FragmentShaderID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if (InfoLogLength > 0) {
-            std::vector<char> FragmentShaderErrorMessage(InfoLogLength + 1);
-            glGetShaderInfoLog(FragmentShaderID, InfoLogLength, NULL, &FragmentShaderErrorMessage[0]);
-            printf("\n%s", &FragmentShaderErrorMessage[0]);
+    glGetShaderiv(fragShaderID, GL_COMPILE_STATUS, &result);
+    glGetShaderiv(fragShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+    if (infoLogLength > 0) {
+        std::vector<char> fragShaderErrorMessage(infoLogLength + 1);
+        glGetShaderInfoLog(fragShaderID, infoLogLength, NULL, &fragShaderErrorMessage[0]);
+        //printf("\n%s", &FragmentShaderErrorMessage[0]);
+        engineOut << std::endl << &fragShaderErrorMessage[0];
     }
-    if (Result == GL_FALSE) {
-        printf("%s SHADER DID NOT COMPILE!\n\n", fragment_file_path);
+    if (result == GL_FALSE) {
+        engineOut << fragFilePath << " SHADER DID NOT COMPILE!\n\n";
         return GL_FALSE;
     } else {
-        printf("%s compiled successfully.\n\n", fragment_file_path);
+        engineOut << fragFilePath << " compiled successfully.\n\n";
     }
     
     //</editor-fold>
     //<editor-fold defaultstate="collapsed" desc="Attach and link shaders">
     
-    printf("Linking program");
+    engineOut << "Linking Program...\n";
     
-    glAttachShader(ProgramID, VertexShaderID);
-    glAttachShader(ProgramID, FragmentShaderID);
-    glLinkProgram(ProgramID);
+    glAttachShader(progID, vertShaderID);
+    glAttachShader(progID, fragShaderID);
+    glLinkProgram(progID);
 
     // Check the program
-    glGetProgramiv(ProgramID, GL_LINK_STATUS, &Result);
-    glValidateProgram(ProgramID);
-    glGetProgramiv(ProgramID, GL_INFO_LOG_LENGTH, &InfoLogLength);
-    if (InfoLogLength > 0) {
-            std::vector<char> ProgramErrorMessage(InfoLogLength + 1);
-            glGetProgramInfoLog(ProgramID, InfoLogLength, NULL, &ProgramErrorMessage[0]);
-            printf("%s\n", &ProgramErrorMessage[0]);
+    glGetProgramiv(progID, GL_LINK_STATUS, &result);
+    glValidateProgram(progID);
+    glGetProgramiv(progID, GL_INFO_LOG_LENGTH, &infoLogLength);
+    if (infoLogLength > 0) {
+        std::vector<char> progErrorMessage(infoLogLength + 1);
+        glGetProgramInfoLog(progID, infoLogLength, NULL, &progErrorMessage[0]);
+        //printf("%s\n", &progErrorMessage[0]);
+        engineOut << std::endl << &progErrorMessage[0];
     }
 
-    glDeleteShader(VertexShaderID);
-    glDeleteShader(FragmentShaderID);
+    glDeleteShader(vertShaderID);
+    glDeleteShader(fragShaderID);
     //</editor-fold>
 
-    printf("shader program successfully loaded and given ID %i\n\n", ProgramID);
-    return ProgramID;
+    engineOut << "shader program successfully loaded and given ID " << progID << std::endl;
+    return progID;
 }
 
 

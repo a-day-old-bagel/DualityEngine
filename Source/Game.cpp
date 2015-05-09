@@ -96,26 +96,6 @@ bool Game::NewGame()
     initializeEngines();
     if (!startEngines()) return false;
     
-    IDNUM boxID = bank.createBox("box",
-                                    0, 0, 0,
-                                    0, 0, 0,
-                                    0, 0, 0,
-                                    0, 0, 0);
-    
-    bank.addControl(boxID);
-    bank.addPointLight(boxID, 200, 90, 230, 0, 0, 0);
-    
-    std::cout << "\nbox ID: " << boxID
-              << "\nbox name: " << bank.getName(boxID)
-              << "\nbox comps: " << bank.listComponents(boxID) << std::endl;
-    
-    bank.addModel(10);      //Should fail
-    bank.addModel(boxID);   //Should fail 
-    
-    bank.deleteEntity(boxID);
-    
-    std::cout << "\nget box name after delete:\n";
-    std::cout << bank.getName(boxID) << std::endl;
     
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);
@@ -221,10 +201,10 @@ bool Game::initializeECS()
  *************************************/
 bool Game::initializeEngines()
 {
-    graphicsEngine = new SystemEngine(&graphicsThread, "Graphics Thread");
+    graphicsEngine = new SystemEngine(&graphicsThread, "Duality Graphics Engine");
     graphicsEngine->addSystem(renderingSystem);
     
-    physicsEngine = new SystemEngine(&physicsThread, "Physics Thread");
+    physicsEngine = new SystemEngine(&physicsThread, "Duality Physics Engine");
     physicsEngine->addSystem(physicsMoveSystem);
     physicsEngine->addSystem(physicsCollisionSystem);
     physicsEngine->addSystem(userControlSystem);
@@ -315,8 +295,7 @@ void Game::nullifyPointers()
  *************************************/
 void Game::freeMemory()
 {
-    POINTER_DELETE(controlDelegates);    
-    //POINTER_DELETE(bank);
+    POINTER_DELETE(controlDelegates);
     
     POINTER_DELETE(renderingSystem);
     POINTER_DELETE(physicsMoveSystem);

@@ -29,16 +29,9 @@ bool System_Render::init(std::stringstream& engineOut)
     //Create context
     context = SDL_GL_CreateContext(window);
     if(context == NULL) {
-        //throw("OpenGL context was not created! SDL Error: %s\n", SDL_GetError());
         engineOut << "OpenGL context was not created! SDL Error: " << SDL_GetError() << std::endl;
-//        printf("OpenGL context was not created! SDL Error: %s\n", SDL_GetError());
         return false;
     }
-    //Initialize OpenGL
-//    try { initGL(); }
-//    catch (const char* errorString){
-//        throw("Unable to initialize graphics\n%s", errorString);
-//    }
     if(!initGL(engineOut)) {
         engineOut << "Unable to initialize graphics!" << std::endl;
         return false;
@@ -70,7 +63,7 @@ bool System_Render::initGL(std::stringstream& engineOut)
 
     // Create and compile our GLSL program from the shaders
     programID = loadShaders("Assets/Shaders/redTri.vert",
-                            "Assets/Shaders/redTri.frag");
+                            "Assets/Shaders/redTri.frag", engineOut);
     
     // If shader compilation / linking didn't work, fail.
     if (programID == GL_FALSE) return false;

@@ -18,7 +18,7 @@ namespace DualityEngine {
 
     // These define the types we'll be using
     #define IDNUM           uint_fast32_t
-    #define REPOKEYNUM      uint_fast16_t
+    #define ASSETKEY        uint_fast16_t
     #define COMPFLAG        uint_fast16_t
     #define STATEFLAG       uint_fast8_t
     #define COLORBYTE       uint_fast8_t
@@ -48,6 +48,11 @@ namespace DualityEngine {
         SPATPARENT      = 0x200,
         OWNER           = 0x400,
         SCORE           = 0x800,
+        
+        BLANK           = 0x1000,
+        BLANK2          = 0x2000,
+        BLANK3          = 0x4000,
+        BLANK4          = 0x8000    // Bit 16
     };
 
     /*****************************************
@@ -71,7 +76,6 @@ namespace DualityEngine {
         static const int GLmajorVersion     = 3;
         static const int GLminorVersion     = 3;
     };
-
 }
 
 #endif	/* SETTINGS_H */
