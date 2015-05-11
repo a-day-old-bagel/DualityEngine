@@ -11,60 +11,61 @@
 namespace DualityEngine {
     
     // Some useful defines
-    #define POINTER_DELETE(p) if (p) { delete p; p = NULL; }
-    #define ARRAY_COUNT(p) (sizeof(p)/sizeof(p[0]))
-    #define WRITE_ZEROS(a) memset(a, 0, sizeof(a))
-    #define INVALID_VALUE_32 0xFFFFFFFF
+    #define DU_POINTER_DELETE(p) if (p) { delete p; p = NULL; }
+    #define DU_ARRAY_COUNT(p) (sizeof(p)/sizeof(p[0]))
+    #define DU_WRITE_ZEROS(a) memset(a, 0, sizeof(a))
 
     // These define the types we'll be using
-    #define IDNUM           uint_fast32_t
-    #define ASSETKEY        uint_fast16_t
-    #define COMPFLAG        uint_fast16_t
-    #define STATEFLAG       uint_fast8_t
-    #define COLORBYTE       uint_fast8_t
-    #define SCORENUM        int_fast16_t
-    #define FLOAT           double
+    typedef uint_fast32_t   DU_ID;
+    typedef uint_fast16_t   DU_ASSETKEY;
+    typedef uint_fast16_t   DU_COMPFLAG;
+    typedef uint_fast8_t    DU_STATEFLAG;
+    typedef uint_fast8_t    DU_COLORBYTE;
+    typedef int_fast16_t    DU_SCORENUM;
+    typedef double          DU_FLOAT;
 
-    #define NULL_ID 0
-    #define START_ID 1
+    // Some defines of useful values
+    #define DU_INVALID_VALUE_32 0xFFFFFFFF  // used for error states
+    #define DU_NULL_ID 0                    // used for entity error states
+    #define DU_START_ID 1                   // ID assignment begins with 1
+    #define DU_DEFAULT_STATE 0              // State entities start with
+    #define DU_DEFAULT_COMPONENTS 0         // Components entities start with
 
     /*****************************************
-     * The state component will include an int
+     * The soul component will include an int
      * whose bits are flags that store whether
      * or not the entity has a given component
      *****************************************/
-    const COMPFLAG defaultComponents = 0;
-    enum componentFlags : COMPFLAG
+    enum componentFlags : DU_COMPFLAG
     {
-        SPATIAL         = 0x1,      // Bit 1
-        MOTION          = 0x2,      // Bit 2
-        COLLISION       = 0x4,      // Bit 3 ...
-        MODEL           = 0x8,
-        CONTROL         = 0x10,
-        LAMBIENT        = 0x20,
-        LDIRECT         = 0x40,
-        LPOINT          = 0x80,
-        SPATCHILD       = 0x100,
-        SPATPARENT      = 0x200,
-        OWNER           = 0x400,
-        SCORE           = 0x800,
+        POSITION        = 0x1,      // Bit 1
+        ROTATION        = 0x2,
+        POSVELOC        = 0x4,
+        ROTVELOC        = 0x8,
+        COLLISION       = 0x10,
+        MODEL           = 0x20,
+        CONTROL         = 0x40,
+        LAMBIENT        = 0x80,
+        LDIRECT         = 0x100,
+        LPOINT          = 0x200,
+        POSCHILD        = 0x400,
+        POSPARENT       = 0x800,
+        OWNER           = 0x1000,
+        SCORE           = 0x2000,
         
-        BLANK           = 0x1000,
-        BLANK2          = 0x2000,
-        BLANK3          = 0x4000,
-        BLANK4          = 0x8000    // Bit 16
+        BLANK           = 0x4000,
+        BLANK2          = 0x8000    // Bit 16
     };
 
     /*****************************************
-     * The state component will include an int
+     * The soul component will include an int
      * whose bits are flags that store boolean
      * states, such as whether or not the
      * entity is experiencing a collision.
      *****************************************/
-    const STATEFLAG defaultState = 0;
-    enum stateFlags : STATEFLAG
+    enum stateFlags : DU_STATEFLAG
     {
-        ACTIVE          = 0x1,      // Bit 1
+        INACTIVE        = 0x1,      // Bit 1
         REMOVAL         = 0x2,      // Bit 2
     };
 

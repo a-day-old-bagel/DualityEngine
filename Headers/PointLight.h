@@ -14,7 +14,7 @@ namespace DualityEngine {
 
     struct PointLight
     {
-        PointLight(const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue, const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ){
+        PointLight(const DU_COLORBYTE &red, const DU_COLORBYTE &green, const DU_COLORBYTE &blue, const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ){
             color = {red, green, blue};
             position = {posX, posY, posZ};
         }

@@ -8,11 +8,11 @@ using namespace DualityEngine;
 
 /* CONSTRUCTOR */
 ComponentBank::ComponentBank(){
-    nextID = 1; // IDnumber of 0 is an error code, so count up from 1.
+    nextID = DU_START_ID;
 }
 
 /* CONSTRUCTOR FOR LOADING SAVED STATES */
-ComponentBank::ComponentBank(const IDNUM &startingID){
+ComponentBank::ComponentBank(const DU_ID &startingID){
     nextID = startingID;
 }
 
@@ -24,7 +24,7 @@ ComponentBank::~ComponentBank(){
  * COMPONENT POINTER GETTERS SECTION - I KNOW THESE ARE A BAD IDEA.
  ******************************************************************************/
 template<class componentType>
-componentType* getComponentPtr(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table){
+componentType* getComponentPtr(const DU_ID &ID, const char* compName, std::unordered_map<DU_ID, componentType> &table){
     try {
         return &(table.at(ID));
     }  catch(const std::out_of_range& oorException) {
@@ -32,40 +32,46 @@ componentType* getComponentPtr(const IDNUM &ID, const char* compName, std::unord
         return NULL;
     }
 }
-Soul* ComponentBank::getSoulPtr(const IDNUM &ID){
+Soul* ComponentBank::getSoulPtr(const DU_ID &ID){
     return getComponentPtr(ID, "soul", components_soul);
 }
-Model* ComponentBank::getModelPtr(const IDNUM &ID){
+Model* ComponentBank::getModelPtr(const DU_ID &ID){
     return getComponentPtr(ID, "model", components_model);
 }
-Motion* ComponentBank::getMotionPtr(const IDNUM &ID){
-    return getComponentPtr(ID, "motion", components_motion);
+PositionVeloc* ComponentBank::getPositionVelocPtr(const DU_ID &ID){
+    return getComponentPtr(ID, "linear velocity", components_positionVeloc);
 }
-Spatial* ComponentBank::getSpatialPtr(const IDNUM &ID){
-    return getComponentPtr(ID, "spatial", components_spatial);
+Position* ComponentBank::getPositionPtr(const DU_ID &ID){
+    return getComponentPtr(ID, "position", components_position);
 }
-SpatialChild* ComponentBank::getSpatialChildPtr(const uint_fast32_t& ID){
-    return getComponentPtr(ID, "spatial child", components_spatialChild);
+PositionChild* ComponentBank::getPositionChildPtr(const DU_ID& ID){
+    return getComponentPtr(ID, "position child", components_positionChild);
 }
-SpatialParent* ComponentBank::getSpatialParentPtr(const uint_fast32_t& ID){
-    return getComponentPtr(ID, "spatial parent", components_spatialParent);
+PositionParent* ComponentBank::getPositionParentPtr(const DU_ID& ID){
+    return getComponentPtr(ID, "position parent", components_positionParent);
 }
-Control* ComponentBank::getControlPtr(const IDNUM &ID){
+Rotation* ComponentBank::getRotationPtr(const DU_ID& ID){
+    return getComponentPtr(ID, "rotation", components_rotation);
+}
+RotationVeloc* ComponentBank::getRotationVelocPtr(const DU_ID& ID){
+    return getComponentPtr(ID, "angular velocity", components_rotationVeloc);
+}
+Control* ComponentBank::getControlPtr(const DU_ID &ID){
     return getComponentPtr(ID, "control", components_control);
 }
-PointLight* ComponentBank::getPointLightPtr(const IDNUM &ID){
+PointLight* ComponentBank::getPointLightPtr(const DU_ID &ID){
     return getComponentPtr(ID, "point light", components_pointLight);
 }
-DirectionalLight* ComponentBank::getDirectionalLightPtr(const IDNUM &ID){
+DirectionalLight* ComponentBank::getDirectionalLightPtr(const DU_ID &ID){
     return getComponentPtr(ID, "directional light", components_directionalLight);
 }
-AmbientLight* ComponentBank::getAmbientLightPtr(const IDNUM &ID){
+AmbientLight* ComponentBank::getAmbientLightPtr(const DU_ID &ID){
     return getComponentPtr(ID, "ambient light", components_ambientLight);
 }
-Owner* ComponentBank::getOwnerPtr(const uint_fast32_t& ID){
+Owner* ComponentBank::getOwnerPtr(const DU_ID& ID){
     return getComponentPtr(ID, "owner", components_owner);
 }
-Score* ComponentBank::getScorePtr(const uint_fast32_t& ID){
+Score* ComponentBank::getScorePtr(const DU_ID& ID){
     return getComponentPtr(ID, "score", components_score);
 }
     
@@ -77,7 +83,7 @@ Score* ComponentBank::getScorePtr(const uint_fast32_t& ID){
  * if soul component exists at given ID, given component bit flag is OR'ed to
  * that soul's component flags.  Otherwise an error message is output.
  ******************************************************************************/
-bool ComponentBank::tryAddFlagToSoul(const COMPFLAG &flag, const IDNUM &ID){
+bool ComponentBank::tryAddFlagToSoul(const DU_COMPFLAG &flag, const DU_ID &ID){
     try{
         components_soul.at(ID).components |= flag;
     } catch(const std::out_of_range& oorException) {
@@ -100,7 +106,7 @@ bool ComponentBank::tryAddFlagToSoul(const COMPFLAG &flag, const IDNUM &ID){
  * [arg0], [arg1], ... ,[lastArg]);
  ******************************************************************************/
 template<class componentType, typename ... types>
-bool ComponentBank::tryAddComponent(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table, const types& ... args){
+bool ComponentBank::tryAddComponent(const DU_ID &ID, const char* compName, std::unordered_map<DU_ID, componentType> &table, const types& ... args){
     if ((table.emplace(std::piecewise_construct, std::forward_as_tuple(ID), std::forward_as_tuple(args...))).second == false){
         printf("Could not add %s component at ID %lu: %s component already exists at that ID.\n", compName, ID, compName);
         return false;
@@ -113,8 +119,8 @@ bool ComponentBank::tryAddComponent(const IDNUM &ID, const char* compName, std::
  * flags to a soul component (for obvious reasons). You won't need to call it
  * anyway - it's private and wrapped into "createEntity."
  ******************************************************************************/
-bool ComponentBank::addSoul(const IDNUM &ID, const char* name){
-    return tryAddComponent(ID, "soul", components_soul, name, defaultComponents, defaultState);
+bool ComponentBank::addSoul(const DU_ID &ID, const char* name){
+    return tryAddComponent(ID, "soul", components_soul, name, DU_DEFAULT_COMPONENTS, DU_DEFAULT_STATE);
 }
 /*******************************************************************************
  * ADD [COMPONENT] WRAPPER FUNCTIONS:
@@ -138,51 +144,57 @@ bool ComponentBank::addSoul(const IDNUM &ID, const char* name){
  * 
  * And that's it - two steps. Just follow the format of the below if you're confused.
  ******************************************************************************/
-void ComponentBank::addModel(const IDNUM &ID){
+void ComponentBank::addModel(const DU_ID &ID){
     if (tryAddFlagToSoul(MODEL, ID))
         tryAddComponent(ID, "model", components_model);
 }
-void ComponentBank::addMotion(const IDNUM &ID, const FLOAT &velX, const FLOAT &velY, const FLOAT &velZ,
-                                           const FLOAT &anvX, const FLOAT &anvY, const FLOAT &anvZ){
-    if (tryAddFlagToSoul(MOTION, ID))
-        tryAddComponent(ID, "motion", components_motion, velX, velY, velZ, anvX, anvY, anvZ);
+void ComponentBank::addPositionVeloc(const DU_ID &ID, const DU_FLOAT &velX, const DU_FLOAT &velY, const DU_FLOAT &velZ){
+    if (tryAddFlagToSoul(POSVELOC, ID))
+        tryAddComponent(ID, "linear velocity", components_positionVeloc, velX, velY, velZ);
 }
-void ComponentBank::addSpatial(const IDNUM &ID, const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ,
-                                            const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ){
-    if (tryAddFlagToSoul(SPATIAL, ID))
-        tryAddComponent(ID, "spatial", components_spatial, posX, posY, posZ, rotX, rotY, rotZ);
+void ComponentBank::addPosition(const DU_ID &ID, const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ){
+    if (tryAddFlagToSoul(POSITION, ID))
+        tryAddComponent(ID, "position", components_position, posX, posY, posZ);
 }
-void ComponentBank::addSpatialChild(const uint_fast32_t& ID, const uint_fast32_t& refID){
-    if (tryAddFlagToSoul(SPATCHILD, ID))
-        tryAddComponent(ID, "spatial child", components_spatialChild, refID);
+void ComponentBank::addPositionChild(const DU_ID& ID, const DU_ID& refID){
+    if (tryAddFlagToSoul(POSCHILD, ID))
+        tryAddComponent(ID, "position child", components_positionChild, refID);
 }
-void ComponentBank::addSpatialParent(const uint_fast32_t& ID, const uint_fast32_t& refID){
-    if (tryAddFlagToSoul(SPATPARENT, ID))
-        tryAddComponent(ID, "spatial parent", components_spatialParent, refID);
+void ComponentBank::addPositionParent(const DU_ID& ID, const DU_ID& refID){
+    if (tryAddFlagToSoul(POSPARENT, ID))
+        tryAddComponent(ID, "position parent", components_positionParent, refID);
 }
-void ComponentBank::addControl(const IDNUM &ID){
+void ComponentBank::addRotation(const DU_ID& ID, const DU_FLOAT& rotX, const DU_FLOAT& rotY, const DU_FLOAT& rotZ){
+    if (tryAddFlagToSoul(ROTATION, ID))
+        tryAddComponent(ID, "rotation", components_rotation, rotX, rotY, rotZ);
+}
+void ComponentBank::addRotationVeloc(const DU_ID& ID, const DU_FLOAT& angX, const DU_FLOAT& angY, const DU_FLOAT& angZ){
+    if (tryAddFlagToSoul(ROTVELOC, ID))
+        tryAddComponent(ID, "angular velocity", components_rotationVeloc, angX, angY, angZ);
+}
+void ComponentBank::addControl(const DU_ID &ID){
     if (tryAddFlagToSoul(CONTROL, ID))
         tryAddComponent(ID, "control", components_control);
 }
-void ComponentBank::addPointLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue,
-                                  const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ){
+void ComponentBank::addPointLight(const DU_ID &ID, const DU_COLORBYTE &red, const DU_COLORBYTE &green, const DU_COLORBYTE &blue,
+                                  const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ){
     if (tryAddFlagToSoul(LPOINT, ID))
         tryAddComponent(ID, "point light", components_pointLight, red, green, blue, posX, posY, posZ);
 }
-void ComponentBank::addDirectionalLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue,
-                                        const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ){
+void ComponentBank::addDirectionalLight(const DU_ID &ID, const DU_COLORBYTE &red, const DU_COLORBYTE &green, const DU_COLORBYTE &blue,
+                                        const DU_FLOAT &rotX, const DU_FLOAT &rotY, const DU_FLOAT &rotZ){
     if (tryAddFlagToSoul(LDIRECT, ID))
         tryAddComponent(ID, "directional light", components_directionalLight, red, green, blue, rotX, rotY, rotZ);
 }
-void ComponentBank::addAmbientLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue){    
+void ComponentBank::addAmbientLight(const DU_ID &ID, const DU_COLORBYTE &red, const DU_COLORBYTE &green, const DU_COLORBYTE &blue){    
     if (tryAddFlagToSoul(LAMBIENT, ID))
         tryAddComponent(ID, "ambient light", components_ambientLight, red, green, blue);
 }
-void ComponentBank::addOwner(const uint_fast32_t& ID, const uint_fast32_t& refID){
+void ComponentBank::addOwner(const DU_ID& ID, const DU_ID& refID){
     if (tryAddFlagToSoul(OWNER, ID))
         tryAddComponent(ID, "owner", components_owner, refID);
 }
-void ComponentBank::addScore(const uint_fast32_t& ID){
+void ComponentBank::addScore(const DU_ID& ID){
     if (tryAddFlagToSoul(SCORE, ID))
         tryAddComponent(ID, "score", components_score);
 }
@@ -195,7 +207,7 @@ void ComponentBank::addScore(const uint_fast32_t& ID){
  * tries to AND a NOT-flag onto the component flags of the soul at ID.
  * if there isn't a soul there, it outputs an error message.
  ******************************************************************************/
-void ComponentBank::tryRemoveFlagFromSoul(const COMPFLAG &flag, const IDNUM &ID){
+void ComponentBank::tryRemoveFlagFromSoul(const DU_COMPFLAG &flag, const DU_ID &ID){
     try{
         components_soul.at(ID).components &= ~flag;
     } catch(const std::out_of_range& oorException) {
@@ -210,7 +222,7 @@ void ComponentBank::tryRemoveFlagFromSoul(const COMPFLAG &flag, const IDNUM &ID)
  * above, except there aren't any variadic arguments at the end.
  ******************************************************************************/
 template<class componentType>
-bool ComponentBank::tryRemoveComponent(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table){
+bool ComponentBank::tryRemoveComponent(const DU_ID &ID, const char* compName, std::unordered_map<DU_ID, componentType> &table){
     if (table.erase(ID) == 0){
         printf("Could not remove %s component at ID %lu: no such component exists.\n", compName, ID);
         return false;
@@ -222,7 +234,7 @@ bool ComponentBank::tryRemoveComponent(const IDNUM &ID, const char* compName, st
  * just like the below functions, except doesn't need to clean any flags.
  * it's private, and wrapped by "deleteEntity," so don't worry about it.
  ******************************************************************************/
-bool ComponentBank::deleteSoul(const IDNUM &ID){
+bool ComponentBank::deleteSoul(const DU_ID &ID){
     return tryRemoveComponent(ID, "soul", components_soul);
 }
 /*******************************************************************************
@@ -238,47 +250,55 @@ bool ComponentBank::deleteSoul(const IDNUM &ID){
  * just call both methods without any of the "if" nonsense.  However, this will
  * cause double error messages to be output in most of the failure cases.
  ******************************************************************************/
-void ComponentBank::deleteModel(const IDNUM &ID){
+void ComponentBank::deleteModel(const DU_ID &ID){
     if (tryRemoveComponent(ID, "model", components_model))
         tryRemoveFlagFromSoul(MODEL, ID);
 }
-void ComponentBank::deleteMotion(const IDNUM &ID){
-    if (tryRemoveComponent(ID, "motion", components_motion))
-        tryRemoveFlagFromSoul(MOTION, ID);
+void ComponentBank::deletePositionVeloc(const DU_ID &ID){
+    if (tryRemoveComponent(ID, "linear velocity", components_positionVeloc))
+        tryRemoveFlagFromSoul(POSVELOC, ID);
 }
-void ComponentBank::deleteSpatial(const IDNUM &ID){
-    if (tryRemoveComponent(ID, "spatial", components_spatial))
-        tryRemoveFlagFromSoul(SPATIAL, ID);
+void ComponentBank::deletePosition(const DU_ID &ID){
+    if (tryRemoveComponent(ID, "position", components_position))
+        tryRemoveFlagFromSoul(POSITION, ID);
 }
-void ComponentBank::deleteSpatialChild(const uint_fast32_t& ID){
-    if (tryRemoveComponent(ID, "spatial child", components_spatialChild))
-        tryRemoveFlagFromSoul(SPATCHILD, ID);
+void ComponentBank::deletePositionChild(const DU_ID& ID){
+    if (tryRemoveComponent(ID, "position child", components_positionChild))
+        tryRemoveFlagFromSoul(POSCHILD, ID);
 }
-void ComponentBank::deleteSpatialParent(const uint_fast32_t& ID){
-    if (tryRemoveComponent(ID, "spatial parent", components_spatialParent))
-        tryRemoveFlagFromSoul(SPATPARENT, ID);
+void ComponentBank::deletePositionParent(const DU_ID& ID){
+    if (tryRemoveComponent(ID, "position parent", components_positionParent))
+        tryRemoveFlagFromSoul(POSPARENT, ID);
 }
-void ComponentBank::deleteControl(const IDNUM &ID){
+void ComponentBank::deleteRotation(const DU_ID &ID){
+    if (tryRemoveComponent(ID, "rotation", components_rotation))
+        tryRemoveFlagFromSoul(ROTATION, ID);
+}
+void ComponentBank::deleteRotationVeloc(const DU_ID& ID){
+    if (tryRemoveComponent(ID, "angular velocity", components_rotationVeloc))
+        tryRemoveFlagFromSoul(ROTVELOC, ID);
+}
+void ComponentBank::deleteControl(const DU_ID &ID){
     if (tryRemoveComponent(ID, "control", components_control))
         tryRemoveFlagFromSoul(CONTROL, ID);
 }
-void ComponentBank::deletePointLight(const IDNUM &ID){
+void ComponentBank::deletePointLight(const DU_ID &ID){
     if (tryRemoveComponent(ID, "point light", components_pointLight))
         tryRemoveFlagFromSoul(LPOINT, ID);
 }
-void ComponentBank::deleteDirectionalLight(const IDNUM &ID){
+void ComponentBank::deleteDirectionalLight(const DU_ID &ID){
     if (tryRemoveComponent(ID, "directional light", components_directionalLight))
         tryRemoveFlagFromSoul(LDIRECT, ID);
 }
-void ComponentBank::deleteAmbientLight(const IDNUM &ID){
+void ComponentBank::deleteAmbientLight(const DU_ID &ID){
     if (tryRemoveComponent(ID, "ambient light", components_ambientLight))
         tryRemoveFlagFromSoul(LAMBIENT, ID);
 }
-void ComponentBank::deleteOwner(const uint_fast32_t& ID){
+void ComponentBank::deleteOwner(const DU_ID& ID){
     if (tryRemoveComponent(ID, "owner", components_owner))
         tryRemoveFlagFromSoul(OWNER, ID);
 }
-void ComponentBank::deleteScore(const uint_fast32_t& ID){
+void ComponentBank::deleteScore(const DU_ID& ID){
     if (tryRemoveComponent(ID, "score", components_score))
         tryRemoveFlagFromSoul(SCORE, ID);
 }
@@ -289,25 +309,25 @@ void ComponentBank::deleteScore(const uint_fast32_t& ID){
 /*******************************************************************************
  * GENERATE ID
  ******************************************************************************/
-IDNUM ComponentBank::generateID(){
+DU_ID ComponentBank::generateID(){
     return nextID++;
 }
 /*******************************************************************************
  * CREATE ENTITY
  ******************************************************************************/
-IDNUM ComponentBank::createEntity(const char* name){
-    IDNUM ID = generateID();
+DU_ID ComponentBank::createEntity(const char* name){
+    DU_ID ID = generateID();
     if (addSoul(ID, name))
         return ID;
     else {
         printf("New entity '%s' not created!\n", name);
-        return NULL_ID;        
+        return DU_NULL_ID;        
     }    
 }
 /*******************************************************************************
  * NOTIFY SYSTEMS OF ADDITIONS
  ******************************************************************************/
-bool ComponentBank::notifySystemsOfAdditions(const IDNUM &ID){
+bool ComponentBank::notifySystemsOfAdditions(const DU_ID &ID){
     return true;
 }
 
@@ -319,8 +339,8 @@ bool ComponentBank::notifySystemsOfAdditions(const IDNUM &ID){
  * first attempts to remove all non-soul components with ID 'ID', then
  * REMOVES THE ENTITY'S SOUL!!!! <- this is the main reason I named it "soul."
  ******************************************************************************/
-bool ComponentBank::deleteEntity(const uint_fast32_t& ID){
-    COMPFLAG flags;
+bool ComponentBank::deleteEntity(const DU_ID& ID){
+    DU_COMPFLAG flags;
     std::string name;
     try {
         flags = components_soul.at(ID).components;
@@ -332,10 +352,10 @@ bool ComponentBank::deleteEntity(const uint_fast32_t& ID){
     
     try {        
         if (flags & MODEL) deleteModel(ID);
-        if (flags & MOTION) deleteMotion(ID);
-        if (flags & SPATIAL) deleteSpatial(ID);
-        if (flags & SPATCHILD) deleteSpatialChild(ID);
-        if (flags & SPATPARENT) deleteSpatialParent(ID);
+        if (flags & POSVELOC) deletePositionVeloc(ID);
+        if (flags & POSITION) deletePosition(ID);
+        if (flags & POSCHILD) deletePositionChild(ID);
+        if (flags & POSPARENT) deletePositionParent(ID);
         if (flags & CONTROL) deleteControl(ID);
         if (flags & LPOINT) deletePointLight(ID);
         if (flags & LDIRECT) deleteDirectionalLight(ID);
@@ -358,13 +378,13 @@ bool ComponentBank::deleteEntity(const uint_fast32_t& ID){
  * this should not only delete the entity, but also delete any entities that are
  * spatial children of it.
  ******************************************************************************/
-bool ComponentBank::purgeEntity(const uint_fast32_t& ID){
+bool ComponentBank::purgeEntity(const DU_ID& ID){
     deleteEntity(ID);
 }
 /*******************************************************************************
  * NOTIFY SYSTEMS OF DELETIONS
  ******************************************************************************/
-bool ComponentBank::notifySystemsOfDeletions(const uint_fast32_t& ID){
+bool ComponentBank::notifySystemsOfDeletions(const DU_ID& ID){
     return true;
 }
 /*******************************************************************************
@@ -374,7 +394,7 @@ bool ComponentBank::notifySystemsOfDeletions(const uint_fast32_t& ID){
  * GET NAME
  * returns a statement string containing the name of the entity (if any) at ID.
  ******************************************************************************/
-std::string ComponentBank::getName(IDNUM &ID){
+std::string ComponentBank::getName(DU_ID &ID){
     std::ostringstream output;
     try {
         output << "Entity " << ID << " is named '" << components_soul.at(ID).name << "'.";
@@ -388,25 +408,25 @@ std::string ComponentBank::getName(IDNUM &ID){
  * returns a statement string containing a list of components currently
  * possessed by the entity at ID.
  ******************************************************************************/
-std::string ComponentBank::listComponents(IDNUM &ID){
+std::string ComponentBank::listComponents(DU_ID &ID){
     std::ostringstream output;    
     try {        
-        COMPFLAG components = components_soul.at(ID).components;
+        DU_COMPFLAG components = components_soul.at(ID).components;
         
-        if (components == defaultComponents){
+        if (components == DU_DEFAULT_COMPONENTS){
             output << "Entity " << ID << " is a disembodied soul.";      
         } else {
             
             output << "Entity " << ID << " has: ";
             if (components & MODEL)
                 output << "MODEL ";
-            if (components & SPATIAL)
+            if (components & POSITION)
                 output << "SPATIAL ";
-            if (components & SPATPARENT)
+            if (components & POSPARENT)
                 output << "SPATPARENT ";
-            if (components & SPATCHILD)
+            if (components & POSCHILD)
                 output << "SPATCHILD ";
-            if (components & MOTION)
+            if (components & POSVELOC)
                 output << "MOTION ";
             if (components & COLLISION)
                 output << "COLLISION ";

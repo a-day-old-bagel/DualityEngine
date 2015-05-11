@@ -7,8 +7,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Game.cpp</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Engine.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Rotation.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Position.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Settings.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/ComponentBank.h</file>
         </group>
     </open-files>
 </project-private>

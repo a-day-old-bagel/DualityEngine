@@ -6,21 +6,21 @@
  * 
  ******************************************************************************/
 
-#ifndef SPATIALCHILD_H
-#define	SPATIALCHILD_H
+#ifndef POSITIONCHILD_H
+#define	POSITIONCHILD_H
 
 #include "Settings.h"
 
 namespace DualityEngine {
     
-    struct SpatialChild
+    struct PositionChild
     {
-        SpatialChild(const IDNUM &ref){
+        PositionChild(const DU_ID &ref){
             entityRef = ref;
         }
-        IDNUM entityRef;
+        DU_ID entityRef;
     };
 }
 
-#endif	/* SPATIALCHILD_H */
+#endif	/* POSTIONCHILD_H */
 

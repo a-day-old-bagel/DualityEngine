@@ -295,14 +295,14 @@ void Game::nullifyPointers()
  *************************************/
 void Game::freeMemory()
 {
-    POINTER_DELETE(controlDelegates);
+    DU_POINTER_DELETE(controlDelegates);
     
-    POINTER_DELETE(renderingSystem);
-    POINTER_DELETE(physicsMoveSystem);
-    POINTER_DELETE(physicsCollisionSystem);    
-    POINTER_DELETE(userControlSystem);  
+    DU_POINTER_DELETE(renderingSystem);
+    DU_POINTER_DELETE(physicsMoveSystem);
+    DU_POINTER_DELETE(physicsCollisionSystem);    
+    DU_POINTER_DELETE(userControlSystem);  
     
-    POINTER_DELETE(graphicsEngine);
-    POINTER_DELETE(physicsEngine);
+    DU_POINTER_DELETE(graphicsEngine);
+    DU_POINTER_DELETE(physicsEngine);
 }
 //</editor-fold>

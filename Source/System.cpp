@@ -22,7 +22,7 @@ std::string System::getName()
     return name;
 }
 
-void System::discoverID(IDNUM ID)
+void System::discoverID(DU_ID ID)
 {
     // If the entity (the ID) isn't already in the list of IDs
     if (std::find(registeredIDs.begin(), registeredIDs.end(), ID) == registeredIDs.end())
@@ -33,7 +33,7 @@ void System::discoverID(IDNUM ID)
     }
 }
 
-void System::scrutinizeID(IDNUM ID)
+void System::scrutinizeID(DU_ID ID)
 {
     // get location (if any) of ID in registeredIDs
     std::vector<uint_fast32_t>::iterator it =

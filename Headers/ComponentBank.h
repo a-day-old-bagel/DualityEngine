@@ -16,10 +16,12 @@
 #include "Soul.h"
 #include "Model.h"
 #include "Control.h"
-#include "Motion.h"
-#include "Spatial.h"
-#include "SpatialChild.h"
-#include "SpatialParent.h"
+#include "Position.h"
+#include "PositionChild.h"
+#include "PositionParent.h"
+#include "PositionVeloc.h"
+#include "Rotation.h"
+#include "RotationVeloc.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
 #include "AmbientLight.h"
@@ -30,105 +32,111 @@ namespace DualityEngine {
 
     class ComponentBank
     {
-        IDNUM nextID;
+        DU_ID nextID;
 
-        std::unordered_map<IDNUM, Soul>              components_soul;
-        std::unordered_map<IDNUM, Model>             components_model;
-        std::unordered_map<IDNUM, Motion>            components_motion;
-        std::unordered_map<IDNUM, Spatial>           components_spatial;
-        std::unordered_map<IDNUM, SpatialChild>      components_spatialChild;
-        std::unordered_map<IDNUM, SpatialParent>     components_spatialParent;
-        std::unordered_map<IDNUM, Control>           components_control;
-        std::unordered_map<IDNUM, PointLight>        components_pointLight;
-        std::unordered_map<IDNUM, DirectionalLight>  components_directionalLight;
-        std::unordered_map<IDNUM, AmbientLight>      components_ambientLight;
-        std::unordered_map<IDNUM, Owner>             components_owner;
-        std::unordered_map<IDNUM, Score>             components_score;
+        std::unordered_map<DU_ID, Soul>              components_soul;
+        std::unordered_map<DU_ID, Model>             components_model;
+        std::unordered_map<DU_ID, Position>          components_position;
+        std::unordered_map<DU_ID, PositionChild>     components_positionChild;
+        std::unordered_map<DU_ID, PositionParent>    components_positionParent;
+        std::unordered_map<DU_ID, PositionVeloc>     components_positionVeloc;
+        std::unordered_map<DU_ID, Rotation>          components_rotation;
+        std::unordered_map<DU_ID, RotationVeloc>     components_rotationVeloc;
+        std::unordered_map<DU_ID, Control>           components_control;
+        std::unordered_map<DU_ID, PointLight>        components_pointLight;
+        std::unordered_map<DU_ID, DirectionalLight>  components_directionalLight;
+        std::unordered_map<DU_ID, AmbientLight>      components_ambientLight;
+        std::unordered_map<DU_ID, Owner>             components_owner;
+        std::unordered_map<DU_ID, Score>             components_score;
         
         /* COMPONENT CREATION */
-        bool tryAddFlagToSoul(const COMPFLAG &flag,const IDNUM &ID);
+        bool tryAddFlagToSoul(const DU_COMPFLAG &flag,const DU_ID &ID);
         template<class componentType, typename ... types>
-        bool tryAddComponent(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table, const types& ... args);
-        bool addSoul(const IDNUM &ID, const char* name);
+        bool tryAddComponent(const DU_ID &ID, const char* compName, std::unordered_map<DU_ID, componentType> &table, const types& ... args);
+        bool addSoul(const DU_ID &ID, const char* name);
         
         /* COMPONENT DELETION */
-        void tryRemoveFlagFromSoul(const COMPFLAG &flag, const IDNUM &ID);
+        void tryRemoveFlagFromSoul(const DU_COMPFLAG &flag, const DU_ID &ID);
         template<class componentType>
-        bool tryRemoveComponent(const IDNUM &ID, const char* compName, std::unordered_map<IDNUM, componentType> &table);
-        bool deleteSoul(const IDNUM &ID);
+        bool tryRemoveComponent(const DU_ID &ID, const char* compName, std::unordered_map<DU_ID, componentType> &table);
+        bool deleteSoul(const DU_ID &ID);
         
         /* ENTITY CREATION */
-        IDNUM generateID();
+        DU_ID generateID();
 
     public:
         // Constructor for new states
         ComponentBank();
         // Constructor for loading saved states
-        ComponentBank(const IDNUM &startingID);
+        ComponentBank(const DU_ID &startingID);
         // Destructor
         ~ComponentBank();
 
         /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
-        Soul* getSoulPtr(const IDNUM &ID);
-        Model* getModelPtr(const IDNUM &ID);
-        Motion* getMotionPtr(const IDNUM &ID);
-        Spatial* getSpatialPtr(const IDNUM &ID);
-        SpatialChild* getSpatialChildPtr(const IDNUM &ID);
-        SpatialParent* getSpatialParentPtr(const IDNUM &ID);
-        Control* getControlPtr(const IDNUM &ID);
-        PointLight* getPointLightPtr(const IDNUM &ID);
-        DirectionalLight* getDirectionalLightPtr(const IDNUM &ID);
-        AmbientLight* getAmbientLightPtr(const IDNUM &ID);
-        Owner* getOwnerPtr(const IDNUM &ID);
-        Score* getScorePtr(const IDNUM &ID);
+        Soul* getSoulPtr(const DU_ID &ID);
+        Model* getModelPtr(const DU_ID &ID);
+        PositionVeloc* getPositionVelocPtr(const DU_ID &ID);
+        Position* getPositionPtr(const DU_ID &ID);
+        Rotation* getRotationPtr(const DU_ID &ID);
+        RotationVeloc* getRotationVelocPtr(const DU_ID &ID);
+        PositionChild* getPositionChildPtr(const DU_ID &ID);
+        PositionParent* getPositionParentPtr(const DU_ID &ID);
+        Control* getControlPtr(const DU_ID &ID);
+        PointLight* getPointLightPtr(const DU_ID &ID);
+        DirectionalLight* getDirectionalLightPtr(const DU_ID &ID);
+        AmbientLight* getAmbientLightPtr(const DU_ID &ID);
+        Owner* getOwnerPtr(const DU_ID &ID);
+        Score* getScorePtr(const DU_ID &ID);
 
         /* COMPONENT CREATION */
-        void addModel(const IDNUM &ID);
-        void addMotion(const IDNUM &ID, const FLOAT &velX, const FLOAT &velY, const FLOAT &velZ,
-                                           const FLOAT &anvX, const FLOAT &anvY, const FLOAT &anvZ);
-        void addSpatial(const IDNUM &ID, const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ,
-                                            const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ);
-        void addSpatialChild(const IDNUM &ID, const IDNUM &refID);
-        void addSpatialParent(const IDNUM &ID, const IDNUM &refID);
-        void addControl(const IDNUM &ID);
-        void addPointLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue,
-                                  const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ);
-        void addDirectionalLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue,
-                                        const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ);
-        void addAmbientLight(const IDNUM &ID, const COLORBYTE &red, const COLORBYTE &green, const COLORBYTE &blue);
-        void addOwner(const IDNUM &ID, const IDNUM &refID);
-        void addScore(const IDNUM &ID);
+        void addModel(const DU_ID &ID);
+        void addPositionVeloc(const DU_ID &ID, const DU_FLOAT &velX, const DU_FLOAT &velY, const DU_FLOAT &velZ);
+        void addPosition(const DU_ID &ID, const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ);
+        void addRotation(const DU_ID &ID, const DU_FLOAT &rotX, const DU_FLOAT &rotY, const DU_FLOAT &rotZ);
+        void addRotationVeloc(const DU_ID &ID, const DU_FLOAT &angX, const DU_FLOAT &angY, const DU_FLOAT &angZ);
+        void addPositionChild(const DU_ID &ID, const DU_ID &refID);
+        void addPositionParent(const DU_ID &ID, const DU_ID &refID);
+        void addControl(const DU_ID &ID);
+        void addPointLight(const DU_ID &ID, const DU_COLORBYTE &red, const DU_COLORBYTE &green, const DU_COLORBYTE &blue,
+                                  const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ);
+        void addDirectionalLight(const DU_ID &ID, const DU_COLORBYTE &red, const DU_COLORBYTE &green, const DU_COLORBYTE &blue,
+                                        const DU_FLOAT &rotX, const DU_FLOAT &rotY, const DU_FLOAT &rotZ);
+        void addAmbientLight(const DU_ID &ID, const DU_COLORBYTE &red, const DU_COLORBYTE &green, const DU_COLORBYTE &blue);
+        void addOwner(const DU_ID &ID, const DU_ID &refID);
+        void addScore(const DU_ID &ID);
 
         /* COMPONENT DELETION */
-        void deleteModel(const IDNUM &ID);
-        void deleteMotion(const IDNUM &ID);
-        void deleteSpatial(const IDNUM &ID);
-        void deleteSpatialChild(const IDNUM &ID);
-        void deleteSpatialParent(const IDNUM &ID);
-        void deleteControl(const IDNUM &ID);
-        void deletePointLight(const IDNUM &ID);
-        void deleteDirectionalLight(const IDNUM &ID);
-        void deleteAmbientLight(const IDNUM &ID);
-        void deleteOwner(const IDNUM &ID);
-        void deleteScore(const IDNUM &ID);
+        void deleteModel(const DU_ID &ID);
+        void deletePositionVeloc(const DU_ID &ID);
+        void deletePosition(const DU_ID &ID);
+        void deleteRotation(const DU_ID &ID);
+        void deleteRotationVeloc(const DU_ID &ID);
+        void deletePositionChild(const DU_ID &ID);
+        void deletePositionParent(const DU_ID &ID);
+        void deleteControl(const DU_ID &ID);
+        void deletePointLight(const DU_ID &ID);
+        void deleteDirectionalLight(const DU_ID &ID);
+        void deleteAmbientLight(const DU_ID &ID);
+        void deleteOwner(const DU_ID &ID);
+        void deleteScore(const DU_ID &ID);
 
         /* ENTITY CREATION */
-        IDNUM createEntity(const char* name);
-        bool  notifySystemsOfAdditions(const IDNUM &ID);
-        IDNUM createBox(const char* name,
-                           const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ,
-                           const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ,
-                           const FLOAT &velX, const FLOAT &velY, const FLOAT &velZ,
-                           const FLOAT &anvX, const FLOAT &anvY, const FLOAT &anvZ);
+        DU_ID createEntity(const char* name);
+        bool  notifySystemsOfAdditions(const DU_ID &ID);
+        DU_ID createBox(const char* name,
+                        const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ,
+                        const DU_FLOAT &rotX, const DU_FLOAT &rotY, const DU_FLOAT &rotZ,   
+                        const DU_FLOAT &velX, const DU_FLOAT &velY, const DU_FLOAT &velZ,
+                        const DU_FLOAT &angX, const DU_FLOAT &angY, const DU_FLOAT &angZ);
         
         /* ENTITY DELETION */
-        bool deleteEntity(const IDNUM &ID);  // orphans children
-        bool purgeEntity(const IDNUM &ID);   // deletes children too.
-        bool notifySystemsOfDeletions(const IDNUM &ID);
+        bool deleteEntity(const DU_ID &ID);  // orphans children
+        bool purgeEntity(const DU_ID &ID);   // deletes children too.
+        bool notifySystemsOfDeletions(const DU_ID &ID);
 
         /* CONVENIENCE GETTERS */
-        std::string getName(IDNUM &ID);
-        std::string listComponents(IDNUM &ID);
+        std::string getName(DU_ID &ID);
+        std::string listComponents(DU_ID &ID);
     };
 
 }

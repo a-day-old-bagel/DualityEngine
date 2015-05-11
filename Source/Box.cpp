@@ -6,18 +6,20 @@
 
 using namespace DualityEngine;
 
-IDNUM ComponentBank::createBox(const char* name,
-                                  const FLOAT &posX, const FLOAT &posY, const FLOAT &posZ,
-                                  const FLOAT &rotX, const FLOAT &rotY, const FLOAT &rotZ,
-                                  const FLOAT &velX, const FLOAT &velY, const FLOAT &velZ,
-                                  const FLOAT &anvX, const FLOAT &anvY, const FLOAT &anvZ)
+DU_ID ComponentBank::createBox(const char* name,
+                               const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ,
+                               const DU_FLOAT &rotX, const DU_FLOAT &rotY, const DU_FLOAT &rotZ,   
+                               const DU_FLOAT &velX, const DU_FLOAT &velY, const DU_FLOAT &velZ,
+                               const DU_FLOAT &angX, const DU_FLOAT &angY, const DU_FLOAT &angZ)
 {
-    IDNUM newEntityID = createEntity(name);
-    if (newEntityID != NULL_ID){
+    DU_ID newEntityID = createEntity(name);
+    if (newEntityID != DU_NULL_ID){
     
-        addModel   (newEntityID);
-        addMotion  (newEntityID, velX, velY, velZ, anvX, anvY, anvZ);
-        addSpatial (newEntityID, posX, posY, posZ, rotX, rotY, rotZ);
+        addModel            (newEntityID);
+        addPosition         (newEntityID, posX, posY, posZ);
+        addPositionVeloc    (newEntityID, velX, velY, velZ);
+        addRotation         (newEntityID, rotX, rotY, rotZ);
+        addRotationVeloc    (newEntityID, angX, angY, angZ);
 
         notifySystemsOfAdditions(newEntityID);    
     }
