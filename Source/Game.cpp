@@ -201,10 +201,12 @@ bool Game::initializeECS()
  *************************************/
 bool Game::initializeEngines()
 {
-    graphicsEngine = new SystemEngine(&graphicsThread, "Duality Graphics Engine");
+    quitDelegate = new VoidDelegate(DELEGATE(&Game::Quit, *this));
+    
+    graphicsEngine = new SystemEngine(&graphicsThread, "Duality Graphics Engine", quitDelegate);
     graphicsEngine->addSystem(renderingSystem);
     
-    physicsEngine = new SystemEngine(&physicsThread, "Duality Physics Engine");
+    physicsEngine = new SystemEngine(&physicsThread, "Duality Physics Engine", quitDelegate);
     physicsEngine->addSystem(physicsMoveSystem);
     physicsEngine->addSystem(physicsCollisionSystem);
     physicsEngine->addSystem(userControlSystem);
@@ -275,8 +277,8 @@ bool Game::killEngines()
 void Game::nullifyPointers()
 {
     window = NULL;
-    //bank = NULL;
     controlDelegates = NULL;
+    quitDelegate = NULL;
     
     renderingSystem = NULL;
     physicsMoveSystem = NULL;
@@ -296,6 +298,7 @@ void Game::nullifyPointers()
 void Game::freeMemory()
 {
     DU_POINTER_DELETE(controlDelegates);
+    DU_POINTER_DELETE(quitDelegate);
     
     DU_POINTER_DELETE(renderingSystem);
     DU_POINTER_DELETE(physicsMoveSystem);

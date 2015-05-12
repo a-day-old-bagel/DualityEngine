@@ -55,6 +55,8 @@ namespace DualityEngine {
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Engines on which to run the systems">
 
+        // A delegate for quitting the game to give to the engines in case of failures
+        VoidDelegate* quitDelegate;
         // An engine (with accompanying thread) to run all graphics Systems
         SystemEngine* graphicsEngine;
         SDL_Thread* graphicsThread;

@@ -15,6 +15,8 @@
 #include <SDL.h>
 #include <SDL_thread.h>
 #include "System.h"
+//#include "OutputRedirector.h"
+#include "Delegate.h"
 
 namespace DualityEngine {
     
@@ -26,6 +28,7 @@ namespace DualityEngine {
         std::vector<System*> systemsToExecute;  // The systems to manage
         std::string threadName;                 // Name of the thread given to OS
         std::stringstream output;               // Output stream
+        VoidDelegate* quit;                      // Used in case of failure of system(s))
     };
 
     // stub for the function that is given to the engine's thread
@@ -46,7 +49,7 @@ namespace DualityEngine {
     public:
         //<editor-fold defaultstate="collapsed" desc="Methods">
         // Constructor takes a thread on which to run the engine
-        SystemEngine(SDL_Thread** thread, std::string name);
+        SystemEngine(SDL_Thread** thread, const char* name, VoidDelegate* quit);
         // Destructor
         ~SystemEngine();
         // Use this to start the engine running.

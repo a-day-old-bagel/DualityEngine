@@ -10,10 +10,11 @@
 using namespace DualityEngine;
 
 //<editor-fold defaultstate="collapsed" desc="Constructor">
-SystemEngine::SystemEngine(SDL_Thread** thread, std::string name)
+SystemEngine::SystemEngine(SDL_Thread** thread, const char* name, VoidDelegate* quit)
 {
     workThread = thread;
     threadData.threadName = name;
+    threadData.quit = quit;
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Destructor">
@@ -47,14 +48,16 @@ void SystemEngine::engage()
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Work Thread Function">
-#define THREAD_BEGIN_BLOCK_OUTPUT std::endl << "@============@  " << threadData->threadName << " initialization output BEGINS  @============@\n\n"
-#define THREAD_END_BLOCK_OUTPUT std::endl << "@============@  " << threadData->threadName << " initialization output ENDS  @============@\n\n"
+#define THREAD_BEGIN_BLOCK_OUTPUT std::endl << "@============@  " << threadName << " initialization log BEGINS  @============@\n\n"
+#define THREAD_END_BLOCK_OUTPUT std::endl << "@============@  " << threadName << " initialization log ENDS  @============@\n\n"
 int DualityEngine::EngineThreadFunction(void* data)
 {
     System* system;
     ThreadData* threadData = (ThreadData*)data;
     std::vector<System*>* systems = &(threadData->systemsToExecute);
     std::stringstream* output = &threadData->output;
+    std::string threadName = threadData->threadName;
+    VoidDelegate* quitGame = threadData->quit;
     
     bool escape = false;   
     
@@ -62,20 +65,39 @@ int DualityEngine::EngineThreadFunction(void* data)
     *output << THREAD_BEGIN_BLOCK_OUTPUT;
     for (int i = 0; i < systems->size(); i++)
     {
-        *output << "Beginning initialization of " << systems->at(i)->getName() << "...\n";
-        if (!(systems->at(i)->init(*output)))
-        {
-            *output << systems->at(i)->getName() << " failed to initialize! Terminating "
-                    << threadData->threadName << "!\n" << THREAD_END_BLOCK_OUTPUT;
+        system = systems->at(i);
+        *output << "Beginning initialization of " << system->getName() << "...\n";
+        try {
+            if (!(system->init(*output)))
+            {
+                *output << system->getName() << " failed to initialize! Terminating "
+                        << threadName << "!\n" << THREAD_END_BLOCK_OUTPUT;
+                std::cout << output->str();
+                //(*quitGame)();
+                return -1;
+            }
+            else
+                *output << system->getName() << " has initialized.\n\n";
+        } catch (...) {
+            *output << "Exception thrown: ";
+            std::exception_ptr eptr = std::current_exception();
+            try {
+                std::rethrow_exception(eptr);
+            } catch (const std::exception& e) {
+                *output << "\"" << e.what() << "\". ";
+            } catch (...) {
+                *output << "Unknown Exception. ";
+            }
+            *output << "Terminating " << threadName << "!\n" << THREAD_END_BLOCK_OUTPUT;
+
             std::cout << output->str();
+            (*quitGame)();
             return -1;
         }
-        else
-            *output << systems->at(i)->getName() << " has initialized.\n\n";
     }
     
     // Printout of what's running on this thread
-    *output << threadData->threadName << " is entering main loop running the following systems:\n";
+    *output << threadName << " is entering main loop running the following systems:\n";
     for (int i = 0; i < systems->size(); i++)
         *output << "    " << i + 1 << ". " << systems->at(i)->getName() << std::endl;
     *output << THREAD_END_BLOCK_OUTPUT;
@@ -95,20 +117,35 @@ int DualityEngine::EngineThreadFunction(void* data)
             system = systems->at(i);
             if (system->isQuit())
             {
-                *output << systems->at(i)->getName() << " has received a call to quit.\n";
+                *output << system->getName() << " has received a call to quit.\n";
                 escape = true;                
             }
             else if (!system->isPaused())
-                system->tick();
+                try{
+                    system->tick();
+                } catch (const char* err) {
+                    *output << system->getName() << " Error: " << err << std::endl;
+                    (*quitGame)();
+                    escape = true;
+                } catch (...) {
+                    *output << "Exception thrown in " << system->getName() << ": ";
+                    std::exception_ptr eptr = std::current_exception();
+                    try {
+                        std::rethrow_exception(eptr);
+                    } catch (const std::exception& e) {
+                        *output << "\"" << e.what() << "\"\n";
+                    } catch (...) {
+                        *output << "Unknown Exception.\n";
+                    }
+                            
+                    (*quitGame)();
+                    escape = true;
+                }
         }
     }
-    *output << "Terminating " << threadData->threadName << "\n\n";
+    *output << "Terminating " << threadName << "\n\n";
     
     // Output the thread's reports to standard out.
     std::cout << output->str();
-    
-    // Clear the thread's output.
-    output->str(std::string());
-    output->clear();
 }
 //</editor-fold>
