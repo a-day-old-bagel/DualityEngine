@@ -92,10 +92,11 @@ namespace DualityEngine {
         return DelegateFactory<no_type, return_type, params...>();
     }
 
-    #define DELEGATE(func, thisPrtRef) (MakeDelegate(func).Create<func>(&thisPrtRef))
-    #define DELEGATE2(func) (MakeDelegate2(func).CreateForFunction<func>())
+    #define VOIDDELEGATE(func, thisPtrRef) (MakeDelegate(func).Create<func>(thisPtrRef))
+    #define CLOSURE(func) (MakeDelegate2(func).CreateForFunction<func>())
 
     typedef Delegate<void()> VoidDelegate;
+    typedef Delegate<void(const char*)> StringDelegate;
 
 }
 

@@ -13,6 +13,7 @@ using namespace DualityEngine;
 Game::Game()
 {
     nullifyPointers();
+    makeDelegates();
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Destructor">
@@ -33,7 +34,7 @@ Game::~Game()
  * instantiated. Maybe will bring up a
  * main menu at some point...
  *************************************/
-bool Game::Begin()
+void Game::Begin()
 {
     // right now, begin just starts a new game.
     NewGame();  
@@ -89,19 +90,18 @@ void Game::Menu()
  * NEW GAME : Game Initializer
  * sets up game
  *************************************/
-bool Game::NewGame()
+void Game::NewGame()
 {    
-    if (!initializeSDLwindow()) return false;
+    initializeSDLwindow();
     initializeECS();
     initializeEngines();
-    if (!startEngines()) return false;
-    
-    
+    engageEngines();
+        
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);
     SDL_WaitThread(graphicsThread, NULL);
     
-    return true;
+    //std::cout << consoleText;
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Pause">
@@ -129,6 +129,15 @@ void Game::Resume()
 void Game::Quit()
 {
     killEngines();
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Output">
+/**************************************
+ * OUTPUT
+ **************************************/
+void Game::Output(const char* text){
+    consoleText += text;
+    std::cout << text;
 }
 //</editor-fold>
 
@@ -184,13 +193,23 @@ bool Game::initializeECS()
     renderingSystem = new System_Render(&bank, window);
     physicsMoveSystem = new System_PhysMove(&bank);
     physicsCollisionSystem = new System_PhysCollide(&bank);
-    
-    controlDelegates = new DelegateBag;
-    controlDelegates->menu = DELEGATE(&Game::Menu, *this);
-    controlDelegates->quit = DELEGATE(&Game::Quit, *this);
     userControlSystem = new System_UserControl(&bank, controlDelegates);
     
     return true;
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Make Delegates">
+/**************************************
+ * MAKE DELEGATES
+ *************************************/
+bool Game::makeDelegates(){
+    quitDelegate = new VoidDelegate(VOIDDELEGATE(&Game::Quit, this));
+    outputDelegate = new StringDelegate(DelegateFactory<Game, void, const char*>().Create<&Game::Output>(this));
+    
+    controlDelegates = new DelegateBag;
+    controlDelegates->menu = VOIDDELEGATE(&Game::Menu, this);
+    controlDelegates->quit = *quitDelegate;
+    controlDelegates->output = *outputDelegate;
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Initialize Engines">
@@ -200,13 +219,11 @@ bool Game::initializeECS()
  * to them the appropriate Systems.
  *************************************/
 bool Game::initializeEngines()
-{
-    quitDelegate = new VoidDelegate(DELEGATE(&Game::Quit, *this));
-    
-    graphicsEngine = new SystemEngine(&graphicsThread, "Duality Graphics Engine", quitDelegate);
+{    
+    graphicsEngine = new SystemEngine(&graphicsThread, "Duality Graphics Engine", outputDelegate, quitDelegate);
     graphicsEngine->addSystem(renderingSystem);
     
-    physicsEngine = new SystemEngine(&physicsThread, "Duality Physics Engine", quitDelegate);
+    physicsEngine = new SystemEngine(&physicsThread, "Duality Physics Engine", outputDelegate, quitDelegate);
     physicsEngine->addSystem(physicsMoveSystem);
     physicsEngine->addSystem(physicsCollisionSystem);
     physicsEngine->addSystem(userControlSystem);
@@ -220,7 +237,7 @@ bool Game::initializeEngines()
  * engages each engine, creating all
  * the threads in the process.
  *************************************/
-bool Game::startEngines()
+bool Game::engageEngines()
 {
     graphicsEngine->engage();
     physicsEngine->engage();      // PHYSICS SYSTEMS NOT YET IMPLEMENTED
@@ -279,6 +296,7 @@ void Game::nullifyPointers()
     window = NULL;
     controlDelegates = NULL;
     quitDelegate = NULL;
+    outputDelegate = NULL;
     
     renderingSystem = NULL;
     physicsMoveSystem = NULL;
@@ -299,6 +317,7 @@ void Game::freeMemory()
 {
     DU_POINTER_DELETE(controlDelegates);
     DU_POINTER_DELETE(quitDelegate);
+    DU_POINTER_DELETE(outputDelegate);
     
     DU_POINTER_DELETE(renderingSystem);
     DU_POINTER_DELETE(physicsMoveSystem);

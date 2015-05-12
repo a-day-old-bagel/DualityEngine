@@ -47,16 +47,13 @@ namespace DualityEngine {
         System_PhysMove* physicsMoveSystem;
         // A system to check collisions between all spatial components according to collision components
         System_PhysCollide* physicsCollisionSystem;
-        // A system to handle user input, along with delegates of top level functions
+        // A system to handle user input
         System_UserControl* userControlSystem;
-        DelegateBag* controlDelegates;
         // More systems to come...
 
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Engines on which to run the systems">
 
-        // A delegate for quitting the game to give to the engines in case of failures
-        VoidDelegate* quitDelegate;
         // An engine (with accompanying thread) to run all graphics Systems
         SystemEngine* graphicsEngine;
         SDL_Thread* graphicsThread;
@@ -66,7 +63,22 @@ namespace DualityEngine {
         // More engines to come...
 
         //</editor-fold>
-
+        //<editor-fold defaultstate="collapsed" desc="Delegates to allow for inter-system/engine communication">
+        
+        // control delegates of top level functions to give to the UserControl system
+        DelegateBag* controlDelegates;
+        // A delegate for quitting the game to give to the engines in case of failures
+        VoidDelegate* quitDelegate;
+        // A delegate for outputting text to the console to give to the engines
+        StringDelegate* outputDelegate;
+        
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="A string to hold the contents of the console">
+        
+        std::string consoleText;
+        
+        //</editor-fold>
+        
         //</editor-fold>    
         //<editor-fold defaultstate="collapsed" desc="Methods">
 
@@ -78,8 +90,10 @@ namespace DualityEngine {
         bool initializeECS();
         // Set up the engines
         bool initializeEngines();
+        // Make the delegates needed for inter-thread/inter-system communication
+        bool makeDelegates();
         // Start the engines (create the threads)
-        bool startEngines();
+        bool engageEngines();
         // Quit the the systems, wait for the threads to exit.
         bool killEngines();
         // Pause game systems momentarily
@@ -98,13 +112,15 @@ namespace DualityEngine {
         // pull up the in-game menu
         void Menu();
         // start a new game
-        bool NewGame();
+        void NewGame();
         // pause the game
         void Pause();
         // resume the game
         void Resume();
         // quit the game
         void Quit();
+        // output to console
+        void Output(const char* text);
         // More top level functions to come...
 
         //</editor-fold>
@@ -115,7 +131,7 @@ namespace DualityEngine {
         //<editor-fold defaultstate="collapsed" desc="Methods">
         Game();
         ~Game();
-        bool Begin();
+        void Begin();
         //</editor-fold>
     };
 

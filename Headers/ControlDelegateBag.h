@@ -17,6 +17,7 @@ namespace DualityEngine {
     {
         VoidDelegate menu;
         VoidDelegate quit;
+        StringDelegate output;
     };
 
 }
