@@ -1,6 +1,6 @@
-*.inc
+/*.inc
 build
 dist
 *~
-*.cpp
-*.txt
+/*.cpp
+/*.txt

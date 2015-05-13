@@ -15,6 +15,7 @@
 #include "UserControl.h"
 #include "Engine.h"
 #include "ControlDelegateBag.h"
+#include "Console.h"
 //</editor-fold>
 
 namespace DualityEngine {
@@ -73,9 +74,9 @@ namespace DualityEngine {
         StringDelegate* outputDelegate;
         
         //</editor-fold>
-        //<editor-fold defaultstate="collapsed" desc="A string to hold the contents of the console">
+        //<editor-fold defaultstate="collapsed" desc="An in-game console">
         
-        std::string consoleText;
+        Console console;
         
         //</editor-fold>
         
@@ -119,8 +120,6 @@ namespace DualityEngine {
         void Resume();
         // quit the game
         void Quit();
-        // output to console
-        void Output(const char* text);
         // More top level functions to come...
 
         //</editor-fold>

@@ -131,15 +131,6 @@ void Game::Quit()
     killEngines();
 }
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Output">
-/**************************************
- * OUTPUT
- **************************************/
-void Game::Output(const char* text){
-    consoleText += text;
-    std::cout << text;
-}
-//</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="Initialize SDL Window">
 /**************************************
@@ -154,8 +145,7 @@ void Game::Output(const char* text){
 bool Game::initializeSDLwindow()
 {
     // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-    {
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf ("SDL did not initialize! SDL Error: %s\n", SDL_GetError());
         return false;
     }
@@ -172,8 +162,7 @@ bool Game::initializeSDLwindow()
                     SDL_WINDOW_OPENGL);
     
     // If the window couldn't be created for whatever reason
-    if (window == NULL)
-    {
+    if (window == NULL) {
         printf ("SDL window was not created! SDL Error: %s\n", SDL_GetError());
         return false;
     }
@@ -204,7 +193,8 @@ bool Game::initializeECS()
  *************************************/
 bool Game::makeDelegates(){
     quitDelegate = new VoidDelegate(VOIDDELEGATE(&Game::Quit, this));
-    outputDelegate = new StringDelegate(DelegateFactory<Game, void, const char*>().Create<&Game::Output>(this));
+    outputDelegate = new StringDelegate(DelegateFactory<Console, void, const char*>()
+                                        .Create<&Console::output>(&console));
     
     controlDelegates = new DelegateBag;
     controlDelegates->menu = VOIDDELEGATE(&Game::Menu, this);

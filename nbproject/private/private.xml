@@ -7,13 +7,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/ComponentBank.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Headers/Engine.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/Engine.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Headers/Game.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/PhysMove.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/Game.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/main.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Console.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Game.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Game.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Console.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Engine.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/ComponentBank.cpp</file>
         </group>
     </open-files>
 </project-private>

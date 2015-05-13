@@ -37,6 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/Source/Box.o \
 	${OBJECTDIR}/Source/ComponentBank.o \
+	${OBJECTDIR}/Source/Console.o \
 	${OBJECTDIR}/Source/Engine.o \
 	${OBJECTDIR}/Source/FileIO.o \
 	${OBJECTDIR}/Source/Game.o \
@@ -88,6 +89,11 @@ ${OBJECTDIR}/Source/ComponentBank.o: Source/ComponentBank.cpp
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/ComponentBank.o Source/ComponentBank.cpp
+
+${OBJECTDIR}/Source/Console.o: Source/Console.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Console.o Source/Console.cpp
 
 ${OBJECTDIR}/Source/Engine.o: Source/Engine.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
