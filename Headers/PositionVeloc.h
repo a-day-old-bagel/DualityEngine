@@ -17,7 +17,7 @@ namespace DualityEngine {
         PositionVeloc(const DU_FLOAT &velX, const DU_FLOAT &velY, const DU_FLOAT &velZ){
             velLinear = {velX, velY, velZ};
         }
-        glm::vec3 velLinear;
+        DU_VEC3 velLinear;
     };
 
 }

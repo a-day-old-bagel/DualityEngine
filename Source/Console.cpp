@@ -9,24 +9,52 @@
 using namespace DualityEngine;
 
 void Console::output(const char* text){
-    log << text;
-    
+    std::stringstream temp(text);
     std::string line;
-    while (std::getline(log, line, '\n')){
+    while (std::getline(temp, line)){
         lines.push_back(line);
     }
             
     std::cout << text;
+    textHasChanged = true;
 }
 
 std::string Console::getLog(){
     std::string out;
     for(auto line:lines){
-        out += line;
+        out += line + '\n';
     }
     return out;
 }
 
 std::string Console::getLine(int line){
     return lines[line];
+}
+
+std::string Console::getLast(){
+    return getLine(lines.size() - 1);
+}
+
+void Console::addToCommand(const char* text){
+    pendingCommand += text;
+    textHasChanged = true;
+}
+
+void Console::eraseOneCharFromCommand(){
+    pendingCommand.pop_back();
+    textHasChanged = true;
+}
+
+void Console::clearCommand(){
+    pendingCommand.clear();
+    textHasChanged = true;
+}
+
+std::string Console::submitCommand(){
+    if (pendingCommand.empty()) return "";
+    lines.push_back(">: " + pendingCommand);
+    std::cout << ">: " << pendingCommand << std::endl;
+    std::string temp = pendingCommand;
+    clearCommand();
+    return temp;
 }

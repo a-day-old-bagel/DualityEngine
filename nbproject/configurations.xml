@@ -90,7 +90,7 @@
       </logicalFolder>
       <logicalFolder name="f4" displayName="Systems" projectFiles="true">
         <logicalFolder name="f1" displayName="Utilities" projectFiles="true">
-          <itemPath>Headers/ControlDelegateBag.h</itemPath>
+          <itemPath>Headers/ControlDelegates.h</itemPath>
           <itemPath>Headers/Delegate.h</itemPath>
         </logicalFolder>
         <itemPath>Headers/PhysCollide.h</itemPath>
@@ -262,7 +262,7 @@
       </item>
       <item path="Headers/Control.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Headers/ControlDelegateBag.h" ex="false" tool="3" flavor2="0">
+      <item path="Headers/ControlDelegates.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Delegate.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -474,7 +474,7 @@
       </item>
       <item path="Headers/Control.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Headers/ControlDelegateBag.h" ex="false" tool="3" flavor2="0">
+      <item path="Headers/ControlDelegates.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Delegate.h" ex="false" tool="3" flavor2="0">
       </item>

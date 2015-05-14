@@ -10,7 +10,7 @@
 using namespace DualityEngine;
 
 //<editor-fold defaultstate="collapsed" desc="Constructor">
-SystemEngine::SystemEngine(SDL_Thread** thread, const char* name, StringDelegate* output, VoidDelegate* quit)
+SystemEngine::SystemEngine(SDL_Thread** thread, const char* name, Delegate<void(const char*)>* output, Delegate<void()>* quit)
 {
     workThread = thread;
     threadData.threadName = name;
@@ -49,17 +49,17 @@ void SystemEngine::engage()
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Work Thread Function">
-#define THREAD_BEGIN_BLOCK_OUTPUT std::endl << "@============@  " << threadName << " initialization log BEGINS  @============@\n\n"
+#define THREAD_BEGIN_BLOCK_OUTPUT "@============@  " << threadName << " initialization log BEGINS  @============@\n\n"
 #define THREAD_END_BLOCK_OUTPUT std::endl << "@============@  " << threadName << " initialization log ENDS  @============@\n\n"
 int DualityEngine::EngineThreadFunction(void* data)
 {
     System* system;
     ThreadData* threadData = (ThreadData*)data;
     std::vector<System*>* systems = &(threadData->systemsToExecute);
-    StringDelegate* output = threadData->output;
+    Delegate<void(const char*)>* output = threadData->output;
     std::stringstream tempOut;
     std::string threadName = threadData->threadName;
-    VoidDelegate* quitGame = threadData->quit;
+    Delegate<void()>* quitGame = threadData->quit;
     
     bool escape = false;   
     

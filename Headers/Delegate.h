@@ -1,103 +1,74 @@
-/**
- * Main template for delgates
- *
- * \tparam return_type  return type of the function that gets captured
- * \tparam params       variadic template list for possible arguments
- *                      of the captured function
- */\
 
 #ifndef DELEGATE_H
 #define	DELEGATE_H
 
 namespace DualityEngine {
 
-    template<typename return_type, typename... params>
-    class Delegate; //forward declaration..
-
-    template<typename return_type, typename... params>
-    class Delegate<return_type(params...)>
-    {
-        typedef return_type (*Pointer2Function)(void* callee, params...);
+    // As will be seen below, the Delegate template class is formatted so:
+    // Given a method that returns float and takes an int and a char, a delegate type would be:
+    // Delegate<float(int, char)>
+    
+    // The following defines are all you need to make delegates.  Usage:    
+    // DELEGATE(func, instRef) makes a delegate to a member method, taking the method and instance, like so:
+    // Given:       int MyClass::myMethod(const char) {...}     example usage would be:
+    // Delegate<int(const char)> myDelegate = DELEGATE(&MyClass::myMethod, &myClassInstance)
+    // and later to use the delegate, just call:    myDelegate()
+    #define DELEGATE(func, instRef) (NewDelegate(func).Create<func>(instRef))
+    #define DELEGATE_NOCLASS(func) (NewDelegate_NoClass(func).CreateForFunction<func>()) // delegate to function
+    
+    // And here are come all the guts...
+    template<typename returnType, typename... params>
+    class Delegate; // this advance declaration allows for the templating ahead.
+    // main Delegate class definition
+    template<typename returnType, typename... params>
+    class Delegate<returnType(params...)> {
+        typedef returnType (*PtrToFunc)(void* callee, params...);
     public:
-
-        Delegate(){}
-
-        Delegate(void* callee, Pointer2Function function)
-            : fpCallee(callee)
-            , fpCallbackFunction(function)
-        {}
-
-        return_type operator()(params... xs) const
-        {
-            return (*fpCallbackFunction)(fpCallee, xs...);
+        Delegate() {}
+        Delegate(void* callee, PtrToFunc function) : calleePtr(callee) , callbackFuncPtr(function) {}
+        returnType operator()(params... args) const {
+            return (*callbackFuncPtr)(calleePtr, args...);
         }
-
-        bool operator==(const Delegate& other) const
-        {
-            return (fpCallee == other.fpCallee)
-                   && (fpCallbackFunction == other.fpCallbackFunction);
+        bool operator==(const Delegate& rhs) const {
+            return (calleePtr == rhs.calleePtr) && (callbackFuncPtr == rhs.callbackFuncPtr);
         }
-
     private:
-
-        void* fpCallee;
-        Pointer2Function fpCallbackFunction;
+        void* calleePtr;
+        PtrToFunc callbackFuncPtr;
     };
 
-    /**
-     * A DelegateFactory is used to create a Delegate for a certain method call.
-     * It takes care of setting up the function that will cast the object that is stored
-     * inside the Delegate back to the correct type.
-     */
-    template<typename T, typename return_type, typename... params>
-    struct DelegateFactory
-    {
-        template<return_type (T::*Func)(params...)>
-        static return_type MethodCaller(void* o, params... xs)
-        {
-            return (static_cast<T*>(o)->*Func)(xs...);
+    // Delegate spawner makes delegates, handles all the casting required for delegate operation.
+    template<typename className, typename returnType, typename... params>
+    struct DelegateSpawner {
+        template<returnType (className::*func)(params...)>
+        static returnType MethodCaller(void* o, params... xs){
+            return (static_cast<className*>(o)->*func)(xs...);
         }
-
-        template <return_type (*TFnctPtr)(params...)>
-            static return_type FunctionCaller(void*, params... xs)
-            {
-                    return (TFnctPtr)(xs...);
-            }
-
-        template<return_type (T::*Func)(params...)>
-        inline static Delegate<return_type(params...)> Create(T* o)
-        {
-            return Delegate<return_type(params...)>(o, &DelegateFactory::MethodCaller<Func>);
+        template <returnType (*classFuncPtr)(params...)>
+        static returnType FunctionCaller(void*, params... xs){
+                return (classFuncPtr)(xs...);
         }
-
-        template<return_type (*TFnctPtr)(params...)>
-        inline static Delegate<return_type(params...)> CreateForFunction()
-        {
-            return Delegate<return_type(params...)>(0L, &DelegateFactory::FunctionCaller<TFnctPtr>);
+        template<returnType (className::*func)(params...)>
+        inline static Delegate<returnType(params...)> Create(className* o){
+            return Delegate<returnType(params...)>(o, &DelegateSpawner::MethodCaller<func>);
+        }
+        template<returnType (*classFuncPtr)(params...)>
+        inline static Delegate<returnType(params...)> CreateForFunction(){
+            return Delegate<returnType(params...)>(0L, &DelegateSpawner::FunctionCaller<classFuncPtr>);
         }
     };
-    /**
-     * helper function that is used to deduce the template arguments.
-     * will return a DelegateFactory
-     */
-    template<typename T, typename return_type, typename... params>
-    DelegateFactory<T, return_type, params... > MakeDelegate(return_type (T::*)(params...))
-    {
-        return DelegateFactory<T, return_type, params...>();
+    
+    // helper function that returns delegate spawner of member method delegates
+    template<typename className, typename returnType, typename... params>
+    DelegateSpawner<className, returnType, params... > NewDelegate(returnType (className::*)(params...)){
+        return DelegateSpawner<className, returnType, params...>();
     }
-    class no_type{};
-    template<typename return_type, typename... params>
-    DelegateFactory<no_type, return_type, params... > MakeDelegate2(return_type (*TFnctPtr)(params...))
-    {
-        return DelegateFactory<no_type, return_type, params...>();
+    class noType{}; // noType class used in the function below
+    // helper function that returns delegate spawner of function delegates
+    template<typename returnType, typename... params>
+    DelegateSpawner<noType, returnType, params... > NewDelegate_NoClass(returnType (*TFnctPtr)(params...)){
+        return DelegateSpawner<noType, returnType, params...>();
     }
-
-    #define VOIDDELEGATE(func, thisPtrRef) (MakeDelegate(func).Create<func>(thisPtrRef))
-    #define CLOSURE(func) (MakeDelegate2(func).CreateForFunction<func>())
-
-    typedef Delegate<void()> VoidDelegate;
-    typedef Delegate<void(const char*)> StringDelegate;
-
 }
 
 #endif

@@ -63,7 +63,7 @@ namespace DualityEngine {
 
     public:
         //<editor-fold defaultstate="collapsed" desc="Methods">
-        System_Render(ComponentBank* bank, SDL_Window* window);
+        System_Render(ComponentBank* bank);
         ~System_Render();
         void tick() override;    
         bool init(std::stringstream& output) override;

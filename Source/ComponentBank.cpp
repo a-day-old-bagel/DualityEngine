@@ -149,7 +149,7 @@ void ComponentBank::addModel(const DU_ID &ID){
         tryAddComponent(ID, "model", components_model);
 }
 void ComponentBank::addPositionVeloc(const DU_ID &ID, const DU_FLOAT &velX, const DU_FLOAT &velY, const DU_FLOAT &velZ){
-    if (tryAddFlagToSoul(POSVELOC, ID))
+    if (tryAddFlagToSoul(LINVELOC, ID))
         tryAddComponent(ID, "linear velocity", components_positionVeloc, velX, velY, velZ);
 }
 void ComponentBank::addPosition(const DU_ID &ID, const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ){
@@ -169,7 +169,7 @@ void ComponentBank::addRotation(const DU_ID& ID, const DU_FLOAT& rotX, const DU_
         tryAddComponent(ID, "rotation", components_rotation, rotX, rotY, rotZ);
 }
 void ComponentBank::addRotationVeloc(const DU_ID& ID, const DU_FLOAT& angX, const DU_FLOAT& angY, const DU_FLOAT& angZ){
-    if (tryAddFlagToSoul(ROTVELOC, ID))
+    if (tryAddFlagToSoul(ANGVELOC, ID))
         tryAddComponent(ID, "angular velocity", components_rotationVeloc, angX, angY, angZ);
 }
 void ComponentBank::addControl(const DU_ID &ID){
@@ -256,7 +256,7 @@ void ComponentBank::deleteModel(const DU_ID &ID){
 }
 void ComponentBank::deletePositionVeloc(const DU_ID &ID){
     if (tryRemoveComponent(ID, "linear velocity", components_positionVeloc))
-        tryRemoveFlagFromSoul(POSVELOC, ID);
+        tryRemoveFlagFromSoul(LINVELOC, ID);
 }
 void ComponentBank::deletePosition(const DU_ID &ID){
     if (tryRemoveComponent(ID, "position", components_position))
@@ -276,7 +276,7 @@ void ComponentBank::deleteRotation(const DU_ID &ID){
 }
 void ComponentBank::deleteRotationVeloc(const DU_ID& ID){
     if (tryRemoveComponent(ID, "angular velocity", components_rotationVeloc))
-        tryRemoveFlagFromSoul(ROTVELOC, ID);
+        tryRemoveFlagFromSoul(ANGVELOC, ID);
 }
 void ComponentBank::deleteControl(const DU_ID &ID){
     if (tryRemoveComponent(ID, "control", components_control))
@@ -352,7 +352,7 @@ bool ComponentBank::deleteEntity(const DU_ID& ID){
     
     try {        
         if (flags & MODEL) deleteModel(ID);
-        if (flags & POSVELOC) deletePositionVeloc(ID);
+        if (flags & LINVELOC) deletePositionVeloc(ID);
         if (flags & POSITION) deletePosition(ID);
         if (flags & POSCHILD) deletePositionChild(ID);
         if (flags & POSPARENT) deletePositionParent(ID);
@@ -426,7 +426,7 @@ std::string ComponentBank::listComponents(DU_ID &ID){
                 output << "SPATPARENT ";
             if (components & POSCHILD)
                 output << "SPATCHILD ";
-            if (components & POSVELOC)
+            if (components & LINVELOC)
                 output << "MOTION ";
             if (components & COLLISION)
                 output << "COLLISION ";

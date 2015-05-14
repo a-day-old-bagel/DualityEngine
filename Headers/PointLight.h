@@ -18,8 +18,8 @@ namespace DualityEngine {
             color = {red, green, blue};
             position = {posX, posY, posZ};
         }
-        glm::vec3 color;
-        glm::vec3 position;
+        DU_VEC3 color;
+        DU_VEC3 position;
     };
 
 }

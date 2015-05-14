@@ -8,6 +8,8 @@
 #ifndef SETTINGS_H
 #define	SETTINGS_H
 
+#include <glm/glm.hpp>
+
 namespace DualityEngine {
     
     // Some useful defines
@@ -23,6 +25,7 @@ namespace DualityEngine {
     typedef uint_fast8_t    DU_COLORBYTE;
     typedef int_fast16_t    DU_SCORENUM;
     typedef double          DU_FLOAT;
+    typedef glm::vec3       DU_VEC3;
 
     // Some defines of useful values
     #define DU_INVALID_VALUE_32 0xFFFFFFFF  // used for error states
@@ -40,8 +43,8 @@ namespace DualityEngine {
     {
         POSITION        = 0x1,      // Bit 1
         ROTATION        = 0x2,
-        POSVELOC        = 0x4,
-        ROTVELOC        = 0x8,
+        LINVELOC        = 0x4,
+        ANGVELOC        = 0x8,
         COLLISION       = 0x10,
         MODEL           = 0x20,
         CONTROL         = 0x40,
@@ -61,7 +64,7 @@ namespace DualityEngine {
      * The soul component will include an int
      * whose bits are flags that store boolean
      * states, such as whether or not the
-     * entity is experiencing a collision.
+     * entity is experiencing a physics collision.
      *****************************************/
     enum stateFlags : DU_STATEFLAG
     {

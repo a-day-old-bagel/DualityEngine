@@ -17,13 +17,18 @@
 namespace DualityEngine {
     class Console {
     private:
-        std::stringstream log;
         std::vector<std::string> lines;
-        int lineIterator = 0;
+        std::string pendingCommand;
+        bool textHasChanged = false;
     public:
         void output (const char* text);
         std::string getLog ();
         std::string getLine (int line);
+        std::string getLast ();
+        void addToCommand (const char* text);
+        void eraseOneCharFromCommand();
+        void clearCommand();
+        std::string submitCommand();
     };
 }
 

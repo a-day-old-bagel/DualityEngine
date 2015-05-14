@@ -20,15 +20,19 @@ namespace DualityEngine {
     {
     private:
         std::string name;
-        std::vector<DU_ID> registeredIDs;
-        DU_COMPFLAG requiredComponents;
-        ComponentBank* bank;
         bool escape = false;
         bool paused = false;
-
+        
+    protected:
+        ComponentBank* bank;
+        std::vector<std::vector<DU_ID>> registeredIDs;   // These are collections so that a system can operate
+        std::vector<DU_COMPFLAG> requiredComponents;     // on more than one kind of entity if it needs to.
+//      std::string messageQueue;   // might want in future for message output from systems...
+        
     public:        
-        System(ComponentBank* bank, std::string name);
+        System(ComponentBank* bank, std::string name, int numRegisters);
         ~System();
+        void clean();
         std::string getName();
         void discoverID (DU_ID ID);
         void scrutinizeID (DU_ID ID);

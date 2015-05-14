@@ -18,7 +18,7 @@ namespace DualityEngine {
         RotationVeloc(const DU_FLOAT &rotX, const DU_FLOAT &rotY, const DU_FLOAT &rotZ){
             velAngular = {rotX, rotY, rotZ};
         }
-        glm::vec3 velAngular;
+        DU_VEC3 velAngular;
     };
 
 }

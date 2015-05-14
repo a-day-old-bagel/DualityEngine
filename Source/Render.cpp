@@ -6,10 +6,10 @@
 using namespace DualityEngine;
 
 //<editor-fold defaultstate="collapsed" desc="Constructor">
-System_Render::System_Render(ComponentBank* bank, SDL_Window* window)
-                  : System(bank, "Rendering System") 
+System_Render::System_Render(ComponentBank* bank)
+                  : System(bank, "Rendering System", 1) 
 {
-    this->window = window;
+    
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Destructor">
@@ -25,7 +25,32 @@ System_Render::~System_Render()
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Init">
 bool System_Render::init(std::stringstream& engineOut)
-{    
+{
+    requiredComponents.at(0) = MODEL | POSITION | ROTATION ;
+    
+    // Initialize SDL
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        printf ("SDL did not initialize! SDL Error: %s\n", SDL_GetError());
+        return false;
+    }
+
+    // Specify OpenGL version and profile
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, Settings::GLmajorVersion);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, Settings::GLminorVersion);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    
+    // Create the SDL window
+    window = SDL_CreateWindow("Game Engine",
+                    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+                    Settings::screenWidth, Settings::screenHeight,
+                    SDL_WINDOW_OPENGL);
+    
+    // If the window couldn't be created for whatever reason
+    if (window == NULL) {
+        printf ("SDL window was not created! SDL Error: %s\n", SDL_GetError());
+        return false;
+    }
+    
     //Create context
     context = SDL_GL_CreateContext(window);
     if(context == NULL) {

@@ -18,7 +18,7 @@ namespace DualityEngine {
         Rotation(const DU_FLOAT &rotX, const DU_FLOAT &rotY, const DU_FLOAT &rotZ){
             rotation = {rotX, rotY, rotZ};
         }
-        glm::vec3 rotation;
+        DU_VEC3 rotation;
     };
 
 }

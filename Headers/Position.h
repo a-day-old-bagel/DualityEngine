@@ -17,7 +17,7 @@ namespace DualityEngine {
         Position(const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ){
             position = {posX, posY, posZ};
         }
-        glm::vec3 position;
+        DU_VEC3 position;
     };
 
 }

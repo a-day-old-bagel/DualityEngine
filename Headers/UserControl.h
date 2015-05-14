@@ -12,17 +12,20 @@
 #include <SDL.h>
 #include "System.h"
 #include <glm/glm.hpp>
-#include "ControlDelegateBag.h"
+#include "ControlDelegates.h"
 
 namespace DualityEngine {
 
     class System_UserControl : public System
     {
     private:
-        DelegateBag* delegates;
+        ControlDelegates* delegates;
         SDL_Event sdlEvent;
+        bool consoleIsActive = false;
+        void parseCommand(std::string command);
+        void handleControlKeys(const Uint8* keyStates);
     public:
-        System_UserControl(ComponentBank* bank, DelegateBag* delegates);
+        System_UserControl(ComponentBank* bank, ControlDelegates* delegates);
         ~System_UserControl();
         void tick() override;
         bool init(std::stringstream& output) override;
