@@ -19,7 +19,7 @@ namespace DualityEngine {
     class System_UserControl : public System
     {
     private:
-        ControlDelegates* delegates;
+        ControlDelegates* dlgt;
         SDL_Event sdlEvent;
         bool consoleIsActive = false;
         bool MenuIsActive = false;

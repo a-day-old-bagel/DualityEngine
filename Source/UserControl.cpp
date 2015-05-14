@@ -14,11 +14,11 @@ using namespace DualityEngine;
 
 System_UserControl::System_UserControl(ComponentBank* bank, ControlDelegates* delegates)
                   : System(bank, "Control System", 1){
-    this->delegates = delegates;
+    this->dlgt = delegates;
 }
 
 System_UserControl::~System_UserControl(){
-    delegates = NULL;
+    dlgt = NULL;
 }
 
 bool System_UserControl::init(std::stringstream& output){
@@ -34,8 +34,8 @@ void System_UserControl::tick(){
     while(SDL_PollEvent(&sdlEvent) != 0){
         //User requests quit
         if(sdlEvent.type == SDL_QUIT){
-            delegates->quit();
-            delegates->output("\nWindow was exited.\n\n");
+            dlgt->quit();
+            dlgt->output("\nWindow was exited.\n\n");
         }
         else if(sdlEvent.type == SDL_KEYDOWN){
             if(sdlEvent.key.keysym.sym == SDLK_ESCAPE){
@@ -46,44 +46,44 @@ void System_UserControl::tick(){
                         consoleIsActive = true;
                         SDL_StartTextInput();
                     }
-                    delegates->clearCommand();
-                    delegates->output(menuText.c_str());
+                    dlgt->clearCommand();
+                    dlgt->output(menuText.c_str());
                     //presentTextMenu();
                 } else {
                     consoleIsActive = false;
                     SDL_StopTextInput();
                 }
-                delegates->setConsoleState(consoleIsActive, MenuIsActive);
+                dlgt->setConsoleState(consoleIsActive, MenuIsActive);
             }
             if(sdlEvent.key.keysym.sym == SDLK_BACKQUOTE){
                 if (!MenuIsActive){
                     consoleIsActive = !consoleIsActive;
                     consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
-                    delegates->clearCommand();
-                    delegates->output(consoleIsActive ? "console ON.\n" : "console OFF.\n");
-                    delegates->setConsoleState(consoleIsActive, MenuIsActive);
+                    dlgt->clearCommand();
+                    dlgt->output(consoleIsActive ? "console ON.\n" : "console OFF.\n");
+                    dlgt->setConsoleState(consoleIsActive, MenuIsActive);
                 }
             }
             if (consoleIsActive){
                 if(sdlEvent.key.keysym.sym == SDLK_BACKSPACE){
-                    delegates->backspaceCommand();
+                    dlgt->backspaceCommand();
                 }
                 else if(sdlEvent.key.keysym.sym == SDLK_RETURN){
-                    std::string command = delegates->submitCommand();
+                    std::string command = dlgt->submitCommand();
                     parseCommand(command);
                 }
                 else if(sdlEvent.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL){
-                    SDL_SetClipboardText(delegates->getLastConsoleLine().c_str());
+                    SDL_SetClipboardText(dlgt->getLastConsoleLine().c_str());
                 }
                 else if(sdlEvent.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL){
-                    delegates->appendToCommand(SDL_GetClipboardText());                    
+                    dlgt->appendToCommand(SDL_GetClipboardText());                    
                 }
             }
         }
         else if(sdlEvent.type == SDL_TEXTINPUT){
             if(!((keyStates[SDL_SCANCODE_C] || keyStates[SDL_SCANCODE_V])
                                             && SDL_GetModState() & KMOD_CTRL)){
-                delegates->appendToCommand(sdlEvent.text.text);
+                dlgt->appendToCommand(sdlEvent.text.text);
             }
         }
     }
@@ -104,33 +104,37 @@ void System_UserControl::parseCommand(std::string command){
     }
     if (MenuIsActive){
         if (args[0] == "exit"){
-            delegates->quit();
+            dlgt->quit();
         } else if (args[0] == "new"){
-            delegates->output("new game command not yet implemented\n");
+            dlgt->output("new game command not yet implemented\n");
         } else if (args[0] == "load"){
-            delegates->output("load game command not yet implemented\n");
+            dlgt->output("load game command not yet implemented\n");
         } else if (args[0] == "save"){
-            delegates->output("save game command not yet implemented\n");
+            dlgt->output("save game command not yet implemented\n");
         } else if (args[0] == "help"){
-            delegates->output("You're in the menu. Type one of the following: 'new', 'load', 'save', or 'exit'.\n");
+            dlgt->output("You're in the menu. Type one of the following: 'new', 'load', 'save', or 'exit'.\n");
         } else if (args[0] == "add" || args[0] == "delete"){
-            delegates->output("That command isn't available from the menu (ESC to exit menu).\n");
+            dlgt->output("That command isn't available from the menu (ESC to exit menu).\n");
         } else {
             std::string error = args[0] + " is not a valid menu option.\n";
-            delegates->output(error.c_str());
+            dlgt->output(error.c_str());
         }
     } else {
         if (args[0] == "add"){
-            delegates->output("Command not yet implemented.\n");
+            dlgt->output("Command not yet implemented.\n");
         } else if (args[0] == "delete"){
-            delegates->output("Command not yet implemented.\n");
+            dlgt->output("Command not yet implemented.\n");
+        } else if (args[0] == "debug"){
+            DU_ID boxID = bank->createBox("box", 0,0,0, 0,0,0, 0,0,0, 0,0,0);
+            std::string output = bank->getName(boxID) + "\n" + bank->listComponents(boxID) + "\n";
+            dlgt->output(output.c_str());
         } else if (args[0] == "help"){
-            delegates->output("You're in the console. You have access to the following commands:\n\tadd [component type] [entity ID] [component parameters...]\n\tdelete [component type] [entity ID]\n");
+            dlgt->output("You're in the console. You have access to the following commands:\n\tadd [component type] [entity ID] [component parameters...]\n\tdelete [component type] [entity ID]\n");
         } else if (args[0] == "new" || args[0] == "load" || args[0] == "save" || args[0] == "exit"){
-            delegates->output("Menu commands only available through menu (ESC to enter menu).\n");
+            dlgt->output("Menu commands only available through menu (ESC to enter menu).\n");
         } else {
             std::string error = args[0] + " is not a valid command.\n";
-            delegates->output(error.c_str());
+            dlgt->output(error.c_str());
         }
     }
 }
