@@ -12,6 +12,9 @@
 
 namespace DualityEngine {
     
+    // Defining this will cause openGL 3.0 to be used instead of 3.3
+    #define GL_OLDHARDWARE
+    
     // Some useful defines
     #define DU_POINTER_DELETE(p) if (p) { delete p; p = NULL; }
     #define DU_ARRAY_COUNT(p) (sizeof(p)/sizeof(p[0]))
@@ -26,6 +29,7 @@ namespace DualityEngine {
     typedef int_fast16_t    DU_SCORENUM;
     typedef double          DU_FLOAT;
     typedef glm::vec3       DU_VEC3;
+    typedef glm::vec2       DU_VEC2;
 
     // Some defines of useful values
     #define DU_INVALID_VALUE_32 0xFFFFFFFF  // used for error states
@@ -78,7 +82,11 @@ namespace DualityEngine {
         static const int screenWidth        = 800;
         static const int screenHeight       = 600;
         static const int GLmajorVersion     = 3;
+        #ifdef GL_OLDHARDWARE
+        static const int GLminorVersion     = 0;
+        #else
         static const int GLminorVersion     = 3;
+        #endif
     };
 }
 

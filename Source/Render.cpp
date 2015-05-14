@@ -87,10 +87,16 @@ bool System_Render::initGL(std::stringstream& engineOut)
     glBindVertexArray(VertexArrayID);
 
     // Create and compile our GLSL program from the shaders
-    programID = loadShaders("Assets/Shaders/redTri.vert",
-                            "Assets/Shaders/redTri.frag", engineOut);
+    #ifdef GL_OLDHARDWARE
+    const char* vertShaderPath = "Assets/Shaders/redTri_3_0.vert";
+    const char* fragShaderPath = "Assets/Shaders/redTri_3_0.frag";
+    #else
+    const char* vertShaderPath = "Assets/Shaders/redTri_3_3.vert";
+    const char* fragShaderPath = "Assets/Shaders/redTri_3_3.frag";
+    #endif
+    programID = loadShaders(vertShaderPath, fragShaderPath, engineOut);
     
-    // If shader compilation / linking didn't work, fail.
+    // If shader compilation/linking didn't work, fail.
     if (programID == GL_FALSE) return false;
 
     // Get a handle for our "MVP" uniform
@@ -111,7 +117,7 @@ bool System_Render::initGL(std::stringstream& engineOut)
     Model = glm::mat4(1.0f);
     
     // Our ModelViewProjection : multiplication of our 3 matrices
-    MVP = Projection * View * Model; // Remember, matrix multiplication is the other way around
+    MVP = Projection * View * Model;
     
     glGenBuffers(1, &vertexbuffer);
     glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);

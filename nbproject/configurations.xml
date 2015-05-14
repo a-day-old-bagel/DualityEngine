@@ -10,6 +10,9 @@
           <itemPath>Assets/Models/Cereal/Transluc.jpg</itemPath>
           <itemPath>Assets/Models/Cereal/_1.jpg</itemPath>
         </logicalFolder>
+        <logicalFolder name="f4" displayName="DebugCube" projectFiles="true">
+          <itemPath>Assets/Models/DebugCube/DebugCube.h</itemPath>
+        </logicalFolder>
         <logicalFolder name="f2" displayName="MetalCube" projectFiles="true">
           <itemPath>Assets/Models/MetalCube/metal.jpg</itemPath>
           <itemPath>Assets/Models/MetalCube/metalCube.mtl</itemPath>
@@ -33,8 +36,10 @@
         <itemPath>Assets/Shaders/lighting.fs</itemPath>
         <itemPath>Assets/Shaders/lighting.vs</itemPath>
         <itemPath>Assets/Shaders/lighting2.fs</itemPath>
-        <itemPath>Assets/Shaders/redTri.frag</itemPath>
-        <itemPath>Assets/Shaders/redTri.vert</itemPath>
+        <itemPath>Assets/Shaders/redTri_3_0.frag</itemPath>
+        <itemPath>Assets/Shaders/redTri_3_0.vert</itemPath>
+        <itemPath>Assets/Shaders/redTri_3_3.frag</itemPath>
+        <itemPath>Assets/Shaders/redTri_3_3.vert</itemPath>
         <itemPath>Assets/Shaders/simple.frag</itemPath>
         <itemPath>Assets/Shaders/simple.vert</itemPath>
       </logicalFolder>
@@ -198,6 +203,11 @@
       </item>
       <item path="Assets/Models/Cereal/_1.jpg" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Assets/Models/DebugCube/DebugCube.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Assets/Models/MetalCube/metal.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Models/MetalCube/metalCube.mtl"
@@ -247,9 +257,13 @@
       </item>
       <item path="Assets/Shaders/lighting2.fs" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/redTri.frag" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/redTri_3_0.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/redTri.vert" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/redTri_3_0.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/redTri_3_3.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/redTri_3_3.vert" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Shaders/simple.frag" ex="false" tool="3" flavor2="0">
       </item>
@@ -412,6 +426,11 @@
       </item>
       <item path="Assets/Models/Cereal/_1.jpg" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Assets/Models/DebugCube/DebugCube.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Assets/Models/MetalCube/metal.jpg" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Models/MetalCube/metalCube.mtl"
@@ -461,9 +480,13 @@
       </item>
       <item path="Assets/Shaders/lighting2.fs" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/redTri.frag" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/redTri_3_0.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/redTri.vert" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/redTri_3_0.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/redTri_3_3.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/redTri_3_3.vert" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Shaders/simple.frag" ex="false" tool="3" flavor2="0">
       </item>

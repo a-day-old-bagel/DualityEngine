@@ -18,6 +18,7 @@
 #include "ShaderRepository.h"
 #include "MeshRepository.h"
 #include "TextureRepository.h"
+#include "../Assets/Models/DebugCube/DebugCube.h"
 //</editor-fold>
 
 namespace DualityEngine {
@@ -53,6 +54,8 @@ namespace DualityEngine {
              0.8, -0.8, 0.0f,
              0.0f, 0.8, 0.0f
         };
+        
+        DebugCube debugCube;
 
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Methods">

@@ -7,10 +7,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/UserControl.cpp</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/UserControl.h</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Box.cpp</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/ComponentBank.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/DirectionalLight.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/Render.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Assets/Models/DebugCube/DebugCube.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/Settings.h</file>
         </group>
     </open-files>
 </project-private>
