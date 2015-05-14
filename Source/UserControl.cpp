@@ -39,13 +39,30 @@ void System_UserControl::tick(){
         }
         else if(sdlEvent.type == SDL_KEYDOWN){
             if(sdlEvent.key.keysym.sym == SDLK_ESCAPE){
-                delegates->menu();
+                //delegates->menu();
+                MenuIsActive = !MenuIsActive;
+                if (MenuIsActive){
+                    if (!consoleIsActive){
+                        consoleIsActive = true;
+                        SDL_StartTextInput();
+                    }
+                    delegates->clearCommand();
+                    delegates->output(menuText.c_str());
+                    //presentTextMenu();
+                } else {
+                    consoleIsActive = false;
+                    SDL_StopTextInput();
+                }
+                delegates->setConsoleState(consoleIsActive, MenuIsActive);
             }
             if(sdlEvent.key.keysym.sym == SDLK_BACKQUOTE){
-                consoleIsActive = !consoleIsActive;
-                consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
-                delegates->clearCommand();
-                delegates->output(consoleIsActive ? "console ON.\n" : "console OFF.\n");
+                if (!MenuIsActive){
+                    consoleIsActive = !consoleIsActive;
+                    consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
+                    delegates->clearCommand();
+                    delegates->output(consoleIsActive ? "console ON.\n" : "console OFF.\n");
+                    delegates->setConsoleState(consoleIsActive, MenuIsActive);
+                }
             }
             if (consoleIsActive){
                 if(sdlEvent.key.keysym.sym == SDLK_BACKSPACE){
@@ -85,12 +102,41 @@ void System_UserControl::parseCommand(std::string command){
         args.push_back(temp);
         temp.clear();
     }
-    if (args[0] == "exit" || args[0] == "quit"){
-        delegates->quit();
+    if (MenuIsActive){
+        if (args[0] == "exit"){
+            delegates->quit();
+        } else if (args[0] == "new"){
+            delegates->output("new game command not yet implemented\n");
+        } else if (args[0] == "load"){
+            delegates->output("load game command not yet implemented\n");
+        } else if (args[0] == "save"){
+            delegates->output("save game command not yet implemented\n");
+        } else if (args[0] == "help"){
+            delegates->output("You're in the menu. Type one of the following: 'new', 'load', 'save', or 'exit'.\n");
+        } else if (args[0] == "add" || args[0] == "delete"){
+            delegates->output("That command isn't available from the menu (ESC to exit menu).\n");
+        } else {
+            std::string error = args[0] + " is not a valid menu option.\n";
+            delegates->output(error.c_str());
+        }
     } else {
-        std::string error = "Bad Command: " + args[0] + '\n';
-        delegates->output(error.c_str());
+        if (args[0] == "add"){
+            delegates->output("Command not yet implemented.\n");
+        } else if (args[0] == "delete"){
+            delegates->output("Command not yet implemented.\n");
+        } else if (args[0] == "help"){
+            delegates->output("You're in the console. You have access to the following commands:\n\tadd [component type] [entity ID] [component parameters...]\n\tdelete [component type] [entity ID]\n");
+        } else if (args[0] == "new" || args[0] == "load" || args[0] == "save" || args[0] == "exit"){
+            delegates->output("Menu commands only available through menu (ESC to enter menu).\n");
+        } else {
+            std::string error = args[0] + " is not a valid command.\n";
+            delegates->output(error.c_str());
+        }
     }
+}
+
+void System_UserControl::presentTextMenu(){
+    
 }
 
 void System_UserControl::handleControlKeys(const Uint8* keyStates){

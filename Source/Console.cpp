@@ -35,6 +35,11 @@ std::string Console::getLast(){
     return getLine(lines.size() - 1);
 }
 
+void Console::setState(bool console, bool menu){
+    consoleIsActive = console;
+    menuIsActive = menu;
+}
+
 void Console::addToCommand(const char* text){
     pendingCommand += text;
     textHasChanged = true;
@@ -52,8 +57,8 @@ void Console::clearCommand(){
 
 std::string Console::submitCommand(){
     if (pendingCommand.empty()) return "";
-    lines.push_back(">: " + pendingCommand);
-    std::cout << ">: " << pendingCommand << std::endl;
+    lines.push_back((menuIsActive ? "MENU>: " : ">: ") + pendingCommand);
+    std::cout << (menuIsActive ? "MENU>: " : ">: ") << pendingCommand << std::endl;
     std::string temp = pendingCommand;
     clearCommand();
     return temp;

@@ -9,8 +9,14 @@
         <group>
             <file>file:/home/adayoldbagel/Code/DualityEngine/Source/UserControl.cpp</file>
             <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/UserControl.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/BankDelegates.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Box.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Console.cpp</file>
             <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Game.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/ComponentBank.h</file>
             <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Game.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Console.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/ComponentBank.cpp</file>
         </group>
     </open-files>
 </project-private>

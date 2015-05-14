@@ -20,8 +20,7 @@ DU_ID ComponentBank::createBox(const char* name,
         addPositionVeloc    (newEntityID, velX, velY, velZ);
         addRotation         (newEntityID, rotX, rotY, rotZ);
         addRotationVeloc    (newEntityID, angX, angY, angZ);
-
-        notifySystemsOfAdditions(newEntityID);    
+        
     }
     
     return newEntityID;

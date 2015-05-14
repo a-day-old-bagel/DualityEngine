@@ -90,6 +90,7 @@
       </logicalFolder>
       <logicalFolder name="f4" displayName="Systems" projectFiles="true">
         <logicalFolder name="f1" displayName="Utilities" projectFiles="true">
+          <itemPath>Headers/BankDelegates.h</itemPath>
           <itemPath>Headers/ControlDelegates.h</itemPath>
           <itemPath>Headers/Delegate.h</itemPath>
         </logicalFolder>
@@ -255,6 +256,8 @@
       <item path="Assets/Shaders/simple.vert" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/AmbientLight.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/BankDelegates.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/ComponentBank.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -467,6 +470,8 @@
       <item path="Assets/Shaders/simple.vert" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/AmbientLight.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/BankDelegates.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/ComponentBank.h" ex="false" tool="3" flavor2="0">
       </item>

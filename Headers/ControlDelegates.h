@@ -14,14 +14,14 @@
 namespace DualityEngine {
 
     struct ControlDelegates {
-        Delegate<void()> menu;
         Delegate<void()> quit;
         Delegate<void()> backspaceCommand;
         Delegate<void()> clearCommand;
         Delegate<void(const char*)> output;
         Delegate<void(const char*)> appendToCommand;        
         Delegate<std::string()> submitCommand;
-        Delegate<std::string()> getLastConsoleLine;        
+        Delegate<std::string()> getLastConsoleLine;
+        Delegate<void(bool, bool)> setConsoleState;
     };
 
 }

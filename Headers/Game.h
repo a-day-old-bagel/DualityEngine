@@ -15,6 +15,7 @@
 #include "UserControl.h"
 #include "Engine.h"
 #include "ControlDelegates.h"
+#include "BankDelegates.h"
 #include "Console.h"
 //</editor-fold>
 
@@ -24,11 +25,6 @@ namespace DualityEngine {
     {
     private:
    
-        //<editor-fold defaultstate="collapsed" desc="Components that hold all game state data">
-
-        ComponentBank bank; // holds collections of components, includes methods to manage them
-
-        //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="An in-game console and output logging device">
 
         Console console;
@@ -37,19 +33,30 @@ namespace DualityEngine {
         //<editor-fold defaultstate="collapsed" desc="Delegates to allow for inter-system/engine communication">
         
         // A delegate for quitting the game to give to the engines in case of failures
-        Delegate<void()> quitDelegate = DELEGATE(&Game::Quit, this);
+        Delegate<void()> quitDelegate = DELEGATE(&Game::Quit, this);        
         // A delegate for outputting text to the console to give to the engines
         Delegate<void(const char*)> outputDelegate = DELEGATE(&Console::output, &console);
         // control delegates of top level functions to give to the UserControl system
         ControlDelegates controlDelegates = {
-            DELEGATE(&Game::Menu, this), quitDelegate,
+            quitDelegate,
             DELEGATE(&Console::eraseOneCharFromCommand, &console),
             DELEGATE(&Console::clearCommand, &console), outputDelegate,
             DELEGATE(&Console::addToCommand, &console),
             DELEGATE(&Console::submitCommand, &console),
-            DELEGATE(&Console::getLast, &console)
+            DELEGATE(&Console::getLast, &console),
+            DELEGATE(&Console::setState, &console)
+        };
+        // Some more delegates for the bank
+        BankDelegates bankDelegates = {
+            DELEGATE(&Game::systems_discover, this),
+            DELEGATE(&Game::systems_scrutinize, this), outputDelegate
         };
         
+        //</editor-fold>
+        //<editor-fold defaultstate="collapsed" desc="Components that hold all game state data">
+
+        ComponentBank bank = ComponentBank(&bankDelegates); // holds collections of components, includes methods to manage them
+
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="Systems to operate on the components, providing game mechanics">
 
@@ -84,13 +91,16 @@ namespace DualityEngine {
         bool killSystems();
         bool pauseSystems();
         bool resumeSystems();
+        void systems_discover(const DU_ID &ID);
+        void systems_scrutinize(const DU_ID &ID);
         // More internal functions to come...
 
         //</editor-fold>
         //<editor-fold defaultstate="collapsed" desc="High-level 'interface' methods">
 
-        void Menu();
         void NewGame();
+        void LoadGame();
+        void SaveGame();
         void Pause();
         void Resume();
         void Quit();

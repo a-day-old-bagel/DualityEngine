@@ -17,62 +17,43 @@ using namespace DualityEngine;
  * main menu at some point...
  *************************************/
 void Game::Begin(){
-    NewGame();  
+    engageEngines();
+        
+    // Wait for all game threads to exit, then the game is over.
+    SDL_WaitThread(physicsThread, NULL);
+    SDL_WaitThread(graphicsThread, NULL);  
 }
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Menu">
-/**************************************
- * MENU
- *************************************/
-void Game::Menu(){
-    pauseSystems();
-    char input;
-    bool menuDone = false;
-    std::cout << "****************************************\n"
-              << "* MENU:\n"
-              << "*    Q: Quit\n"
-              << "*    N: New Game\n"
-              << "*    R: Resume\n"
-              << "****************************************\n"
-              << ">: ";
-    std::cin >> input;
-    
-    while (!menuDone){
-        switch (input){
-            case 'Q':
-            case 'q':
-                Quit();
-                menuDone = true;
-                break;
-            case 'N':
-            case 'n':
-                NewGame();
-                menuDone = true;
-                break;
-            case 'R':
-            case 'r':
-                resumeSystems();
-                menuDone = true;
-                break;
-            default:
-                std::cout << "bad input.\n>: ";
-                std::cin >> input;
-                break;
-        }
-    }
-}
-//</editor-fold>
+
 //<editor-fold defaultstate="collapsed" desc="New Game">
 /**************************************
  * NEW GAME : Game Initializer
  * sets up game
  *************************************/
 void Game::NewGame(){ 
-    engageEngines();
-        
-    // Wait for all game threads to exit, then the game is over.
-    SDL_WaitThread(physicsThread, NULL);
-    SDL_WaitThread(graphicsThread, NULL);
+    pauseSystems();
+    renderingSystem.clean();
+    physicsMoveSystem.clean();
+    physicsCollisionSystem.clean();
+    userControlSystem.clean();
+    bank.clean();
+    resumeSystems();
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Load Game">
+/**************************************
+ * LOAD GAME
+ *************************************/
+void Game::LoadGame(){
+    
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Save Game">
+/**************************************
+ * SAVE GAME
+ *************************************/
+void Game::SaveGame(){
+    
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Pause">
@@ -80,7 +61,8 @@ void Game::NewGame(){
  * PAUSE
  *************************************/
 void Game::Pause(){
-    pauseSystems();
+    physicsMoveSystem.pause();
+    physicsCollisionSystem.pause();
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Resume">
@@ -88,7 +70,8 @@ void Game::Pause(){
  * RESUME
  *************************************/
 void Game::Resume(){
-    resumeSystems();
+    physicsMoveSystem.resume();
+    physicsCollisionSystem.resume();
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Quit">
@@ -118,23 +101,27 @@ bool Game::engageEngines(){
     return true;
 }
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Pause Engines">
+//<editor-fold defaultstate="collapsed" desc="Pause Systems">
 /**************************************
  * PAUSE ENGINES
  *************************************/
 bool Game::pauseSystems(){
     physicsMoveSystem.pause();
     physicsCollisionSystem.pause();
+    renderingSystem.pause();
+    userControlSystem.pause();
     return true;
 }
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Resume Engines">
+//<editor-fold defaultstate="collapsed" desc="Resume Systems">
 /**************************************
  * RESUME ENGINES
  *************************************/
 bool Game::resumeSystems(){
     physicsMoveSystem.resume();
     physicsCollisionSystem.resume();
+    renderingSystem.resume();
+    userControlSystem.resume();
     return true;
 }
 //</editor-fold>
@@ -152,5 +139,27 @@ bool Game::killSystems(){
     physicsCollisionSystem.quit();
     userControlSystem.quit();    
     return true;
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Systems Discover">
+/**************************************
+ * SYSTEMS DISCOVER
+ *************************************/
+void Game::systems_discover(const DU_ID &ID){
+    renderingSystem.discoverID(ID);
+    physicsMoveSystem.discoverID(ID);
+    physicsCollisionSystem.discoverID(ID);
+    userControlSystem.discoverID(ID);
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Systems Scrutinize">
+/**************************************
+ * SYSTEMS SCRUTINIZE
+ *************************************/
+void Game::systems_scrutinize(const DU_ID &ID){
+    renderingSystem.scrutinizeID(ID);
+    physicsMoveSystem.scrutinizeID(ID);
+    physicsCollisionSystem.scrutinizeID(ID);
+    userControlSystem.scrutinizeID(ID);
 }
 //</editor-fold>

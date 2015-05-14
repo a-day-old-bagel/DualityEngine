@@ -7,28 +7,52 @@
 using namespace DualityEngine;
 
 /* CONSTRUCTOR */
-ComponentBank::ComponentBank(){
+ComponentBank::ComponentBank(BankDelegates* dlgt){
     nextID = DU_START_ID;
-}
-
-/* CONSTRUCTOR FOR LOADING SAVED STATES */
-ComponentBank::ComponentBank(const DU_ID &startingID){
-    nextID = startingID;
+    this->dlgt = dlgt;
 }
 
 ComponentBank::~ComponentBank(){
+    dlgt = NULL;
+}
+
+/*******************************************************************************
+ * BANK MANAGEMENT SECTION
+ ******************************************************************************/
+void ComponentBank::clean(){
+    components_soul.clear();
+    components_model.clear();
+    components_position.clear();
+    components_positionChild.clear();
+    components_positionParent.clear();
+    components_positionVeloc.clear();
+    components_rotation.clear();
+    components_rotationVeloc.clear();
+    components_control.clear();
+    components_pointLight.clear();
+    components_directionalLight.clear();
+    components_ambientLight.clear();
+    components_owner.clear();
+    components_score.clear();
+}
+void ComponentBank::save(const char* saveName){
     
 }
+void ComponentBank::load(const char* saveName){
+    
+}
+
 
 /*******************************************************************************
  * COMPONENT POINTER GETTERS SECTION - I KNOW THESE ARE A BAD IDEA.
  ******************************************************************************/
 template<class componentType>
-componentType* getComponentPtr(const DU_ID &ID, const char* compName, std::unordered_map<DU_ID, componentType> &table){
+componentType* ComponentBank::getComponentPtr(const DU_ID &ID, const char* compName, std::unordered_map<DU_ID, componentType> &table){
     try {
         return &(table.at(ID));
     }  catch(const std::out_of_range& oorException) {
-        printf("No %s component exists with ID %lu.", compName, ID);
+        std::string error = "No " + std::string(compName) + " component exists with ID " + std::to_string(ID) + ".\n";
+        dlgt->output(error.c_str());
         return NULL;
     }
 }
@@ -87,7 +111,8 @@ bool ComponentBank::tryAddFlagToSoul(const DU_COMPFLAG &flag, const DU_ID &ID){
     try{
         components_soul.at(ID).components |= flag;
     } catch(const std::out_of_range& oorException) {
-        printf("Permission denied to add component(s) at ID %lu: no soul yet exists at that ID\n", ID);
+        std::string error = "Could not add component at ID " + std::to_string(ID) + ": no soul exists at that ID.\n";
+        dlgt->output(error.c_str());
         return false;
     }
     return true;
@@ -108,9 +133,11 @@ bool ComponentBank::tryAddFlagToSoul(const DU_COMPFLAG &flag, const DU_ID &ID){
 template<class componentType, typename ... types>
 bool ComponentBank::tryAddComponent(const DU_ID &ID, const char* compName, std::unordered_map<DU_ID, componentType> &table, const types& ... args){
     if ((table.emplace(std::piecewise_construct, std::forward_as_tuple(ID), std::forward_as_tuple(args...))).second == false){
-        printf("Could not add %s component at ID %lu: %s component already exists at that ID.\n", compName, ID, compName);
+        std::string error = std::string(compName) + " component already exists at ID " + std::to_string(ID) + "\n";
+        dlgt->output(error.c_str());
         return false;
     }
+    dlgt->systemsDiscover(ID);
     return true;
 }
 /*******************************************************************************
@@ -211,7 +238,8 @@ void ComponentBank::tryRemoveFlagFromSoul(const DU_COMPFLAG &flag, const DU_ID &
     try{
         components_soul.at(ID).components &= ~flag;
     } catch(const std::out_of_range& oorException) {
-        printf("Cannot remove component flag at ID %lu: no soul exists at that ID\n", ID);
+        std::string error = "Could not remove component at ID " + std::to_string(ID) + ": no soul exists at that ID.\n";
+        dlgt->output(error.c_str());
     }
 }
 /*******************************************************************************
@@ -224,9 +252,11 @@ void ComponentBank::tryRemoveFlagFromSoul(const DU_COMPFLAG &flag, const DU_ID &
 template<class componentType>
 bool ComponentBank::tryRemoveComponent(const DU_ID &ID, const char* compName, std::unordered_map<DU_ID, componentType> &table){
     if (table.erase(ID) == 0){
-        printf("Could not remove %s component at ID %lu: no such component exists.\n", compName, ID);
+        std::string error = "No " + std::string(compName) + " component exists to be removed at ID " + std::to_string(ID) + "\n";
+        dlgt->output(error.c_str());
         return false;
     }
+    dlgt->systemsScrutinize(ID);
     return true;
 }
 /*******************************************************************************
@@ -320,15 +350,10 @@ DU_ID ComponentBank::createEntity(const char* name){
     if (addSoul(ID, name))
         return ID;
     else {
-        printf("New entity '%s' not created!\n", name);
+        std::string error = "New entity " + std::string(name) + " not created!\n";
+        dlgt->output(error.c_str());
         return DU_NULL_ID;        
     }    
-}
-/*******************************************************************************
- * NOTIFY SYSTEMS OF ADDITIONS
- ******************************************************************************/
-bool ComponentBank::notifySystemsOfAdditions(const DU_ID &ID){
-    return true;
 }
 
 /*******************************************************************************
@@ -346,7 +371,8 @@ bool ComponentBank::deleteEntity(const DU_ID& ID){
         flags = components_soul.at(ID).components;
         name = components_soul.at(ID).name;
     } catch(const std::out_of_range& oorException) {
-        printf("Could not delete entity: No soul component exists at ID %lu.\n", ID);
+        std::string error = "Could not delete entity " + std::to_string(ID) + ": no soul exists at that ID.\n";
+        dlgt->output(error.c_str());
         return false;
     }
     
@@ -366,11 +392,13 @@ bool ComponentBank::deleteEntity(const DU_ID& ID){
         deleteSoul(ID);
     
     } catch(...) {
-        printf("Something went wrong upon attempting to delete entity %lu ('%s')!\n", ID, name.c_str());
+        std::string error = "Something went wrong upon attempting to delete entity " + std::to_string(ID) + " ('" + name + "')!\n";
+        dlgt->output(error.c_str());
         return false;
     }
     
-    printf("Entity %lu ('%s') has been deleted.", ID, name.c_str());
+    std::string error = "Entity " + std::to_string(ID) + " ('" + name + "') has been deleted.\n";
+    dlgt->output(error.c_str());
     return true;
 }
 /*******************************************************************************
@@ -381,12 +409,7 @@ bool ComponentBank::deleteEntity(const DU_ID& ID){
 bool ComponentBank::purgeEntity(const DU_ID& ID){
     deleteEntity(ID);
 }
-/*******************************************************************************
- * NOTIFY SYSTEMS OF DELETIONS
- ******************************************************************************/
-bool ComponentBank::notifySystemsOfDeletions(const DU_ID& ID){
-    return true;
-}
+
 /*******************************************************************************
  * CONVENIENCE STRING GETTERS SECTION
  ******************************************************************************/

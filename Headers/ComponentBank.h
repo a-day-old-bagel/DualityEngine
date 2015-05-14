@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <sstream>
 
+#include "BankDelegates.h"
 #include "Settings.h"
 #include "Soul.h"
 #include "Model.h"
@@ -49,6 +50,13 @@ namespace DualityEngine {
         std::unordered_map<DU_ID, Owner>             components_owner;
         std::unordered_map<DU_ID, Score>             components_score;
         
+        /* BANK MANAGEMENT */
+        BankDelegates* dlgt;
+        
+        /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
+        template<class componentType>
+        componentType* getComponentPtr(const DU_ID&, const char*, std::unordered_map<DU_ID, componentType>&);
+        
         /* COMPONENT CREATION */
         bool tryAddFlagToSoul(const DU_COMPFLAG &flag,const DU_ID &ID);
         template<class componentType, typename ... types>
@@ -66,11 +74,14 @@ namespace DualityEngine {
 
     public:
         // Constructor for new states
-        ComponentBank();
-        // Constructor for loading saved states
-        ComponentBank(const DU_ID &startingID);
+        ComponentBank(BankDelegates* dlgt);
         // Destructor
         ~ComponentBank();
+        
+        /* BANK MANAGEMENT */
+        void clean();
+        void save(const char* saveName);
+        void load(const char* saveName);
 
         /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
         Soul* getSoulPtr(const DU_ID &ID);
@@ -122,7 +133,6 @@ namespace DualityEngine {
 
         /* ENTITY CREATION */
         DU_ID createEntity(const char* name);
-        bool  notifySystemsOfAdditions(const DU_ID &ID);
         DU_ID createBox(const char* name,
                         const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ,
                         const DU_FLOAT &rotX, const DU_FLOAT &rotY, const DU_FLOAT &rotZ,   
@@ -132,7 +142,6 @@ namespace DualityEngine {
         /* ENTITY DELETION */
         bool deleteEntity(const DU_ID &ID);  // orphans children
         bool purgeEntity(const DU_ID &ID);   // deletes children too.
-        bool notifySystemsOfDeletions(const DU_ID &ID);
 
         /* CONVENIENCE GETTERS */
         std::string getName(DU_ID &ID);
