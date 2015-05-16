@@ -91,8 +91,8 @@ namespace DualityEngine {
         bool killSystems();
         bool pauseSystems();
         bool resumeSystems();
-        void systems_discover(const DU_ID &ID);
-        void systems_scrutinize(const DU_ID &ID);
+        void systems_discover(const DUA_ID &ID);
+        void systems_scrutinize(const DUA_ID &ID);
         // More internal functions to come...
 
         //</editor-fold>

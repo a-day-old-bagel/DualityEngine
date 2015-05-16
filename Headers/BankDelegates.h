@@ -15,8 +15,8 @@
 namespace DualityEngine {
 
     struct BankDelegates {
-        Delegate<void(const DU_ID&)> systemsDiscover;
-        Delegate<void(const DU_ID&)> systemsScrutinize;
+        Delegate<void(const DUA_ID&)> systemsDiscover;
+        Delegate<void(const DUA_ID&)> systemsScrutinize;
         Delegate<void(const char*)>  output;
     };
 

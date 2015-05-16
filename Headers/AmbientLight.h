@@ -14,10 +14,10 @@ namespace DualityEngine {
 
     struct AmbientLight
     {
-        AmbientLight(const DU_COLORBYTE &red, const DU_COLORBYTE &green, const DU_COLORBYTE &blue){
+        AmbientLight(const DUA_COLORBYTE &red, const DUA_COLORBYTE &green, const DUA_COLORBYTE &blue){
             color = {red, green, blue};
         }
-        DU_VEC3 color;
+        DUA_VEC3 color;
     };
 
 }

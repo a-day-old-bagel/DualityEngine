@@ -15,10 +15,10 @@ namespace DualityEngine {
 
     struct RotationVeloc
     {
-        RotationVeloc(const DU_FLOAT &rotX, const DU_FLOAT &rotY, const DU_FLOAT &rotZ){
+        RotationVeloc(const DUA_DBL &rotX, const DUA_DBL &rotY, const DUA_DBL &rotZ){
             velAngular = {rotX, rotY, rotZ};
         }
-        DU_VEC3 velAngular;
+        DUA_VEC3 velAngular;
     };
 
 }

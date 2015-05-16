@@ -6,14 +6,14 @@
 
 using namespace DualityEngine;
 
-DU_ID ComponentBank::createBox(const char* name,
-                               const DU_FLOAT &posX, const DU_FLOAT &posY, const DU_FLOAT &posZ,
-                               const DU_FLOAT &rotX, const DU_FLOAT &rotY, const DU_FLOAT &rotZ,   
-                               const DU_FLOAT &velX, const DU_FLOAT &velY, const DU_FLOAT &velZ,
-                               const DU_FLOAT &angX, const DU_FLOAT &angY, const DU_FLOAT &angZ)
+DUA_ID ComponentBank::createBox(const char* name,
+                               const DUA_DBL &posX, const DUA_DBL &posY, const DUA_DBL &posZ,
+                               const DUA_DBL &rotX, const DUA_DBL &rotY, const DUA_DBL &rotZ,   
+                               const DUA_DBL &velX, const DUA_DBL &velY, const DUA_DBL &velZ,
+                               const DUA_DBL &angX, const DUA_DBL &angY, const DUA_DBL &angZ)
 {
-    DU_ID newEntityID = createEntity(name);
-    if (newEntityID != DU_NULL_ID){
+    DUA_ID newEntityID = createEntity(name);
+    if (newEntityID != DUA_NULL_ID){
     
         addModel            (newEntityID);
         addPosition         (newEntityID, posX, posY, posZ);

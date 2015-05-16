@@ -26,136 +26,98 @@ System_Render::~System_Render()
 //<editor-fold defaultstate="collapsed" desc="Init">
 bool System_Render::init(std::stringstream& engineOut)
 {
+    // entities to be rendered must have these components
     requiredComponents.at(0) = MODEL | POSITION | ROTATION ;
     
+    // Set up window and context
+    if (!setUpEnvironment(engineOut)) return false;
+    
+    // Load graphics assets and buffer them to GPU
+    if(!setUpResources(engineOut)) {
+        engineOut << "Unable to initialize graphics resources!" << std::endl;
+        return false;
+    }
+    return true;
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Set Up Environment">
+
+bool System_Render::setUpEnvironment(std::stringstream& engineOut)
+{
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         printf ("SDL did not initialize! SDL Error: %s\n", SDL_GetError());
         return false;
     }
-
     // Specify OpenGL version and profile
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, Settings::GLmajorVersion);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, Settings::GLminorVersion);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-    
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, DUA_GLVERSION_MAJOR);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, DUA_GLVERSION_MINOR);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);    
     // Create the SDL window
     window = SDL_CreateWindow("Game Engine",
                     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                    Settings::screenWidth, Settings::screenHeight,
-                    SDL_WINDOW_OPENGL);
-    
+                    DUA_SCREENRES_X, DUA_SCREENRES_Y,
+                    SDL_WINDOW_OPENGL);    
     // If the window couldn't be created for whatever reason
     if (window == NULL) {
         printf ("SDL window was not created! SDL Error: %s\n", SDL_GetError());
         return false;
-    }
-    
+    }    
     //Create context
     context = SDL_GL_CreateContext(window);
     if(context == NULL) {
         engineOut << "OpenGL context was not created! SDL Error: " << SDL_GetError() << std::endl;
         return false;
     }
-    if(!initGL(engineOut)) {
-        engineOut << "Unable to initialize graphics!" << std::endl;
-        return false;
-    }
-    //Use Vsync
-    if(SDL_GL_SetSwapInterval(1) < 0) {
-        engineOut << "Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
-    }    
-    return true;
-}
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="InitGL">
-
-bool System_Render::initGL(std::stringstream& engineOut)
-{
+    //Initialize GLEW (openGL Extensions Wrangler)
     glewExperimental = GL_TRUE; 
     GLenum glewError = glewInit();
     if(glewError != GLEW_OK) {
         engineOut << "Could not initialize GLEW! " << glewGetErrorString(glewError) << std::endl;
         return false;
+    }    
+    //Use Vsync
+    if(SDL_GL_SetSwapInterval(1) < 0) {
+        engineOut << "Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
     }
     
-    // Set background color
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS); 
+    glEnable(GL_CULL_FACE);
     
-    // Create VAO
-    glGenVertexArrays(1, &VertexArrayID);
-    glBindVertexArray(VertexArrayID);
+    return true;
+}
 
-    // Create and compile our GLSL program from the shaders
-    #ifdef GL_OLDHARDWARE
-    const char* vertShaderPath = "Assets/Shaders/redTri_3_0.vert";
-    const char* fragShaderPath = "Assets/Shaders/redTri_3_0.frag";
-    #else
-    const char* vertShaderPath = "Assets/Shaders/redTri_3_3.vert";
-    const char* fragShaderPath = "Assets/Shaders/redTri_3_3.frag";
-    #endif
-    programID = loadShaders(vertShaderPath, fragShaderPath, engineOut);
-    
-    // If shader compilation/linking didn't work, fail.
-    if (programID == GL_FALSE) return false;
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Set Up Resources">
 
-    // Get a handle for our "MVP" uniform
-    MatrixID = glGetUniformLocation(programID, "MVP");
-
-    // Projection matrix : field of view, aspect ration, zNear, zFar
-    Projection = glm::perspective(60.0f, 4.0f / 3.0f, 0.1f, 100.0f);
-
-    // Camera matrix
-    View = glm::lookAt
-            (
-                glm::vec3(4,3,3), // Camera is at (4,3,3), in World Space
-                glm::vec3(0,0,0), // and looks at the origin
-                glm::vec3(0,1,0)  // Head is up (set to 0,-1,0 to look upside-down)
-            );
+bool System_Render::setUpResources(std::stringstream& engineOut)
+{
+    bool success = true;
     
-    // Model matrix : an identity matrix (model will be at the origin)
-    Model = glm::mat4(1.0f);
+    success = debugCube.Init(engineOut);
     
-    // Our ModelViewProjection : multiplication of our 3 matrices
-    MVP = Projection * View * Model;
-    
-    glGenBuffers(1, &vertexbuffer);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(g_vertex_buffer_data), g_vertex_buffer_data, GL_STATIC_DRAW);
+    // Projection matrix : field of view, aspect ratio, zNear, zFar
+    projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+    view = glm::lookAt(
+             glm::vec3(-2, 0, 2),    // Camera position
+             glm::vec3(0, 0, 0),    // Camera look-at
+             glm::vec3(0, -1, 0));   // "Up" direction
+             
+    return success;
 }
 
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Tick">
 void System_Render::tick()
 {
-    // Clear the screen
-    glClear( GL_COLOR_BUFFER_BIT );
-
-    // Use our shader
-    glUseProgram(programID);
-
-    // Send our transformation to the currently bound shader, 
-    // in the "MVP" uniform
-    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
-
-    // 1rst attribute buffer : vertices
-    glEnableVertexAttribArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-    glVertexAttribPointer(
-            0,                  // attribute 0. No particular reason for 0, but must match the layout in the shader.
-            3,                  // size
-            GL_FLOAT,           // type
-            GL_FALSE,           // normalized?
-            0,                  // stride
-            (void*)0            // array buffer offset
-    );
-
-    // Draw the triangle !
-    glDrawArrays(GL_TRIANGLES, 0, 3); // 3 indices starting at 0 -> 1 triangle
-
-    glDisableVertexAttribArray(0);
-
-    //Update screen
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+    vp = projection * view;
+    
+    debugCube.render(vp);
+    
     SDL_GL_SwapWindow( window );
 }
 //</editor-fold>

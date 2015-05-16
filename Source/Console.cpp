@@ -28,7 +28,11 @@ std::string Console::getLog(){
 }
 
 std::string Console::getLine(int line){
-    return lines[line];
+    if (lines.empty() || line < 0 || line > lines.size() - 1){
+        return "";
+    } else {
+        return lines.at(line);
+    }
 }
 
 std::string Console::getLast(){
@@ -46,6 +50,7 @@ void Console::addToCommand(const char* text){
 }
 
 void Console::eraseOneCharFromCommand(){
+    if (pendingCommand.empty()) return;
     pendingCommand.pop_back();
     textHasChanged = true;
 }

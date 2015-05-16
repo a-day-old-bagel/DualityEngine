@@ -26,51 +26,24 @@ namespace DualityEngine {
     class System_Render : public System
     {
     private:
-        //<editor-fold defaultstate="collapsed" desc="Members">
 
-        // Window pointer passed in
         SDL_Window* window = NULL;
-        // Context created in this class
         SDL_GLContext context;
-
-        // Store for all shaders
-        ShaderRepository shaderRepo;
-        // Store for all meshes
-        MeshRepository meshRepo;
-        // Store for all textures
-        TextureRepository textureRepo;
-
-        GLuint VertexArrayID;
-        GLuint programID;
-        GLuint vertexbuffer;
-        SDL_Event e;
-        GLuint MatrixID;
-        glm::mat4 Projection;
-        glm::mat4 View;
-        glm::mat4 Model;
-        glm::mat4 MVP;
-        GLfloat g_vertex_buffer_data[9] = { 
-            -0.8, -0.8, 0.0f,
-             0.8, -0.8, 0.0f,
-             0.0f, 0.8, 0.0f
-        };
         
         DebugCube debugCube;
+        
+        glm::mat4 view = glm::mat4(1.0f);
+        glm::mat4 projection = glm::mat4(1.0f);
+        glm::mat4 vp = glm::mat4(1.0f);
 
-        //</editor-fold>
-        //<editor-fold defaultstate="collapsed" desc="Methods">
-
-        bool initGL(std::stringstream& engineOut);
-
-        //</editor-fold>
+        bool setUpResources(std::stringstream& engineOut);
+        bool setUpEnvironment(std::stringstream& engineOut);
 
     public:
-        //<editor-fold defaultstate="collapsed" desc="Methods">
         System_Render(ComponentBank* bank);
         ~System_Render();
         void tick() override;    
         bool init(std::stringstream& output) override;
-        //</editor-fold>
     };
 
 }

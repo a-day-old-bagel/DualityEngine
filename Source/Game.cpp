@@ -145,7 +145,7 @@ bool Game::killSystems(){
 /**************************************
  * SYSTEMS DISCOVER
  *************************************/
-void Game::systems_discover(const DU_ID &ID){
+void Game::systems_discover(const DUA_ID &ID){
     renderingSystem.discoverID(ID);
     physicsMoveSystem.discoverID(ID);
     physicsCollisionSystem.discoverID(ID);
@@ -156,7 +156,7 @@ void Game::systems_discover(const DU_ID &ID){
 /**************************************
  * SYSTEMS SCRUTINIZE
  *************************************/
-void Game::systems_scrutinize(const DU_ID &ID){
+void Game::systems_scrutinize(const DUA_ID &ID){
     renderingSystem.scrutinizeID(ID);
     physicsMoveSystem.scrutinizeID(ID);
     physicsCollisionSystem.scrutinizeID(ID);

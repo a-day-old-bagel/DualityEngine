@@ -11,7 +11,6 @@
           <itemPath>Assets/Models/Cereal/_1.jpg</itemPath>
         </logicalFolder>
         <logicalFolder name="f4" displayName="DebugCube" projectFiles="true">
-          <itemPath>Assets/Models/DebugCube/DebugCube.h</itemPath>
         </logicalFolder>
         <logicalFolder name="f2" displayName="MetalCube" projectFiles="true">
           <itemPath>Assets/Models/MetalCube/metal.jpg</itemPath>
@@ -31,6 +30,8 @@
       <logicalFolder name="f1" displayName="Shaders" projectFiles="true">
         <itemPath>Assets/Shaders/debug.frag</itemPath>
         <itemPath>Assets/Shaders/debug.vert</itemPath>
+        <itemPath>Assets/Shaders/debugCube.frag</itemPath>
+        <itemPath>Assets/Shaders/debugCube.vert</itemPath>
         <itemPath>Assets/Shaders/foo.frag</itemPath>
         <itemPath>Assets/Shaders/foo.vert</itemPath>
         <itemPath>Assets/Shaders/lighting.fs</itemPath>
@@ -43,6 +44,9 @@
         <itemPath>Assets/Shaders/simple.frag</itemPath>
         <itemPath>Assets/Shaders/simple.vert</itemPath>
       </logicalFolder>
+      <logicalFolder name="f3" displayName="Textures" projectFiles="true">
+        <itemPath>Assets/Textures/debugBoxTinyNumbered.bmp</itemPath>
+      </logicalFolder>
     </logicalFolder>
     <logicalFolder name="f1" displayName="Headers" projectFiles="true">
       <logicalFolder name="f6" displayName="Admin" projectFiles="true">
@@ -50,7 +54,6 @@
         <itemPath>Headers/Console.h</itemPath>
         <itemPath>Headers/Engine.h</itemPath>
         <itemPath>Headers/Game.h</itemPath>
-        <itemPath>Headers/Settings.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="Asset Management" projectFiles="true">
         <logicalFolder name="f1" displayName="Graphics" projectFiles="true">
@@ -94,17 +97,19 @@
         <itemPath>Headers/Soul.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f4" displayName="Systems" projectFiles="true">
-        <logicalFolder name="f1" displayName="Utilities" projectFiles="true">
-          <itemPath>Headers/BankDelegates.h</itemPath>
-          <itemPath>Headers/ControlDelegates.h</itemPath>
-          <itemPath>Headers/Delegate.h</itemPath>
-        </logicalFolder>
         <itemPath>Headers/PhysCollide.h</itemPath>
         <itemPath>Headers/PhysMove.h</itemPath>
         <itemPath>Headers/Render.h</itemPath>
         <itemPath>Headers/RenderOld.h</itemPath>
         <itemPath>Headers/System.h</itemPath>
         <itemPath>Headers/UserControl.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="Utilities" projectFiles="true">
+        <itemPath>Headers/BankDelegates.h</itemPath>
+        <itemPath>Headers/ControlDelegates.h</itemPath>
+        <itemPath>Assets/Models/DebugCube/DebugCube.h</itemPath>
+        <itemPath>Headers/Delegate.h</itemPath>
+        <itemPath>Headers/Settings.h</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="f2" displayName="Source" projectFiles="true">
@@ -247,6 +252,10 @@
       </item>
       <item path="Assets/Shaders/debug.vert" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Assets/Shaders/debugCube.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/debugCube.vert" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Assets/Shaders/foo.frag" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Shaders/foo.vert" ex="false" tool="3" flavor2="0">
@@ -268,6 +277,11 @@
       <item path="Assets/Shaders/simple.frag" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Shaders/simple.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Textures/debugBoxTinyNumbered.bmp"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Headers/AmbientLight.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -470,6 +484,10 @@
       </item>
       <item path="Assets/Shaders/debug.vert" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Assets/Shaders/debugCube.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/debugCube.vert" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Assets/Shaders/foo.frag" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Shaders/foo.vert" ex="false" tool="3" flavor2="0">
@@ -491,6 +509,11 @@
       <item path="Assets/Shaders/simple.frag" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Shaders/simple.vert" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Textures/debugBoxTinyNumbered.bmp"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Headers/AmbientLight.h" ex="false" tool="3" flavor2="0">
       </item>

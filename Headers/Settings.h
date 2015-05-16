@@ -8,42 +8,50 @@
 #ifndef SETTINGS_H
 #define	SETTINGS_H
 
+#include <GL/glew.h>
 #include <glm/glm.hpp>
 
 namespace DualityEngine {
     
-    // Defining this will cause openGL 3.0 to be used instead of 3.3
-    #define GL_OLDHARDWARE
-    
-    // Some useful defines
-    #define DU_POINTER_DELETE(p) if (p) { delete p; p = NULL; }
-    #define DU_ARRAY_COUNT(p) (sizeof(p)/sizeof(p[0]))
-    #define DU_WRITE_ZEROS(a) memset(a, 0, sizeof(a))
-
     // These define the types we'll be using
-    typedef uint_fast32_t   DU_ID;
-    typedef uint_fast16_t   DU_ASSETKEY;
-    typedef uint_fast16_t   DU_COMPFLAG;
-    typedef uint_fast8_t    DU_STATEFLAG;
-    typedef uint_fast8_t    DU_COLORBYTE;
-    typedef int_fast16_t    DU_SCORENUM;
-    typedef double          DU_FLOAT;
-    typedef glm::vec3       DU_VEC3;
-    typedef glm::vec2       DU_VEC2;
+    typedef uint_fast32_t   DUA_ID;          // used for entity UIDs
+    typedef uint_fast16_t   DUA_ASSETKEY;    // used for accessing assets from hash tables
+    typedef uint_fast16_t   DUA_COMPFLAG;    // flags used to store which components an entity has
+    typedef uint_fast8_t    DUA_STATEFLAG;   // flags used to store an entity's boolean states
+    typedef uint_fast8_t    DUA_COLORBYTE;   // wrapper for an 8-bit value used for color
+    typedef int_fast16_t    DUA_SCORENUM;    // wrapper for an int used to keep score
+    typedef uint8_t         DUA_UINT8;       // used for specifying mesh face vertex indices
+    typedef float           DUA_FLOAT;       // wrapper for the 64 bitfloating point values used by the game
+    typedef double          DUA_DBL;         // wrapper for the 32 bit floating point values used by the game
+    typedef glm::vec3       DUA_VEC3;        // wrapper for a 3D vector
+    typedef glm::vec2       DUA_VEC2;        // wrapper for a 2D vector
 
     // Some defines of useful values
-    #define DU_INVALID_VALUE_32 0xFFFFFFFF  // used for error states
-    #define DU_NULL_ID 0                    // used for entity error states
-    #define DU_START_ID 1                   // ID assignment begins with 1
-    #define DU_DEFAULT_STATE 0              // State entities start with
-    #define DU_DEFAULT_COMPONENTS 0         // Components entities start with
+    #define DUA_NULL_ID 0                    // used for entity error states
+    #define DUA_START_ID 1                   // ID assignment begins with 1
+    #define DUA_DEFAULT_STATE 0              // State entities start with
+    #define DUA_DEFAULT_COMPONENTS 0         // Components entities start with
 
+    // Configurable settings - will be in separate configuration file in the future
+    
+    //#define DUA_OLD_VIDEO_DRIVERS // Defining this will cause openGL 3.0 to be used instead of 3.3
+    #define DUA_GLVERSION_MAJOR 3
+    #ifndef DUA_OLD_VIDEO_DRIVERS
+    #define DUA_GLVERSION_MINOR 3
+    #else
+    #define DUA_GLVERSION_MINOR 0
+    #endif
+    #define DUA_SCREENRES_X 800
+    #define DUA_SCREENRES_Y 600
+
+    // Enumerators
+    
     /*****************************************
-     * The soul component will include an int
+     * The soul component will include a uint
      * whose bits are flags that store whether
      * or not the entity has a given component
      *****************************************/
-    enum componentFlags : DU_COMPFLAG
+    enum DUA_componentFlags : DUA_COMPFLAG
     {
         POSITION        = 0x1,      // Bit 1
         ROTATION        = 0x2,
@@ -65,28 +73,15 @@ namespace DualityEngine {
     };
 
     /*****************************************
-     * The soul component will include an int
+     * The soul component will include a uint
      * whose bits are flags that store boolean
      * states, such as whether or not the
      * entity is experiencing a physics collision.
      *****************************************/
-    enum stateFlags : DU_STATEFLAG
+    enum DUA_stateFlags : DUA_STATEFLAG
     {
         INACTIVE        = 0x1,      // Bit 1
         REMOVAL         = 0x2,      // Bit 2
-    };
-
-    class Settings
-    {
-    public:
-        static const int screenWidth        = 800;
-        static const int screenHeight       = 600;
-        static const int GLmajorVersion     = 3;
-        #ifdef GL_OLDHARDWARE
-        static const int GLminorVersion     = 0;
-        #else
-        static const int GLminorVersion     = 3;
-        #endif
     };
 }
 
