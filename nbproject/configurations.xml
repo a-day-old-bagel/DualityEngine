@@ -28,6 +28,8 @@
         </logicalFolder>
       </logicalFolder>
       <logicalFolder name="f1" displayName="Shaders" projectFiles="true">
+        <itemPath>Assets/Shaders/GUI_Console.frag</itemPath>
+        <itemPath>Assets/Shaders/GUI_Console.vert</itemPath>
         <itemPath>Assets/Shaders/debug.frag</itemPath>
         <itemPath>Assets/Shaders/debug.vert</itemPath>
         <itemPath>Assets/Shaders/debugCube.frag</itemPath>
@@ -109,6 +111,7 @@
         <itemPath>Headers/ControlDelegates.h</itemPath>
         <itemPath>Assets/Models/DebugCube/DebugCube.h</itemPath>
         <itemPath>Headers/Delegate.h</itemPath>
+        <itemPath>Assets/GUI/GUI_Console.h</itemPath>
         <itemPath>Headers/Settings.h</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -192,6 +195,8 @@
           <commandLine>`pkg-config --libs sdl2 gl glew assimp freetype2 fontconfig `</commandLine>
         </linkerTool>
       </compileType>
+      <item path="Assets/GUI/GUI_Console.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Assets/Models/Cereal/CerealBowlObjFromBlenderSep.mtl"
             ex="false"
             tool="3"
@@ -247,6 +252,10 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="Assets/Shaders/GUI_Console.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/GUI_Console.vert" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Shaders/debug.frag" ex="false" tool="3" flavor2="0">
       </item>
@@ -424,6 +433,8 @@
           <developmentMode>5</developmentMode>
         </asmTool>
       </compileType>
+      <item path="Assets/GUI/GUI_Console.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Assets/Models/Cereal/CerealBowlObjFromBlenderSep.mtl"
             ex="false"
             tool="3"
@@ -479,6 +490,10 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="Assets/Shaders/GUI_Console.frag" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Shaders/GUI_Console.vert" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Shaders/debug.frag" ex="false" tool="3" flavor2="0">
       </item>

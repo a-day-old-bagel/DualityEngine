@@ -39,11 +39,17 @@ namespace DualityEngine {
         // control delegates of top level functions to give to the UserControl system
         ControlDelegates controlDelegates = {
             quitDelegate,
-            DELEGATE(&Console::eraseOneCharFromCommand, &console),
-            DELEGATE(&Console::clearCommand, &console), outputDelegate,
+            DELEGATE(&Console::applyBackspace, &console),
+            DELEGATE(&Console::applyDelete, &console),
+            DELEGATE(&Console::clearCommand, &console),
+            DELEGATE(&Console::upOneCommand, &console),
+            DELEGATE(&Console::downOneCommand, &console),
+            DELEGATE(&Console::leftCursor, &console),
+            DELEGATE(&Console::rightCursor, &console),
+            outputDelegate,
             DELEGATE(&Console::addToCommand, &console),
             DELEGATE(&Console::submitCommand, &console),
-            DELEGATE(&Console::getLast, &console),
+            DELEGATE(&Console::getLastLogLine, &console),
             DELEGATE(&Console::setState, &console)
         };
         // Some more delegates for the bank

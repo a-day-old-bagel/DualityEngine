@@ -16,7 +16,12 @@ namespace DualityEngine {
     struct ControlDelegates {
         Delegate<void()> quit;
         Delegate<void()> backspaceCommand;
+        Delegate<void()> deleteCommand;
         Delegate<void()> clearCommand;
+        Delegate<void()> upOneCommand;
+        Delegate<void()> downOneCommand;
+        Delegate<void()> leftCursor;
+        Delegate<void()> rightCursor;
         Delegate<void(const char*)> output;
         Delegate<void(const char*)> appendToCommand;        
         Delegate<std::string()> submitCommand;

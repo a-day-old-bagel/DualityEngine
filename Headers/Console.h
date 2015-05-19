@@ -17,20 +17,32 @@
 namespace DualityEngine {
     class Console {
     private:
-        std::vector<std::string> lines;
-        std::string pendingCommand;
+        std::vector<std::string> logLines;
+        std::vector<std::string> submittedLines = {""};
+        std::string pendingCommand = "";
+        int cursorPosition = 0;
+        int submitLinePending = 0;
+        int submitLineActive = 0;
         bool consoleIsActive = false;
         bool menuIsActive = false;
-        bool textHasChanged = false;
+        bool hasChangedVisually = false;
+        
+        void refreshPendingCommand();
     public:
         void output (const char* text);
+        void outputStr (const std::string& text);
         std::string getLog ();
-        std::string getLine (int line);
-        std::string getLast ();
+        std::string getLogLine (int line);
+        std::string getLastLogLine ();
         void setState(bool console, bool menu);
         void addToCommand (const char* text);
-        void eraseOneCharFromCommand();
+        void applyBackspace();
+        void applyDelete();
         void clearCommand();
+        void upOneCommand();
+        void downOneCommand();
+        void leftCursor();
+        void rightCursor();
         std::string submitCommand();
     };
 }

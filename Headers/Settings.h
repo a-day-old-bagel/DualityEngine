@@ -5,8 +5,8 @@
  * Created on January 29, 2015, 2:18 PM
  */
 
-#ifndef SETTINGS_H
-#define	SETTINGS_H
+#ifndef DUA_SETTINGS_H
+#define	DUA_SETTINGS_H
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
@@ -59,7 +59,7 @@ namespace DualityEngine {
      *****************************************/
     enum DUA_componentFlags : DUA_COMPFLAG
     {
-        VALID_COMP      = 0x1,      // If this bit is 0, error code. Must be on for all souls.
+        VALID_COMPS     = 0x1,      // If this bit is 0, error code. Must be on for all souls.
         POSITION        = 0x2,      // Bit 1
         ROTATION        = 0x4,
         LINVELOC        = 0x8,
@@ -110,7 +110,11 @@ namespace DualityEngine {
     #endif
     #define DUA_SCREENRES_X 800
     #define DUA_SCREENRES_Y 600
+    #define DUA_DEFAULTFOV 45.0f
+    #define DUA_ASPECTRATIO ((float)DUA_SCREENRES_X / (float)DUA_SCREENRES_Y)
+    #define DUA_ZPLANENEAR 0.1f
+    #define DUA_ZPLANEFAR 100.0f
 }
 
-#endif	/* SETTINGS_H */
+#endif	/* DUA_SETTINGS_H */
 

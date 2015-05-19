@@ -98,8 +98,7 @@ bool System_Render::setUpResources(std::stringstream& engineOut)
     
     success = debugCube.Init(engineOut);
     
-    // Projection matrix : field of view, aspect ratio, zNear, zFar
-    projection = glm::perspective(45.0f, 4.0f / 3.0f, 0.1f, 100.0f);
+    projection = glm::perspective(DUA_DEFAULTFOV, DUA_ASPECTRATIO, DUA_ZPLANENEAR, DUA_ZPLANEFAR);
     view = glm::lookAt(
              glm::vec3(-2, 0, 2),    // Camera position
              glm::vec3(0, 0, 0),    // Camera look-at

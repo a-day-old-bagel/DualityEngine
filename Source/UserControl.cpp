@@ -35,7 +35,7 @@ void System_UserControl::tick(){
         //User requests quit
         if(sdlEvent.type == SDL_QUIT){
             dlgt->quit();
-            dlgt->output("\nWindow was exited.\n\n");
+            dlgt->output("\nFORCED EXIT\n\n");
         }
         else if(sdlEvent.type == SDL_KEYDOWN){
             if(sdlEvent.key.keysym.sym == SDLK_ESCAPE){
@@ -67,15 +67,22 @@ void System_UserControl::tick(){
             if (consoleIsActive){
                 if(sdlEvent.key.keysym.sym == SDLK_BACKSPACE){
                     dlgt->backspaceCommand();
-                }
-                else if(sdlEvent.key.keysym.sym == SDLK_RETURN){
+                } else if(sdlEvent.key.keysym.sym == SDLK_DELETE){
+                    dlgt->deleteCommand();
+                } else if(sdlEvent.key.keysym.sym == SDLK_RETURN){
                     std::string command = dlgt->submitCommand();
                     parseCommand(command);
-                }
-                else if(sdlEvent.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL){
+                } else if(sdlEvent.key.keysym.sym == SDLK_UP){
+                    dlgt->upOneCommand();
+                } else if(sdlEvent.key.keysym.sym == SDLK_DOWN){
+                    dlgt->downOneCommand();
+                } else if(sdlEvent.key.keysym.sym == SDLK_LEFT){
+                    dlgt->leftCursor();
+                } else if(sdlEvent.key.keysym.sym == SDLK_RIGHT){
+                    dlgt->rightCursor();
+                } else if(sdlEvent.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL){
                     SDL_SetClipboardText(dlgt->getLastConsoleLine().c_str());
-                }
-                else if(sdlEvent.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL){
+                } else if(sdlEvent.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL){
                     dlgt->appendToCommand(SDL_GetClipboardText());                    
                 }
             }
