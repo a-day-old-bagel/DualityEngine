@@ -31,33 +31,44 @@ namespace DualityEngine {
         DUA_FLOAT* bodyVerts;
         DUA_FLOAT* bodyUVs;
         DUA_UINT8* bodyIndices;
-        int bodyWidth;
-        int bodyHeight;
+        int bodyWidthInChars;
+        int bodyHeightInChars;
         
         DUA_FLOAT* commandVerts;
         DUA_FLOAT* commandUVs;
         DUA_UINT8* commandIndices;
-        int commandWidth;
-        const int commandHeight = 1;
-        
-        #define BKGD_DEPTH DUA_ZPLANENEAR + 0.001f
-        const DUA_FLOAT backgroundVerts[18] = {
-            0.0, 1.0, BKGD_DEPTH,
-            1.0, 1.0, BKGD_DEPTH,
-            0.0, 0.45, BKGD_DEPTH,
-            1.0, 0.45, BKGD_DEPTH,
-            0.0, 0.5, BKGD_DEPTH,
-            1.0, 0.5, BKGD_DEPTH
-        };
+        int commandWidthInChars;
+        const int commandHeightInChars = 1;
         
         DUA_FLOAT* allVerts;
         DUA_FLOAT* allUVs;
-        DUA_FLOAT* allIndices;
-        int numVerts;
-        int numIndices;
+        DUA_UINT8* allIndices;
+        int sizeVertArray;
+        int sizeIndexArray;
+        
+        int marginWidth;
+        int marginHeight;
         
         void determineBufferData (){
+            int numBodyVerts = (bodyWidthInChars + 1) * (bodyHeightInChars + 1);
+            int numCommVerts = (commandWidthInChars + 1) * (commandHeightInChars + 1);
+            int numBodyTris  = bodyWidthInChars * bodyHeightInChars * 2;
+            int numCommTris  = commandWidthInChars * commandHeightInChars * 2;
             
+            bodyVerts = new DUA_FLOAT[numBodyVerts * 3];
+            commandVerts = new DUA_FLOAT[numCommVerts * 3];
+            DUA_FLOAT bkgdVerts[18] = {};
+            
+            sizeVertArray = (numBodyVerts + numCommVerts + 6) * 3;            
+            sizeIndexArray = (numBodyTris + numCommTris + 4) * 3;
+            
+            allVerts = new DUA_FLOAT[sizeVertArray];
+            allUVs = new DUA_FLOAT[sizeVertArray];
+            allIndices = new DUA_UINT8[sizeIndexArray];
+            
+            for (int i = 0; i < numBodyVerts; i++){
+                
+            }
         }
         
         void loadFontToBitmap(){
@@ -74,11 +85,23 @@ namespace DualityEngine {
         }
         
         bool Init(std::stringstream output, const char* fontFileName, int consoleWidth, int consoleHeight, int charWidth, int charHeight){
+            
+            this->charWidth = charWidth;
+            this->charHeight = charHeight;
+            bodyWidthInChars = consoleWidth / charWidth;
+            commandWidthInChars = bodyWidthInChars;
+            bodyHeightInChars = consoleHeight / charHeight - commandHeightInChars;
+            marginWidth = (consoleWidth % charWidth) / 2;
+            marginHeight = (consoleHeight % charHeight) / 3;
+            
             shdrLoc = loadShaders("Assets/Shaders/GUI_Console.vert", "Assets/Shaders/GUI_Console.frag", output);
 
             attrLoc_verts   = glGetAttribLocation(shdrLoc, "Vertex");
             attrLoc_uvCoo   = glGetAttribLocation(shdrLoc, "UV");
             txtrLoc         = glGetUniformLocation(shdrLoc, "font_texture");
+            
+            determineBufferData();
+            loadFontToBitmap();
         }
     };
 }
