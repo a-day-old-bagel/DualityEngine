@@ -121,3 +121,9 @@ void System_Render::tick()
     SDL_GL_SwapWindow( window );
 }
 //</editor-fold>
+void System_Render::discoverID(const DUA_ID& ID){
+    System::discoverID(ID);
+}
+void System_Render::scrutinizeID(const DUA_ID& ID){
+    System::scrutinizeID(ID);
+}

@@ -84,7 +84,6 @@ namespace DualityEngine {
         void load(const char* saveName);
 
         /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
-        Soul* getSoulPtr(const DUA_ID &ID);
         Model* getModelPtr(const DUA_ID &ID);
         PositionVeloc* getPositionVelocPtr(const DUA_ID &ID);
         Position* getPositionPtr(const DUA_ID &ID);
@@ -98,7 +97,7 @@ namespace DualityEngine {
         AmbientLight* getAmbientLightPtr(const DUA_ID &ID);
         Owner* getOwnerPtr(const DUA_ID &ID);
         Score* getScorePtr(const DUA_ID &ID);
-
+        
         /* COMPONENT CREATION */
         void addModel(const DUA_ID &ID);
         void addPositionVeloc(const DUA_ID &ID, const DUA_DBL &velX, const DUA_DBL &velY, const DUA_DBL &velZ);
@@ -130,6 +129,10 @@ namespace DualityEngine {
         void deleteAmbientLight(const DUA_ID &ID);
         void deleteOwner(const DUA_ID &ID);
         void deleteScore(const DUA_ID &ID);
+        
+        /* ENTITY STATE GETTERS */
+        DUA_COMPFLAG getComponents(const DUA_ID& ID);
+        DUA_STATEFLAG getState(const DUA_ID& ID);
 
         /* ENTITY CREATION */
         DUA_ID createEntity(const char* name);

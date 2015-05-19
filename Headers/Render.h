@@ -36,14 +36,16 @@ namespace DualityEngine {
         glm::mat4 projection = glm::mat4(1.0f);
         glm::mat4 vp = glm::mat4(1.0f);
 
-        bool setUpResources(std::stringstream& engineOut);
         bool setUpEnvironment(std::stringstream& engineOut);
+        bool setUpResources(std::stringstream& engineOut);        
 
     public:
         System_Render(ComponentBank* bank);
         ~System_Render();
         void tick() override;    
         bool init(std::stringstream& output) override;
+        void discoverID(const DUA_ID& ID) override;
+        void scrutinizeID(const DUA_ID& ID) override;
     };
 
 }

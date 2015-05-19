@@ -29,20 +29,20 @@ std::string System::getName(){
     return name;
 }
 
-void System::discoverID(DUA_ID ID){
+void System::discoverID(const DUA_ID& ID){
     // for each instance of registeredIDs and corresponding instance of requiredComponents...
     for (int i = 0; i < registeredIDs.size(); i++){
         // If the entity (the ID) isn't already in the list of IDs
         if (std::find(registeredIDs[i].begin(), registeredIDs[i].end(), ID) == registeredIDs[i].end()){
             // If the entity (the ID) has all the required components
-            if (((bank->getSoulPtr(ID)->components) & requiredComponents[i]) == requiredComponents[i]){
+            if ((bank->getComponents(ID) & requiredComponents[i]) == requiredComponents[i]){
                 registeredIDs[i].push_back(ID);    // add the entity (ID) to the list
             }
         }
     }
 }
 
-void System::scrutinizeID(DUA_ID ID){
+void System::scrutinizeID(const DUA_ID& ID){
     for (int i = 0; i < registeredIDs.size(); i++){
         // get location (if any) of ID in registeredIDs
         std::vector<DUA_ID>::iterator it =
@@ -50,7 +50,7 @@ void System::scrutinizeID(DUA_ID ID){
         // if the ID is in registeredIDs...
         if (it != registeredIDs[i].end()){
             // if the entity no longer has the required components
-            if (((bank->getSoulPtr(ID)->components) & requiredComponents[i]) != requiredComponents[i])
+            if ((bank->getComponents(ID) & requiredComponents[i]) != requiredComponents[i])
                 registeredIDs[i].erase(it);    // remove that entity (ID) from the list
         }
     }

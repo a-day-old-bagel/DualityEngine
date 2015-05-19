@@ -56,9 +56,6 @@ componentType* ComponentBank::getComponentPtr(const DUA_ID &ID, const char* comp
         return NULL;
     }
 }
-Soul* ComponentBank::getSoulPtr(const DUA_ID &ID){
-    return getComponentPtr(ID, "soul", components_soul);
-}
 Model* ComponentBank::getModelPtr(const DUA_ID &ID){
     return getComponentPtr(ID, "model", components_model);
 }
@@ -331,6 +328,26 @@ void ComponentBank::deleteOwner(const DUA_ID& ID){
 void ComponentBank::deleteScore(const DUA_ID& ID){
     if (tryRemoveComponent(ID, "score", components_score))
         tryRemoveFlagFromSoul(SCORE, ID);
+}
+
+/*******************************************************************************
+ * ENTITY STATE GETTERS SECTION
+ ******************************************************************************/
+DUA_COMPFLAG ComponentBank::getComponents(const DUA_ID& ID){
+    DUA_COMPFLAG flags;
+    try {
+        return components_soul.at(ID).components;
+    } catch(const std::out_of_range& oorException) {
+        return DUA_INVALID_COMPONENTS;
+    }
+}
+DUA_STATEFLAG ComponentBank::getState(const DUA_ID& ID){
+    DUA_STATEFLAG flags;
+    try {
+        return components_soul.at(ID).components;
+    } catch(const std::out_of_range& oorException) {
+        return DUA_INVALID_STATE;
+    }
 }
 
 /*******************************************************************************

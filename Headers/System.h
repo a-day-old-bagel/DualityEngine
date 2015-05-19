@@ -34,8 +34,8 @@ namespace DualityEngine {
         ~System();
         void clean();
         std::string getName();
-        void discoverID (DUA_ID ID);
-        void scrutinizeID (DUA_ID ID);
+        virtual void discoverID (const DUA_ID& ID);
+        virtual void scrutinizeID (const DUA_ID& ID);
         virtual bool init(std::stringstream& output){}
         virtual void tick(){}
         void pause();
