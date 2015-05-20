@@ -19,6 +19,7 @@
 #include "MeshRepository.h"
 #include "TextureRepository.h"
 #include "../Assets/Models/DebugCube/DebugCube.h"
+#include "../Assets/GUI/GUI_Console.h"
 //</editor-fold>
 
 namespace DualityEngine {
@@ -30,6 +31,7 @@ namespace DualityEngine {
         SDL_Window* window = NULL;
         SDL_GLContext context;
         
+        GUI_Console GUI_console;
         DebugCube debugCube;
         
         glm::mat4 view = glm::mat4(1.0f);

@@ -32,8 +32,8 @@ namespace DualityEngine {
         GLuint txtrLoc_diffuse;
         
         // Transform matrices used in rendering
-        glm::mat4 mvp = glm::mat4(1.0f);;
-        glm::mat4 model = glm::mat4(1.0f);;
+        glm::mat4 mvp = glm::mat4(1.0f);
+        glm::mat4 model = glm::mat4(1.0f);
         
         // Vertices of the cube mesh
         const DUA_FLOAT vertices[72] = { // A cube has 8 corners, each of which are represented three times - once for each connecting face.
@@ -241,6 +241,12 @@ namespace DualityEngine {
 
             glGenBuffers(4, buffers);
 
+            
+            
+            /*        FIX SIZEOF THING                FIX SIZEOF THING           DO IT NOW!       */
+            
+            
+            
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
             glBufferData(GL_ARRAY_BUFFER, sizeof vertices, vertices, GL_STATIC_DRAW);
             glEnableVertexAttribArray(attrLoc_verts);
@@ -267,7 +273,7 @@ namespace DualityEngine {
     
             return true;
         }
-        void render(glm::mat4 vp) {
+        void render(const glm::mat4& vp) {
             model = glm::rotate (model, 0.003f, glm::vec3 (1, 0, 0));
             model = glm::rotate (model, 0.007f, glm::vec3 (0, 1, 0));
             model = glm::rotate (model, 0.002f, glm::vec3 (0, 0, 1));

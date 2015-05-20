@@ -21,7 +21,8 @@ namespace DualityEngine {
     typedef uint_fast8_t    DUA_COMPTYPEREF; // used to enumerate the different types of components for array access
     typedef uint_fast8_t    DUA_COLORBYTE;   // wrapper for an 8-bit value used for color
     typedef int_fast16_t    DUA_SCORENUM;    // wrapper for an int used to keep score
-    typedef uint8_t         DUA_UINT8;       // used for specifying mesh face vertex indices
+    typedef uint8_t         DUA_UINT8;       // used for specifying mesh face vertex indices for objects
+    typedef uint16_t        DUA_UINT16;
     typedef float           DUA_FLOAT;       // wrapper for the 64 bitfloating point values used by the game
     typedef double          DUA_DBL;         // wrapper for the 32 bit floating point values used by the game
     typedef glm::vec3       DUA_VEC3;        // wrapper for a 3D vector
