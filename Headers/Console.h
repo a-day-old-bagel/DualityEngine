@@ -25,7 +25,8 @@ namespace DualityEngine {
         int submitLineActive = 0;
         bool consoleIsActive = false;
         bool menuIsActive = false;
-        bool hasChangedVisually = false;
+        bool bodyHasChangedVisually = false;
+        bool commHasChangedVisually = false;
         
         void refreshPendingCommand();
     public:

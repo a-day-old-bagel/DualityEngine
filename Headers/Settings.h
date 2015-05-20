@@ -112,8 +112,8 @@ namespace DualityEngine {
     #define DUA_SCREENRES_Y 600
     #define DUA_DEFAULTFOV 45.0f
     #define DUA_ASPECTRATIO ((float)DUA_SCREENRES_X / (float)DUA_SCREENRES_Y)
-    #define DUA_ZPLANENEAR 0.1f
-    #define DUA_ZPLANEFAR 100.0f
+    #define DUA_ZPLANENEAR 0.1
+    #define DUA_ZPLANEFAR 100.0
 }
 
 #endif	/* DUA_SETTINGS_H */

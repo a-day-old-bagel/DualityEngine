@@ -16,7 +16,7 @@ void Console::output(const char* text){
     }
             
     std::cout << text;
-    hasChangedVisually = true;
+    bodyHasChangedVisually = true;
 }
 
 void Console::outputStr(const std::string& text){
@@ -49,23 +49,12 @@ void Console::setState(bool console, bool menu){
 }
 
 void Console::addToCommand(const char* text){
-//    if (cursorPosition >= pendingCommand.length()){
-//        pendingCommand += text;
-//        if (submitLineActive == submitLinePending){
-//            submittedLines.at(submitLinePending) = pendingCommand;
-//        }
-//        cursorPosition = pendingCommand.length();
-//    } else {
-        //int oldLength = pendingCommand.length();
-        pendingCommand.insert(cursorPosition, text);
-        //cursorPosition += pendingCommand.length() - oldLength;
-        cursorPosition++;
-        
-        if (submitLineActive == submitLinePending){
-            submittedLines.at(submitLinePending) = pendingCommand;
-        }
-//    }
-    hasChangedVisually = true;
+    pendingCommand.insert(cursorPosition, text);
+    cursorPosition++;        
+    if (submitLineActive == submitLinePending){
+        submittedLines.at(submitLinePending) = pendingCommand;
+    }
+    commHasChangedVisually = true;
     /*DEBUG*/std::cout << pendingCommand << std::endl;
 }
 
@@ -73,7 +62,7 @@ void Console::applyBackspace(){
     if (!pendingCommand.empty() && cursorPosition > 0){
         pendingCommand.erase(cursorPosition - 1, 1);
         cursorPosition--;
-        hasChangedVisually = true;
+        commHasChangedVisually = true;
         /*DEBUG*/std::cout <<  pendingCommand << std::endl;
     }
 }
@@ -81,7 +70,7 @@ void Console::applyBackspace(){
 void Console::applyDelete(){
     if (!pendingCommand.empty() && cursorPosition < pendingCommand.length()){
         pendingCommand.erase(cursorPosition, 1);
-        hasChangedVisually = true;
+        commHasChangedVisually = true;
         /*DEBUG*/std::cout << pendingCommand << std::endl;
     }
 }
@@ -89,13 +78,13 @@ void Console::applyDelete(){
 void Console::clearCommand(){
     pendingCommand.clear();
     cursorPosition = 0;
-    hasChangedVisually = true;    
+    commHasChangedVisually = true;    
 }
 
 void Console::refreshPendingCommand(){
     pendingCommand = submittedLines.at(submitLineActive);
     cursorPosition = pendingCommand.size();
-    hasChangedVisually = true;
+    commHasChangedVisually = true;
     /*DEBUG*/std::cout << pendingCommand << std::endl;
 }
 
@@ -116,14 +105,14 @@ void Console::downOneCommand(){
 void Console::leftCursor(){
     if (cursorPosition > 0){
         cursorPosition--;
-        hasChangedVisually = true;
+        commHasChangedVisually = true;
    }
 }
 
 void Console::rightCursor(){
     if (cursorPosition < pendingCommand.length()){
         cursorPosition++;
-        hasChangedVisually = true;
+        commHasChangedVisually = true;
     }
 }
 
