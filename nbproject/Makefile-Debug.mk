@@ -53,8 +53,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Source/main.o \
 	${OBJECTDIR}/Source/mesh.o \
 	${OBJECTDIR}/Source/technique.o \
-	${OBJECTDIR}/Source/texture.o \
-	${OBJECTDIR}/example1.o
+	${OBJECTDIR}/Source/texture.o
 
 
 # C Compiler Flags
@@ -175,11 +174,6 @@ ${OBJECTDIR}/Source/texture.o: Source/texture.cpp
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/texture.o Source/texture.cpp
-
-${OBJECTDIR}/example1.o: example1.c 
-	${MKDIR} -p ${OBJECTDIR}
-	${RM} "$@.d"
-	$(COMPILE.c) -g -I/usr/include/freetype2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/example1.o example1.c
 
 # Subprojects
 .build-subprojects:
