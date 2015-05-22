@@ -85,6 +85,10 @@ bool System_Render::setUpEnvironment(std::stringstream& engineOut)
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS); 
     glEnable(GL_CULL_FACE);
+    
+    glEnable (GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
 //    
     return true;
 }
@@ -97,17 +101,14 @@ bool System_Render::setUpResources(std::stringstream& engineOut)
     bool success = true;
     
     success &= debugCube.Init(engineOut);
-    success &= GUI_console.Init(engineOut, "foobar.otf", 10, 10, 790, 290, 16, 16, 0, 0, 0 ,0);
+    success &= GUI_console.Init(engineOut, "foobar.otf", 200, 200, 400, 400, 100, 100, 2, 5, 0 ,0);
     
     projection = glm::perspective(DUA_DEFAULTFOV, DUA_ASPECTRATIO, (float)DUA_ZPLANENEAR, (float)DUA_ZPLANEFAR);
     //projection = glm::ortho(0, DUA_SCREENRES_X, 0, DUA_SCREENRES_Y);
     view = glm::lookAt(
-//             glm::vec3(-2, 0, 2),    // Camera position
-//             glm::vec3(0, 0, 0),    // Camera look-at
-//             glm::vec3(0, -1, 0));   // "Up" direction
-            glm::vec3(0, 0, 0.8),    // Camera position
-            glm::vec3(0, 0, 0),    // Camera look-at
-            glm::vec3(0, 1, 0));   // "Up" direction
+             glm::vec3(-2, 0, 2),    // Camera position
+             glm::vec3(0, 0, 0),    // Camera look-at
+             glm::vec3(0, -1, 0));   // "Up" direction\
              
     return success;
 }
@@ -120,8 +121,8 @@ void System_Render::tick()
     
     vp = projection * view;
     
-    GUI_console.render();
     debugCube.render(vp);
+    GUI_console.render();
     
     SDL_GL_SwapWindow( window );
 }

@@ -113,6 +113,7 @@
         <itemPath>Headers/Delegate.h</itemPath>
         <itemPath>Assets/GUI/GUI_Console.h</itemPath>
         <itemPath>Headers/Settings.h</itemPath>
+        <itemPath>example1.c</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="f2" displayName="Source" projectFiles="true">
@@ -412,6 +413,13 @@
       </item>
       <item path="Source/texture.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="example1.c" ex="false" tool="0" flavor2="0">
+        <cTool>
+          <incDir>
+            <pElem>/usr/include/freetype2</pElem>
+          </incDir>
+        </cTool>
+      </item>
     </conf>
     <conf name="Release" type="1">
       <toolsSet>
@@ -649,6 +657,8 @@
       <item path="Source/technique.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/texture.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="example1.c" ex="false" tool="0" flavor2="0">
       </item>
     </conf>
   </confs>
