@@ -101,7 +101,7 @@ bool System_Render::setUpResources(std::stringstream& engineOut)
     bool success = true;
     
     success &= debugCube.Init(engineOut);
-    success &= GUI_console.Init(engineOut, "foobar.otf", 200, 200, 400, 400, 100, 100, 2, 5, 0 ,0);
+    success &= GUI_console.Init(engineOut, "Assets/Fonts/Gidole-Regular.otf", 200, 200, 400, 400, 32, 32, 2, 5, 0 ,0);
     
     projection = glm::perspective(DUA_DEFAULTFOV, DUA_ASPECTRATIO, (float)DUA_ZPLANENEAR, (float)DUA_ZPLANEFAR);
     //projection = glm::ortho(0, DUA_SCREENRES_X, 0, DUA_SCREENRES_Y);

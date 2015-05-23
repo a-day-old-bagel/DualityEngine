@@ -72,19 +72,24 @@ namespace DualityEngine {
             DUA_FLOAT allUVs[sizeVertArray];
             DUA_UINT16 allIndices[sizeIndexArray];
             
+            const int debugStartChar = 17;
+            
             //memset(allUVs, 0, sizeVertArray);
+            const float adv = 1.0 / (endOfChars - beginningOfChars + 2);
+            const float startX = adv * debugStartChar;
+            const float endX = startX + adv;
             for (int i = 0; i < sizeVertArray; i += 8){
-                allUVs[i+0] = 0.0;
-                allUVs[i+1] = 1.0;
+                allUVs[i+0] = (startX + i * adv / 8.0);
+                allUVs[i+1] = 0.0;
                 
-                allUVs[i+2] = 1.0;
-                allUVs[i+3] = 1.0;
+                allUVs[i+2] = (endX + i * adv / 8.0);
+                allUVs[i+3] = 0.0;
                 
-                allUVs[i+4] = 0.0;
-                allUVs[i+5] = 0.0;
+                allUVs[i+4] = (startX + i * adv / 8.0);
+                allUVs[i+5] = 1.0;
                 
-                allUVs[i+6] = 1.0;
-                allUVs[i+7] = 0.0;
+                allUVs[i+6] = (endX + i * adv / 8.0);
+                allUVs[i+7] = 1.0;
             }
             
             // generate vertex and index data for all the character quads, first for the characters in the body text
@@ -158,218 +163,85 @@ namespace DualityEngine {
             return true;
         }
         
-        bool generateAndBufferFontSpriteSheetTexture(std::stringstream& output){
+        bool generateAndBufferFontAtlas(std::stringstream& output, const char* fontFile){            
             
             FT_Library library;
             FT_Face     face;
             
             const int numCharTexPanels = endOfChars - beginningOfChars + 2;
-            int startChar = beginningOfChars + 1;
+            int startChar = beginningOfChars - 1;
             int endChar = endOfChars;
-            int texWidth = findNextPowOfTwo(charWidth);
-            int texHeight = findNextPowOfTwo(-charHeight)/ 2;  // REMEMBER stupid openGL y flipping
-            int texBytes = numCharTexPanels * texWidth * texHeight;
-            output << texWidth << " " << texHeight << "\n";
+            int texWidth = charWidth;//findNextPowOfTwo(charWidth);
+            int texHeight = -charHeight;//findNextPowOfTwo(-charHeight);  // REMEMBER stupid openGL y flipping
+            /*DEBUG*/int texBytes = numCharTexPanels * texWidth * texHeight;
+            
 
             FT_Error error = FT_Init_FreeType (&library);
             if (error){
                 output << "\nERROR initializing freeType library.\n";
                 return false;
-            }
-            
+            }            
             error = FT_New_Face (library, "Assets/Fonts/FantasqueSansMono-Regular.ttf", 0, &face);
             if (error == FT_Err_Unknown_File_Format){
                 output << "\nERROR loading font: unknown file format.\n";
                 return false;
-            }
-            else if (error){
+            } else if (error){
                 output << "\nERROR loading font.\n";
                 return false;
-            }
-            
+            }            
             error = FT_Set_Pixel_Sizes (face, texWidth, texHeight);
             if (error){
                 output << "\nERROR setting font size.\n";
                 return false;
-            }
+            }            
             
-            DUA_UINT8 texData[texBytes];
-            memset(texData, 0x0F, texBytes);
-            
-//            for (int i = 0; i < texHeight; i += 2){
-//                for (int j = 0; j < texWidth; j++){
-//                    texData[i * texWidth + j + 0] = 0xFF;
-//                    texData[i * texWidth + j + 1] = 0x00;
-//                }
-//            }
-//            
-//            for (char i = startChar; i <= endChar; i++){
-//                FT_UInt glyph_index = FT_Get_Char_Index(face, (int)i);
-//               
-//                error = FT_Load_Glyph (face, glyph_index /*i*/, FT_LOAD_RENDER);
-//                if (error){
-//                    output << "\nERROR loading font character " << i << std::endl;
-//                    return false;
-//                }
-//                
-//                FT_Bitmap bmp = face->glyph->bitmap;
-//                int bmpW = bmp.width;
-//                int bmpH = bmp.rows;
-//                
-//                if (bmp.buffer == NULL){
-//                    output << "NULL\n";
-//                } else {                    
-//                    for (int j = 0; j < bmpH; j++){
-//                        for (int k = 0; k < bmpW; k++){
-//                            texData[(i - startChar) * texWidth * texHeight + j * bmpW + k] = bmp.buffer[j * bmpW + k];
-//                        }
-//                    }
-//                }                
-//            }
-//            
-//            GLenum glErr = glGetError();
-//            if (glErr != GL_NO_ERROR) {
-//                output << "\nglError 0: " << gluErrorString(glErr) << std::endl;
-//            }
+            /*DEBUG*/DUA_UINT8 texData[texBytes];
+            /*DEBUG*/memset(texData, 0x80, texBytes);            
             
             glGenTextures (1, &texture);
             glBindTexture (GL_TEXTURE_2D, texture);
             glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
-            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-            glTexImage2D (GL_TEXTURE_2D, 0, GL_RED, texWidth, texHeight * numCharTexPanels, 0, GL_RED, GL_UNSIGNED_BYTE, &texData[0]);
+            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+//            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+//            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+            glTexImage2D (GL_TEXTURE_2D, 0, GL_RED, texWidth * numCharTexPanels, texHeight, 0, GL_RED, GL_UNSIGNED_BYTE, &texData[0]);/*DEBUG*/ //should be 0 on end
             
             GLenum glErr = glGetError();
             if (glErr != GL_NO_ERROR) {
-                output << "\nglError 1: " << gluErrorString(glErr) << std::endl;
+                output << "glError after creating empty texture atlas.\n" << gluErrorString(glErr) << std::endl;
             }
+            
+            for (char i = startChar; i <= endChar; i++){
+                FT_UInt glyph_index = FT_Get_Char_Index(face, (int)i);
+               
+                error = FT_Load_Glyph (face, glyph_index /*i*/, FT_LOAD_RENDER);
+                if (error){
+                    output << "\nERROR loading font character " << i << std::endl;
+                }
+                
+                FT_Bitmap bmp = face->glyph->bitmap;
+                int bmpW = bmp.width;
+                int bmpH = bmp.rows;
+                
+                if (bmp.buffer == NULL){
+                    output << "No bitmap loaded for character '" << i << "'.\n";
+                } else {                    
+                    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - startChar) * texWidth, 0, bmpW, bmpH, GL_RED, GL_UNSIGNED_BYTE, bmp.buffer);
+                }
+                
+                glErr = glGetError ();
+                if (glErr != GL_NO_ERROR){
+                    output << "glError while subbing texture for '" << i << "': " << gluErrorString (glErr) << std::endl;
+                } else {
+                    
+                }
+            }            
             
             FT_Done_Face (face);
             FT_Done_FreeType (library);
             
             return true;
-            
-            
-            
-            
-            
-            
-//            
-//            FT_Library library;
-//            FT_Face     face;
-//            
-//            const int numCharTexPanels = endOfChars - beginningOfChars + 2;
-//            int startChar = beginningOfChars + 1;
-//            int endChar = endOfChars;
-//            int texWidth = findNextPowOfTwo(charWidth);
-//            int texHeight = findNextPowOfTwo(-charHeight);  // REMEMBER stupid openGL y flipping
-//            int texBytes = numCharTexPanels * texWidth * texHeight;
-//            output << texWidth << " " << texHeight << "\n";
-//
-//            FT_Error error = FT_Init_FreeType (&library);
-//            if (error){
-//                output << "\nERROR initializing freeType library.\n";
-//                return false;
-//            }
-//            
-//            error = FT_New_Face (library, "Assets/Fonts/FantasqueSansMono-Regular.ttf", 0, &face);
-//            if (error == FT_Err_Unknown_File_Format){
-//                output << "\nERROR loading font: unknown file format.\n";
-//                return false;
-//            }
-//            else if (error){
-//                output << "\nERROR loading font.\n";
-//                return false;
-//            }
-//            
-//            error = FT_Set_Pixel_Sizes (face, texWidth, texHeight);
-//            if (error){
-//                output << "\nERROR setting font size.\n";
-//                return false;
-//            }
-//            
-//            
-//            GLenum glErr = glGetError();
-//            if (glErr != GL_NO_ERROR) {
-//                output << "\nglError 0: " << gluErrorString(glErr) << std::endl;
-//            }
-//            
-//            
-//            DUA_UINT8 texData[texBytes];
-//            memset(texData, 0, texBytes);
-//            
-////            for (int i = 0; i < texBytes; i++){
-////                texData[i] = 0x0F;
-////            }
-//            
-//            glGenTextures (1, &texture);
-//            glBindTexture (GL_TEXTURE_2D, texture);
-//            glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
-//            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-//            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-//            glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-//            glTexImage2D (GL_TEXTURE_2D, 0, GL_RED, texWidth, texHeight * numCharTexPanels, 0, GL_RED, GL_UNSIGNED_BYTE, &texData[0]);
-//            
-//            glErr = glGetError();
-//            if (glErr != GL_NO_ERROR) {
-//                output << "\nglError 1: " << gluErrorString(glErr) << std::endl;
-//            }
-//            
-//            //glTexImage2D (GL_TEXTURE_2D, 0, GL_RED, texWidth * numCharTexPanels, texHeight, 0, GL_RED, GL_UNSIGNED_BYTE, 0);//&texData[0]);
-//            
-//            glErr = glGetError();
-//            if (glErr != GL_NO_ERROR) {
-//                output << "\nglError 2: " << gluErrorString(glErr) << std::endl;
-//            }
-//            
-//            DUA_COLORBYTE unkwnChar[texWidth * texHeight];
-//            for (int i = 0; i < texHeight; i += 2){
-//                for (int j = 0; j < texWidth; j++){
-//                    unkwnChar[i * texWidth + j + 0] = 0xFF;
-//                    unkwnChar[i * texWidth + j + 1] = 0x00;
-//                }
-//            }
-//            
-//            glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, texWidth, texHeight, GL_RED, GL_UNSIGNED_BYTE, unkwnChar);
-//            
-//            glErr = glGetError();
-//            if (glErr != GL_NO_ERROR) {
-//                output << "\nglError 3: " << gluErrorString(glErr) << std::endl;
-//            }
-//            
-//            for (char i = startChar; i <= endChar; i++){
-//                FT_UInt glyph_index = FT_Get_Char_Index(face, (int)i);
-//               
-//                error = FT_Load_Glyph (face, glyph_index /*i*/, FT_LOAD_RENDER);
-//                if (error){
-//                    output << "\nERROR loading font character " << i << std::endl;
-//                    return false;
-//                }
-//                
-//                FT_Bitmap bmp = face->glyph->bitmap;
-//                int bmpW = bmp.width;
-//                int bmpH = bmp.rows;
-//                
-//                if (bmp.buffer == NULL){
-//                    output << "NULL\n";
-//                } else {                    
-//                    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - startChar) * texWidth, 0, bmpW, bmpH, GL_RED, GL_UNSIGNED_BYTE, bmp.buffer);
-//                }                
-//            }
-//            
-//            glErr = glGetError();
-//            if (glErr != GL_NO_ERROR) {
-//                output << "\nglError 4: " << gluErrorString(glErr) << std::endl;
-//            }
-//            
-//            
-//            FT_Done_Face (face);
-//            FT_Done_FreeType (library);
-//            
-//            return true;
         }
         
         void updateUVsWithCurrentConsoleText(){
@@ -385,7 +257,7 @@ namespace DualityEngine {
             glDeleteVertexArrays (1, &VAOloc);
         }
         
-        bool Init(std::stringstream& output, const char* fontFileName, int locX, int locY, int width, int height, int charW, int charH, int spacingX, int spacingY, int marginX, int marginY){
+        bool Init(std::stringstream& output, const char* fontFile, int locX, int locY, int width, int height, int charW, int charH, int spacingX, int spacingY, int marginX, int marginY){
             
             screenOffsetX =  locX;
             screenOffsetY = -locY; // openGL flips y+ is up
@@ -410,44 +282,15 @@ namespace DualityEngine {
 
             attrLoc_verts   = glGetAttribLocation(shdrLoc, "Vertex");
             attrLoc_uvCoo   = glGetAttribLocation(shdrLoc, "UV");
-            txtrLoc         = glGetUniformLocation(shdrLoc, "font_texture");
-            //unifLoc_txDim   = glGetUniformLocation(shdrLoc, "charTexDimensions");
-            
+            txtrLoc         = glGetUniformLocation(shdrLoc, "font_texture");            
             
             // buffer part    
             glGenVertexArrays(1, &VAOloc);
             glBindVertexArray(VAOloc);
-            glGenBuffers(3, buffers);
-            
+            glGenBuffers(3, buffers);            
             
             if (!generateAndBufferGeometry(output)) return false;
-            if (!generateAndBufferFontSpriteSheetTexture(output)) return false;
-            
-            
-//            output << "\n" << sizeIndexArray << "\n\n";
-//            for (int i = 0; i < bodyHeightInChars + commandHeightInChars; i++){
-//                for (int j = 0; j < widthInChars; j++){
-//                    output << "[" << allVerts[i * widthInChars * 8 + j * 8 + 0] << ", "
-//                                  << allVerts[i * widthInChars * 8 + j * 8 + 1] << "] ["
-//                                  << allVerts[i * widthInChars * 8 + j * 8 + 2] << ", "
-//                                  << allVerts[i * widthInChars * 8 + j * 8 + 3] << "] ["
-//                                  << allVerts[i * widthInChars * 8 + j * 8 + 4] << ", "
-//                                  << allVerts[i * widthInChars * 8 + j * 8 + 5] << "] ["
-//                                  << allVerts[i * widthInChars * 8 + j * 8 + 6] << ", "
-//                                  << allVerts[i * widthInChars * 8 + j * 8 + 7] << "]\n";                    
-//                }
-//            }
-//            output << "\n\n";
-//            for (int i = 0; i < bodyHeightInChars + commandHeightInChars; i++){
-//                for (int j = 0; j < widthInChars; j++){
-//                    output << "[" << allIndices[i * widthInChars * 6 + j * 6 + 0] << ", "
-//                                  << allIndices[i * widthInChars * 6 + j * 6 + 1] << ", "
-//                                  << allIndices[i * widthInChars * 6 + j * 6 + 2] << "] ["                            
-//                                  << allIndices[i * widthInChars * 6 + j * 6 + 3] << ", "
-//                                  << allIndices[i * widthInChars * 6 + j * 6 + 4] << ", "
-//                                  << allIndices[i * widthInChars * 6 + j * 6 + 5] << "]\n";                    
-//                }
-//            }
+            if (!generateAndBufferFontAtlas(output, fontFile)) return false;
             
             return true;
         }
