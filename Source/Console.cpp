@@ -15,7 +15,7 @@ void Console::output(const char* text){
         logLines.push_back(line);
     }
             
-    std::cout << text;
+    // /*DEBUG*/ std::cout << text;
     bodyHasChangedVisually = true;
 }
 
@@ -39,8 +39,12 @@ std::string Console::getLogLine(int line){
     }
 }
 
-std::string Console::getLastLogLine(){
-    return getLogLine(logLines.size() - 1);
+std::string Console::getLogLineFromBack(int lineFromBack){
+    return getLogLine(logLines.size() - lineFromBack - 1);
+}
+
+std::string Console::getPendingCommand(){
+    return pendingCommand;
 }
 
 void Console::setState(bool console, bool menu){
@@ -119,8 +123,7 @@ void Console::rightCursor(){
 std::string Console::submitCommand(){
     if (pendingCommand.empty()) return "";
     std::string temp = pendingCommand;
-    pendingCommand.clear();
-    cursorPosition = 0;
+    clearCommand();
     if ((submittedLines.size() <= 1) ? true : temp != submittedLines.at(submitLinePending - 1)){
         submittedLines.at(submitLinePending) = temp;
         submittedLines.push_back("");

@@ -83,7 +83,7 @@ bool System_Render::setUpEnvironment(std::stringstream& engineOut)
     
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);
-    glDepthFunc(GL_LESS); 
+    glDepthFunc(GL_LEQUAL); 
     glEnable(GL_CULL_FACE);
     
     glEnable (GL_BLEND);
@@ -101,7 +101,7 @@ bool System_Render::setUpResources(std::stringstream& engineOut)
     bool success = true;
     
     success &= debugCube.Init(engineOut);
-    success &= GUI_console.Init(engineOut, "Assets/Fonts/FantasqueSansMono-Regular.ttf", 200, 200, 400, 400, 16, 32, 2, 5, 0 ,0);
+    success &= GUI_console.Init(engineOut, pConsole, "Assets/Fonts/Inconsolata-LGC.otf", 0, 0, 1024, 384, 10, 20, 2, 5, 5 ,5);
     
     projection = glm::perspective(DUA_DEFAULTFOV, DUA_ASPECTRATIO, (float)DUA_ZPLANENEAR, (float)DUA_ZPLANEFAR);
     //projection = glm::ortho(0, DUA_SCREENRES_X, 0, DUA_SCREENRES_Y);

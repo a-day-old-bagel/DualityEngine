@@ -36,7 +36,8 @@ namespace DualityEngine {
         void outputStr (const std::string& text);
         std::string getLog ();
         std::string getLogLine (int line);
-        std::string getLastLogLine ();
+        std::string getLogLineFromBack (int lineFromBack);
+        std::string getPendingCommand();
         void setState(bool console, bool menu);
         void addToCommand (const char* text);
         void applyBackspace();

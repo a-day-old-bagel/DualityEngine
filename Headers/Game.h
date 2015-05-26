@@ -49,7 +49,7 @@ namespace DualityEngine {
             outputDelegate,
             DELEGATE(&Console::addToCommand, &console),
             DELEGATE(&Console::submitCommand, &console),
-            DELEGATE(&Console::getLastLogLine, &console),
+            DELEGATE(&Console::getLogLineFromBack, &console),
             DELEGATE(&Console::setState, &console)
         };
         // Some more delegates for the bank

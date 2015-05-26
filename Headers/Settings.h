@@ -28,32 +28,7 @@ namespace DualityEngine {
     typedef double          DUA_dbl;         // wrapper for the 32 bit floating point values used by the game
     typedef glm::vec3       DUA_vec3;        // wrapper for a 3D vector
     typedef glm::vec2       DUA_vec2;        // wrapper for a 2D vector
-
-    // Enumerators
     
-//    /*****************************************
-//     * the component hash maps will be kept all
-//     * in an array at these indices
-//     *****************************************/
-//    enum DUA_componentCollectionsArrayIndices : DUA_COMPTYPEREF
-//    {
-//        SOUL_COLLECTION             = 0,
-//        MODEL_COLLECTION            = 1,
-//        POSITION_COLLECTION         = 2,
-//        ROTATION_COLLECTION         = 3,
-//        LINVELOC_COLLECTION         = 4,
-//        ANGVELOC_COLLECTION         = 5,
-//        COLLISION_COLLECTION        = 6,
-//        CONTROL_COLLECTION          = 7,
-//        LAMBIENT_COLLECTION         = 8,
-//        LDIRECT_COLLECTION          = 9,
-//        LPOINT_COLLECTION           = 10,
-//        POSCHILD_COLLECTION         = 11,
-//        POSPARENT_COLLECTION        = 12,
-//        OWNER_COLLECTION            = 13,
-//        SCORE_COLLECTION            = 14,
-//    };
-//    
     /*****************************************
      * The soul component will include a uint
      * whose bits are flags that store whether
@@ -93,6 +68,9 @@ namespace DualityEngine {
         REMOVAL         = 0x4,      // Bit 2
     };
     
+    // Macros
+    #define BUFFER_OFFSET(i) ((char *)NULL + (i))
+    
     // Some defines of useful values
     #define DUA_NULL_ID 0                           // used for entity error states
     #define DUA_START_ID 1                          // ID assignment begins with 1
@@ -110,8 +88,8 @@ namespace DualityEngine {
     #else
         #define DUA_GLVERSION_MINOR 0
     #endif
-    #define DUA_SCREENRES_X 800
-    #define DUA_SCREENRES_Y 600
+    #define DUA_SCREENRES_X 1024
+    #define DUA_SCREENRES_Y 768
     #define DUA_DEFAULTFOV 45.0f
     #define DUA_ASPECTRATIO ((float)DUA_SCREENRES_X / (float)DUA_SCREENRES_Y)
     #define DUA_ZPLANENEAR 0.1

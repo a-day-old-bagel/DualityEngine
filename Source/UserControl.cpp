@@ -39,7 +39,6 @@ void System_UserControl::tick(){
         }
         else if(sdlEvent.type == SDL_KEYDOWN){
             if(sdlEvent.key.keysym.sym == SDLK_ESCAPE){
-                //delegates->menu();
                 MenuIsActive = !MenuIsActive;
                 if (MenuIsActive){
                     if (!consoleIsActive){
@@ -48,7 +47,6 @@ void System_UserControl::tick(){
                     }
                     dlgt->clearCommand();
                     dlgt->output(menuText.c_str());
-                    //presentTextMenu();
                 } else {
                     consoleIsActive = false;
                     SDL_StopTextInput();
@@ -59,8 +57,6 @@ void System_UserControl::tick(){
                 if (!MenuIsActive){
                     consoleIsActive = !consoleIsActive;
                     consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
-                    dlgt->clearCommand();
-                    dlgt->output(consoleIsActive ? "console ON.\n" : "console OFF.\n");
                     dlgt->setConsoleState(consoleIsActive, MenuIsActive);
                 }
             }
@@ -81,7 +77,7 @@ void System_UserControl::tick(){
                 } else if(sdlEvent.key.keysym.sym == SDLK_RIGHT){
                     dlgt->rightCursor();
                 } else if(sdlEvent.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL){
-                    SDL_SetClipboardText(dlgt->getLastConsoleLine().c_str());
+                    SDL_SetClipboardText(dlgt->getLogFromBack(0).c_str());
                 } else if(sdlEvent.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL){
                     dlgt->appendToCommand(SDL_GetClipboardText());                    
                 }
