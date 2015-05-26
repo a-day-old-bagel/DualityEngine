@@ -15,10 +15,10 @@ namespace DualityEngine {
     
     struct PositionChild
     {
-        PositionChild(const DUA_ID &ref){
+        PositionChild(const DUA_id &ref){
             entityRef = ref;
         }
-        DUA_ID entityRef;
+        DUA_id entityRef;
     };
 }
 

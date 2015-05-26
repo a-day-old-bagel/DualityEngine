@@ -14,12 +14,12 @@ namespace DualityEngine {
 
     struct Soul
     {
-        Soul(const char* name, const DUA_COMPFLAG &flags, const DUA_STATEFLAG &states){
+        Soul(const char* name, const DUA_compFlag &flags, const DUA_stateFlag &states){
             this->name = name; components = flags; state = states;
         }
         std::string name;
-        DUA_COMPFLAG components;
-        DUA_STATEFLAG state;
+        DUA_compFlag components;
+        DUA_stateFlag state;
     };
 
 }

@@ -14,20 +14,20 @@
 namespace DualityEngine {
     
     // These define the types we'll be using
-    typedef uint_fast32_t   DUA_ID;          // used for entity UIDs
-    typedef uint_fast16_t   DUA_ASSETKEY;    // used for accessing assets from hash tables
-    typedef uint_fast16_t   DUA_COMPFLAG;    // flags used to store which components an entity has
-    typedef uint_fast8_t    DUA_STATEFLAG;   // flags used to store an entity's boolean states
-    typedef uint_fast8_t    DUA_COMPTYPEREF; // used to enumerate the different types of components for array access
-    typedef uint_fast8_t    DUA_COLORBYTE;   // wrapper for an 8-bit value used for color
-    typedef int_fast16_t    DUA_SCORENUM;    // wrapper for an int used to keep score
-    typedef uint8_t         DUA_UINT8;       // used for specifying mesh face vertex indices for objects
-    typedef uint16_t        DUA_UINT16;
-    typedef uint32_t        DUA_UINT32;
-    typedef float           DUA_FLOAT;       // wrapper for the 64 bitfloating point values used by the game
-    typedef double          DUA_DBL;         // wrapper for the 32 bit floating point values used by the game
-    typedef glm::vec3       DUA_VEC3;        // wrapper for a 3D vector
-    typedef glm::vec2       DUA_VEC2;        // wrapper for a 2D vector
+    typedef uint_fast32_t   DUA_id;          // used for entity UIDs
+    typedef uint_fast16_t   DUA_assetKey;    // used for accessing assets from hash tables
+    typedef uint_fast16_t   DUA_compFlag;    // flags used to store which components an entity has
+    typedef uint_fast8_t    DUA_stateFlag;   // flags used to store an entity's boolean states
+    typedef uint_fast8_t    DUA_compTypeRef; // used to enumerate the different types of components for array access
+    typedef uint_fast8_t    DUA_colorByte;   // wrapper for an 8-bit value used for color
+    typedef int_fast16_t    DUA_scoreNum;    // wrapper for an int used to keep score
+    typedef uint8_t         DUA_uint8;       // used for specifying mesh face vertex indices for objects
+    typedef uint16_t        DUA_uint16;
+    typedef uint32_t        DUA_uint32;
+    typedef float           DUA_float;       // wrapper for the 64 bitfloating point values used by the game
+    typedef double          DUA_dbl;         // wrapper for the 32 bit floating point values used by the game
+    typedef glm::vec3       DUA_vec3;        // wrapper for a 3D vector
+    typedef glm::vec2       DUA_vec2;        // wrapper for a 2D vector
 
     // Enumerators
     
@@ -59,7 +59,7 @@ namespace DualityEngine {
      * whose bits are flags that store whether
      * or not the entity has a given component
      *****************************************/
-    enum DUA_componentFlags : DUA_COMPFLAG
+    enum DUA_componentFlags : DUA_compFlag
     {
         VALID_COMPS     = 0x1,      // If this bit is 0, error code. Must be on for all souls.
         POSITION        = 0x2,      // Bit 1
@@ -86,7 +86,7 @@ namespace DualityEngine {
      * states, such as whether or not the
      * entity is experiencing a physics collision.
      *****************************************/
-    enum DUA_stateFlags : DUA_STATEFLAG
+    enum DUA_stateFlags : DUA_stateFlag
     {
         VALID_STATE     = 0x1,      // If this bit is 0, error code. Must be on for all souls.
         INACTIVE        = 0x2,      // Bit 1
@@ -106,9 +106,9 @@ namespace DualityEngine {
     #define DUA_OLD_VIDEO_DRIVERS // Defining this will cause openGL 3.0 to be used instead of 3.3
     #define DUA_GLVERSION_MAJOR 3
     #ifndef DUA_OLD_VIDEO_DRIVERS
-    #define DUA_GLVERSION_MINOR 3
+        #define DUA_GLVERSION_MINOR 3
     #else
-    #define DUA_GLVERSION_MINOR 0
+        #define DUA_GLVERSION_MINOR 0
     #endif
     #define DUA_SCREENRES_X 800
     #define DUA_SCREENRES_Y 600

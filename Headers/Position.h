@@ -14,10 +14,10 @@ namespace DualityEngine {
 
     struct Position
     {
-        Position(const DUA_DBL &posX, const DUA_DBL &posY, const DUA_DBL &posZ){
+        Position(const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ){
             position = {posX, posY, posZ};
         }
-        DUA_VEC3 position;
+        DUA_vec3 position;
     };
 
 }

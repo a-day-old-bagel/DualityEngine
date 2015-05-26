@@ -67,7 +67,7 @@ namespace DualityEngine {
         //<editor-fold defaultstate="collapsed" desc="Systems to operate on the components, providing game mechanics">
 
         // A system to render all graphical components (manages openGL calls)
-        System_Render renderingSystem = System_Render(&bank);
+        System_Render renderingSystem = System_Render(&bank, &console);
         // A system to update all spatial components according to motion components
         System_PhysMove physicsMoveSystem = System_PhysMove(&bank);
         // A system to check collisions between all spatial components according to collision components
@@ -97,8 +97,8 @@ namespace DualityEngine {
         bool killSystems();
         bool pauseSystems();
         bool resumeSystems();
-        void systems_discover(const DUA_ID &ID);
-        void systems_scrutinize(const DUA_ID &ID);
+        void systems_discover(const DUA_id &ID);
+        void systems_scrutinize(const DUA_id &ID);
         // More internal functions to come...
 
         //</editor-fold>

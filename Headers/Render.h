@@ -18,6 +18,7 @@
 #include "ShaderRepository.h"
 #include "MeshRepository.h"
 #include "TextureRepository.h"
+#include "Console.h"
 #include "../Assets/Models/DebugCube/DebugCube.h"
 #include "../Assets/GUI/GUI_Console.h"
 //</editor-fold>
@@ -28,9 +29,10 @@ namespace DualityEngine {
     {
     private:
 
-        SDL_Window* window = NULL;
+        SDL_Window* pWindow = NULL;
         SDL_GLContext context;
         
+        Console* pConsole;
         GUI_Console GUI_console;
         DebugCube debugCube;
         
@@ -42,12 +44,12 @@ namespace DualityEngine {
         bool setUpResources(std::stringstream& engineOut);        
 
     public:
-        System_Render(ComponentBank* bank);
+        System_Render(ComponentBank* bank, Console* console);
         ~System_Render();
         void tick() override;    
         bool init(std::stringstream& output) override;
-        void discoverID(const DUA_ID& ID) override;
-        void scrutinizeID(const DUA_ID& ID) override;
+        void discoverID(const DUA_id& ID) override;
+        void scrutinizeID(const DUA_id& ID) override;
     };
 
 }

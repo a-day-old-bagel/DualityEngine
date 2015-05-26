@@ -14,12 +14,12 @@ namespace DualityEngine {
 
     struct DirectionalLight
     {
-        DirectionalLight(const DUA_COLORBYTE &red, const DUA_COLORBYTE &green, const DUA_COLORBYTE &blue, const DUA_DBL &dirX, const DUA_DBL &dirY, const DUA_DBL &dirZ){
+        DirectionalLight(const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue, const DUA_dbl &dirX, const DUA_dbl &dirY, const DUA_dbl &dirZ){
             color = {red, green, blue};
             direction = {dirX, dirY, dirZ};
         }
-        DUA_VEC3 color;
-        DUA_VEC3 direction;
+        DUA_vec3 color;
+        DUA_vec3 direction;
     };
 
 }

@@ -14,10 +14,10 @@ namespace DualityEngine {
 
     struct PositionVeloc
     {
-        PositionVeloc(const DUA_DBL &velX, const DUA_DBL &velY, const DUA_DBL &velZ){
+        PositionVeloc(const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ){
             velLinear = {velX, velY, velZ};
         }
-        DUA_VEC3 velLinear;
+        DUA_vec3 velLinear;
     };
 
 }

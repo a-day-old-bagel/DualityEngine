@@ -132,7 +132,7 @@ void System_UserControl::parseCommand(std::string command){
         } else if (args[0] == "delete"){
             dlgt->output("Command not yet implemented.\n");
         } else if (args[0] == "debug"){
-            DUA_ID boxID = bank->createBox("box", 0,0,0, 0,0,0, 0,0,0, 0,0,0);
+            DUA_id boxID = bank->createBox("box", 0,0,0, 0,0,0, 0,0,0, 0,0,0);
             std::string output = bank->getName(boxID) + "\n" + bank->listComponents(boxID) + "\n";
             dlgt->output(output.c_str());
         } else if (args[0] == "help"){

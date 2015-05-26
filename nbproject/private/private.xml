@@ -9,10 +9,9 @@
         <group>
             <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Render.cpp</file>
             <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Settings.h</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Assets/Models/DebugCube/DebugCube.h</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Assets/Shaders/GUI_Console.vert</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Assets/Shaders/debugCube.frag</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Assets/Shaders/GUI_Console.frag</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Render.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Game.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Console.h</file>
             <file>file:/home/adayoldbagel/Code/DualityEngine/Assets/GUI/GUI_Console.h</file>
         </group>
     </open-files>

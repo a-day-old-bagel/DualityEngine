@@ -36,7 +36,7 @@ namespace DualityEngine {
         glm::mat4 model = glm::mat4(1.0f);
         
         // Vertices of the cube mesh
-        const DUA_FLOAT vertices[72] = { // A cube has 8 corners, each of which are represented three times - once for each connecting face.
+        const DUA_float vertices[72] = { // A cube has 8 corners, each of which are represented three times - once for each connecting face.
                                         // Redundant vertices are nearly unavoidable when UV mapping 3D objects, but usually this is hidden from the developer.
                                         // Vertex count increases from 8 to 24, but the number of triangles that must be rendered does not.
              0.5,  0.5,  0.5,
@@ -72,7 +72,7 @@ namespace DualityEngine {
             -0.5, -0.5, -0.5
         };
         // Normals for each vertex
-        const DUA_FLOAT normals[72] = {  // Each of the three corner vertices has a respective normal pointing in the direction of the face the vertex belongs to.
+        const DUA_float normals[72] = {  // Each of the three corner vertices has a respective normal pointing in the direction of the face the vertex belongs to.
                                          // This will create a 'flat shaded' look to the cube, which is to say the edges will look 'sharp'.
              0.0,  0.0,  1.0,
              0.0,  1.0,  0.0,         // Corner 0 connects 3 faces - one pointing in the z direction, one in the y, and one in the x.
@@ -108,7 +108,7 @@ namespace DualityEngine {
         };
         // This is just a helper to create the correct UVs. It will not be used as object data.
         // the values here are based on the layout of the texture image.
-        const DUA_VEC2 faces[6][4] = {
+        const DUA_vec2 faces[6][4] = {
             {{0.0, 0.75}, {0.5, 0.75}, {0.0,  0.5}, {0.5,  0.5}},
             {{0.5, 0.75}, {1.0, 0.75}, {0.5,  0.5}, {1.0,  0.5}},
             {{0.0,  0.5}, {0.5,  0.5}, {0.0, 0.25}, {0.5, 0.25}},
@@ -117,7 +117,7 @@ namespace DualityEngine {
             {{0.5, 0.25}, {1.0, 0.25}, {0.5, 0.00}, {1.0, 0.00}}
         };
         // UV texture coordinates for each vertex (ranging from 0.0 to 1.0 for each x and y)
-        const DUA_FLOAT uvCoords[48] = {
+        const DUA_float uvCoords[48] = {
             faces[1][0].x, faces[1][0].y,
             faces[4][1].x, faces[4][1].y,                    // Corner 0
             faces[3][1].x, faces[3][1].y,
@@ -155,7 +155,7 @@ namespace DualityEngine {
         #define FACING_Y * 3 + 1
         #define FACING_Z * 3
         // face indices specifying faces to be drawn by referencing the vertices
-        const DUA_UINT8 indices[36] = { // 12 triangles make 6 squares make 1 cube
+        const DUA_uint8 indices[36] = { // 12 triangles make 6 squares make 1 cube
             5 FACING_Z, 3 FACING_Z, 7 FACING_Z,   // Face 0
             5 FACING_Z, 1 FACING_Z, 3 FACING_Z,   // Face 1...
             0 FACING_Z, 6 FACING_Z, 2 FACING_Z,
@@ -180,7 +180,7 @@ namespace DualityEngine {
         #define CL5 0xFF, 0xFF, 0x00 // yellow
         #define CL6 0xFF, 0x33, 0x33 // scarlet
         // raw bitmap data for the texture:
-        const DUA_COLORBYTE rawTexture[1536] = { // 16 x 32 x 3 (width x height x [RGB]) = 1152 bytes
+        const DUA_colorByte rawTexture[1536] = { // 16 x 32 x 3 (width x height x [RGB]) = 1152 bytes
             CNR,EDG,EDG,EDG,EDG,EDG,EDG,CNR,CNR,EDG,EDG,EDG,EDG,EDG,EDG,CNR,
             EDG,BGD,BGD,CL1,CL1,BGD,BGD,EDG,EDG,BGD,BGD,CL2,CL2,BGD,BGD,EDG,
             EDG,BGD,BGD,BGD,CL1,BGD,BGD,EDG,EDG,BGD,CL2,BGD,BGD,CL2,BGD,EDG, 

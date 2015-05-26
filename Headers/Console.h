@@ -23,13 +23,15 @@ namespace DualityEngine {
         int cursorPosition = 0;
         int submitLinePending = 0;
         int submitLineActive = 0;
-        bool consoleIsActive = false;
-        bool menuIsActive = false;
-        bool bodyHasChangedVisually = false;
-        bool commHasChangedVisually = false;
         
         void refreshPendingCommand();
     public:
+        
+        bool consoleIsActive = false;
+        bool menuIsActive = false;
+        bool bodyHasChangedVisually = true;
+        bool commHasChangedVisually = true;
+        
         void output (const char* text);
         void outputStr (const std::string& text);
         std::string getLog ();

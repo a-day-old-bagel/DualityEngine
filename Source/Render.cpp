@@ -6,18 +6,18 @@
 using namespace DualityEngine;
 
 //<editor-fold defaultstate="collapsed" desc="Constructor">
-System_Render::System_Render(ComponentBank* bank)
+System_Render::System_Render(ComponentBank* bank, Console* console)
                   : System(bank, "Rendering System", 1) 
 {
-    
+    pConsole = console;
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Destructor">
 System_Render::~System_Render()
 {
     //Destroy window	
-    SDL_DestroyWindow(window);
-    window = NULL;
+    SDL_DestroyWindow(pWindow);
+    pWindow = NULL;
 
     //Quit SDL subsystems
     SDL_Quit();
@@ -54,17 +54,17 @@ bool System_Render::setUpEnvironment(std::stringstream& engineOut)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, DUA_GLVERSION_MINOR);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);    
     // Create the SDL window
-    window = SDL_CreateWindow("Game Engine",
+    pWindow = SDL_CreateWindow("Game Engine",
                     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                     DUA_SCREENRES_X, DUA_SCREENRES_Y,
                     SDL_WINDOW_OPENGL);    
     // If the window couldn't be created for whatever reason
-    if (window == NULL) {
+    if (pWindow == NULL) {
         printf ("SDL window was not created! SDL Error: %s\n", SDL_GetError());
         return false;
     }    
     //Create context
-    context = SDL_GL_CreateContext(window);
+    context = SDL_GL_CreateContext(pWindow);
     if(context == NULL) {
         engineOut << "OpenGL context was not created! SDL Error: " << SDL_GetError() << std::endl;
         return false;
@@ -101,7 +101,7 @@ bool System_Render::setUpResources(std::stringstream& engineOut)
     bool success = true;
     
     success &= debugCube.Init(engineOut);
-    success &= GUI_console.Init(engineOut, "Assets/Fonts/Gidole-Regular.otf", 200, 200, 400, 400, 32, 32, 2, 5, 0 ,0);
+    success &= GUI_console.Init(engineOut, "Assets/Fonts/FantasqueSansMono-Regular.ttf", 200, 200, 400, 400, 16, 32, 2, 5, 0 ,0);
     
     projection = glm::perspective(DUA_DEFAULTFOV, DUA_ASPECTRATIO, (float)DUA_ZPLANENEAR, (float)DUA_ZPLANEFAR);
     //projection = glm::ortho(0, DUA_SCREENRES_X, 0, DUA_SCREENRES_Y);
@@ -124,12 +124,12 @@ void System_Render::tick()
     debugCube.render(vp);
     GUI_console.render();
     
-    SDL_GL_SwapWindow( window );
+    SDL_GL_SwapWindow( pWindow );
 }
 //</editor-fold>
-void System_Render::discoverID(const DUA_ID& ID){
+void System_Render::discoverID(const DUA_id& ID){
     System::discoverID(ID);
 }
-void System_Render::scrutinizeID(const DUA_ID& ID){
+void System_Render::scrutinizeID(const DUA_id& ID){
     System::scrutinizeID(ID);
 }
