@@ -25,7 +25,7 @@ namespace DualityEngine {
         bool MenuIsActive = false;
         const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*        new, load, save, exit         *\n****************************************\n";
         std::unordered_map<std::string, const std::string> commandUsages = {
-            {"newent" , "\"newent [name] - no spaces in names.\""},
+            {"newent" , "\"newent [name]\" (no spaces in name)"},
             {"add" , "\"add [component type] [entity ID] [component arguments...]\""},
             {"delete" , "\"delete [component type] [entity ID]\""},
             {"help" , "\"help\" OR \"help [command]\" OR \"help [component]\""},

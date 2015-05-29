@@ -200,8 +200,8 @@ void System_UserControl::parseCommand(std::string command){
 }
 
 void System_UserControl::handleBadUsage(std::string command){
-    dlgt->outputStr("Incorrect usage of " + command + ". Try \"" + commandUsages[command] +
-                    "\"\n    for more help with the " + command + " command, type \"help " + command + "\"\n");
+    dlgt->outputStr("Incorrect usage of " + command + ". Try " + commandUsages[command] +
+                    "\n    for more help with the " + command + " command, type \"help " + command + "\"\n");
 }
 
 void System_UserControl::presentTextMenu(){

@@ -88,6 +88,7 @@ namespace DualityEngine {
     #else
         #define DUA_GLVERSION_MINOR 0
     #endif
+    #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
     #define DUA_SCREENRES_X 1366
     #define DUA_SCREENRES_Y 768
     #define DUA_DEFAULTFOV 45.0f

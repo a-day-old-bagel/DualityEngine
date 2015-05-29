@@ -3,6 +3,26 @@
  * Author: adayoldbagel
  *
  * Created on May 19, 2015, 1:47 PM
+ * 
+ * This is a class that, when instantiated and initialized, sets up (generates) all the
+ * resources needed to display a graphical command line interface (console) to the screen.
+ * it can be placed wherever, be of whatever size, of whatever colors, and whatever font.
+ * upon instantiation, values are passed for margin sizes (horiz and vert), character spacing
+ * (horiz and vert), character sizes in pixels (horiz and vert), position of console quad (x and y),
+ * width/height of console quad, and font file to access. Freetype 2 is used to read fonts and
+ * convert them to bitmaps.  Monspaced fonts are recommended and some tweaking of this file
+ * will probably be required to make any one font look good.
+ *      The render() method is called to draw the console each frame.
+ *      This class also requires a pointer to a DualityEngine::Console class instance from
+ * which it can draw current text, cursor positions, etc.
+ * 
+ * PROBLEMS TO FIX: right now scrolling (pgUp, pgDown) in the log scrolls by the unwrapped line, 
+ *                  meaning that if a single line is displayed across three lines because it was
+ *                  too long to fit in one line, pressing pgUp will scroll the whole three lines
+ *                  upward instead of the usual one line when that multi-line entry is crossed.
+ *                      This is a minor problem and may not need fixing.  So far, all other known
+ *                  bugs have been fixed (29 MAY 2015)
+ *                      The code is still really messy here though.
  */
 
 #ifndef GUI_CONSOLE_H
@@ -18,8 +38,8 @@
 namespace DualityEngine {
     class GUI_Console {
         
-        const glm::vec3 textColor = {1.0, 0.8, 0.0};//{0.5, 1.0, 0.3};
-        const glm::vec3 bkgdColor = {0.0, 0.0, 0.1};//{0.05, 0.05, 0.05};
+        const glm::vec3 textColor = /*{0.5, 0.8, 1.0};//{1.0, 0.8, 0.0};*/{0.5, 1.0, 0.3};
+        const glm::vec3 bkgdColor = /*{0.1, 0.05, 0.0};//{0.0, 0.0, 0.1};*/{0.05, 0.05, 0.05};
         const char firstAsciiChar = ' ';
         const char lastAsciiChar = '~';
         const std::string commPromptNorm = ">: ";
@@ -42,8 +62,10 @@ namespace DualityEngine {
         std::string graphicalLine;
         std::string carryOverLine;
         int numLinesCarried = 0;
+        int multiLineIterator;
         bool lineHasCarried = false;
-        int currentPromptLength;
+        int currentCommLineLength;
+        int graphicalCommOffset;
         float cursorZeroPosX;
         float cursorPosY;
         float cursorAdvanceX;
@@ -331,8 +353,9 @@ namespace DualityEngine {
                     if (lineReaderSize > numCharsX){
                         lineHasCarried = true;
                         numLinesCarried++;
-                        carryOverLine = lineReader.substr(0, numCharsX * (lineReaderSize / numCharsX));
-                        lineReader = lineReader.substr(lineReaderSize - (lineReaderSize % numCharsX));
+                        for (multiLineIterator = 0; multiLineIterator + numCharsX < lineReaderSize; multiLineIterator += numCharsX);
+                        carryOverLine = lineReader.substr(0, multiLineIterator);
+                        lineReader = lineReader.substr(multiLineIterator);
                     }
                     
                     lineReaderSize = lineReader.length();
@@ -360,16 +383,26 @@ namespace DualityEngine {
                 graphicalLine.clear();
                 
                 if (console->menuIsActive){
-                    currentPromptLength = numCharsX - commPromptMenu.length();
+                    currentCommLineLength = numCharsX - commPromptMenu.length();
                 } else {
-                    currentPromptLength = numCharsX - commPromptNorm.length();
+                    currentCommLineLength = numCharsX - commPromptNorm.length();
                 }
                 
-                lineReader = console->getPendingCommand();
+                
+                
+                if (console->cursorPosition > currentCommLineLength - 2){
+                    graphicalCommOffset = console->cursorPosition - (currentCommLineLength - 2);
+                    lineReader = (console->getPendingCommand()).substr(graphicalCommOffset);
+                } else {
+                    graphicalCommOffset = 0;
+                    lineReader = console->getPendingCommand();
+                }
+                
                 lineReaderSize = lineReader.length();
-                graphicalLine.replace(0, currentPromptLength, lineReader);
-                if (lineReaderSize < currentPromptLength) {
-                    graphicalLine.replace(lineReaderSize, currentPromptLength - lineReaderSize, currentPromptLength - lineReaderSize, ' ');
+                
+                graphicalLine.replace(0, currentCommLineLength, lineReader);
+                if (lineReaderSize < currentCommLineLength) {
+                    graphicalLine.replace(lineReaderSize, currentCommLineLength - lineReaderSize, currentCommLineLength - lineReaderSize, ' ');
                 }
                 graphicalLine.insert(0, console->menuIsActive ? commPromptMenu : commPromptNorm);
                 for (int j = 0; j < numCharsX; j++) {
@@ -386,7 +419,7 @@ namespace DualityEngine {
                 glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
                 glBufferSubData(GL_ARRAY_BUFFER, numCharsX * numCharsY_body * 8 * sizeof(DUA_float), numCharsX * numCharsY_comm * 8 * sizeof(DUA_float), &commSubArray[0]);
                 
-                cursorSubArray[0] = cursorZeroPosX + (console->cursorPosition + (console->menuIsActive ? commPromptMenu.length() : commPromptNorm.size())) * cursorAdvanceX;
+                cursorSubArray[0] = cursorZeroPosX + (console->cursorPosition - graphicalCommOffset + (console->menuIsActive ? commPromptMenu.length() : commPromptNorm.size())) * cursorAdvanceX;
                 cursorSubArray[2] = cursorSubArray[0] - cursorHalfWidth;
                 cursorSubArray[4] = cursorSubArray[0] + cursorHalfWidth;
                 
