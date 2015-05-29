@@ -76,6 +76,10 @@ void System_UserControl::tick(){
                     dlgt->leftCursor();
                 } else if(sdlEvent.key.keysym.sym == SDLK_RIGHT){
                     dlgt->rightCursor();
+                } else if(sdlEvent.key.keysym.sym == SDLK_PAGEUP){
+                    dlgt->logTraverse(1);
+                } else if(sdlEvent.key.keysym.sym == SDLK_PAGEDOWN){
+                    dlgt->logTraverse(-1);
                 } else if(sdlEvent.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL){
                     SDL_SetClipboardText(dlgt->getLogFromBack(0).c_str());
                 } else if(sdlEvent.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL){
@@ -106,6 +110,7 @@ void System_UserControl::parseCommand(std::string command){
         temp.clear();
     }
     const int numArgs = args.size();
+    if (numArgs < 1) return;
     
     if (MenuIsActive){
         if (args[0] == "exit"){
@@ -117,7 +122,7 @@ void System_UserControl::parseCommand(std::string command){
         } else if (args[0] == "save"){
             dlgt->output("save game command not yet implemented\n");
         } else if (args[0] == "help"){
-            dlgt->output("You're in the menu. Type one of the following: 'new', 'load', 'save', or 'exit'.\n");
+            dlgt->output("You're in the menu. Type one of the following: 'new', 'load', 'save', or 'exit'.\nPress ESC to exit the menu.\n");
         } else if (args[0] == "add" || args[0] == "delete"){
             dlgt->output("That command isn't available from the menu (ESC to exit menu).\n");
         } else {
@@ -157,21 +162,32 @@ void System_UserControl::parseCommand(std::string command){
         } else if (args[0] == "help"){
             if (numArgs == 1){
                 dlgt->outputStr("You're in the console. You have access to the following commands:\n    "
-                             + commandUsages["newent"]  + "\n    "
-                             + commandUsages["add"]     + "\n    "
-                             + commandUsages["delete"]  + "\n    "
-                             + commandUsages["help"]);
+                                + commandUsages["newent"]  + "\n    "
+                                + commandUsages["add"]     + "\n    "
+                                + commandUsages["delete"]  + "\n    "
+                                + commandUsages["help"]    + "\n    "
+                                + "Type \"components\" to see a list of available components or press ESC to enter the menu.\n");
             } else if (numArgs == 2){
                 if (commandHelps.count(args[1])){
                     dlgt->outputStr("The " + args[1] + " command " + commandHelps[args[1]] + "\n" +
-                                 "Usage is " + commandUsages[args[1]] + "\n" +
-                                 "Example: " + commandExamples[args[1]] + "\n");
+                                    "Usage is " + commandUsages[args[1]] + "\n" +
+                                    "Example: " + commandExamples[args[1]] + "\n");
                 }else if (componentHelps.count(args[1])){
                     dlgt->outputStr("The " + args[1] + " component " + componentHelps[args[1]] + "\n" +
-                                 "Its arguments are: " + componentArgs[args[1]] + "\n");
+                                    "Its arguments are: " + componentArgs[args[1]] + "\n");
                 }else {
                     dlgt->outputStr("No documentation for: " + args[1] + "\n");
                 }
+            } else {
+                handleBadUsage(args[0]);
+            }
+        } else if (args[0] == "components"){
+            if (numArgs == 1){
+                std::string compList;
+                for ( auto it = componentHelps.begin(); it != componentHelps.end(); ++it ){
+                    compList.append(it->first + ", ");
+                }
+                dlgt->outputStr("Available components are:\n" + compList + "\nUse \"help [component]\" for more info on a specific component.\n");
             } else {
                 handleBadUsage(args[0]);
             }
@@ -185,7 +201,7 @@ void System_UserControl::parseCommand(std::string command){
 
 void System_UserControl::handleBadUsage(std::string command){
     dlgt->outputStr("Incorrect usage of " + command + ". Try \"" + commandUsages[command] +
-                 "\"\n    for more help with the " + command + " command, type \"help " + command + "\"\n");
+                    "\"\n    for more help with the " + command + " command, type \"help " + command + "\"\n");
 }
 
 void System_UserControl::presentTextMenu(){

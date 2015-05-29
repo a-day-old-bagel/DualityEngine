@@ -69,7 +69,7 @@ namespace DualityEngine {
     };
     
     // Macros
-    #define BUFFER_OFFSET(i) ((char *)NULL + (i))
+    #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
     
     // Some defines of useful values
     #define DUA_NULL_ID 0                           // used for entity error states
@@ -88,7 +88,7 @@ namespace DualityEngine {
     #else
         #define DUA_GLVERSION_MINOR 0
     #endif
-    #define DUA_SCREENRES_X 1024
+    #define DUA_SCREENRES_X 1366
     #define DUA_SCREENRES_Y 768
     #define DUA_DEFAULTFOV 45.0f
     #define DUA_ASPECTRATIO ((float)DUA_SCREENRES_X / (float)DUA_SCREENRES_Y)

@@ -50,15 +50,18 @@ std::string Console::getPendingCommand(){
 void Console::setState(bool console, bool menu){
     consoleIsActive = console;
     menuIsActive = menu;
+    commHasChangedVisually = true;
+    if (menu) logLineTraverser = 0;
 }
 
 void Console::addToCommand(const char* text){
     pendingCommand.insert(cursorPosition, text);
-    cursorPosition++;        
+    cursorPosition += std::strlen(text);       
     if (submitLineActive == submitLinePending){
         submittedLines.at(submitLinePending) = pendingCommand;
     }
     commHasChangedVisually = true;
+    //outputStr(std::to_string(cursorPosition));
     ///*DEBUG*/std::cout << pendingCommand << std::endl;
 }
 
@@ -120,10 +123,22 @@ void Console::rightCursor(){
     }
 }
 
+void Console::traverseLog(int numLines){
+    if (logLineTraverser + numLines < 0){
+        logLineTraverser = 0;
+    } else if (logLineTraverser + numLines > logLines.size() - 1){
+        logLineTraverser = logLines.size() - 1;
+    } else {
+        logLineTraverser += numLines;
+    }
+    bodyHasChangedVisually = true;
+}
+
 std::string Console::submitCommand(){
     if (pendingCommand.empty()) return "";
     std::string temp = pendingCommand;
     clearCommand();
+    logLineTraverser = 0;
     if ((submittedLines.size() <= 1) ? true : temp != submittedLines.at(submitLinePending - 1)){
         submittedLines.at(submitLinePending) = temp;
         submittedLines.push_back("");

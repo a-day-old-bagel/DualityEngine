@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cstring>
 
 namespace DualityEngine {
     class Console {
@@ -20,13 +21,14 @@ namespace DualityEngine {
         std::vector<std::string> logLines;
         std::vector<std::string> submittedLines = {""};
         std::string pendingCommand = "";
-        int cursorPosition = 0;
         int submitLinePending = 0;
         int submitLineActive = 0;
         
         void refreshPendingCommand();
     public:
         
+        int cursorPosition = 0;
+        int logLineTraverser = 0;
         bool consoleIsActive = false;
         bool menuIsActive = false;
         bool bodyHasChangedVisually = true;
@@ -47,6 +49,7 @@ namespace DualityEngine {
         void downOneCommand();
         void leftCursor();
         void rightCursor();
+        void traverseLog(int numLines);
         std::string submitCommand();
     };
 }

@@ -25,25 +25,26 @@ namespace DualityEngine {
         bool MenuIsActive = false;
         const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*        new, load, save, exit         *\n****************************************\n";
         std::unordered_map<std::string, const std::string> commandUsages = {
-            {"newent" , "\"newent [name (no spaces)]\""},
+            {"newent" , "\"newent [name] - no spaces in names.\""},
             {"add" , "\"add [component type] [entity ID] [component arguments...]\""},
             {"delete" , "\"delete [component type] [entity ID]\""},
-            {"help" , "\"help\" OR \"help [command]\" OR \"help [component]\""}
+            {"help" , "\"help\" OR \"help [command]\" OR \"help [component]\""},
+            {"components" , "\"components\" - no arguments allowed."}
         };
         std::unordered_map<std::string, const std::string> commandExamples = {
-            {"newent" , "\"newent testEntity\""},
+            {"newent" , "\"newent testEntity\" creates a new entity (new soul) named \"testEntity\""},
             {"add" , "\"add position 12 10 0 10\" gives entity 12 a spatial position of (10, 0, 10)"},
             {"delete" , "\"delete model 6\" removes the graphical model possessed by entity 6"},
             {"help" , "\"help add\" helps the user to know how to use the \"add\" command."}
         };
         std::unordered_map<std::string, const std::string> commandHelps = {
-            {"newent" , "creates a new entity, displaying its ID (CTRL-C to copy the ID afterwards)"},
+            {"newent" , "creates a new entity, displaying its ID (CTRL-C to copy the ID afterwards)."},
             {"add" , "creates a new component (or functionality) for a given entity."},
             {"delete" , "removes a component (or functionality) from a given entity."},
             {"help" , "helps those who help themselves."}
         };
         std::unordered_map<std::string, const std::string> componentHelps = {
-            {"soul" , "is something that every entity starts out with. they cannot be created directly."},
+            {"soul" , "is something that every entity starts out with. Souls cannot be created or destroyed directly."},
             {"position" , "gives an entity a location in 3D space."},
             {"rotation" , "gives an entity an orientation in 3D space."},
             {"linveloc" , "gives an entity a linear velocity in 3D space (translation)."},
@@ -60,21 +61,21 @@ namespace DualityEngine {
             {"score" , "gives an entity a scorekeeping device."}
         };
         std::unordered_map<std::string, const std::string> componentArgs = {
-            {"soul" , "cannot be created with the \"add\" command. \"newent\" must be used"},
+            {"soul" , "N/A - a soul cannot be created with the \"add\" command. \"newent\" must be used"},
             {"position" , "[X-coordinate] [Y-coordinate] [Z-coordinate]"},
             {"rotation" , "[X-angle (pitch)] [Y-angle (yaw)] [Z-angle (roll)]"},
             {"linveloc" , "[X velocity] [Y velocity] [Z velocity]"},
             {"angveloc" , "[X angular velocity] [Y angular velocity] [Z angular velocity]"},
-            {"collision" , ""},
+            {"collision" , "none"},
             {"model" , "[filepath to model]"},
-            {"control" , ""},
+            {"control" , "none"},
             {"lambient" , "[R] [G] [B]"},
             {"ldirect" , "[R] [G] [B] [X vector component] [Y vector component] [Z vector component]"},
             {"lpoint" , "[R] [G] [B] [X-coordinate] [Y-coordinate] [Z-coordinate]"},
             {"poschild" , "[ID number of positional child]"},
             {"posparent" , "[ID number of positional parent]"},
             {"owner" , "[ID number of owner]"},
-            {"score" , ""}
+            {"score" , "none"}
         };
         
         void parseCommand(std::string command);

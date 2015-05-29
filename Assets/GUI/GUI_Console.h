@@ -18,11 +18,12 @@
 namespace DualityEngine {
     class GUI_Console {
         
-        Console* console;
-        const glm::vec3 textColor = {0.5, 1.0, 0.3};
-        const glm::vec3 bkgdColor = {0.1, 0.1, 0.1};
+        const glm::vec3 textColor = {1.0, 0.8, 0.0};//{0.5, 1.0, 0.3};
+        const glm::vec3 bkgdColor = {0.0, 0.0, 0.1};//{0.05, 0.05, 0.05};
         const char firstAsciiChar = ' ';
         const char lastAsciiChar = '~';
+        const std::string commPromptNorm = ">: ";
+        const std::string commPromptMenu = "MENU>: ";
         const int numTexPanels = lastAsciiChar - firstAsciiChar + 2;
         const float texPanelAdvance = 1.0 / (float)numTexPanels;
         
@@ -35,35 +36,38 @@ namespace DualityEngine {
         GLuint attrLoc_uvCoo;
         GLuint unifLoc_color;
         
+        Console* console;
         std::string lineReader;
+        int lineReaderSize;
         std::string graphicalLine;
-        const std::string commPromptNorm = ">: ";
-        const std::string commPromptMenu = "MENU>: ";
+        std::string carryOverLine;
+        int numLinesCarried = 0;
+        bool lineHasCarried = false;
         int currentPromptLength;
+        float cursorZeroPosX;
+        float cursorPosY;
+        float cursorAdvanceX;
+        float cursorHalfWidth;
+        float cursorHeight;
         DUA_float* bodySubArray;
         DUA_float* commSubArray;
-        int lineReaderSize;
+        DUA_float cursorSubArray[6];
         
         int charWidth;
         int charHeight;
         int charStepX;
-        int charStepY;
-        
+        int charStepY;        
         int totalWidth;
         int totalHeight;
         int innerWidth;
-        int innerHeight;
-        
+        int innerHeight;        
         int numCharsX; 
         int numCharsY_body;
-        const int numCharsY_comm = 1;
-        
+        const int numCharsY_comm = 1;   // don't change this for now - not completely supported.        
         int screenOffsetX;
-        int screenOffsetY;
-        
+        int screenOffsetY;        
         int sizeVertArray;
-        int sizeIndexArray;
-        
+        int sizeIndexArray;        
         int marginWidth;
         int marginHeight;
         
@@ -73,12 +77,15 @@ namespace DualityEngine {
             int numBodyTris  = numCharsX * numCharsY_body * 2;
             int numCommTris  = numCharsX * numCharsY_comm * 2;
             
-            sizeVertArray = (numBodyVerts + numCommVerts + 4) * 2;// +4 and +2 are for background quad.    
-            sizeIndexArray = (numBodyTris + numCommTris + 2) * 3;
+            sizeVertArray = (numBodyVerts + numCommVerts +4 +3) * 2;// +4 and +2 are for background quad.    
+            sizeIndexArray = (numBodyTris + numCommTris +2 +1) * 3;// +3 and +1 are for the cursor triangle.
             
             DUA_float verts[sizeVertArray];
             DUA_float UVs[sizeVertArray];
             DUA_uint16 indices[sizeIndexArray];
+            
+            // fill the UV buffer with zeros for now.
+            memset(UVs, 0, sizeVertArray);
             
             // Generate the backgroud quad
                 verts[sizeVertArray - 8] =                screenOffsetX  / ((float)DUA_SCREENRES_X * 0.5f) - 1;
@@ -106,20 +113,31 @@ namespace DualityEngine {
                 indices[sizeIndexArray - 4] = sizeVertArray / 2 - 1;            
                 indices[sizeIndexArray - 3] = sizeVertArray / 2 - 4;
                 indices[sizeIndexArray - 2] = sizeVertArray / 2 - 1;
-                indices[sizeIndexArray - 1] = sizeVertArray / 2 - 3;            
-            
-            //memset(allUVs, 0, sizeVertArray);
-            
-            /*DEBUG*/const int debugStartChar = 0;
-            /*DEBUG*/const float adv = 1.0 / (lastAsciiChar - firstAsciiChar + 2);
-            /*DEBUG*/const float startX = adv * debugStartChar;
-            /*DEBUG*/const float endX = startX + adv;
+                indices[sizeIndexArray - 1] = sizeVertArray / 2 - 3;       
+                
+            // Generate the cursor triangle
+                verts[sizeVertArray - 14] =  cursorZeroPosX;
+                verts[sizeVertArray - 13] =  cursorPosY;
+                verts[sizeVertArray - 12] =  cursorZeroPosX - cursorHalfWidth;
+                verts[sizeVertArray - 11] =  cursorPosY - cursorHeight;
+                verts[sizeVertArray - 10] =  cursorZeroPosX + cursorHalfWidth;
+                verts[sizeVertArray -  9] =  cursorPosY - cursorHeight;
+                
+                UVs[sizeVertArray - 14] = (1.0 - offSetToCenterX) / numTexPanels;
+                UVs[sizeVertArray - 13] =  1.0 - offSetToCenterY;
+                UVs[sizeVertArray - 12] =        offSetToCenterX  / numTexPanels;
+                UVs[sizeVertArray - 11] =  1.0 - offSetToCenterY;
+                UVs[sizeVertArray - 10] = (1.0 - offSetToCenterX) / numTexPanels;
+                UVs[sizeVertArray -  9] =        offSetToCenterY;
+                
+                indices[sizeIndexArray - 9] = sizeVertArray / 2 - 7;
+                indices[sizeIndexArray - 8] = sizeVertArray / 2 - 6;
+                indices[sizeIndexArray - 7] = sizeVertArray / 2 - 5;
             
             // generate vertex and index data for all the character quads, first for the characters in the body text
             #define STRIDE(x) (i * numCharsX * x) + (j * x)// + x // +x is for background quad.
             for (int i = 0; i < numCharsY_body; i++){
                 for (int j = 0; j < numCharsX; j++){
-                    //output << STRIDE(8) << " to " << STRIDE(8) + 7 << " and " << STRIDE(6) << " to " << STRIDE(6) + 5 << "\n";
                     // Vertices of each character quad - four per quad
                     verts[STRIDE(8) +  0] = ((marginWidth  + j * charStepX) + screenOffsetX) / ((float)DUA_SCREENRES_X * 0.5) - 1;
                     verts[STRIDE(8) +  1] = ((marginHeight + i * charStepY) + screenOffsetY) / ((float)DUA_SCREENRES_Y * 0.5) + 1;
@@ -132,20 +150,6 @@ namespace DualityEngine {
                     
                     verts[STRIDE(8) +  6] = ((marginWidth  + j * charStepX  + charWidth) + screenOffsetX) / ((float)DUA_SCREENRES_X * 0.5) - 1;
                     verts[STRIDE(8) +  7] = ((marginHeight + i * charStepY + charHeight) + screenOffsetY) / ((float)DUA_SCREENRES_Y * 0.5) + 1;
-                    
-                    
-                    /*DEBUG*/UVs[STRIDE(8) +  0] = (startX + (i * numCharsX + j) * adv);
-                    /*DEBUG*/UVs[STRIDE(8) +  1] = 0.0;
-
-                    /*DEBUG*/UVs[STRIDE(8) +  2] = (endX + (i * numCharsX + j) * adv);
-                    /*DEBUG*/UVs[STRIDE(8) +  3] = 0.0;
-
-                    /*DEBUG*/UVs[STRIDE(8) +  4] = (startX + (i * numCharsX + j) * adv);
-                    /*DEBUG*/UVs[STRIDE(8) +  5] = 1.0;
-
-                    /*DEBUG*/UVs[STRIDE(8) +  6] = (endX + (i * numCharsX + j) * adv);
-                    /*DEBUG*/UVs[STRIDE(8) +  7] = 1.0;
-                    
                    
                     // Two triangles drawn per character quad
                     indices[STRIDE(6) + 0] = STRIDE(4) +  0;
@@ -161,7 +165,6 @@ namespace DualityEngine {
             // then do the same thing for the quads belonging to the command input line text
             for (int i = numCharsY_body; i < numCharsY_body + numCharsY_comm; i++){
                 for (int j = 0; j < numCharsX; j++){
-                    //output << STRIDE(8) << " to " << STRIDE(8) + 7 << " and " << STRIDE(6) << " to " << STRIDE(6) + 5 << "\n";
                     // Vertices of each character quad - four per quad
                     verts[STRIDE(8) +  0] = ((    marginWidth  + j * charStepX) + screenOffsetX) / ((float)DUA_SCREENRES_X * 0.5) - 1;
                     verts[STRIDE(8) +  1] = ((2 * marginHeight + i * charStepY) + screenOffsetY) / ((float)DUA_SCREENRES_Y * 0.5) + 1;
@@ -174,20 +177,6 @@ namespace DualityEngine {
                     
                     verts[STRIDE(8) +  6] = ((    marginWidth  + j * charStepX  + charWidth) + screenOffsetX) / ((float)DUA_SCREENRES_X * 0.5) - 1;
                     verts[STRIDE(8) +  7] = ((2 * marginHeight + i * charStepY + charHeight) + screenOffsetY) / ((float)DUA_SCREENRES_Y * 0.5) + 1;
-                    
-                    
-                    /*DEBUG*/UVs[STRIDE(8) +  0] = (startX + (i * numCharsX + j) * adv);
-                    /*DEBUG*/UVs[STRIDE(8) +  1] = 0.0;
-
-                    /*DEBUG*/UVs[STRIDE(8) +  2] = (endX + (i * numCharsX + j) * adv);
-                    /*DEBUG*/UVs[STRIDE(8) +  3] = 0.0;
-
-                    /*DEBUG*/UVs[STRIDE(8) +  4] = (startX + (i * numCharsX + j) * adv);
-                    /*DEBUG*/UVs[STRIDE(8) +  5] = 1.0;
-
-                    /*DEBUG*/UVs[STRIDE(8) +  6] = (endX + (i * numCharsX + j) * adv);
-                    /*DEBUG*/UVs[STRIDE(8) +  7] = 1.0;
-                    
                     
                     // Two triangles drawn per character quad
                     indices[STRIDE(6) + 0] = STRIDE(4) +  0;
@@ -324,17 +313,34 @@ namespace DualityEngine {
             return true;
         }
         
-        void updateUVsWithCurrentConsoleText(){
+        void updateBuffersWithCurrentConsoleText(){
             if (console->bodyHasChangedVisually){
                 console->bodyHasChangedVisually = false;
+                numLinesCarried = 0;
+                lineHasCarried = false;
                 graphicalLine.clear();
                 for (int i = 0; i < numCharsY_body; i++){
-                    lineReader = console->getLogLineFromBack(i);
-                    lineReaderSize = lineReader.size();
+                    if (lineHasCarried){
+                        lineHasCarried = false;
+                        lineReader = carryOverLine;
+                    } else {
+                        lineReader = console->getLogLineFromBack(i - numLinesCarried + console->logLineTraverser);
+                    }
+                    lineReaderSize = lineReader.length();
+                    
+                    if (lineReaderSize > numCharsX){
+                        lineHasCarried = true;
+                        numLinesCarried++;
+                        carryOverLine = lineReader.substr(0, numCharsX * (lineReaderSize / numCharsX));
+                        lineReader = lineReader.substr(lineReaderSize - (lineReaderSize % numCharsX));
+                    }
+                    
+                    lineReaderSize = lineReader.length();
                     graphicalLine.replace(0, numCharsX, lineReader);
                     if (lineReaderSize < numCharsX){
                         graphicalLine.replace(lineReaderSize, numCharsX - lineReaderSize, numCharsX - lineReaderSize, ' ');
                     }
+                    
                     for (int j = 0; j < numCharsX; j++){
                         bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 0] = (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance;
                         bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 1] = 0.0;
@@ -354,13 +360,13 @@ namespace DualityEngine {
                 graphicalLine.clear();
                 
                 if (console->menuIsActive){
-                    currentPromptLength = numCharsX - commPromptMenu.size();
+                    currentPromptLength = numCharsX - commPromptMenu.length();
                 } else {
-                    currentPromptLength = numCharsX - commPromptNorm.size();
+                    currentPromptLength = numCharsX - commPromptNorm.length();
                 }
                 
                 lineReader = console->getPendingCommand();
-                lineReaderSize = lineReader.size();
+                lineReaderSize = lineReader.length();
                 graphicalLine.replace(0, currentPromptLength, lineReader);
                 if (lineReaderSize < currentPromptLength) {
                     graphicalLine.replace(lineReaderSize, currentPromptLength - lineReaderSize, currentPromptLength - lineReaderSize, ' ');
@@ -379,13 +385,14 @@ namespace DualityEngine {
                 
                 glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
                 glBufferSubData(GL_ARRAY_BUFFER, numCharsX * numCharsY_body * 8 * sizeof(DUA_float), numCharsX * numCharsY_comm * 8 * sizeof(DUA_float), &commSubArray[0]);
-            }
-            
-            GLenum glErr = glGetError();
-            if (glErr != GL_NO_ERROR) {
-                std::cout << "bad poop error. " << gluErrorString(glErr) << std::endl;
-            }
-            
+                
+                cursorSubArray[0] = cursorZeroPosX + (console->cursorPosition + (console->menuIsActive ? commPromptMenu.length() : commPromptNorm.size())) * cursorAdvanceX;
+                cursorSubArray[2] = cursorSubArray[0] - cursorHalfWidth;
+                cursorSubArray[4] = cursorSubArray[0] + cursorHalfWidth;
+                
+                glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+                glBufferSubData(GL_ARRAY_BUFFER, (sizeVertArray - 14) * sizeof(DUA_float), 6 * sizeof(DUA_float), &cursorSubArray[0]);
+            }            
         }
         
     public:
@@ -401,6 +408,7 @@ namespace DualityEngine {
         
         bool Init(std::stringstream& output, Console* console, const char* fontFile, int locX, int locY, int width, int height, int charW, int charH, int spacingX, int spacingY, int marginX, int marginY){
             
+            output << "\nBeginning initialization of console GUI.\n";
             this->console = console;
             
             screenOffsetX =  locX;
@@ -423,6 +431,16 @@ namespace DualityEngine {
             marginWidth =         ( innerWidth  %  charStepX) / 2 + marginX;
             marginHeight = (-1) * (-innerHeight % -charStepY) / 3 - marginY;    // openGL flips y+ is up
             
+            cursorHalfWidth = (float)charW / (float)DUA_SCREENRES_X;
+            cursorHeight = (float)charH / (float)DUA_SCREENRES_Y;
+            cursorZeroPosX = (screenOffsetX + marginWidth/* + charStepX * commPromptNorm.size()*/) / ((float)DUA_SCREENRES_X * 0.5f) - 1;
+            cursorAdvanceX = (charStepX) / ((float)DUA_SCREENRES_X * 0.5);
+            cursorPosY = (screenOffsetY + totalHeight - marginHeight) / ((float)DUA_SCREENRES_Y * 0.5f) + 1;
+            
+            cursorSubArray[1] = cursorPosY;
+            cursorSubArray[3] = cursorPosY - cursorHeight;
+            cursorSubArray[5] = cursorPosY - cursorHeight;
+            
             bodySubArray = new DUA_float[numCharsX * numCharsY_body * 8];
             commSubArray = new DUA_float[numCharsX * numCharsY_comm * 8];
             
@@ -443,13 +461,14 @@ namespace DualityEngine {
             
             if (!generateAndBufferGeometry(output)) return false;
             
+            output << "Console GUI has initialized.\n\n";
             return true;
         }
         
         void render(){
             
             if (console->consoleIsActive || console->menuIsActive){
-                updateUVsWithCurrentConsoleText();
+                updateBuffersWithCurrentConsoleText();
                 
                 glActiveTexture (GL_TEXTURE1);
                 glBindTexture (GL_TEXTURE_2D, texture);
@@ -459,7 +478,7 @@ namespace DualityEngine {
                 glBindVertexArray (VAOloc_text);  
 
                 glUniform3fv(unifLoc_color, 1, &bkgdColor[0]);
-                glDrawElements (GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, BUFFER_OFFSET((sizeIndexArray - 6) * sizeof(DUA_uint16)));
+                glDrawElements (GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, DUA_GL_BUFFER_OFFSET((sizeIndexArray - 6) * sizeof(DUA_uint16)));
                 glUniform3fv(unifLoc_color, 1, &textColor[0]);
                 glDrawElements (GL_TRIANGLES, sizeIndexArray - 6, GL_UNSIGNED_SHORT, 0);
             }

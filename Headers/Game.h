@@ -52,7 +52,8 @@ namespace DualityEngine {
             DELEGATE(&Console::addToCommand, &console),
             DELEGATE(&Console::submitCommand, &console),
             DELEGATE(&Console::getLogLineFromBack, &console),
-            DELEGATE(&Console::setState, &console)
+            DELEGATE(&Console::setState, &console),
+            DELEGATE(&Console::traverseLog, &console)
         };
         // Some more delegates for the bank
         BankDelegates bankDelegates = {

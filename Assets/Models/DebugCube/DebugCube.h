@@ -225,6 +225,9 @@ namespace DualityEngine {
             glDeleteVertexArrays (1, &VAOloc);
         }
         bool Init(std::stringstream& output) {
+            
+            output << "\nBeginning initialization of debug cube.\n";
+            
             // shader part
             shdrLoc = loadShaders("Assets/Shaders/debugCube.vert", "Assets/Shaders/debugCube.frag", output);
 
@@ -271,6 +274,7 @@ namespace DualityEngine {
             glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     
+            output << "Debug cube has initialized.\n\n";
             return true;
         }
         void render(const glm::mat4& vp) {

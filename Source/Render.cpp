@@ -57,7 +57,7 @@ bool System_Render::setUpEnvironment(std::stringstream& engineOut)
     pWindow = SDL_CreateWindow("Game Engine",
                     SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
                     DUA_SCREENRES_X, DUA_SCREENRES_Y,
-                    SDL_WINDOW_OPENGL);    
+                    SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP);    
     // If the window couldn't be created for whatever reason
     if (pWindow == NULL) {
         printf ("SDL window was not created! SDL Error: %s\n", SDL_GetError());
@@ -101,7 +101,7 @@ bool System_Render::setUpResources(std::stringstream& engineOut)
     bool success = true;
     
     success &= debugCube.Init(engineOut);
-    success &= GUI_console.Init(engineOut, pConsole, "Assets/Fonts/Inconsolata-LGC.otf", 0, 0, 1024, 384, 10, 20, 2, 5, 5 ,5);
+    success &= GUI_console.Init(engineOut, pConsole, "Assets/Fonts/Inconsolata-LGC.otf", 0, 0, DUA_SCREENRES_X, DUA_SCREENRES_Y / 2, 10, 20, 2, 5, 5 ,5);
     
     projection = glm::perspective(DUA_DEFAULTFOV, DUA_ASPECTRATIO, (float)DUA_ZPLANENEAR, (float)DUA_ZPLANEFAR);
     //projection = glm::ortho(0, DUA_SCREENRES_X, 0, DUA_SCREENRES_Y);
