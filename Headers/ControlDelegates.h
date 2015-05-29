@@ -23,6 +23,7 @@ namespace DualityEngine {
         Delegate<void()> leftCursor;
         Delegate<void()> rightCursor;
         Delegate<void(const char*)> output;
+        Delegate<void(const std::string&)> outputStr;
         Delegate<void(const char*)> appendToCommand;        
         Delegate<std::string()> submitCommand;
         Delegate<std::string(int)> getLogFromBack;

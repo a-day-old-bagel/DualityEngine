@@ -36,6 +36,8 @@ namespace DualityEngine {
         Delegate<void()> quitDelegate = DELEGATE(&Game::Quit, this);        
         // A delegate for outputting text to the console to give to the engines
         Delegate<void(const char*)> outputDelegate = DELEGATE(&Console::output, &console);
+        // Same thing, but for std::string
+        Delegate<void(const std::string&)> outputStrDelegate = DELEGATE(&Console::outputStr, &console);
         // control delegates of top level functions to give to the UserControl system
         ControlDelegates controlDelegates = {
             quitDelegate,
@@ -46,7 +48,7 @@ namespace DualityEngine {
             DELEGATE(&Console::downOneCommand, &console),
             DELEGATE(&Console::leftCursor, &console),
             DELEGATE(&Console::rightCursor, &console),
-            outputDelegate,
+            outputDelegate, outputStrDelegate,
             DELEGATE(&Console::addToCommand, &console),
             DELEGATE(&Console::submitCommand, &console),
             DELEGATE(&Console::getLogLineFromBack, &console),

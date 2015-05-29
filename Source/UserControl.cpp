@@ -105,6 +105,8 @@ void System_UserControl::parseCommand(std::string command){
         args.push_back(temp);
         temp.clear();
     }
+    const int numArgs = args.size();
+    
     if (MenuIsActive){
         if (args[0] == "exit"){
             dlgt->quit();
@@ -119,27 +121,71 @@ void System_UserControl::parseCommand(std::string command){
         } else if (args[0] == "add" || args[0] == "delete"){
             dlgt->output("That command isn't available from the menu (ESC to exit menu).\n");
         } else {
-            std::string error = args[0] + " is not a valid menu option.\n";
+            std::string error = "Not a menu option: " + args[0];
             dlgt->output(error.c_str());
         }
     } else {
-        if (args[0] == "add"){
-            dlgt->output("Command not yet implemented.\n");
+        if (args[0] == "newent"){
+            if (numArgs == 2){
+                dlgt->output("newent command not yet implemented in the console.\n");
+            } else {
+                handleBadUsage(args[0]);
+            }
+        }else if (args[0] == "add"){
+            if (numArgs > 1){
+                if (componentArgs.count(args[1])){
+                    dlgt->outputStr("Adding " + args[1] + " components not yet available from console.\n");
+                } else {
+                    dlgt->outputStr("Unknown component: " + args[1] + "\n");
+                }
+            } else {
+                handleBadUsage(args[0]);
+            }
         } else if (args[0] == "delete"){
-            dlgt->output("Command not yet implemented.\n");
+            if (numArgs == 3){
+                if (componentArgs.count(args[1])){
+                    dlgt->outputStr("Deleting " + args[1] + " components not yet available from console.\n");
+                } else {
+                    dlgt->outputStr("Unknown component: " + args[1] + "\n");
+                }
+            } else {
+                handleBadUsage(args[0]);
+            }
         } else if (args[0] == "debug"){
             DUA_id boxID = bank->createBox("box", 0,0,0, 0,0,0, 0,0,0, 0,0,0);
-            std::string output = bank->getName(boxID) + "\n" + bank->listComponents(boxID) + "\n";
-            dlgt->output(output.c_str());
+            dlgt->outputStr(bank->getName(boxID) + "\n" + bank->listComponents(boxID) + "\n");
         } else if (args[0] == "help"){
-            dlgt->output("You're in the console. You have access to the following commands:\n\tadd [component type] [entity ID] [component parameters...]\n\tdelete [component type] [entity ID]\n");
+            if (numArgs == 1){
+                dlgt->outputStr("You're in the console. You have access to the following commands:\n    "
+                             + commandUsages["newent"]  + "\n    "
+                             + commandUsages["add"]     + "\n    "
+                             + commandUsages["delete"]  + "\n    "
+                             + commandUsages["help"]);
+            } else if (numArgs == 2){
+                if (commandHelps.count(args[1])){
+                    dlgt->outputStr("The " + args[1] + " command " + commandHelps[args[1]] + "\n" +
+                                 "Usage is " + commandUsages[args[1]] + "\n" +
+                                 "Example: " + commandExamples[args[1]] + "\n");
+                }else if (componentHelps.count(args[1])){
+                    dlgt->outputStr("The " + args[1] + " component " + componentHelps[args[1]] + "\n" +
+                                 "Its arguments are: " + componentArgs[args[1]] + "\n");
+                }else {
+                    dlgt->outputStr("No documentation for: " + args[1] + "\n");
+                }
+            } else {
+                handleBadUsage(args[0]);
+            }
         } else if (args[0] == "new" || args[0] == "load" || args[0] == "save" || args[0] == "exit"){
             dlgt->output("Menu commands only available through menu (ESC to enter menu).\n");
         } else {
-            std::string error = args[0] + " is not a valid command.\n";
-            dlgt->output(error.c_str());
+            dlgt->outputStr("Bad command: " + args[0] + "\nType \"help\" for a list of commands.\n");
         }
     }
+}
+
+void System_UserControl::handleBadUsage(std::string command){
+    dlgt->outputStr("Incorrect usage of " + command + ". Try \"" + commandUsages[command] +
+                 "\"\n    for more help with the " + command + " command, type \"help " + command + "\"\n");
 }
 
 void System_UserControl::presentTextMenu(){

@@ -2,6 +2,8 @@
 #ifndef DELEGATE_H
 #define	DELEGATE_H
 
+#include <string>
+
 namespace DualityEngine {
 
     // As will be seen below, the Delegate template class is formatted so:
