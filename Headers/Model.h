@@ -14,7 +14,7 @@ namespace DualityEngine {
 
     struct Model
     {
-        Model(){
+        Model(const char* fileName){
             
         }
         //Mesh* mesh;

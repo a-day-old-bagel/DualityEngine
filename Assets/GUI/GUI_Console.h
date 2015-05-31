@@ -44,8 +44,8 @@ namespace DualityEngine {
         const char lastAsciiChar = '~';
         const std::string commPromptNorm = ">: ";
         const std::string commPromptMenu = "MENU>: ";
-        const int numTexPanels = lastAsciiChar - firstAsciiChar + 2;
-        const float texPanelAdvance = 1.0 / (float)numTexPanels;
+        const int numTexPanels = lastAsciiChar - firstAsciiChar + 2; //+2 is for the 'unknown char/background' quad plus the off-by-one.
+        const float texPanelAdvance = 1.0 / (float)numTexPanels;    // this is how far the GPU texture sampler will have to move to get to the next character in the texture atlas.
         
         GLuint buffers[3];
         GLuint texture;

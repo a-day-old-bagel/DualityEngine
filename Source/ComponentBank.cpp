@@ -95,6 +95,9 @@ Owner* ComponentBank::getOwnerPtr(const DUA_id& ID){
 Score* ComponentBank::getScorePtr(const DUA_id& ID){
     return getComponentPtr(ID, "score", components_score);
 }
+Collision* ComponentBank::getCollisionPtr(const DUA_id& ID){
+    return getComponentPtr(ID, "collision", components_collision);
+}
     
 /*******************************************************************************
  * COMPONENT CREATION SECTION
@@ -137,6 +140,11 @@ bool ComponentBank::tryAddComponent(const DUA_id &ID, const char* compName, std:
     dlgt->systemsDiscover(ID);
     return true;
 }
+//template<typename ... types>
+//bool ComponentBank::addComponent(const DUA_id &ID, const char* compType, const types& ... args){
+//    if (tryAddFlagToSoul(componentEnumIndexer[compType], ID))
+//        tryAddComponent(ID, compType, componentCollectionIndexer[compType], args...);
+//}
 /*******************************************************************************
  * ADD SOUL
  * is a little different than the rest below because it doesn't need to add any
@@ -168,9 +176,9 @@ bool ComponentBank::addSoul(const DUA_id &ID, const char* name){
  * 
  * And that's it - two steps. Just follow the format of the below if you're confused.
  ******************************************************************************/
-void ComponentBank::addModel(const DUA_id &ID){
+void ComponentBank::addModel(const DUA_id &ID, const char* fileName){
     if (tryAddFlagToSoul(MODEL, ID))
-        tryAddComponent(ID, "model", components_model);
+        tryAddComponent(ID, "model", components_model, fileName);
 }
 void ComponentBank::addPositionVeloc(const DUA_id &ID, const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ){
     if (tryAddFlagToSoul(LINVELOC, ID))
@@ -221,6 +229,10 @@ void ComponentBank::addOwner(const DUA_id& ID, const DUA_id& refID){
 void ComponentBank::addScore(const DUA_id& ID){
     if (tryAddFlagToSoul(SCORE, ID))
         tryAddComponent(ID, "score", components_score);
+}
+void ComponentBank::addCollision(const DUA_id& ID){
+    if (tryAddFlagToSoul(COLLISION, ID))
+        tryAddComponent(ID, "collision", components_collision);
 }
 
 /*******************************************************************************
@@ -329,6 +341,10 @@ void ComponentBank::deleteScore(const DUA_id& ID){
     if (tryRemoveComponent(ID, "score", components_score))
         tryRemoveFlagFromSoul(SCORE, ID);
 }
+void ComponentBank::deleteCollision(const DUA_id& ID){
+    if (tryRemoveComponent(ID, "collision", components_collision))
+        tryRemoveFlagFromSoul(COLLISION, ID);
+}
 
 /*******************************************************************************
  * ENTITY STATE GETTERS SECTION
@@ -430,11 +446,23 @@ bool ComponentBank::purgeEntity(const DUA_id& ID){
 /*******************************************************************************
  * CONVENIENCE STRING GETTERS SECTION
  ******************************************************************************/
+bool ComponentBank::getIDs(std::string& name, std::vector<DUA_id>& IDs){
+    try {
+        for (auto pair : components_soul){
+            if (pair.second.name == name){
+                IDs.push_back(pair.first);
+            }
+        }
+        return true;
+    } catch(const std::out_of_range& oorException) {
+        return false;
+    }
+}
 /*******************************************************************************
  * GET NAME
  * returns a statement string containing the name of the entity (if any) at ID.
  ******************************************************************************/
-std::string ComponentBank::getName(DUA_id &ID){
+std::string ComponentBank::getName(const DUA_id &ID){
     std::ostringstream output;
     try {
         output << "Entity " << ID << " is named '" << components_soul.at(ID).name << "'.";
@@ -448,7 +476,7 @@ std::string ComponentBank::getName(DUA_id &ID){
  * returns a statement string containing a list of components currently
  * possessed by the entity at ID.
  ******************************************************************************/
-std::string ComponentBank::listComponents(DUA_id &ID){
+std::string ComponentBank::listComponents(const DUA_id &ID){
     std::ostringstream output;    
     try {        
         DUA_compFlag components = components_soul.at(ID).components;
@@ -456,18 +484,22 @@ std::string ComponentBank::listComponents(DUA_id &ID){
         if (components == DUA_DEFAULT_COMPONENTS){
             output << "Entity " << ID << " is a disembodied soul.";      
         } else {
-            
+                        
             output << "Entity " << ID << " has: ";
             if (components & MODEL)
                 output << "MODEL ";
             if (components & POSITION)
-                output << "SPATIAL ";
+                output << "POSITION ";
+            if (components & ROTATION)
+                output << "ROTATION ";
+            if (components & ANGVELOC)
+                output << "ANGVELOC ";
             if (components & POSPARENT)
-                output << "SPATPARENT ";
+                output << "POSPARENT ";
             if (components & POSCHILD)
-                output << "SPATCHILD ";
+                output << "POSCHILD ";
             if (components & LINVELOC)
-                output << "MOTION ";
+                output << "LINVELOC ";
             if (components & COLLISION)
                 output << "COLLISION ";
             if (components & CONTROL)

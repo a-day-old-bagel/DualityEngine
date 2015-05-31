@@ -21,13 +21,20 @@ namespace DualityEngine {
     typedef uint_fast8_t    DUA_compTypeRef; // used to enumerate the different types of components for array access
     typedef uint_fast8_t    DUA_colorByte;   // wrapper for an 8-bit value used for color
     typedef int_fast16_t    DUA_scoreNum;    // wrapper for an int used to keep score
-    typedef uint8_t         DUA_uint8;       // used for specifying mesh face vertex indices for objects
+    typedef uint8_t         DUA_uint8;       // three uint types used when buffering to GPU and actual memory size matters.
     typedef uint16_t        DUA_uint16;
     typedef uint32_t        DUA_uint32;
     typedef float           DUA_float;       // wrapper for the 64 bitfloating point values used by the game
     typedef double          DUA_dbl;         // wrapper for the 32 bit floating point values used by the game
     typedef glm::vec3       DUA_vec3;        // wrapper for a 3D vector
     typedef glm::vec2       DUA_vec2;        // wrapper for a 2D vector
+    
+    // This is the function used to convert strings to ID numbers (currently unsigned ints)
+    #define DUA_STR_TO_ID(str, base) std::stoul(str, nullptr, base)
+    // This is the function used to convert strings to DUA_dbl (currently just c++ doubles)
+    #define DUA_STR_TO_DBL(str) std::stod(str)
+
+    #define DUA_STR_TO_COLOR(str, base) std::stoul(str, nullptr, base)
     
     /*****************************************
      * The soul component will include a uint

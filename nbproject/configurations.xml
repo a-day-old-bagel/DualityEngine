@@ -84,6 +84,7 @@
       </logicalFolder>
       <logicalFolder name="f2" displayName="Components" projectFiles="true">
         <itemPath>Headers/AmbientLight.h</itemPath>
+        <itemPath>Headers/Collision.h</itemPath>
         <itemPath>Headers/Control.h</itemPath>
         <itemPath>Headers/DirectionalLight.h</itemPath>
         <itemPath>Headers/Model.h</itemPath>
@@ -295,6 +296,8 @@
       <item path="Headers/AmbientLight.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/BankDelegates.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Collision.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/ComponentBank.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -533,6 +536,8 @@
       <item path="Headers/AmbientLight.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/BankDelegates.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Collision.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/ComponentBank.h" ex="false" tool="3" flavor2="0">
       </item>

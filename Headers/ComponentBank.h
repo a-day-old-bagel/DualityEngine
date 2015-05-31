@@ -28,6 +28,7 @@
 #include "AmbientLight.h"
 #include "Owner.h"
 #include "Score.h"
+#include "Collision.h"
 
 namespace DualityEngine {
 
@@ -41,6 +42,7 @@ namespace DualityEngine {
         std::unordered_map<DUA_id, PositionChild>     components_positionChild;
         std::unordered_map<DUA_id, PositionParent>    components_positionParent;
         std::unordered_map<DUA_id, PositionVeloc>     components_positionVeloc;
+        std::unordered_map<DUA_id, Collision>         components_collision;
         std::unordered_map<DUA_id, Rotation>          components_rotation;
         std::unordered_map<DUA_id, RotationVeloc>     components_rotationVeloc;
         std::unordered_map<DUA_id, Control>           components_control;
@@ -49,6 +51,40 @@ namespace DualityEngine {
         std::unordered_map<DUA_id, AmbientLight>      components_ambientLight;
         std::unordered_map<DUA_id, Owner>             components_owner;
         std::unordered_map<DUA_id, Score>             components_score;
+        
+//        std::unordered_map<std::string, void*>  componentCollectionIndexer = {
+//            {"model", &components_model},
+//            {"position", &components_position},
+//            {"poschild", &components_positionChild},
+//            {"posparent", &components_positionParent},
+//            {"linveloc", &components_positionVeloc},
+//            {"rotation", &components_rotation},
+//            {"angveloc", &components_rotationVeloc},
+//            {"control", &components_control},
+//            {"lpoint", &components_pointLight},
+//            {"ldirect", &components_directionalLight},
+//            {"lambient", &components_ambientLight},
+//            {"owner", &components_owner},
+//            {"score", &components_score},
+//            {"collision", &components_collision}
+//        };
+//        
+//        std::unordered_map<std::string, DUA_compFlag>  componentEnumIndexer = {
+//            {"model", MODEL},
+//            {"position", POSITION},
+//            {"poschild", POSCHILD},
+//            {"posparent", POSPARENT},
+//            {"linveloc", LINVELOC},
+//            {"rotation", ROTATION},
+//            {"angveloc", ANGVELOC},
+//            {"control", CONTROL},
+//            {"lpoint", LPOINT},
+//            {"ldirect", LDIRECT},
+//            {"lambient", LAMBIENT},
+//            {"owner", OWNER},
+//            {"score", SCORE},
+//            {"collision", COLLISION}
+//        };
         
         /* BANK MANAGEMENT */
         BankDelegates* dlgt;
@@ -97,9 +133,13 @@ namespace DualityEngine {
         AmbientLight* getAmbientLightPtr(const DUA_id &ID);
         Owner* getOwnerPtr(const DUA_id &ID);
         Score* getScorePtr(const DUA_id &ID);
+        Collision* getCollisionPtr(const DUA_id &ID);
         
         /* COMPONENT CREATION */
-        void addModel(const DUA_id &ID);
+//        template<typename ... types>
+//        bool addComponent(const DUA_id &ID, const char* compType, const types& ... args);
+        
+        void addModel(const DUA_id &ID, const char* fileName);
         void addPositionVeloc(const DUA_id &ID, const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ);
         void addPosition(const DUA_id &ID, const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ);
         void addRotation(const DUA_id &ID, const DUA_dbl &rotX, const DUA_dbl &rotY, const DUA_dbl &rotZ);
@@ -114,6 +154,7 @@ namespace DualityEngine {
         void addAmbientLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue);
         void addOwner(const DUA_id &ID, const DUA_id &refID);
         void addScore(const DUA_id &ID);
+        void addCollision(const DUA_id &ID);
 
         /* COMPONENT DELETION */
         void deleteModel(const DUA_id &ID);
@@ -129,6 +170,7 @@ namespace DualityEngine {
         void deleteAmbientLight(const DUA_id &ID);
         void deleteOwner(const DUA_id &ID);
         void deleteScore(const DUA_id &ID);
+        void deleteCollision(const DUA_id &ID);
         
         /* ENTITY STATE GETTERS */
         DUA_compFlag getComponents(const DUA_id& ID);
@@ -147,8 +189,9 @@ namespace DualityEngine {
         bool purgeEntity(const DUA_id &ID);   // deletes children too.
 
         /* CONVENIENCE GETTERS */
-        std::string getName(DUA_id &ID);
-        std::string listComponents(DUA_id &ID);
+        bool getIDs(std::string& name, std::vector<DUA_id>& IDs);
+        std::string getName(const DUA_id &ID);
+        std::string listComponents(const DUA_id &ID);
     };
 
 }

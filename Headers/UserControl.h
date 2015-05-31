@@ -25,23 +25,34 @@ namespace DualityEngine {
         bool MenuIsActive = false;
         const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*        new, load, save, exit         *\n****************************************\n";
         std::unordered_map<std::string, const std::string> commandUsages = {
-            {"newent" , "\"newent [name]\" (no spaces in name)"},
-            {"add" , "\"add [component type] [entity ID] [component arguments...]\""},
-            {"delete" , "\"delete [component type] [entity ID]\""},
-            {"help" , "\"help\" OR \"help [command]\" OR \"help [component]\""},
-            {"components" , "\"components\" - no arguments allowed."}
+            {"newent" , "newent [name]    (no spaces in names)"},
+            {"delent" , "delent [entity ID]"},
+            {"add" , "add [component type] [entity ID] [component arguments...]"},
+            {"remove" , "remove [component type] [entity ID]"},
+            {"id" , "id [name]    (no spaces in names)"},
+            {"name" , "name [entity ID]"},
+            {"help" , "help  OR  help [command]  OR  help [component]  OR  help components"},
+            {"comps" , "comps [entity ID]"}
         };
         std::unordered_map<std::string, const std::string> commandExamples = {
             {"newent" , "\"newent testEntity\" creates a new entity (new soul) named \"testEntity\""},
+            {"delent" , "\"delent A6\" deletes the entity with ID A6"},
             {"add" , "\"add position 12 10 0 10\" gives entity 12 a spatial position of (10, 0, 10)"},
-            {"delete" , "\"delete model 6\" removes the graphical model possessed by entity 6"},
-            {"help" , "\"help add\" helps the user to know how to use the \"add\" command."}
+            {"remove" , "\"remove model 6\" removes the graphical model possessed by entity 6"},
+            {"id" , "\"id fooBox\" displays the ID of the entity named \"fooBox,\" if there is one (CTRL-C to copy ID afterwards)."},
+            {"name" , "\"name 42\" displays the name of entity 42."},
+            {"help" , "\"help add\" helps the user to know how to use the \"add\" command."},
+            {"comps" , "\"comps 343\" lists all components of entity 343. If 343 has a model, \"MODEL\" will be displayed."}
         };
         std::unordered_map<std::string, const std::string> commandHelps = {
-            {"newent" , "creates a new entity, displaying its ID (CTRL-C to copy the ID afterwards)."},
+            {"newent" , "creates a new entity, displaying its assigned ID (CTRL-C to copy the ID afterwards)."},
+            {"delent" , "deletes an entity by removing all components belonging to a given ID, including the soul."},
             {"add" , "creates a new component (or functionality) for a given entity."},
-            {"delete" , "removes a component (or functionality) from a given entity."},
-            {"help" , "helps those who help themselves."}
+            {"remove" , "removes a component (or functionality) from a given entity."},
+            {"id" , "tells the user the ID number of any and all entities with a given name."},
+            {"name" , "displays the name given to the entity assigned a given ID."},
+            {"help" , "helps those who help themselves."},
+            {"comps" , "displays a list of all components associated with a given ID, in Duality enumerator format."}
         };
         std::unordered_map<std::string, const std::string> componentHelps = {
             {"soul" , "is something that every entity starts out with. Souls cannot be created or destroyed directly."},
@@ -60,28 +71,32 @@ namespace DualityEngine {
             {"owner" , "means another entity is the owner of this entity."},
             {"score" , "gives an entity a scorekeeping device."}
         };
-        std::unordered_map<std::string, const std::string> componentArgs = {
-            {"soul" , "N/A - a soul cannot be created with the \"add\" command. \"newent\" must be used"},
-            {"position" , "[X-coordinate] [Y-coordinate] [Z-coordinate]"},
-            {"rotation" , "[X-angle (pitch)] [Y-angle (yaw)] [Z-angle (roll)]"},
-            {"linveloc" , "[X velocity] [Y velocity] [Z velocity]"},
-            {"angveloc" , "[X angular velocity] [Y angular velocity] [Z angular velocity]"},
-            {"collision" , "none"},
-            {"model" , "[filepath to model]"},
-            {"control" , "none"},
-            {"lambient" , "[R] [G] [B]"},
-            {"ldirect" , "[R] [G] [B] [X vector component] [Y vector component] [Z vector component]"},
-            {"lpoint" , "[R] [G] [B] [X-coordinate] [Y-coordinate] [Z-coordinate]"},
-            {"poschild" , "[ID number of positional child]"},
-            {"posparent" , "[ID number of positional parent]"},
-            {"owner" , "[ID number of owner]"},
-            {"score" , "none"}
+        std::unordered_map<std::string, std::pair<const std::string, int>> componentArgs = {
+            {"soul" , {"N/A - a soul cannot be created with the \"add\" command. \"newent\" must be used" , 0}},
+            {"position" , {"[X-coordinate] [Y-coordinate] [Z-coordinate]" , 3}},
+            {"rotation" , {"[X-angle (pitch)] [Y-angle (yaw)] [Z-angle (roll)]" , 3}},
+            {"linveloc" , {"[X velocity] [Y velocity] [Z velocity]" , 3}},
+            {"angveloc" , {"[X angular velocity] [Y angular velocity] [Z angular velocity]" , 3}},
+            {"collision" , {"none" , 0}},
+            {"model" , {"[filepath to model]" , 1}},
+            {"control" , {"none" , 0}},
+            {"lambient" , {"[R] [G] [B]" , 3}},
+            {"ldirect" , {"[R] [G] [B] [X vector component] [Y vector component] [Z vector component]" , 6}},
+            {"lpoint" , {"[R] [G] [B] [X-coordinate] [Y-coordinate] [Z-coordinate]" , 6}},
+            {"poschild" , {"[ID number of positional child]" , 1}},
+            {"posparent" , {"[ID number of positional parent]" , 1}},
+            {"owner" , {"[ID number of owner]", 1}},
+            {"score" , {"none" , 0}}
         };
         
+        DUA_id tryResolveID(std::string IDstring);
+        DUA_dbl tryResolveDbl(std::string dblString);
+        DUA_colorByte tryResolveColor(std::string colorValue);
         void parseCommand(std::string command);
+        void parseAddCommand(std::vector<std::string>& args);
+        void parseRemoveCommand(std::vector<std::string>& args);
         void handleBadUsage(std::string command);
         void handleControlKeys(const Uint8* keyStates);
-        void presentTextMenu();
     public:
         System_UserControl(ComponentBank* bank, ControlDelegates* delegates);
         ~System_UserControl();
