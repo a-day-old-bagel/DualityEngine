@@ -104,6 +104,7 @@
         <itemPath>Headers/PhysMove.h</itemPath>
         <itemPath>Headers/Render.h</itemPath>
         <itemPath>Headers/RenderOld.h</itemPath>
+        <itemPath>Headers/Scripting.h</itemPath>
         <itemPath>Headers/System.h</itemPath>
         <itemPath>Headers/UserControl.h</itemPath>
       </logicalFolder>
@@ -113,6 +114,7 @@
         <itemPath>Assets/Models/DebugCube/DebugCube.h</itemPath>
         <itemPath>Headers/Delegate.h</itemPath>
         <itemPath>Assets/GUI/GUI_Console.h</itemPath>
+        <itemPath>Headers/ScriptingDelegates.h</itemPath>
         <itemPath>Headers/Settings.h</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -157,6 +159,7 @@
         <itemPath>Source/PhysMove.cpp</itemPath>
         <itemPath>Source/Render.cpp</itemPath>
         <itemPath>Source/RenderOld.cpp</itemPath>
+        <itemPath>Source/Scripting.cpp</itemPath>
         <itemPath>Source/System.cpp</itemPath>
         <itemPath>Source/UserControl.cpp</itemPath>
       </logicalFolder>
@@ -347,6 +350,10 @@
       </item>
       <item path="Headers/Score.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Scripting.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ScriptingDelegates.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Settings.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/ShaderRepository.h" ex="false" tool="3" flavor2="0">
@@ -396,6 +403,8 @@
       <item path="Source/Render.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Scripting.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/ShaderRepository.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -587,6 +596,10 @@
       </item>
       <item path="Headers/Score.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Scripting.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ScriptingDelegates.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Settings.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/ShaderRepository.h" ex="false" tool="3" flavor2="0">
@@ -636,6 +649,8 @@
       <item path="Source/Render.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Scripting.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/ShaderRepository.cpp" ex="false" tool="1" flavor2="0">
       </item>

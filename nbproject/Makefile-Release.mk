@@ -45,6 +45,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Source/PhysMove.o \
 	${OBJECTDIR}/Source/Render.o \
 	${OBJECTDIR}/Source/RenderOld.o \
+	${OBJECTDIR}/Source/Scripting.o \
 	${OBJECTDIR}/Source/ShaderRepository.o \
 	${OBJECTDIR}/Source/System.o \
 	${OBJECTDIR}/Source/UserControl.o \
@@ -129,6 +130,11 @@ ${OBJECTDIR}/Source/RenderOld.o: Source/RenderOld.cpp
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/RenderOld.o Source/RenderOld.cpp
+
+${OBJECTDIR}/Source/Scripting.o: Source/Scripting.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Scripting.o Source/Scripting.cpp
 
 ${OBJECTDIR}/Source/ShaderRepository.o: Source/ShaderRepository.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source

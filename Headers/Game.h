@@ -13,8 +13,10 @@
 #include "PhysMove.h"
 #include "PhysCollide.h"
 #include "UserControl.h"
+#include "Scripting.h"
 #include "Engine.h"
 #include "ControlDelegates.h"
+#include "ScriptingDelegates.h"
 #include "BankDelegates.h"
 #include "Console.h"
 //</editor-fold>
@@ -38,6 +40,8 @@ namespace DualityEngine {
         Delegate<void(const char*)> outputDelegate = DELEGATE(&Console::output, &console);
         // Same thing, but for std::string
         Delegate<void(const std::string&)> outputStrDelegate = DELEGATE(&Console::outputStr, &console);
+        // Delegate to submit a command to the scripting system
+        Delegate<void(const std::string&)> submitCommand = DELEGATE(&Game::submitScriptCommand, this);
         // control delegates of top level functions to give to the UserControl system
         ControlDelegates controlDelegates = {
             quitDelegate,
@@ -51,9 +55,13 @@ namespace DualityEngine {
             outputDelegate, outputStrDelegate,
             DELEGATE(&Console::addToCommand, &console),
             DELEGATE(&Console::submitCommand, &console),
+            submitCommand,
             DELEGATE(&Console::getLogLineFromBack, &console),
             DELEGATE(&Console::setState, &console),
             DELEGATE(&Console::traverseLog, &console)
+        };
+        ScriptingDelegates scriptingDelegates = {
+            outputDelegate, outputStrDelegate
         };
         // Some more delegates for the bank
         BankDelegates bankDelegates = {
@@ -77,6 +85,8 @@ namespace DualityEngine {
         System_PhysCollide physicsCollisionSystem = System_PhysCollide(&bank);
         // A system to handle user input
         System_UserControl userControlSystem = System_UserControl(&bank, &controlDelegates);
+        // A system to handle scripting input from the console or from a file.
+        System_Scripting scriptingSystem = System_Scripting(&bank, &scriptingDelegates);
         // More systems to come...
 
         //</editor-fold>
@@ -102,6 +112,7 @@ namespace DualityEngine {
         bool resumeSystems();
         void systems_discover(const DUA_id &ID);
         void systems_scrutinize(const DUA_id &ID);
+        void submitScriptCommand(const std::string& command);
         // More internal functions to come...
 
         //</editor-fold>

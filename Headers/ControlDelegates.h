@@ -25,7 +25,8 @@ namespace DualityEngine {
         Delegate<void(const char*)> output;
         Delegate<void(const std::string&)> outputStr;
         Delegate<void(const char*)> appendToCommand;        
-        Delegate<std::string()> submitCommand;
+        Delegate<std::string()> consoleEnter;
+        Delegate<void(const std::string&)> submitScriptCommand;
         Delegate<std::string(int)> getLogFromBack;
         Delegate<void(bool, bool)> setConsoleState;
         Delegate<void(int)> logTraverse;

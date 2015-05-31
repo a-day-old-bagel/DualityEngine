@@ -96,6 +96,7 @@ bool Game::engageEngines(){
     physicsEngine.addSystem(&physicsMoveSystem);
     physicsEngine.addSystem(&physicsCollisionSystem);
     physicsEngine.addSystem(&userControlSystem);
+    physicsEngine.addSystem(&scriptingSystem);
     physicsEngine.engage();
     
     return true;
@@ -161,5 +162,13 @@ void Game::systems_scrutinize(const DUA_id &ID){
     physicsMoveSystem.scrutinizeID(ID);
     physicsCollisionSystem.scrutinizeID(ID);
     userControlSystem.scrutinizeID(ID);
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Submit Script Command">
+/**************************************
+ * SUBMIT SCRIPT COMMAND
+ *************************************/
+void Game::submitScriptCommand(const std::string& command){
+    scriptingSystem.submitCommand(command);
 }
 //</editor-fold>
