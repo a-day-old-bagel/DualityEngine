@@ -9,9 +9,7 @@
 #ifndef SCRIPTING_H
 #define	SCRIPTING_H
 
-//#include <SDL.h>
 #include "System.h"
-//#include <glm/glm.hpp>
 #include "ScriptingDelegates.h"
 #include <queue>
 
