@@ -22,6 +22,7 @@ namespace DualityEngine {
         std::string name;
         bool escape = false;
         bool paused = false;
+        bool pauseConfirmed = false;
         
     protected:
         ComponentBank* bank;
@@ -40,9 +41,11 @@ namespace DualityEngine {
         virtual void tick(){}
         void pause();
         void resume();
+        void confirmPaused();
         void quit();
 
         bool isPaused();
+        bool isPauseConfirmed();
         bool isQuit();
     };
 

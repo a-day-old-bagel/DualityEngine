@@ -29,6 +29,7 @@
 #include "Owner.h"
 #include "Score.h"
 #include "Collision.h"
+#include "CameraFree.h"
 
 namespace DualityEngine {
 
@@ -51,40 +52,9 @@ namespace DualityEngine {
         std::unordered_map<DUA_id, AmbientLight>      components_ambientLight;
         std::unordered_map<DUA_id, Owner>             components_owner;
         std::unordered_map<DUA_id, Score>             components_score;
+        std::unordered_map<DUA_id, CameraFree>        components_freeCam;
         
-//        std::unordered_map<std::string, void*>  componentCollectionIndexer = {
-//            {"model", &components_model},
-//            {"position", &components_position},
-//            {"poschild", &components_positionChild},
-//            {"posparent", &components_positionParent},
-//            {"linveloc", &components_positionVeloc},
-//            {"rotation", &components_rotation},
-//            {"angveloc", &components_rotationVeloc},
-//            {"control", &components_control},
-//            {"lpoint", &components_pointLight},
-//            {"ldirect", &components_directionalLight},
-//            {"lambient", &components_ambientLight},
-//            {"owner", &components_owner},
-//            {"score", &components_score},
-//            {"collision", &components_collision}
-//        };
-//        
-//        std::unordered_map<std::string, DUA_compFlag>  componentEnumIndexer = {
-//            {"model", MODEL},
-//            {"position", POSITION},
-//            {"poschild", POSCHILD},
-//            {"posparent", POSPARENT},
-//            {"linveloc", LINVELOC},
-//            {"rotation", ROTATION},
-//            {"angveloc", ANGVELOC},
-//            {"control", CONTROL},
-//            {"lpoint", LPOINT},
-//            {"ldirect", LDIRECT},
-//            {"lambient", LAMBIENT},
-//            {"owner", OWNER},
-//            {"score", SCORE},
-//            {"collision", COLLISION}
-//        };
+//        std::unordered_map<std::string, std::pair<CompCollect, DUA_compFlag>> compCollectIndex;
         
         /* BANK MANAGEMENT */
         BankDelegates* dlgt;
@@ -134,6 +104,7 @@ namespace DualityEngine {
         Owner* getOwnerPtr(const DUA_id &ID);
         Score* getScorePtr(const DUA_id &ID);
         Collision* getCollisionPtr(const DUA_id &ID);
+        CameraFree* getCameraFreePtr(const DUA_id &ID);
         
         /* COMPONENT CREATION */
 //        template<typename ... types>
@@ -155,6 +126,7 @@ namespace DualityEngine {
         void addOwner(const DUA_id &ID, const DUA_id &refID);
         void addScore(const DUA_id &ID);
         void addCollision(const DUA_id &ID);
+        void addCameraFree(const DUA_id &ID, DUA_float fov, DUA_float zNear, DUA_float zFar);
 
         /* COMPONENT DELETION */
         void deleteModel(const DUA_id &ID);
@@ -171,6 +143,7 @@ namespace DualityEngine {
         void deleteOwner(const DUA_id &ID);
         void deleteScore(const DUA_id &ID);
         void deleteCollision(const DUA_id &ID);
+        void deleteCameraFree(const DUA_id &ID);
         
         /* ENTITY STATE GETTERS */
         DUA_compFlag getComponents(const DUA_id& ID);

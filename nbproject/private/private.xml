@@ -7,8 +7,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/UserControl.cpp</file>
-            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/UserControl.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/ComponentBank.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/ControlDelegates.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/Console.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/Render.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/Game.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/Settings.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/ComponentBank.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/Render.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/Console.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/Game.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/Settings.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/CameraFree.h</file>
         </group>
     </open-files>
 </project-private>

@@ -16,7 +16,8 @@ using namespace DualityEngine;
  * instantiated. Maybe will bring up a
  * main menu at some point...
  *************************************/
-void Game::Begin(){
+void Game::Main(){
+    
     engageEngines();
         
     // Wait for all game threads to exit, then the game is over.
@@ -32,11 +33,7 @@ void Game::Begin(){
  *************************************/
 void Game::NewGame(){ 
     pauseSystems();
-    renderingSystem.clean();
-    physicsMoveSystem.clean();
-    physicsCollisionSystem.clean();
-    userControlSystem.clean();
-    bank.clean();
+    cleanGameData();    
     resumeSystems();
 }
 //</editor-fold>
@@ -44,16 +41,21 @@ void Game::NewGame(){
 /**************************************
  * LOAD GAME
  *************************************/
-void Game::LoadGame(){
-    
+void Game::LoadGame(const std::string& saveName){
+    pauseSystems();
+    cleanGameData();
+    bank.load(saveName.c_str());
+    resumeSystems();
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Save Game">
 /**************************************
  * SAVE GAME
  *************************************/
-void Game::SaveGame(){
-    
+void Game::SaveGame(const std::string& saveName){
+    pauseSystems();
+    bank.save(saveName.c_str());
+    resumeSystems();
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Pause">
@@ -102,6 +104,29 @@ bool Game::engageEngines(){
     return true;
 }
 //</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Wait For Systems To Pause">
+/**************************************
+ * WAIT FOR SYSTEMS TO PAUSE
+ *************************************/
+bool Game::waitForSystemsToPause(){
+    
+    int startTime = SDL_GetTicks();
+    bool done = false;
+    while(!done){
+        done = true;
+        done &= renderingSystem.isPauseConfirmed();
+        done &= physicsMoveSystem.isPauseConfirmed();
+        done &= physicsCollisionSystem.isPauseConfirmed();
+        done &= userControlSystem.isPauseConfirmed();
+        done &= scriptingSystem.isPauseConfirmed();
+        
+        if (SDL_GetTicks() - startTime > Settings::systemsPauseTimeout){
+            return false;
+        }
+    }
+    return true;
+}
+//</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Pause Systems">
 /**************************************
  * PAUSE ENGINES
@@ -111,7 +136,15 @@ bool Game::pauseSystems(){
     physicsCollisionSystem.pause();
     renderingSystem.pause();
     userControlSystem.pause();
-    return true;
+    scriptingSystem.pause();
+    
+    if (waitForSystemsToPause()){
+        return true;
+    } else {
+        outputDelegate("Pause timed out!\n");
+        resumeSystems();
+        return false;
+    }
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Resume Systems">
@@ -123,50 +156,72 @@ bool Game::resumeSystems(){
     physicsCollisionSystem.resume();
     renderingSystem.resume();
     userControlSystem.resume();
+    scriptingSystem.resume();
     return true;
 }
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Kill Engines">
+//<editor-fold defaultstate="collapsed" desc="Kill Systems">
 /**************************************
- * QUIT ENGINES
+ * KILL SYSTEMS
  * Tell each system to quit, which
  * should trigger their respective
  * engines to exit their loops.
- * Then wait for threads to exit.
  *************************************/
 bool Game::killSystems(){
     renderingSystem.quit();
     physicsMoveSystem.quit();
     physicsCollisionSystem.quit();
-    userControlSystem.quit();    
+    userControlSystem.quit();
+    scriptingSystem.quit();
+    return true;
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Clean Game Data">
+/**************************************
+ * CLEAN GAME DATA
+ * Only cleans the bank and the systems
+ * that keep registry(s) of IDs on hand.
+ * Systems that keep no registries do not
+ * need to be cleaned.
+ *************************************/
+bool Game::cleanGameData(){
+    renderingSystem.clean();
+    physicsMoveSystem.clean();
+    physicsCollisionSystem.clean();
+    bank.clean();
     return true;
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Systems Discover">
 /**************************************
  * SYSTEMS DISCOVER
+ * Systems that keep no registries do not
+ * need to discover.
  *************************************/
 void Game::systems_discover(const DUA_id &ID){
     renderingSystem.discoverID(ID);
     physicsMoveSystem.discoverID(ID);
     physicsCollisionSystem.discoverID(ID);
-    userControlSystem.discoverID(ID);
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Systems Scrutinize">
 /**************************************
  * SYSTEMS SCRUTINIZE
+ * Systems that keep no registries do not
+ * need to scrutinize.
  *************************************/
 void Game::systems_scrutinize(const DUA_id &ID){
     renderingSystem.scrutinizeID(ID);
     physicsMoveSystem.scrutinizeID(ID);
     physicsCollisionSystem.scrutinizeID(ID);
-    userControlSystem.scrutinizeID(ID);
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Submit Script Command">
 /**************************************
  * SUBMIT SCRIPT COMMAND
+ * sends a single line (command with args)
+ * to the scripting system for parsing
+ * and execution (or error handling)
  *************************************/
 void Game::submitScriptCommand(const std::string& command){
     scriptingSystem.submitCommand(command);

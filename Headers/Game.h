@@ -108,7 +108,9 @@ namespace DualityEngine {
 
         bool engageEngines();
         bool killSystems();
+        bool cleanGameData();
         bool pauseSystems();
+        bool waitForSystemsToPause();
         bool resumeSystems();
         void systems_discover(const DUA_id &ID);
         void systems_scrutinize(const DUA_id &ID);
@@ -119,8 +121,8 @@ namespace DualityEngine {
         //<editor-fold defaultstate="collapsed" desc="High-level 'interface' methods">
 
         void NewGame();
-        void LoadGame();
-        void SaveGame();
+        void LoadGame(const std::string&);
+        void SaveGame(const std::string&);
         void Pause();
         void Resume();
         void Quit();
@@ -131,7 +133,7 @@ namespace DualityEngine {
     public:
         Game() {};
         ~Game() {};
-        void Begin();
+        void Main();
     };
 
 }

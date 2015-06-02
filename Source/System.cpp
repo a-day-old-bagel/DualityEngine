@@ -62,9 +62,14 @@ void System::pause(){
     }
 }
 
+void System::confirmPaused(){
+    pauseConfirmed = true;
+}
+
 void System::resume(){
     if (paused){
         paused = false;
+        pauseConfirmed = false;
     }
 }
 
@@ -76,6 +81,10 @@ void System::quit(){
 
 bool System::isPaused(){
     return paused;
+}
+
+bool System::isPauseConfirmed(){
+    return pauseConfirmed;
 }
 
 bool System::isQuit(){

@@ -34,6 +34,8 @@ void ComponentBank::clean(){
     components_ambientLight.clear();
     components_owner.clear();
     components_score.clear();
+    components_collision.clear();
+    components_freeCam.clear();
 }
 void ComponentBank::save(const char* saveName){
     
@@ -97,6 +99,9 @@ Score* ComponentBank::getScorePtr(const DUA_id& ID){
 }
 Collision* ComponentBank::getCollisionPtr(const DUA_id& ID){
     return getComponentPtr(ID, "collision", components_collision);
+}
+CameraFree* ComponentBank::getCameraFreePtr(const DUA_id& ID){
+    return getComponentPtr(ID, "free camera", components_freeCam);
 }
     
 /*******************************************************************************
@@ -234,6 +239,10 @@ void ComponentBank::addCollision(const DUA_id& ID){
     if (tryAddFlagToSoul(COLLISION, ID))
         tryAddComponent(ID, "collision", components_collision);
 }
+void ComponentBank::addCameraFree(const DUA_id& ID, DUA_float fov, DUA_float zNear, DUA_float zFar){
+    if (tryAddFlagToSoul(FREECAM, ID))
+        tryAddComponent(ID, "free camera", components_freeCam, fov, zNear, zFar);
+}
 
 /*******************************************************************************
  * COMPONENT DELETION SECTION
@@ -345,6 +354,10 @@ void ComponentBank::deleteCollision(const DUA_id& ID){
     if (tryRemoveComponent(ID, "collision", components_collision))
         tryRemoveFlagFromSoul(COLLISION, ID);
 }
+void ComponentBank::deleteCameraFree(const DUA_id& ID){
+    if (tryRemoveComponent(ID, "free camera", components_freeCam))
+        tryRemoveFlagFromSoul(FREECAM, ID);
+}
 
 /*******************************************************************************
  * ENTITY STATE GETTERS SECTION
@@ -421,6 +434,10 @@ bool ComponentBank::deleteEntity(const DUA_id& ID){
         if (flags & LAMBIENT) deleteAmbientLight(ID);
         if (flags & OWNER) deleteOwner(ID);
         if (flags & SCORE) deleteScore(ID);
+        if (flags & ROTATION) deleteRotation(ID);
+        if (flags & ANGVELOC) deleteRotationVeloc(ID);
+        if (flags & COLLISION) deleteCollision(ID);
+        if (flags & FREECAM) deleteCameraFree(ID);
 
         deleteSoul(ID);
     
@@ -435,7 +452,7 @@ bool ComponentBank::deleteEntity(const DUA_id& ID){
     return true;
 }
 /*******************************************************************************
- * PURGE ENTITY
+ * PURGE ENTITY [NOT IMPLEMENTED YET]
  * this should not only delete the entity, but also delete any entities that are
  * spatial children of it.
  ******************************************************************************/
@@ -514,6 +531,8 @@ std::string ComponentBank::listComponents(const DUA_id &ID){
                 output << "OWNER ";
             if (components & SCORE)
                 output << "SCORE ";
+            if (components & FREECAM)
+                output << "FREECAM ";
             
         }
     } catch(const std::out_of_range& oorException) {

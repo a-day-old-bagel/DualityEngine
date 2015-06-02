@@ -84,6 +84,7 @@
       </logicalFolder>
       <logicalFolder name="f2" displayName="Components" projectFiles="true">
         <itemPath>Headers/AmbientLight.h</itemPath>
+        <itemPath>Headers/CameraFree.h</itemPath>
         <itemPath>Headers/Collision.h</itemPath>
         <itemPath>Headers/Control.h</itemPath>
         <itemPath>Headers/DirectionalLight.h</itemPath>
@@ -162,6 +163,9 @@
         <itemPath>Source/Scripting.cpp</itemPath>
         <itemPath>Source/System.cpp</itemPath>
         <itemPath>Source/UserControl.cpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f5" displayName="Utilities" projectFiles="true">
+        <itemPath>Source/Settings.cpp</itemPath>
       </logicalFolder>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -300,6 +304,8 @@
       </item>
       <item path="Headers/BankDelegates.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/CameraFree.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Collision.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/ComponentBank.h" ex="false" tool="3" flavor2="0">
@@ -405,6 +411,8 @@
       <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Scripting.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Settings.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/ShaderRepository.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -546,6 +554,8 @@
       </item>
       <item path="Headers/BankDelegates.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/CameraFree.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Collision.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/ComponentBank.h" ex="false" tool="3" flavor2="0">
@@ -651,6 +661,8 @@
       <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Scripting.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Settings.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/ShaderRepository.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -12,7 +12,7 @@
  ************************************************/
 int main()
 {
-    DualityEngine::Game().Begin();
+    DualityEngine::Game().Main();
     return 0;
 }
 

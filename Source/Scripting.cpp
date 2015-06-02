@@ -194,6 +194,8 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
             bank->addScore(entID);
         }else if (args[1] == "collision"){
             bank->addCollision(entID);
+        }else if (args[1] == "freecam"){
+            bank->addCameraFree(entID, tryResolveFloat(args[3]), tryResolveFloat(args[4]), tryResolveFloat(args[5]));
         }else{
             dlgt->outputStr("Unknown component: " + args[1] + "\n");
         }
@@ -236,6 +238,8 @@ void System_Scripting::parseRemoveCommand(const std::vector<std::string>& args){
             bank->deleteScore(entID);
         }else if (args[1] == "collision"){
             bank->deleteCollision(entID);
+        }else if (args[1] == "freecam"){
+            bank->deleteCameraFree(entID);
         }else{
             dlgt->outputStr("Unknown component: " + args[1] + "\n");
         }
@@ -248,7 +252,7 @@ DUA_id System_Scripting::tryResolveID(const std::string& IDstring){
     DUA_id entID = DUA_NULL_ID;
     try {
         entID = DUA_STR_TO_ID(IDstring, 10);
-        if (entID > std::numeric_limits<DUA_id>::max()) {
+        if (entID > std::numeric_limits<DUA_id>::max() || entID < 0) {
             throw std::out_of_range("DUA_id");
         }
     } catch (std::invalid_argument& invalidException) {
@@ -263,9 +267,9 @@ DUA_dbl System_Scripting::tryResolveDbl(const std::string& dblString){
     DUA_dbl dbl = -1;
     try {
         dbl = DUA_STR_TO_DBL(dblString);
-        if (dbl > std::numeric_limits<DUA_dbl>::max()) {
-            throw std::out_of_range("DUA_dbl");
-        }
+//        if (dbl > std::numeric_limits<DUA_dbl>::max() || dbl > std::numeric_limits<DUA_dbl>::min()) {
+//            throw std::out_of_range("DUA_dbl");
+//        }
     } catch (std::invalid_argument& invalidException) {
         throw std::string("Not a valid value: " + dblString + "\n").c_str();
     } catch (std::out_of_range& oorException) {
@@ -274,11 +278,26 @@ DUA_dbl System_Scripting::tryResolveDbl(const std::string& dblString){
     return dbl;
 }
 
+DUA_float System_Scripting::tryResolveFloat(const std::string& floatString){
+    DUA_float flt = -1;
+    try {
+        flt = DUA_STR_TO_FLOAT(floatString);
+//        if (flt > std::numeric_limits<DUA_float>::max() || flt > std::numeric_limits<DUA_float>::min()) {
+//            throw std::out_of_range("DUA_float");
+//        }
+    } catch (std::invalid_argument& invalidException) {
+        throw std::string("Not a valid value: " + floatString + "\n").c_str();
+    } catch (std::out_of_range& oorException) {
+        throw std::string("Value out of range: " + floatString + "\n").c_str();
+    }
+    return flt;
+}
+
 DUA_colorByte System_Scripting::tryResolveColor(const std::string& colorValue){
     DUA_colorByte colorVal = -1;
     try {
         colorVal = DUA_STR_TO_COLOR(colorValue, 10);
-        if (colorVal > std::numeric_limits<Uint8>::max()) {
+        if (colorVal > std::numeric_limits<Uint8>::max() || colorVal < 0) {
             throw std::out_of_range("DUA_colorByte");
         }
     } catch (std::invalid_argument& invalidException) {

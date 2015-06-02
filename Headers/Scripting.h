@@ -65,7 +65,8 @@ namespace DualityEngine {
             {"poschild" , "means another entity is a positional child of this entity."},
             {"posparent" , "means another entity is a positional parent of this entity."},
             {"owner" , "means another entity is the owner of this entity."},
-            {"score" , "gives an entity a scorekeeping device."}
+            {"score" , "gives an entity a scorekeeping device."},
+            {"freecam" , "allows a user to see from the viewpoint of an entity."}
         };
         std::unordered_map<std::string, std::pair<const std::string, int>> componentArgs = {
             {"soul" , {"N/A - a soul cannot be created with the \"add\" command. \"newent\" must be used" , 0}},
@@ -82,11 +83,13 @@ namespace DualityEngine {
             {"poschild" , {"[ID number of positional child]" , 1}},
             {"posparent" , {"[ID number of positional parent]" , 1}},
             {"owner" , {"[ID number of owner]", 1}},
-            {"score" , {"none" , 0}}
+            {"score" , {"none" , 0}},
+            {"freecam" , {"[field of view] [near plane] [far plane]", 3}}
         };
         
         DUA_id tryResolveID(const std::string& IDstring);
         DUA_dbl tryResolveDbl(const std::string& dblString);
+        DUA_float tryResolveFloat(const std::string& floatString);
         DUA_colorByte tryResolveColor(const std::string& colorValue);
         void parseCommand(const std::string& command);
         void parseAddCommand(const std::vector<std::string>& args);

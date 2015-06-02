@@ -13,7 +13,7 @@ using namespace DualityEngine;
 //<editor-fold>
 
 System_UserControl::System_UserControl(ComponentBank* bank, ControlDelegates* delegates)
-                  : System(bank, "Control System", 1){
+                  : System(bank, "Control System", 0){
     this->dlgt = delegates;
 }
 
@@ -22,7 +22,6 @@ System_UserControl::~System_UserControl(){
 }
 
 bool System_UserControl::init(std::stringstream& output){
-    requiredComponents.at(0) = CONTROL ;
     return true;
 }
 

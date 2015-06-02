@@ -3,6 +3,8 @@
  * Author: adayoldbagel
  *
  * Created on January 29, 2015, 2:18 PM
+ * 
+ * Contains all the typedefs, defines, enumerators, and extern variables used by Duality
  */
 
 #ifndef DUA_SETTINGS_H
@@ -13,7 +15,8 @@
 
 namespace DualityEngine {
     
-    // These define the types we'll be using
+    /* TYPES */
+    
     typedef uint_fast32_t   DUA_id;          // used for entity UIDs
     typedef uint_fast16_t   DUA_assetKey;    // used for accessing assets from hash tables
     typedef uint_fast16_t   DUA_compFlag;    // flags used to store which components an entity has
@@ -29,12 +32,20 @@ namespace DualityEngine {
     typedef glm::vec3       DUA_vec3;        // wrapper for a 3D vector
     typedef glm::vec2       DUA_vec2;        // wrapper for a 2D vector
     
+    /* MACROS */
+    
     // This is the function used to convert strings to ID numbers (currently unsigned ints)
     #define DUA_STR_TO_ID(str, base) std::stoul(str, nullptr, base)
     // This is the function used to convert strings to DUA_dbl (currently just c++ doubles)
     #define DUA_STR_TO_DBL(str) std::stod(str)
-
+    // This is the function used to convert strings to DUA_float (currently just c++ floats)
+    #define DUA_STR_TO_FLOAT(str) std::stof(str)
+    // This is the function used to convert strings to DUA_colorByte
     #define DUA_STR_TO_COLOR(str, base) std::stoul(str, nullptr, base)
+
+    #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
+
+    /* ENUMERATORS */
     
     /*****************************************
      * The soul component will include a uint
@@ -57,9 +68,8 @@ namespace DualityEngine {
         POSCHILD        = 0x800,
         POSPARENT       = 0x1000,
         OWNER           = 0x2000,
-        SCORE           = 0x4000,
-        
-        BLANK           = 0x8000    // Bit 16
+        SCORE           = 0x4000,        
+        FREECAM         = 0x8000    // Bit 16
     };
 
     /*****************************************
@@ -73,12 +83,11 @@ namespace DualityEngine {
         VALID_STATE     = 0x1,      // If this bit is 0, error code. Must be on for all souls.
         INACTIVE        = 0x2,      // Bit 1
         REMOVAL         = 0x4,      // Bit 2
+        HASMOVED        = 0x8,      //
     };
     
-    // Macros
-    #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
+    /* INTERNALLY-USEFUL DEFINES *DO NOT MODIFY* */
     
-    // Some defines of useful values
     #define DUA_NULL_ID 0                           // used for entity error states
     #define DUA_START_ID 1                          // ID assignment begins with 1
     #define DUA_DEFAULT_STATE VALID_STATE           // State entities start with
@@ -86,22 +95,37 @@ namespace DualityEngine {
     #define DUA_DEFAULT_COMPONENTS VALID_COMPS      // Components entities start with (none)
     #define DUA_INVALID_COMPONENTS  0x0             // For returning errors
 
-    // Configurable settings - will be in separate configuration file in the future
+    /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */
     
-    #define DUA_OLD_VIDEO_DRIVERS // Defining this will cause openGL 3.0 to be used instead of 3.3
+    #define DUA_OLD_VIDEO_DRIVERS // This needs to be commented out in order to use OpenGL 3.3 instead of just 3.0.
+
     #define DUA_GLVERSION_MAJOR 3
     #ifndef DUA_OLD_VIDEO_DRIVERS
         #define DUA_GLVERSION_MINOR 3
     #else
         #define DUA_GLVERSION_MINOR 0
     #endif
+
+    #define DUA_WHICH_MONITOR 0  
+
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
-    #define DUA_SCREENRES_X 1366
-    #define DUA_SCREENRES_Y 768
-    #define DUA_DEFAULTFOV 45.0f
-    #define DUA_ASPECTRATIO ((float)DUA_SCREENRES_X / (float)DUA_SCREENRES_Y)
-    #define DUA_ZPLANENEAR 0.1
-    #define DUA_ZPLANEFAR 100.0
+    #define DUA_DEFAULT_SCREENRES_X 800
+    #define DUA_DEFAULT_SCREENRES_Y 600
+    #define DUA_DEFAULT_FOV 45.0f
+    #define DUA_DEFAULT_ZPLANENEAR 0.1f
+    #define DUA_DEFAULT_ZPLANEFAR 100.f
+
+    /* RUN-TIME MUTABLE SETTINGS *AKA GLOBAL VARIABLES* */
+    
+    namespace Settings{
+        extern int screenResX;
+        extern int screenResY;
+        extern float screenAspectRatio;
+        extern int whichMonitor;
+        extern int monitorOffsetX;
+        extern int monitorOffsetY;
+        extern int systemsPauseTimeout;
+    }
 }
 
 #endif	/* DUA_SETTINGS_H */

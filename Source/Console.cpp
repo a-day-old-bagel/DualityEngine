@@ -15,7 +15,7 @@ void Console::output(const char* text){
         logLines.push_back(line);
     }
             
-//    /*DEBUG*/ std::cout << text;
+    /*DEBUG*/ std::cout << text;
     bodyHasChangedVisually = true;
 }
 

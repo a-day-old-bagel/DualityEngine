@@ -117,12 +117,10 @@ int DualityEngine::EngineThreadFunction(void* data)
         for (int i = 0; i < systems->size(); i++)
         {
             system = systems->at(i);
-            if (system->isQuit())
-            {
+            if (system->isQuit()){
                 tempOut << system->getName() << " has received a call to quit.\n";
                 escape = true;                
-            }
-            else if (!system->isPaused())
+            } else if (!system->isPaused()) {
                 try{
                     system->tick();
                 } catch (const char* err) {
@@ -143,6 +141,11 @@ int DualityEngine::EngineThreadFunction(void* data)
                     (*quitGame)();
                     escape = true;
                 }
+            } else if (system->isPaused()) {
+                system->confirmPaused();
+                std::string pauseOut = system->getName() + " confirmed paused.\n";
+                (*output)(pauseOut.c_str());
+            }
         }
     }
     tempOut << "Terminating " << threadName << "\n\n";

@@ -5,6 +5,9 @@
 
 using namespace DualityEngine;
 
+//int Settings::screenResX;
+//int Settings::screenResY;
+
 //<editor-fold defaultstate="collapsed" desc="Constructor">
 System_Render::System_Render(ComponentBank* bank, Console* console)
                   : System(bank, "Rendering System", 1) 
@@ -43,24 +46,61 @@ bool System_Render::init(std::stringstream& engineOut)
 //<editor-fold defaultstate="collapsed" desc="Set Up Environment">
 
 bool System_Render::setUpEnvironment(std::stringstream& engineOut)
-{
+{   
+    //SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0");
+    
+    // struct for getting current display mode.
+    SDL_DisplayMode display;
+    
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        printf ("SDL did not initialize! SDL Error: %s\n", SDL_GetError());
+        engineOut << "SDL did not initialize! SDL Error: " << SDL_GetError() << std::endl;
         return false;
     }
+    
+    int monitorUsed = 0;
+    for (monitorUsed = 0; monitorUsed <= Settings::whichMonitor; monitorUsed++){
+        if (SDL_GetCurrentDisplayMode(monitorUsed, &display)){
+            engineOut << "Could not get display mode for monitor " << monitorUsed << ": " << SDL_GetError() << std::endl;
+            return false;
+        } else {
+            engineOut << "Display " << monitorUsed << " reports: " << display.w << "x" << display.h << "@" << display.refresh_rate << std::endl;
+            if (monitorUsed == Settings::whichMonitor){
+                Settings::screenResX = display.w;
+                Settings::screenResY = display.h;
+                Settings::screenAspectRatio = (float) Settings::screenResX / (float) Settings::screenResY;
+                engineOut << "Running on display " << monitorUsed << std::endl;
+            } else {
+                Settings::monitorOffsetX += display.w;
+            }
+        }
+    }
+    
+//    if (Settings::whichMonitor > 0){
+//        //SDL_DisplayMode display;
+//        for (int i = 0; i < Settings::whichMonitor; i++){
+//            if (SDL_GetCurrentDisplayMode(i, &display)){
+//                Settings::monitorOffsetX += display.w;
+//            } else {
+//                engineOut << "Could not get display mode for display " << i << ": " << SDL_GetError() << std::endl;
+//                return false;
+//            }
+//        }
+//        engineOut << "Monitor offset X: " << Settings::monitorOffsetX << std::endl;
+//    }
+    
     // Specify OpenGL version and profile
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, DUA_GLVERSION_MAJOR);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, DUA_GLVERSION_MINOR);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);    
     // Create the SDL window
-    pWindow = SDL_CreateWindow("Game Engine",
-                    SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-                    DUA_SCREENRES_X, DUA_SCREENRES_Y,
+    pWindow = SDL_CreateWindow("Duality Engine",
+                    Settings::monitorOffsetX, Settings::monitorOffsetY,
+                    Settings::screenResX, Settings::screenResY,
                     DUA_SDL_SCREENOPTIONS);    
     // If the window couldn't be created for whatever reason
     if (pWindow == NULL) {
-        printf ("SDL window was not created! SDL Error: %s\n", SDL_GetError());
+        engineOut << "SDL window was not created! SDL Error: " << SDL_GetError() << std::endl;
         return false;
     }    
     //Create context
@@ -101,10 +141,10 @@ bool System_Render::setUpResources(std::stringstream& engineOut)
     bool success = true;
     
     success &= debugCube.Init(engineOut);
-    success &= GUI_console.Init(engineOut, pConsole, "Assets/Fonts/Inconsolata-LGC.otf", 0, 0, DUA_SCREENRES_X, DUA_SCREENRES_Y / 2, 10, 20, 2, 5, 10 ,5);
+    success &= GUI_console.Init(engineOut, pConsole, "Assets/Fonts/Inconsolata-LGC.otf", 0, 0, Settings::screenResX, Settings::screenResY / 2, 10, 20, 2, 5, 10 ,5);
     
-    projection = glm::perspective(DUA_DEFAULTFOV, DUA_ASPECTRATIO, (float)DUA_ZPLANENEAR, (float)DUA_ZPLANEFAR);
-    //projection = glm::ortho(0, DUA_SCREENRES_X, 0, DUA_SCREENRES_Y);
+    projection = glm::perspective(DUA_DEFAULT_FOV, Settings::screenAspectRatio, DUA_DEFAULT_ZPLANENEAR, DUA_DEFAULT_ZPLANEFAR);
+    //projection = glm::ortho(0, Settings::screenResX, 0, Settings::screenResY);
     view = glm::lookAt(
              glm::vec3(-2, 0, 2),    // Camera position
              glm::vec3(0, 0, 0),    // Camera look-at
