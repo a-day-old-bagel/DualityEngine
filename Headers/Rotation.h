@@ -10,10 +10,11 @@
 #define	ROTATION_H
 
 #include <glm/glm.hpp>
+#include "Component.h"
 
 namespace DualityEngine {
 
-    struct Rotation
+    struct Rotation : public Component
     {
         Rotation(const DUA_dbl &rotX, const DUA_dbl &rotY, const DUA_dbl &rotZ){
             rotation = {rotX, rotY, rotZ};

@@ -83,9 +83,13 @@
         <itemPath>Headers/stb_image.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="Components" projectFiles="true">
+        <logicalFolder name="f1" displayName="Collections" projectFiles="true">
+          <itemPath>Headers/ComponentCollection.h</itemPath>
+        </logicalFolder>
         <itemPath>Headers/AmbientLight.h</itemPath>
         <itemPath>Headers/CameraFree.h</itemPath>
         <itemPath>Headers/Collision.h</itemPath>
+        <itemPath>Headers/Component.h</itemPath>
         <itemPath>Headers/Control.h</itemPath>
         <itemPath>Headers/DirectionalLight.h</itemPath>
         <itemPath>Headers/Model.h</itemPath>
@@ -308,7 +312,11 @@
       </item>
       <item path="Headers/Collision.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Component.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/ComponentBank.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ComponentCollection.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Console.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -558,7 +566,11 @@
       </item>
       <item path="Headers/Collision.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Component.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/ComponentBank.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ComponentCollection.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Console.h" ex="false" tool="3" flavor2="0">
       </item>

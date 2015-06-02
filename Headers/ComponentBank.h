@@ -37,6 +37,24 @@ namespace DualityEngine {
     {
         DUA_id nextID;
 
+#ifdef NEWWAY
+        std::unordered_map<DUA_id, Soul>              components_soul;
+        std::unordered_map<DUA_id, Component>             components_model;
+        std::unordered_map<DUA_id, Component>          components_position;
+        std::unordered_map<DUA_id, Component>     components_positionChild;
+        std::unordered_map<DUA_id, Component>    components_positionParent;
+        std::unordered_map<DUA_id, Component>     components_positionVeloc;
+        std::unordered_map<DUA_id, Component>         components_collision;
+        std::unordered_map<DUA_id, Component>          components_rotation;
+        std::unordered_map<DUA_id, Component>     components_rotationVeloc;
+        std::unordered_map<DUA_id, Component>           components_control;
+        std::unordered_map<DUA_id, Component>        components_pointLight;
+        std::unordered_map<DUA_id, Component>  components_directionalLight;
+        std::unordered_map<DUA_id, Component>      components_ambientLight;
+        std::unordered_map<DUA_id, Component>             components_owner;
+        std::unordered_map<DUA_id, Component>             components_score;
+        std::unordered_map<DUA_id, Component>        components_freeCam;
+#else
         std::unordered_map<DUA_id, Soul>              components_soul;
         std::unordered_map<DUA_id, Model>             components_model;
         std::unordered_map<DUA_id, Position>          components_position;
@@ -53,8 +71,7 @@ namespace DualityEngine {
         std::unordered_map<DUA_id, Owner>             components_owner;
         std::unordered_map<DUA_id, Score>             components_score;
         std::unordered_map<DUA_id, CameraFree>        components_freeCam;
-        
-//        std::unordered_map<std::string, std::pair<CompCollect, DUA_compFlag>> compCollectIndex;
+#endif
         
         /* BANK MANAGEMENT */
         BankDelegates* dlgt;
@@ -79,6 +96,28 @@ namespace DualityEngine {
         DUA_id generateID();
 
     public:
+        
+        #define DUA_COMP_TUPLE std::tuple<std::string, std::string, DUA_compFlag>
+        #define DUA_COMPCOLL(x, y) std::get<y>(bank->componentCollections[x])
+        const std::array<const std::tuple<std::string, std::string, DUA_compFlag>, 16> componentCollections = {{
+            DUA_COMP_TUPLE{"soul", "soul", 0},
+            DUA_COMP_TUPLE{"model", "model", MODEL},
+            DUA_COMP_TUPLE{"position", "position", POSITION},
+            DUA_COMP_TUPLE{"positional child", "poschild", POSCHILD},
+            DUA_COMP_TUPLE{"positional parent", "posparent", POSPARENT},
+            DUA_COMP_TUPLE{"linear velocity", "linveloc", LINVELOC},
+            DUA_COMP_TUPLE{"collision", "collision", COLLISION},
+            DUA_COMP_TUPLE{"rotation", "rotation", ROTATION},
+            DUA_COMP_TUPLE{"angular velocity", "angveloc", ANGVELOC},
+            DUA_COMP_TUPLE{"control", "control", CONTROL},
+            DUA_COMP_TUPLE{"point light", "lpoint", LPOINT},
+            DUA_COMP_TUPLE{"directional light", "ldirect", LDIRECT},
+            DUA_COMP_TUPLE{"ambient light", "lambient", LAMBIENT},
+            DUA_COMP_TUPLE{"owner", "owner", OWNER},
+            DUA_COMP_TUPLE{"score", "score", SCORE},
+            DUA_COMP_TUPLE{"free camera", "freecam", FREECAM}
+        }};
+        
         // Constructor for new states
         ComponentBank(BankDelegates* dlgt);
         // Destructor

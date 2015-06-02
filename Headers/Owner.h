@@ -12,10 +12,11 @@
 #define	OWNER_H
 
 #include "Settings.h"
+#include "Component.h"
 
 namespace DualityEngine {
     
-    struct Owner
+    struct Owner : public Component
     {
         Owner(const DUA_id &ref){
             entityRef = ref;

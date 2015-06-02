@@ -15,6 +15,8 @@
 
 namespace DualityEngine {
     
+#define NEWWAY
+    
     /* TYPES */
     
     typedef uint_fast32_t   DUA_id;          // used for entity UIDs

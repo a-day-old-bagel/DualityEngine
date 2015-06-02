@@ -166,35 +166,35 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
         }
         DUA_id entID = tryResolveID(args[2]);
         
-        if       (args[1] == "model"){
+        if       (args[1] == DUA_COMPCOLL(1,1)){
             bank->addModel(entID, args[3].c_str());
-        }else if (args[1] == "position"){
+        }else if (args[1] == DUA_COMPCOLL(2,1)){
             bank->addPosition(entID, tryResolveDbl(args[3]), tryResolveDbl(args[4]), tryResolveDbl(args[5]));
-        }else if (args[1] == "poschild"){
+        }else if (args[1] == DUA_COMPCOLL(3,1)){
             bank->addPositionChild(entID, tryResolveID(args[3]));
-        }else if (args[1] == "posparent"){
+        }else if (args[1] == DUA_COMPCOLL(4,1)){
             bank->addPositionParent(entID, tryResolveID(args[3]));
-        }else if (args[1] == "rotation"){
+        }else if (args[1] == DUA_COMPCOLL(7,1)){
             bank->addRotation(entID, tryResolveDbl(args[3]), tryResolveDbl(args[4]), tryResolveDbl(args[5]));
-        }else if (args[1] == "linveloc"){
+        }else if (args[1] == DUA_COMPCOLL(5,1)){
             bank->addPositionVeloc(entID, tryResolveDbl(args[3]), tryResolveDbl(args[4]), tryResolveDbl(args[5]));
-        }else if (args[1] == "angveloc"){
+        }else if (args[1] == DUA_COMPCOLL(8,1)){
             bank->addRotationVeloc(entID, tryResolveDbl(args[3]), tryResolveDbl(args[4]), tryResolveDbl(args[5]));
-        }else if (args[1] == "control"){
+        }else if (args[1] == DUA_COMPCOLL(9,1)){
             bank->addControl(entID);
-        }else if (args[1] == "lambient"){
+        }else if (args[1] == DUA_COMPCOLL(12,1)){
             bank->addAmbientLight(entID, tryResolveColor(args[3]), tryResolveColor(args[4]), tryResolveColor(args[5]));
-        }else if (args[1] == "ldirect"){
+        }else if (args[1] == DUA_COMPCOLL(11,1)){
             bank->addDirectionalLight(entID, tryResolveColor(args[3]), tryResolveColor(args[4]), tryResolveColor(args[5]), tryResolveDbl(args[6]), tryResolveDbl(args[7]), tryResolveDbl(args[8]));
-        }else if (args[1] == "lpoint"){
+        }else if (args[1] == DUA_COMPCOLL(10,1)){
             bank->addPointLight(entID, tryResolveColor(args[3]), tryResolveColor(args[4]), tryResolveColor(args[5]), tryResolveDbl(args[6]), tryResolveDbl(args[7]), tryResolveDbl(args[8]));
-        }else if (args[1] == "owner"){
+        }else if (args[1] == DUA_COMPCOLL(13,1)){
             bank->addOwner(entID, tryResolveID(args[3]));
-        }else if (args[1] == "score"){
+        }else if (args[1] == DUA_COMPCOLL(14,1)){
             bank->addScore(entID);
-        }else if (args[1] == "collision"){
+        }else if (args[1] == DUA_COMPCOLL(6,1)){
             bank->addCollision(entID);
-        }else if (args[1] == "freecam"){
+        }else if (args[1] == DUA_COMPCOLL(15,1)){
             bank->addCameraFree(entID, tryResolveFloat(args[3]), tryResolveFloat(args[4]), tryResolveFloat(args[5]));
         }else{
             dlgt->outputStr("Unknown component: " + args[1] + "\n");
@@ -210,35 +210,35 @@ void System_Scripting::parseRemoveCommand(const std::vector<std::string>& args){
         DUA_id entID = tryResolveID(args[2]);
         if (entID == DUA_NULL_ID) return;
         
-        if       (args[1] == "model"){
+        if       (args[1] == DUA_COMPCOLL(1,1)){
             bank->deleteModel(entID);
-        }else if (args[1] == "position"){
+        }else if (args[1] == DUA_COMPCOLL(2,1)){
             bank->deletePosition(entID);
-        }else if (args[1] == "poschild"){
+        }else if (args[1] == DUA_COMPCOLL(3,1)){
             bank->deletePositionChild(entID);
-        }else if (args[1] == "posparent"){
+        }else if (args[1] == DUA_COMPCOLL(4,1)){
             bank->deletePositionParent(entID);
-        }else if (args[1] == "rotation"){
+        }else if (args[1] == DUA_COMPCOLL(7,1)){
             bank->deleteRotation(entID);
-        }else if (args[1] == "linveloc"){
+        }else if (args[1] == DUA_COMPCOLL(5,1)){
             bank->deletePositionVeloc(entID);
-        }else if (args[1] == "angveloc"){
+        }else if (args[1] == DUA_COMPCOLL(8,1)){
             bank->deleteRotationVeloc(entID);
-        }else if (args[1] == "control"){
+        }else if (args[1] == DUA_COMPCOLL(9,1)){
             bank->deleteControl(entID);
-        }else if (args[1] == "lambient"){
+        }else if (args[1] == DUA_COMPCOLL(12,1)){
             bank->deleteAmbientLight(entID);
-        }else if (args[1] == "ldirect"){
+        }else if (args[1] == DUA_COMPCOLL(11,1)){
             bank->deleteDirectionalLight(entID);
-        }else if (args[1] == "lpoint"){
+        }else if (args[1] == DUA_COMPCOLL(10,1)){
             bank->deletePointLight(entID);
-        }else if (args[1] == "owner"){
+        }else if (args[1] == DUA_COMPCOLL(13,1)){
             bank->deleteOwner(entID);
-        }else if (args[1] == "score"){
+        }else if (args[1] == DUA_COMPCOLL(14,1)){
             bank->deleteScore(entID);
-        }else if (args[1] == "collision"){
+        }else if (args[1] == DUA_COMPCOLL(6,1)){
             bank->deleteCollision(entID);
-        }else if (args[1] == "freecam"){
+        }else if (args[1] == DUA_COMPCOLL(15,1)){
             bank->deleteCameraFree(entID);
         }else{
             dlgt->outputStr("Unknown component: " + args[1] + "\n");

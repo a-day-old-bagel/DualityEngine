@@ -10,10 +10,11 @@
 #define	SCORE_H
 
 #include "Settings.h"
+#include "Component.h"
 
 namespace DualityEngine {
     
-    struct Score
+    struct Score : public Component
     {
         Score(){ score = 0; }
         Score(const DUA_scoreNum &score){ this->score = score; }

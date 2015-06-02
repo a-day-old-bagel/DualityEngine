@@ -51,40 +51,40 @@ namespace DualityEngine {
             {"comps" , "displays a list of all components associated with a given ID, in Duality enumerator format."}
         };
         std::unordered_map<std::string, const std::string> componentHelps = {
-            {"soul" , "is something that every entity starts out with. Souls cannot be created or destroyed directly."},
-            {"position" , "gives an entity a location in 3D space."},
-            {"rotation" , "gives an entity an orientation in 3D space."},
-            {"linveloc" , "gives an entity a linear velocity in 3D space (translation)."},
-            {"angveloc" , "gives an entity an angular velocity (spin)."},
-            {"collision" , "allows an entity to collide with other entities if it has a position and geometry."},
-            {"model" , "makes an entity visible by giving it a 3D model representation."},
-            {"control" , "allows an entity to be controlled by the user."},
-            {"lambient" , "attaches an ambient light to an entity."},
-            {"ldirect" , "attaches a directional light to an entity."},
-            {"lpoint" , "attaches a point light to an entity."},
-            {"poschild" , "means another entity is a positional child of this entity."},
-            {"posparent" , "means another entity is a positional parent of this entity."},
-            {"owner" , "means another entity is the owner of this entity."},
-            {"score" , "gives an entity a scorekeeping device."},
-            {"freecam" , "allows a user to see from the viewpoint of an entity."}
+            {DUA_COMPCOLL(0, 1) , "is something that every entity starts out with. Souls cannot be created or destroyed directly."},
+            {DUA_COMPCOLL(2, 1) , "gives an entity a location in 3D space."},
+            {DUA_COMPCOLL(7, 1) , "gives an entity an orientation in 3D space."},
+            {DUA_COMPCOLL(5, 1) , "gives an entity a linear velocity in 3D space (translation)."},
+            {DUA_COMPCOLL(8, 1) , "gives an entity an angular velocity (spin)."},
+            {DUA_COMPCOLL(6, 1) , "allows an entity to collide with other entities if it has a position and geometry."},
+            {DUA_COMPCOLL(1, 1) , "makes an entity visible by giving it a 3D model representation."},
+            {DUA_COMPCOLL(9, 1) , "allows an entity to be controlled by the user."},
+            {DUA_COMPCOLL(12, 1), "attaches an ambient light to an entity."},
+            {DUA_COMPCOLL(11, 1), "attaches a directional light to an entity."},
+            {DUA_COMPCOLL(10, 1), "attaches a point light to an entity."},
+            {DUA_COMPCOLL(3, 1) , "means another entity is a positional child of this entity."},
+            {DUA_COMPCOLL(4, 1) , "means another entity is a positional parent of this entity."},
+            {DUA_COMPCOLL(13, 1), "means another entity is the owner of this entity."},
+            {DUA_COMPCOLL(14, 1), "gives an entity a scorekeeping device."},
+            {DUA_COMPCOLL(15, 1), "allows a user to see from the viewpoint of an entity."}
         };
-        std::unordered_map<std::string, std::pair<const std::string, int>> componentArgs = {
-            {"soul" , {"N/A - a soul cannot be created with the \"add\" command. \"newent\" must be used" , 0}},
-            {"position" , {"[X-coordinate] [Y-coordinate] [Z-coordinate]" , 3}},
-            {"rotation" , {"[X-angle (pitch)] [Y-angle (yaw)] [Z-angle (roll)]" , 3}},
-            {"linveloc" , {"[X velocity] [Y velocity] [Z velocity]" , 3}},
-            {"angveloc" , {"[X angular velocity] [Y angular velocity] [Z angular velocity]" , 3}},
-            {"collision" , {"none" , 0}},
-            {"model" , {"[filepath to model]" , 1}},
-            {"control" , {"none" , 0}},
-            {"lambient" , {"[R] [G] [B]" , 3}},
-            {"ldirect" , {"[R] [G] [B] [X vector component] [Y vector component] [Z vector component]" , 6}},
-            {"lpoint" , {"[R] [G] [B] [X-coordinate] [Y-coordinate] [Z-coordinate]" , 6}},
-            {"poschild" , {"[ID number of positional child]" , 1}},
-            {"posparent" , {"[ID number of positional parent]" , 1}},
-            {"owner" , {"[ID number of owner]", 1}},
-            {"score" , {"none" , 0}},
-            {"freecam" , {"[field of view] [near plane] [far plane]", 3}}
+        std::unordered_map<std::string, std::pair<const std::string, const int>> componentArgs = {
+            {DUA_COMPCOLL(0, 1) , {"N/A - a soul cannot be created with the \"add\" command. \"newent\" must be used" , 0}},
+            {DUA_COMPCOLL(2, 1) , {"[X-coordinate] [Y-coordinate] [Z-coordinate]" , 3}},
+            {DUA_COMPCOLL(7, 1) , {"[X-angle (pitch)] [Y-angle (yaw)] [Z-angle (roll)]" , 3}},
+            {DUA_COMPCOLL(5, 1) , {"[X velocity] [Y velocity] [Z velocity]" , 3}},
+            {DUA_COMPCOLL(8, 1) , {"[X angular velocity] [Y angular velocity] [Z angular velocity]" , 3}},
+            {DUA_COMPCOLL(6, 1) , {"none" , 0}},
+            {DUA_COMPCOLL(1, 1) , {"[filepath to model]" , 1}},
+            {DUA_COMPCOLL(9, 1) , {"none" , 0}},
+            {DUA_COMPCOLL(12, 1), {"[R] [G] [B]" , 3}},
+            {DUA_COMPCOLL(11, 1), {"[R] [G] [B] [X vector component] [Y vector component] [Z vector component]" , 6}},
+            {DUA_COMPCOLL(10, 1), {"[R] [G] [B] [X-coordinate] [Y-coordinate] [Z-coordinate]" , 6}},
+            {DUA_COMPCOLL(3, 1) , {"[ID number of positional child]" , 1}},
+            {DUA_COMPCOLL(4, 1) , {"[ID number of positional parent]" , 1}},
+            {DUA_COMPCOLL(13, 1), {"[ID number of owner]", 1}},
+            {DUA_COMPCOLL(14, 1), {"none" , 0}},
+            {DUA_COMPCOLL(15, 1), {"[field of view] [near plane] [far plane]", 3}}
         };
         
         DUA_id tryResolveID(const std::string& IDstring);

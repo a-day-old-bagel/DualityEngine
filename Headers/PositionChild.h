@@ -10,10 +10,11 @@
 #define	POSITIONCHILD_H
 
 #include "Settings.h"
+#include "Component.h"
 
 namespace DualityEngine {
     
-    struct PositionChild
+    struct PositionChild : public Component
     {
         PositionChild(const DUA_id &ref){
             entityRef = ref;

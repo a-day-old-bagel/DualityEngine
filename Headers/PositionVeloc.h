@@ -9,10 +9,11 @@
 #define	POSITIONVELOC_H
 
 #include <glm/glm.hpp>
+#include "Component.h"
 
 namespace DualityEngine {
 
-    struct PositionVeloc
+    struct PositionVeloc : public Component
     {
         PositionVeloc(const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ){
             velLinear = {velX, velY, velZ};

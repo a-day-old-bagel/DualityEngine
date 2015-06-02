@@ -58,6 +58,54 @@ componentType* ComponentBank::getComponentPtr(const DUA_id &ID, const char* comp
         return NULL;
     }
 }
+
+#ifdef NEWWAY
+Model* ComponentBank::getModelPtr(const DUA_id &ID){
+    return (Model*)getComponentPtr(ID, "model", components_model);
+}
+PositionVeloc* ComponentBank::getPositionVelocPtr(const DUA_id &ID){
+    return (PositionVeloc*)getComponentPtr(ID, "linear velocity", components_positionVeloc);
+}
+Position* ComponentBank::getPositionPtr(const DUA_id &ID){
+    return (Position*)getComponentPtr(ID, "position", components_position);
+}
+PositionChild* ComponentBank::getPositionChildPtr(const DUA_id& ID){
+    return (PositionChild*)getComponentPtr(ID, "position child", components_positionChild);
+}
+PositionParent* ComponentBank::getPositionParentPtr(const DUA_id& ID){
+    return (PositionParent*)getComponentPtr(ID, "position parent", components_positionParent);
+}
+Rotation* ComponentBank::getRotationPtr(const DUA_id& ID){
+    return (Rotation*)getComponentPtr(ID, "rotation", components_rotation);
+}
+RotationVeloc* ComponentBank::getRotationVelocPtr(const DUA_id& ID){
+    return (RotationVeloc*)getComponentPtr(ID, "angular velocity", components_rotationVeloc);
+}
+Control* ComponentBank::getControlPtr(const DUA_id &ID){
+    return (Control*)getComponentPtr(ID, "control", components_control);
+}
+PointLight* ComponentBank::getPointLightPtr(const DUA_id &ID){
+    return (PointLight*)getComponentPtr(ID, "point light", components_pointLight);
+}
+DirectionalLight* ComponentBank::getDirectionalLightPtr(const DUA_id &ID){
+    return (DirectionalLight*)getComponentPtr(ID, "directional light", components_directionalLight);
+}
+AmbientLight* ComponentBank::getAmbientLightPtr(const DUA_id &ID){
+    return (AmbientLight*)getComponentPtr(ID, "ambient light", components_ambientLight);
+}
+Owner* ComponentBank::getOwnerPtr(const DUA_id& ID){
+    return (Owner*)getComponentPtr(ID, "owner", components_owner);
+}
+Score* ComponentBank::getScorePtr(const DUA_id& ID){
+    return (Score*)getComponentPtr(ID, "score", components_score);
+}
+Collision* ComponentBank::getCollisionPtr(const DUA_id& ID){
+    return (Collision*)getComponentPtr(ID, "collision", components_collision);
+}
+CameraFree* ComponentBank::getCameraFreePtr(const DUA_id& ID){
+    return (CameraFree*)getComponentPtr(ID, "free camera", components_freeCam);
+}
+#else
 Model* ComponentBank::getModelPtr(const DUA_id &ID){
     return getComponentPtr(ID, "model", components_model);
 }
@@ -103,6 +151,8 @@ Collision* ComponentBank::getCollisionPtr(const DUA_id& ID){
 CameraFree* ComponentBank::getCameraFreePtr(const DUA_id& ID){
     return getComponentPtr(ID, "free camera", components_freeCam);
 }
+#endif
+
     
 /*******************************************************************************
  * COMPONENT CREATION SECTION
@@ -422,7 +472,8 @@ bool ComponentBank::deleteEntity(const DUA_id& ID){
         return false;
     }
     
-    try {        
+    try {
+        
         if (flags & MODEL) deleteModel(ID);
         if (flags & LINVELOC) deletePositionVeloc(ID);
         if (flags & POSITION) deletePosition(ID);
@@ -503,36 +554,11 @@ std::string ComponentBank::listComponents(const DUA_id &ID){
         } else {
                         
             output << "Entity " << ID << " has: ";
-            if (components & MODEL)
-                output << "MODEL ";
-            if (components & POSITION)
-                output << "POSITION ";
-            if (components & ROTATION)
-                output << "ROTATION ";
-            if (components & ANGVELOC)
-                output << "ANGVELOC ";
-            if (components & POSPARENT)
-                output << "POSPARENT ";
-            if (components & POSCHILD)
-                output << "POSCHILD ";
-            if (components & LINVELOC)
-                output << "LINVELOC ";
-            if (components & COLLISION)
-                output << "COLLISION ";
-            if (components & CONTROL)
-                output << "CONTROL ";
-            if (components & LAMBIENT)
-                output << "LAMBIENT ";
-            if (components & LDIRECT)
-                output << "LDIRECT ";
-            if (components & LPOINT)
-                output << "LPOINT ";
-            if (components & OWNER)
-                output << "OWNER ";
-            if (components & SCORE)
-                output << "SCORE ";
-            if (components & FREECAM)
-                output << "FREECAM ";
+            for (auto compType : componentCollections){
+                if (components & std::get<2>(compType)){
+                    output << std::get<0>(compType) << ", ";
+                }
+            }
             
         }
     } catch(const std::out_of_range& oorException) {

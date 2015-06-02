@@ -8,9 +8,11 @@
 #ifndef COLLISIONL_H
 #define	COLLISIONL_H
 
+#include "Component.h"
+
 namespace DualityEngine {
 
-    struct Collision
+    struct Collision : public Component
     {
         Collision(){
             

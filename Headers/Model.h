@@ -9,10 +9,11 @@
 #define	MODEL_H
 
 #include <vector>
+#include "Component.h"
 
 namespace DualityEngine {
 
-    struct Model
+    struct Model : public Component
     {
         Model(const char* fileName){
             

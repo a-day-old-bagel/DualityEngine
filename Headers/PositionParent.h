@@ -12,10 +12,11 @@
 #define	POSITIONPARENT_H
 
 #include "Settings.h"
+#include "Component.h"
 
 namespace DualityEngine {
     
-    struct PositionParent
+    struct PositionParent : public Component
     {
         PositionParent(const DUA_id &ref){
             entityRef = ref;

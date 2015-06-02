@@ -9,10 +9,11 @@
 #define	AMBIENTLIGHT_H
 
 #include <glm/glm.hpp>
+#include "Component.h"
 
 namespace DualityEngine {
 
-    struct AmbientLight
+    struct AmbientLight : public Component
     {
         AmbientLight(const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue){
             color = {red, green, blue};

@@ -10,10 +10,11 @@
 
 #include <glm/glm.hpp>
 #include "Settings.h"
+#include "Component.h"
 
 namespace DualityEngine {
 
-    struct CameraFree
+    struct CameraFree : public Component
     {
         CameraFree(DUA_float fov, DUA_float zNear, DUA_float zFar){
             this->fov = fov;

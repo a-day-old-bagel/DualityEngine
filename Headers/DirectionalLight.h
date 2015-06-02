@@ -9,10 +9,11 @@
 #define	DIRECTIONALLIGHT_H
 
 #include <glm/glm.hpp>
+#include "Component.h"
 
 namespace DualityEngine {
 
-    struct DirectionalLight
+    struct DirectionalLight : public Component
     {
         DirectionalLight(const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue, const DUA_dbl &dirX, const DUA_dbl &dirY, const DUA_dbl &dirZ){
             color = {red, green, blue};

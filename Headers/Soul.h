@@ -9,10 +9,11 @@
 #define	SOUL_H
 
 #include <string>
+#include "Component.h"
 
 namespace DualityEngine {
 
-    struct Soul
+    struct Soul : public Component
     {
         Soul(const char* name, const DUA_compFlag &flags, const DUA_stateFlag &states){
             this->name = name; components = flags; state = states;

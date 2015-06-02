@@ -9,10 +9,11 @@
 #define	POSITION_H
 
 #include <glm/glm.hpp>
+#include "Component.h"
 
 namespace DualityEngine {
 
-    struct Position
+    struct Position : public Component
     {
         Position(const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ){
             position = {posX, posY, posZ};

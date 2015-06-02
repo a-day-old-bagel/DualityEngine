@@ -10,10 +10,11 @@
 #define	ROTATIONVELOC_H
 
 #include <glm/glm.hpp>
+#include "Component.h"
 
 namespace DualityEngine {
 
-    struct RotationVeloc
+    struct RotationVeloc : public Component
     {
         RotationVeloc(const DUA_dbl &rotX, const DUA_dbl &rotY, const DUA_dbl &rotZ){
             velAngular = {rotX, rotY, rotZ};
