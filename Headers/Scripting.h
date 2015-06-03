@@ -84,13 +84,13 @@ namespace DualityEngine {
             {DUA_COMPCOLL(4, 1) , {"[ID number of positional parent]" , 1}},
             {DUA_COMPCOLL(13, 1), {"[ID number of owner]", 1}},
             {DUA_COMPCOLL(14, 1), {"none" , 0}},
-            {DUA_COMPCOLL(15, 1), {"[field of view] [near plane] [far plane]", 3}}
+            {DUA_COMPCOLL(15, 1), {"[field of view] [near plane] [far plane] [eye X] [eye Y] [eye Z] [focus X] [focus Y] [focus Z] [up X] [up Y] [up Z]", 12}}
         };
         
-        DUA_id tryResolveID(const std::string& IDstring);
-        DUA_dbl tryResolveDbl(const std::string& dblString);
-        DUA_float tryResolveFloat(const std::string& floatString);
-        DUA_colorByte tryResolveColor(const std::string& colorValue);
+        DUA_id prsID(const std::string& IDstring);
+        DUA_dbl prsDbl(const std::string& dblString);
+        DUA_float prsFlt(const std::string& floatString);
+        DUA_colorByte prsClr(const std::string& colorValue);
         void parseCommand(const std::string& command);
         void parseAddCommand(const std::vector<std::string>& args);
         void parseRemoveCommand(const std::vector<std::string>& args);

@@ -99,6 +99,11 @@ namespace DualityEngine {
             DUA_COMP_TUPLE{"free camera", "freecam", FREECAM}
         }};
         
+        
+        DUA_id activeCamera = DUA_NULL_ID;
+        bool switchToCam(const DUA_id &id);
+        
+        
         // Constructor for new states
         ComponentBank(BankDelegates* dlgt);
         // Destructor
@@ -146,7 +151,7 @@ namespace DualityEngine {
         void addOwner(const DUA_id &ID, const DUA_id &refID);
         void addScore(const DUA_id &ID);
         void addCollision(const DUA_id &ID);
-        void addCameraFree(const DUA_id &ID, DUA_float fov, DUA_float zNear, DUA_float zFar);
+        void addCameraFree(const DUA_id &ID, DUA_float fov, DUA_float zNear, DUA_float zFar, DUA_dbl eyeX, DUA_dbl eyeY, DUA_dbl eyeZ, DUA_dbl focusX, DUA_dbl focusY, DUA_dbl focusZ, DUA_dbl upX, DUA_dbl upY, DUA_dbl upZ);
 
         /* COMPONENT DELETION */
         void deleteModel(const DUA_id &ID);
@@ -165,9 +170,11 @@ namespace DualityEngine {
         void deleteCollision(const DUA_id &ID);
         void deleteCameraFree(const DUA_id &ID);
         
-        /* ENTITY STATE GETTERS */
+        /* ENTITY STATE GETTERS / SETTERS */
         DUA_compFlag getComponents(const DUA_id& ID);
         DUA_stateFlag getState(const DUA_id& ID);
+        void stateOn(const DUA_id& ID, const DUA_stateFlag& flag);
+        void stateOff(const DUA_id& ID, const DUA_stateFlag& flag);
 
         /* ENTITY CREATION */
         DUA_id createEntity(const char* name);

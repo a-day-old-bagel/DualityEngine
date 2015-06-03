@@ -24,11 +24,13 @@ void System_PhysMove::tick()
     for (auto ID : registeredIDs[0]){
         if (!(bank->getState(ID) & INACTIVE)){
             bank->getPositionPtr(ID)->position += bank->getPositionVelocPtr(ID)->velLinear;
+            bank->stateOn(ID, RECALCVIEWMAT);
         }
     }
     for (auto ID : registeredIDs[1]){
         if (!(bank->getState(ID) & INACTIVE)){
             bank->getRotationPtr(ID)->rotation += bank->getRotationVelocPtr(ID)->velAngular;
+            bank->stateOn(ID, RECALCVIEWMAT);
         }
     }
 }

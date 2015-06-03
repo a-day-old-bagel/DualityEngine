@@ -15,6 +15,7 @@
 #include <SDL_opengl.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 #include "System.h"
 #include "../Assets/Models/DebugCube/DebugCube.h"
@@ -25,13 +26,25 @@ namespace DualityEngine {
     class System_Render_Models : public System
     {
     private:
-        DebugCube debugCube;
-        
+                
+        DUA_id localActiveCamera = DUA_NULL_ID;
+        CameraFree* pRepUseCam;
+        DUA_vec3 repUseEye;
+        DUA_vec3 repUseFocus;
+        DUA_vec3 repUseUp;
+        glm::mat4 repUseCamTransMat;
+        glm::mat4 repUseCamRotatMat;
+        DUA_vec3 repUseRot;
+        glm::mat4 repUseCamModelMat;
+        const glm::mat4 identMat = glm::mat4(1.0);
+       
+        DebugCube debugCube;       
         glm::mat4 view = glm::mat4(1.0f);
         glm::mat4 projection = glm::mat4(1.0f);
         glm::mat4 vp = glm::mat4(1.0f);
 
-        bool setUpResources(std::stringstream& engineOut);        
+        bool setUpResources(std::stringstream& engineOut);
+        bool aquireView();
 
     public:
         System_Render_Models(ComponentBank* bank);

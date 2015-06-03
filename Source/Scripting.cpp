@@ -64,7 +64,7 @@ void System_Scripting::parseCommand(const std::string& command){
             }
         } else if (args[0] == "delent"){
             if (numArgs == 2){
-                bank->deleteEntity(tryResolveID(args[1]));
+                bank->deleteEntity(prsID(args[1]));
             } else {
                 handleBadUsage(args[0]);
             }
@@ -127,7 +127,7 @@ void System_Scripting::parseCommand(const std::string& command){
             }
         } else if (args[0] == "comps"){
             if (numArgs == 2){
-                std::string outStr = bank->listComponents(tryResolveID(args[1]));
+                std::string outStr = bank->listComponents(prsID(args[1]));
                 if (!outStr.empty()){
                     dlgt->outputStr(outStr);
                 }
@@ -136,7 +136,7 @@ void System_Scripting::parseCommand(const std::string& command){
             }
         } else if (args[0] == "name"){
             if (numArgs == 2){
-                std::string outStr = bank->getName(tryResolveID(args[1]));
+                std::string outStr = bank->getName(prsID(args[1]));
                 if (!outStr.empty()){
                     dlgt->outputStr(outStr);
                 }
@@ -164,38 +164,38 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
                 return;
             }
         }
-        DUA_id entID = tryResolveID(args[2]);
+        DUA_id entID = prsID(args[2]);
         
         if       (args[1] == DUA_COMPCOLL(1,1)){
             bank->addModel(entID, args[3].c_str());
         }else if (args[1] == DUA_COMPCOLL(2,1)){
-            bank->addPosition(entID, tryResolveDbl(args[3]), tryResolveDbl(args[4]), tryResolveDbl(args[5]));
+            bank->addPosition(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(3,1)){
-            bank->addPositionChild(entID, tryResolveID(args[3]));
+            bank->addPositionChild(entID, prsID(args[3]));
         }else if (args[1] == DUA_COMPCOLL(4,1)){
-            bank->addPositionParent(entID, tryResolveID(args[3]));
+            bank->addPositionParent(entID, prsID(args[3]));
         }else if (args[1] == DUA_COMPCOLL(7,1)){
-            bank->addRotation(entID, tryResolveDbl(args[3]), tryResolveDbl(args[4]), tryResolveDbl(args[5]));
+            bank->addRotation(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(5,1)){
-            bank->addPositionVeloc(entID, tryResolveDbl(args[3]), tryResolveDbl(args[4]), tryResolveDbl(args[5]));
+            bank->addPositionVeloc(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(8,1)){
-            bank->addRotationVeloc(entID, tryResolveDbl(args[3]), tryResolveDbl(args[4]), tryResolveDbl(args[5]));
+            bank->addRotationVeloc(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(9,1)){
             bank->addControl(entID);
         }else if (args[1] == DUA_COMPCOLL(12,1)){
-            bank->addAmbientLight(entID, tryResolveColor(args[3]), tryResolveColor(args[4]), tryResolveColor(args[5]));
+            bank->addAmbientLight(entID, prsClr(args[3]), prsClr(args[4]), prsClr(args[5]));
         }else if (args[1] == DUA_COMPCOLL(11,1)){
-            bank->addDirectionalLight(entID, tryResolveColor(args[3]), tryResolveColor(args[4]), tryResolveColor(args[5]), tryResolveDbl(args[6]), tryResolveDbl(args[7]), tryResolveDbl(args[8]));
+            bank->addDirectionalLight(entID, prsClr(args[3]), prsClr(args[4]), prsClr(args[5]), prsDbl(args[6]), prsDbl(args[7]), prsDbl(args[8]));
         }else if (args[1] == DUA_COMPCOLL(10,1)){
-            bank->addPointLight(entID, tryResolveColor(args[3]), tryResolveColor(args[4]), tryResolveColor(args[5]), tryResolveDbl(args[6]), tryResolveDbl(args[7]), tryResolveDbl(args[8]));
+            bank->addPointLight(entID, prsClr(args[3]), prsClr(args[4]), prsClr(args[5]), prsDbl(args[6]), prsDbl(args[7]), prsDbl(args[8]));
         }else if (args[1] == DUA_COMPCOLL(13,1)){
-            bank->addOwner(entID, tryResolveID(args[3]));
+            bank->addOwner(entID, prsID(args[3]));
         }else if (args[1] == DUA_COMPCOLL(14,1)){
             bank->addScore(entID);
         }else if (args[1] == DUA_COMPCOLL(6,1)){
             bank->addCollision(entID);
         }else if (args[1] == DUA_COMPCOLL(15,1)){
-            bank->addCameraFree(entID, tryResolveFloat(args[3]), tryResolveFloat(args[4]), tryResolveFloat(args[5]));
+            bank->addCameraFree(entID, prsFlt(args[3]), prsFlt(args[4]), prsFlt(args[5]), prsDbl(args[6]), prsDbl(args[7]), prsDbl(args[8]), prsDbl(args[9]), prsDbl(args[10]), prsDbl(args[11]), prsDbl(args[12]), prsDbl(args[13]), prsDbl(args[14]));
         }else{
             dlgt->outputStr("Unknown component: " + args[1] + "\n");
         }
@@ -207,7 +207,7 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
 void System_Scripting::parseRemoveCommand(const std::vector<std::string>& args){
     
     try{
-        DUA_id entID = tryResolveID(args[2]);
+        DUA_id entID = prsID(args[2]);
         if (entID == DUA_NULL_ID) return;
         
         if       (args[1] == DUA_COMPCOLL(1,1)){
@@ -248,7 +248,7 @@ void System_Scripting::parseRemoveCommand(const std::vector<std::string>& args){
     }
 }
 
-DUA_id System_Scripting::tryResolveID(const std::string& IDstring){
+DUA_id System_Scripting::prsID(const std::string& IDstring){
     DUA_id entID = DUA_NULL_ID;
     try {
         entID = DUA_STR_TO_ID(IDstring, 10);
@@ -263,7 +263,7 @@ DUA_id System_Scripting::tryResolveID(const std::string& IDstring){
     return entID;
 }
 
-DUA_dbl System_Scripting::tryResolveDbl(const std::string& dblString){
+DUA_dbl System_Scripting::prsDbl(const std::string& dblString){
     DUA_dbl dbl = -1;
     try {
         dbl = DUA_STR_TO_DBL(dblString);
@@ -278,7 +278,7 @@ DUA_dbl System_Scripting::tryResolveDbl(const std::string& dblString){
     return dbl;
 }
 
-DUA_float System_Scripting::tryResolveFloat(const std::string& floatString){
+DUA_float System_Scripting::prsFlt(const std::string& floatString){
     DUA_float flt = -1;
     try {
         flt = DUA_STR_TO_FLOAT(floatString);
@@ -293,7 +293,7 @@ DUA_float System_Scripting::tryResolveFloat(const std::string& floatString){
     return flt;
 }
 
-DUA_colorByte System_Scripting::tryResolveColor(const std::string& colorValue){
+DUA_colorByte System_Scripting::prsClr(const std::string& colorValue){
     DUA_colorByte colorVal = -1;
     try {
         colorVal = DUA_STR_TO_COLOR(colorValue, 10);

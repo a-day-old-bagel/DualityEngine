@@ -16,6 +16,21 @@ ComponentBank::~ComponentBank(){
     dlgt = NULL;
 }
 
+bool ComponentBank::switchToCam(const DUA_id& ID){
+    try{
+        if (components_soul.at(ID).state & FREECAM){
+            activeCamera = ID;
+        } else {
+            dlgt->output("That entity doesn't have a camera.\n");
+            return false;
+        }
+    }catch(const std::out_of_range& oorException){
+        dlgt->output("No entity exists at that ID.\n");
+        return false;
+    }
+    return true;
+}
+
 /*******************************************************************************
  * BANK MANAGEMENT SECTION
  ******************************************************************************/
@@ -146,11 +161,6 @@ bool ComponentBank::tryAddComponent(const DUA_id &ID, const char* compName, std:
     dlgt->systemsDiscover(ID);
     return true;
 }
-//template<typename ... types>
-//bool ComponentBank::addComponent(const DUA_id &ID, const char* compType, const types& ... args){
-//    if (tryAddFlagToSoul(componentEnumIndexer[compType], ID))
-//        tryAddComponent(ID, compType, componentCollectionIndexer[compType], args...);
-//}
 /*******************************************************************************
  * ADD SOUL
  * is a little different than the rest below because it doesn't need to add any
@@ -240,9 +250,10 @@ void ComponentBank::addCollision(const DUA_id& ID){
     if (tryAddFlagToSoul(COLLISION, ID))
         tryAddComponent(ID, "collision", components_collision);
 }
-void ComponentBank::addCameraFree(const DUA_id& ID, DUA_float fov, DUA_float zNear, DUA_float zFar){
+void ComponentBank::addCameraFree(const DUA_id& ID, DUA_float fov, DUA_float zNear, DUA_float zFar, DUA_dbl eyeX, DUA_dbl eyeY, DUA_dbl eyeZ, DUA_dbl focusX, DUA_dbl focusY, DUA_dbl focusZ, DUA_dbl upX, DUA_dbl upY, DUA_dbl upZ){
     if (tryAddFlagToSoul(FREECAM, ID))
-        tryAddComponent(ID, "free camera", components_freeCam, fov, zNear, zFar);
+        if (tryAddComponent(ID, "free camera", components_freeCam, fov, zNear, zFar, eyeX, eyeY, eyeZ, focusX, focusY, focusZ, upX, upY, upZ))
+            components_soul.at(ID).state |= (RECALCVIEWMAT | RECALCPROJMAT);
 }
 
 /*******************************************************************************
@@ -361,7 +372,7 @@ void ComponentBank::deleteCameraFree(const DUA_id& ID){
 }
 
 /*******************************************************************************
- * ENTITY STATE GETTERS SECTION
+ * ENTITY STATE GETTERS / SETTERS SECTION
  ******************************************************************************/
 DUA_compFlag ComponentBank::getComponents(const DUA_id& ID){
     DUA_compFlag flags;
@@ -377,6 +388,20 @@ DUA_stateFlag ComponentBank::getState(const DUA_id& ID){
         return components_soul.at(ID).components;
     } catch(const std::out_of_range& oorException) {
         return DUA_INVALID_STATE;
+    }
+}
+void ComponentBank::stateOn(const DUA_id& ID, const DUA_stateFlag& flag){
+    try{
+        components_soul.at(ID).state |= flag;
+    }catch (const std::out_of_range& oorException) {
+        dlgt->output("WARNING: Bad stateOn attempt: No such ID.");
+    }
+}
+void ComponentBank::stateOff(const DUA_id& ID, const DUA_stateFlag& flag){
+    try{
+        components_soul.at(ID).state &= ~flag;
+    }catch (const std::out_of_range& oorException) {
+        dlgt->output("WARNING: Bad stateOff attempt: No such ID.");
     }
 }
 

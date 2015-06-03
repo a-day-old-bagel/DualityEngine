@@ -86,6 +86,8 @@ namespace DualityEngine {
         INACTIVE        = 0x2,      // Bit 1
         REMOVAL         = 0x4,      // Bit 2
         HASMOVED        = 0x8,      //
+        RECALCPROJMAT   = 0x10,
+        RECALCVIEWMAT   = 0x20
     };
     
     /* INTERNALLY-USEFUL DEFINES *DO NOT MODIFY* */
