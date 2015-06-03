@@ -36,25 +36,7 @@ namespace DualityEngine {
     class ComponentBank
     {
         DUA_id nextID;
-
-#ifdef NEWWAY
-        std::unordered_map<DUA_id, Soul>              components_soul;
-        std::unordered_map<DUA_id, Component>             components_model;
-        std::unordered_map<DUA_id, Component>          components_position;
-        std::unordered_map<DUA_id, Component>     components_positionChild;
-        std::unordered_map<DUA_id, Component>    components_positionParent;
-        std::unordered_map<DUA_id, Component>     components_positionVeloc;
-        std::unordered_map<DUA_id, Component>         components_collision;
-        std::unordered_map<DUA_id, Component>          components_rotation;
-        std::unordered_map<DUA_id, Component>     components_rotationVeloc;
-        std::unordered_map<DUA_id, Component>           components_control;
-        std::unordered_map<DUA_id, Component>        components_pointLight;
-        std::unordered_map<DUA_id, Component>  components_directionalLight;
-        std::unordered_map<DUA_id, Component>      components_ambientLight;
-        std::unordered_map<DUA_id, Component>             components_owner;
-        std::unordered_map<DUA_id, Component>             components_score;
-        std::unordered_map<DUA_id, Component>        components_freeCam;
-#else
+        
         std::unordered_map<DUA_id, Soul>              components_soul;
         std::unordered_map<DUA_id, Model>             components_model;
         std::unordered_map<DUA_id, Position>          components_position;
@@ -71,7 +53,6 @@ namespace DualityEngine {
         std::unordered_map<DUA_id, Owner>             components_owner;
         std::unordered_map<DUA_id, Score>             components_score;
         std::unordered_map<DUA_id, CameraFree>        components_freeCam;
-#endif
         
         /* BANK MANAGEMENT */
         BankDelegates* dlgt;

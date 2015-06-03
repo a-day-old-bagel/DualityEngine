@@ -12,11 +12,10 @@
 
 #include <GL/glew.h>
 #include <glm/glm.hpp>
+#include <string>
 
 namespace DualityEngine {
-    
-#define NEWWAY
-    
+        
     /* TYPES */
     
     typedef uint_fast32_t   DUA_id;          // used for entity UIDs
@@ -45,6 +44,7 @@ namespace DualityEngine {
     // This is the function used to convert strings to DUA_colorByte
     #define DUA_STR_TO_COLOR(str, base) std::stoul(str, nullptr, base)
 
+    // This is used when passing buffer offsets to the GPU via openGL
     #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
 
     /* ENUMERATORS */
@@ -99,6 +99,7 @@ namespace DualityEngine {
 
     /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */
     
+//    #define DUA_DEBUG_CONSOLE_TO_COUT
     #define DUA_OLD_VIDEO_DRIVERS // This needs to be commented out in order to use OpenGL 3.3 instead of just 3.0.
 
     #define DUA_GLVERSION_MAJOR 3
@@ -116,17 +117,21 @@ namespace DualityEngine {
     #define DUA_DEFAULT_FOV 45.0f
     #define DUA_DEFAULT_ZPLANENEAR 0.1f
     #define DUA_DEFAULT_ZPLANEFAR 100.f
+    #define DUA_DEFAULT_CONSOLEWIDTH 800
+    #define DUA_DEFAULT_CONSOLEHEIGHT 600
 
     /* RUN-TIME MUTABLE SETTINGS *AKA GLOBAL VARIABLES* */
     
     namespace Settings{
-        extern int screenResX;
-        extern int screenResY;
+        extern int screenResX, screenResY;
         extern float screenAspectRatio;
-        extern int whichMonitor;
-        extern int monitorOffsetX;
-        extern int monitorOffsetY;
+        extern int whichMonitor, monitorOffsetX, monitorOffsetY;
         extern int systemsPauseTimeout;
+        
+        namespace Console{
+            extern int locX, locY, width, height, charW, charH, marginX, marginY, spacingX, spacingY;
+            extern std::string fontName;
+        }
     }
 }
 

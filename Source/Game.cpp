@@ -93,6 +93,8 @@ void Game::Quit(){
  *************************************/
 bool Game::engageEngines(){
     graphicsEngine.addSystem(&renderingSystem);
+    graphicsEngine.addSystem(&renderModelsSystem);
+    graphicsEngine.addSystem(&renderConsoleSystem);
     graphicsEngine.engage();
     
     physicsEngine.addSystem(&physicsMoveSystem);
@@ -115,6 +117,8 @@ bool Game::waitForSystemsToPause(){
     while(!done){
         done = true;
         done &= renderingSystem.isPauseConfirmed();
+        done &= renderConsoleSystem.isPauseConfirmed();
+        done &= renderModelsSystem.isPauseConfirmed();
         done &= physicsMoveSystem.isPauseConfirmed();
         done &= physicsCollisionSystem.isPauseConfirmed();
         done &= userControlSystem.isPauseConfirmed();
@@ -135,13 +139,16 @@ bool Game::pauseSystems(){
     physicsMoveSystem.pause();
     physicsCollisionSystem.pause();
     renderingSystem.pause();
+    renderConsoleSystem.pause();
+    renderModelsSystem.pause();
     userControlSystem.pause();
     scriptingSystem.pause();
     
     if (waitForSystemsToPause()){
+        outputDelegate("All systems paused.\n");
         return true;
     } else {
-        outputDelegate("Pause timed out!\n");
+        outputDelegate("Systems pause timed out!\n");
         resumeSystems();
         return false;
     }
@@ -155,6 +162,8 @@ bool Game::resumeSystems(){
     physicsMoveSystem.resume();
     physicsCollisionSystem.resume();
     renderingSystem.resume();
+    renderConsoleSystem.resume();
+    renderModelsSystem.resume();
     userControlSystem.resume();
     scriptingSystem.resume();
     return true;
@@ -168,6 +177,8 @@ bool Game::resumeSystems(){
  * engines to exit their loops.
  *************************************/
 bool Game::killSystems(){
+    renderModelsSystem.quit();
+    renderConsoleSystem.quit();
     renderingSystem.quit();
     physicsMoveSystem.quit();
     physicsCollisionSystem.quit();
@@ -185,7 +196,7 @@ bool Game::killSystems(){
  * need to be cleaned.
  *************************************/
 bool Game::cleanGameData(){
-    renderingSystem.clean();
+    renderModelsSystem.clean();
     physicsMoveSystem.clean();
     physicsCollisionSystem.clean();
     bank.clean();
@@ -199,7 +210,7 @@ bool Game::cleanGameData(){
  * need to discover.
  *************************************/
 void Game::systems_discover(const DUA_id &ID){
-    renderingSystem.discoverID(ID);
+    renderModelsSystem.discoverID(ID);
     physicsMoveSystem.discoverID(ID);
     physicsCollisionSystem.discoverID(ID);
 }
@@ -211,7 +222,7 @@ void Game::systems_discover(const DUA_id &ID){
  * need to scrutinize.
  *************************************/
 void Game::systems_scrutinize(const DUA_id &ID){
-    renderingSystem.scrutinizeID(ID);
+    renderModelsSystem.scrutinizeID(ID);
     physicsMoveSystem.scrutinizeID(ID);
     physicsCollisionSystem.scrutinizeID(ID);
 }

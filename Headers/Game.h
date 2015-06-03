@@ -9,7 +9,9 @@
 #define	GAME_H
 
 //<editor-fold defaultstate="collapsed" desc="Includes">
-#include "Render.h"
+#include "Render_Master.h"
+#include "Render_Console.h"
+#include "Render_Models.h"
 #include "PhysMove.h"
 #include "PhysCollide.h"
 #include "UserControl.h"
@@ -35,7 +37,7 @@ namespace DualityEngine {
         //<editor-fold defaultstate="collapsed" desc="Delegates to allow for inter-system/engine communication">
         
         // A delegate for quitting the game to give to the engines in case of failures
-        Delegate<void()> quitDelegate = DELEGATE(&Game::Quit, this);        
+        Delegate<void()> quitDelegate = DELEGATE(&Game::Quit, this);
         // A delegate for outputting text to the console to give to the engines
         Delegate<void(const char*)> outputDelegate = DELEGATE(&Console::output, &console);
         // Same thing, but for std::string
@@ -45,6 +47,8 @@ namespace DualityEngine {
         // control delegates of top level functions to give to the UserControl system
         ControlDelegates controlDelegates = {
             quitDelegate,
+            DELEGATE(&Game::Pause, this),
+            DELEGATE(&Game::Resume, this),
             DELEGATE(&Console::applyBackspace, &console),
             DELEGATE(&Console::applyDelete, &console),
             DELEGATE(&Console::clearCommand, &console),
@@ -78,7 +82,11 @@ namespace DualityEngine {
         //<editor-fold defaultstate="collapsed" desc="Systems to operate on the components, providing game mechanics">
 
         // A system to render all graphical components (manages openGL calls)
-        System_Render renderingSystem = System_Render(&bank, &console);
+        System_Render_Master renderingSystem = System_Render_Master(&bank);
+        
+        System_Render_Console renderConsoleSystem = System_Render_Console(&bank, &console);
+        
+        System_Render_Models renderModelsSystem = System_Render_Models(&bank);
         // A system to update all spatial components according to motion components
         System_PhysMove physicsMoveSystem = System_PhysMove(&bank);
         // A system to check collisions between all spatial components according to collision components

@@ -142,9 +142,9 @@ int DualityEngine::EngineThreadFunction(void* data)
                     escape = true;
                 }
             } else if (system->isPaused()) {
-                system->confirmPaused();
-                std::string pauseOut = system->getName() + " confirmed paused.\n";
-                (*output)(pauseOut.c_str());
+                if (!system->isPauseConfirmed()){
+                    system->confirmPaused();
+                }
             }
         }
     }

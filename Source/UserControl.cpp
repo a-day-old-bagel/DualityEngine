@@ -46,9 +46,11 @@ void System_UserControl::tick(){
                     }
                     dlgt->clearCommand();
                     dlgt->output(menuText.c_str());
+                    dlgt->pause();
                 } else {
                     consoleIsActive = false;
                     SDL_StopTextInput();
+                    dlgt->resume();
                 }
                 dlgt->setConsoleState(consoleIsActive, MenuIsActive);
             }

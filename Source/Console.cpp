@@ -14,9 +14,11 @@ void Console::output(const char* text){
     while (std::getline(temp, line)){
         logLines.push_back(line);
     }
-            
-    /*DEBUG*/ std::cout << text;
     bodyHasChangedVisually = true;
+    
+    #ifdef DUA_DEBUG_CONSOLE_TO_COUT
+    std::cout << text;
+    #endif
 }
 
 void Console::outputStr(const std::string& text){

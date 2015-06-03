@@ -14,6 +14,7 @@
 #include <vector>
 #include <iostream>
 #include <cstring>
+#include "Settings.h" // only for debug defines
 
 namespace DualityEngine {
     class Console {

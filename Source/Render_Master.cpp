@@ -1,22 +1,19 @@
 /****************************************************************
  * Galen Cochrane, 1 FEB 2015
  ****************************************************************/
-#include "../Headers/Render.h"
+#include "../Headers/Render_Master.h"
 
 using namespace DualityEngine;
 
-//int Settings::screenResX;
-//int Settings::screenResY;
-
 //<editor-fold defaultstate="collapsed" desc="Constructor">
-System_Render::System_Render(ComponentBank* bank, Console* console)
-                  : System(bank, "Rendering System", 1) 
+System_Render_Master::System_Render_Master(ComponentBank* bank)
+                  : System(bank, "Console Rendering System", 0) 
 {
-    pConsole = console;
+    
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Destructor">
-System_Render::~System_Render()
+System_Render_Master::~System_Render_Master()
 {
     //Destroy window	
     SDL_DestroyWindow(pWindow);
@@ -27,25 +24,17 @@ System_Render::~System_Render()
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Init">
-bool System_Render::init(std::stringstream& engineOut)
-{
-    // entities to be rendered must have these components
-    requiredComponents.at(0) = MODEL | POSITION | ROTATION ;
-    
+bool System_Render_Master::init(std::stringstream& engineOut)
+{    
     // Set up window and context
     if (!setUpEnvironment(engineOut)) return false;
     
-    // Load graphics assets and buffer them to GPU
-    if(!setUpResources(engineOut)) {
-        engineOut << "Unable to initialize graphics resources!" << std::endl;
-        return false;
-    }
     return true;
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Set Up Environment">
 
-bool System_Render::setUpEnvironment(std::stringstream& engineOut)
+bool System_Render_Master::setUpEnvironment(std::stringstream& engineOut)
 {   
     //SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0");
     
@@ -76,18 +65,8 @@ bool System_Render::setUpEnvironment(std::stringstream& engineOut)
         }
     }
     
-//    if (Settings::whichMonitor > 0){
-//        //SDL_DisplayMode display;
-//        for (int i = 0; i < Settings::whichMonitor; i++){
-//            if (SDL_GetCurrentDisplayMode(i, &display)){
-//                Settings::monitorOffsetX += display.w;
-//            } else {
-//                engineOut << "Could not get display mode for display " << i << ": " << SDL_GetError() << std::endl;
-//                return false;
-//            }
-//        }
-//        engineOut << "Monitor offset X: " << Settings::monitorOffsetX << std::endl;
-//    }
+    Settings::Console::width = Settings::screenResX;
+    Settings::Console::height = Settings::screenResY / 2;
     
     // Specify OpenGL version and profile
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, DUA_GLVERSION_MAJOR);
@@ -129,47 +108,16 @@ bool System_Render::setUpEnvironment(std::stringstream& engineOut)
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-//    
     return true;
 }
 
 //</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Set Up Resources">
-
-bool System_Render::setUpResources(std::stringstream& engineOut)
-{
-    bool success = true;
-    
-    success &= debugCube.Init(engineOut);
-    success &= GUI_console.Init(engineOut, pConsole, "Assets/Fonts/Inconsolata-LGC.otf", 0, 0, Settings::screenResX, Settings::screenResY / 2, 10, 20, 2, 5, 10 ,5);
-    
-    projection = glm::perspective(DUA_DEFAULT_FOV, Settings::screenAspectRatio, DUA_DEFAULT_ZPLANENEAR, DUA_DEFAULT_ZPLANEFAR);
-    //projection = glm::ortho(0, Settings::screenResX, 0, Settings::screenResY);
-    view = glm::lookAt(
-             glm::vec3(-2, 0, 2),    // Camera position
-             glm::vec3(0, 0, 0),    // Camera look-at
-             glm::vec3(0, -1, 0));   // "Up" direction\
-             
-    return success;
-}
-
-//</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Tick">
-void System_Render::tick()
+void System_Render_Master::tick()
 {
+    //...rendering to framebuffer is finished already in other systems...
+    SDL_GL_SwapWindow( pWindow );    
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    vp = projection * view;
-    
-    debugCube.render(vp);
-    GUI_console.render();
-    
-    SDL_GL_SwapWindow( pWindow );
+    //...rendering to framebuffer starts again in other systems after this...
 }
 //</editor-fold>
-void System_Render::discoverID(const DUA_id& ID){
-    System::discoverID(ID);
-}
-void System_Render::scrutinizeID(const DUA_id& ID){
-    System::scrutinizeID(ID);
-}

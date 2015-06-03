@@ -43,8 +43,10 @@ OBJECTFILES= \
 	${OBJECTDIR}/Source/Game.o \
 	${OBJECTDIR}/Source/PhysCollide.o \
 	${OBJECTDIR}/Source/PhysMove.o \
-	${OBJECTDIR}/Source/Render.o \
 	${OBJECTDIR}/Source/RenderOld.o \
+	${OBJECTDIR}/Source/Render_Console.o \
+	${OBJECTDIR}/Source/Render_Master.o \
+	${OBJECTDIR}/Source/Render_Models.o \
 	${OBJECTDIR}/Source/Scripting.o \
 	${OBJECTDIR}/Source/Settings.o \
 	${OBJECTDIR}/Source/ShaderRepository.o \
@@ -122,15 +124,25 @@ ${OBJECTDIR}/Source/PhysMove.o: Source/PhysMove.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/PhysMove.o Source/PhysMove.cpp
 
-${OBJECTDIR}/Source/Render.o: Source/Render.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Source
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render.o Source/Render.cpp
-
 ${OBJECTDIR}/Source/RenderOld.o: Source/RenderOld.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/RenderOld.o Source/RenderOld.cpp
+
+${OBJECTDIR}/Source/Render_Console.o: Source/Render_Console.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Console.o Source/Render_Console.cpp
+
+${OBJECTDIR}/Source/Render_Master.o: Source/Render_Master.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Master.o Source/Render_Master.cpp
+
+${OBJECTDIR}/Source/Render_Models.o: Source/Render_Models.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Models.o Source/Render_Models.cpp
 
 ${OBJECTDIR}/Source/Scripting.o: Source/Scripting.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
