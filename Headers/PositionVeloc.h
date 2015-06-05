@@ -13,9 +13,9 @@
 
 namespace DualityEngine {
 
-    struct PositionVeloc : public Component
+    struct LinearVelocity : public Component
     {
-        PositionVeloc(const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ){
+        LinearVelocity(const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ){
             velLinear = {velX, velY, velZ};
         }
         DUA_vec3 velLinear;

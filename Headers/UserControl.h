@@ -23,6 +23,9 @@ namespace DualityEngine {
         SDL_Event sdlEvent;
         bool consoleIsActive = false;
         bool MenuIsActive = false;
+        DUA_id localActiveControl = DUA_NULL_ID;
+        Control* pControlCurrent;
+        Position* pPositionCurrent;
         const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*        new, load, save, exit         *\n****************************************\n";
         void handleMenuCommand(const std::string& command);
         void handleControlKeys(const Uint8* keyStates);

@@ -143,6 +143,18 @@ void System_Scripting::parseCommand(const std::string& command){
             } else {
                 handleBadUsage(args[0]);
             }
+        } else if (args[0] == "cam"){
+            if (numArgs == 2){
+                bank->switchToCam(prsID(args[1]));
+            } else {
+                handleBadUsage(args[0]);
+            }
+        } else if (args[0] == "control"){
+            if (numArgs == 2){
+                bank->switchToControl(prsID(args[1]));
+            } else {
+                handleBadUsage(args[0]);
+            }
         } else if (args[0] == "new" || args[0] == "load" || args[0] == "save" || args[0] == "exit"){
             dlgt->output("Menu commands only available through menu (ESC to enter menu).\n");
         } else {
@@ -171,15 +183,15 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
         }else if (args[1] == DUA_COMPCOLL(2,1)){
             bank->addPosition(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(3,1)){
-            bank->addPositionChild(entID, prsID(args[3]));
+            bank->addSpatialChild(entID, prsID(args[3]));
         }else if (args[1] == DUA_COMPCOLL(4,1)){
-            bank->addPositionParent(entID, prsID(args[3]));
+            bank->addSpatialParent(entID, prsID(args[3]));
         }else if (args[1] == DUA_COMPCOLL(7,1)){
-            bank->addRotation(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
+            bank->addOrientation(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(5,1)){
-            bank->addPositionVeloc(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
+            bank->addLinearVeloc(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(8,1)){
-            bank->addRotationVeloc(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
+            bank->addAngularVeloc(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(9,1)){
             bank->addControl(entID);
         }else if (args[1] == DUA_COMPCOLL(12,1)){
@@ -215,15 +227,15 @@ void System_Scripting::parseRemoveCommand(const std::vector<std::string>& args){
         }else if (args[1] == DUA_COMPCOLL(2,1)){
             bank->deletePosition(entID);
         }else if (args[1] == DUA_COMPCOLL(3,1)){
-            bank->deletePositionChild(entID);
+            bank->deleteSpatialChild(entID);
         }else if (args[1] == DUA_COMPCOLL(4,1)){
-            bank->deletePositionParent(entID);
+            bank->deleteSpatialParent(entID);
         }else if (args[1] == DUA_COMPCOLL(7,1)){
-            bank->deleteRotation(entID);
+            bank->deleteOrientation(entID);
         }else if (args[1] == DUA_COMPCOLL(5,1)){
-            bank->deletePositionVeloc(entID);
+            bank->deleteLinearVeloc(entID);
         }else if (args[1] == DUA_COMPCOLL(8,1)){
-            bank->deleteRotationVeloc(entID);
+            bank->deleteAngularVeloc(entID);
         }else if (args[1] == DUA_COMPCOLL(9,1)){
             bank->deleteControl(entID);
         }else if (args[1] == DUA_COMPCOLL(12,1)){

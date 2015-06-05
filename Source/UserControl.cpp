@@ -134,9 +134,38 @@ void System_UserControl::handleMenuCommand(const std::string& command){
 
 void System_UserControl::handleControlKeys(const Uint8* keyStates){
     
-//    if(keyStates[SDL_SCANCODE_W]){
-//        //do w thing.
-//    }
+    if (bank->activeControl != localActiveControl){
+        localActiveControl = bank->activeControl;
+        pPositionCurrent = bank->getPositionPtr(localActiveControl);
+        pControlCurrent = bank->getControlPtr(localActiveControl);
+    }
+    
+    if (localActiveControl != DUA_NULL_ID){
+        if(keyStates[SDL_SCANCODE_W]){
+                pPositionCurrent->translate(DUA_vec3(pControlCurrent->forward) * 0.008f);
+                bank->stateOn(localActiveControl, RECALCVIEWMAT);
+        }
+        if(keyStates[SDL_SCANCODE_S]){
+                pPositionCurrent->translate(DUA_vec3(pControlCurrent->forward) * -0.008f);
+                bank->stateOn(localActiveControl, RECALCVIEWMAT);
+        }
+        if(keyStates[SDL_SCANCODE_A]){
+                pPositionCurrent->translate(DUA_vec3(pControlCurrent->right) * -0.008f);
+                bank->stateOn(localActiveControl, RECALCVIEWMAT);
+        }
+        if(keyStates[SDL_SCANCODE_D]){
+                pPositionCurrent->translate(DUA_vec3(pControlCurrent->right) * 0.008f);
+                bank->stateOn(localActiveControl, RECALCVIEWMAT);
+        }
+        if(keyStates[SDL_SCANCODE_LSHIFT]){
+                pPositionCurrent->translate(DUA_vec3(pControlCurrent->up) * 0.008f);
+                bank->stateOn(localActiveControl, RECALCVIEWMAT);
+        }
+        if(keyStates[SDL_SCANCODE_LCTRL]){
+                pPositionCurrent->translate(DUA_vec3(pControlCurrent->up) * -0.008f);
+                bank->stateOn(localActiveControl, RECALCVIEWMAT);
+        }
+    }
 }
 
 //</editor-fold>

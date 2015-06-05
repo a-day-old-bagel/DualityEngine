@@ -10,11 +10,13 @@
 
 #include "System.h"
 #include <glm/glm.hpp>
+#include <SDL.h>
 
 namespace DualityEngine {
 
     class System_PhysMove : public System
     {
+//        uint ticker = 0;
     public:
         System_PhysMove(ComponentBank* bank);
         ~System_PhysMove();

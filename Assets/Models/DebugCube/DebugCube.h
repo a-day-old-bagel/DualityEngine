@@ -277,11 +277,12 @@ namespace DualityEngine {
             output << "Debug cube has initialized.\n\n";
             return true;
         }
-        void render(const glm::mat4& vp) {
-            model = glm::rotate (model, 0.003f, glm::vec3 (1, 0, 0));
-            model = glm::rotate (model, 0.007f, glm::vec3 (0, 1, 0));
-            model = glm::rotate (model, 0.002f, glm::vec3 (0, 0, 1));
-            mvp = vp * model;
+        void render(const glm::mat4& m, const glm::mat4& vp) {
+//            model = glm::rotate (model, 0.003f, glm::vec3 (1, 0, 0));
+//            model = glm::rotate (model, 0.007f, glm::vec3 (0, 1, 0));
+//            model = glm::rotate (model, 0.002f, glm::vec3 (0, 0, 1));
+//            mvp = vp * model;
+            mvp = vp * m;
 
             glActiveTexture (GL_TEXTURE0);
             glBindTexture (GL_TEXTURE_2D, texture);

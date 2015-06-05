@@ -28,20 +28,10 @@ namespace DualityEngine {
     private:
                 
         DUA_id localActiveCamera = DUA_NULL_ID;
-        CameraFree* pRepUseCam;
-        DUA_vec3 repUseEye;
-        DUA_vec3 repUseFocus;
-        DUA_vec3 repUseUp;
-        glm::mat4 repUseCamTransMat;
-        glm::mat4 repUseCamRotatMat;
-        DUA_vec3 repUseRot;
-        glm::mat4 repUseCamModelMat;
-        const glm::mat4 identMat = glm::mat4(1.0);
+        CameraFree* pCamCurrent;
        
-        DebugCube debugCube;       
-        glm::mat4 view = glm::mat4(1.0f);
-        glm::mat4 projection = glm::mat4(1.0f);
-        glm::mat4 vp = glm::mat4(1.0f);
+        DUA_id dbgCube;
+        DebugCube debugCube;
 
         bool setUpResources(std::stringstream& engineOut);
         bool aquireView();

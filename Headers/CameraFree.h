@@ -20,18 +20,30 @@ namespace DualityEngine {
             this->fov = fov;
             this->zNear = zNear;
             this->zFar = zFar;
-            eye = {eyeX, eyeY, eyeZ, 1.0};
-            focus = {focusX, focusY, focusZ, 1.0};
-            up = {upX, upY, upZ, 1.0};
+            eyeOrig = {eyeX, eyeY, eyeZ, 1.0};
+            focusOrig = {focusX, focusY, focusZ, 1.0};
+            upOrig = {upX, upY, upZ, 1.0};
+            updateView(glm::mat4(1.0));
+            updateProjection();
+            updateViewProjection();
+        }
+        inline void updateView(glm::mat4 transform){
+            view = glm::lookAt(DUA_vec3(transform * eyeOrig), DUA_vec3(transform * focusOrig), DUA_vec3(transform * upOrig));            
+        }
+        inline void updateProjection(){
+            projection = glm::perspective(fov, Settings::screenAspectRatio, zNear, zFar);
+        }
+        inline void updateViewProjection(){
+            viewProjection = projection * view;
         }
         
         DUA_float fov;
         DUA_float zNear;
         DUA_float zFar;
         
-        glm::vec4 eye;
-        glm::vec4 focus;
-        glm::vec4 up;
+        glm::vec4 eyeOrig;
+        glm::vec4 focusOrig;
+        glm::vec4 upOrig;
         
         glm::mat4 view;
         glm::mat4 projection;

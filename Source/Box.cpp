@@ -17,9 +17,9 @@ DUA_id ComponentBank::createBox(const char* name,
     
         addModel            (newEntityID, "placeHolderFileName");
         addPosition         (newEntityID, posX, posY, posZ);
-        addPositionVeloc    (newEntityID, velX, velY, velZ);
-        addRotation         (newEntityID, rotX, rotY, rotZ);
-        addRotationVeloc    (newEntityID, angX, angY, angZ);
+        addLinearVeloc    (newEntityID, velX, velY, velZ);
+        addOrientation         (newEntityID, rotX, rotY, rotZ);
+        addAngularVeloc    (newEntityID, angX, angY, angZ);
         
     }
     

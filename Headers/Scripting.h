@@ -28,7 +28,9 @@ namespace DualityEngine {
             {"id" , "id [name]    (no spaces in names)"},
             {"name" , "name [entity ID]"},
             {"help" , "help  OR  help [command]  OR  help [component]  OR  help components"},
-            {"comps" , "comps [entity ID]"}
+            {"comps" , "comps [entity ID]"},
+            {"cam" , "cam [entity ID]"},
+            {"control" , "control [entity ID]"}
         };
         std::unordered_map<std::string, const std::string> commandExamples = {
             {"newent" , "\"newent testEntity\" creates a new entity (new soul) named \"testEntity\""},
@@ -38,7 +40,9 @@ namespace DualityEngine {
             {"id" , "\"id fooBox\" displays the ID of the entity named \"fooBox,\" if there is one (CTRL-C to copy ID afterwards)."},
             {"name" , "\"name 42\" displays the name of entity 42."},
             {"help" , "\"help add\" helps the user to know how to use the \"add\" command."},
-            {"comps" , "\"comps 343\" lists all components of entity 343. If 343 has a model, \"MODEL\" will be displayed."}
+            {"comps" , "\"comps 343\" lists all components of entity 343. If 343 has a model, \"MODEL\" will be displayed."},
+            {"cam" , "\"cam 33\" switches the view to that of the camera of entity 33, if it has one."},
+            {"control" , "\"control 4045\" switches the users control to entity 4045."}
         };
         std::unordered_map<std::string, const std::string> commandHelps = {
             {"newent" , "creates a new entity, displaying its assigned ID (CTRL-C to copy the ID afterwards)."},
@@ -48,7 +52,9 @@ namespace DualityEngine {
             {"id" , "tells the user the ID number of any and all entities with a given name."},
             {"name" , "displays the name given to the entity assigned a given ID."},
             {"help" , "helps those who help themselves."},
-            {"comps" , "displays a list of all components associated with a given ID, in Duality enumerator format."}
+            {"comps" , "displays a list of all components associated with a given ID, in Duality enumerator format."},
+            {"cam" , "switches the users view to the perspective of the entity at a given ID."},
+            {"control" , "binds the user's controls to the control component of a given entity."}
         };
         std::unordered_map<std::string, const std::string> componentHelps = {
             {DUA_COMPCOLL(0, 1) , "is something that every entity starts out with. Souls cannot be created or destroyed directly."},
@@ -84,7 +90,7 @@ namespace DualityEngine {
             {DUA_COMPCOLL(4, 1) , {"[ID number of positional parent]" , 1}},
             {DUA_COMPCOLL(13, 1), {"[ID number of owner]", 1}},
             {DUA_COMPCOLL(14, 1), {"none" , 0}},
-            {DUA_COMPCOLL(15, 1), {"[field of view] [near plane] [far plane] [eye X] [eye Y] [eye Z] [focus X] [focus Y] [focus Z] [up X] [up Y] [up Z]", 12}}
+            {DUA_COMPCOLL(15, 1), {"[field of view in radians] [near plane] [far plane] [eye X] [eye Y] [eye Z] [focus X] [focus Y] [focus Z] [up X] [up Y] [up Z]", 12}}
         };
         
         DUA_id prsID(const std::string& IDstring);

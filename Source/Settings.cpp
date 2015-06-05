@@ -1,6 +1,8 @@
 #include "../Headers/Settings.h"
 
 namespace DualityEngine {
+    const glm::mat4 duaIdentMat4 = glm::mat4(1.0);
+    
     namespace Settings{
         int screenResX = DUA_DEFAULT_SCREENRES_X;
         int screenResY = DUA_DEFAULT_SCREENRES_Y;

@@ -18,6 +18,7 @@ namespace DualityEngine {
         Delegate<void(const DUA_id&)> systemsDiscover;
         Delegate<void(const DUA_id&)> systemsScrutinize;
         Delegate<void(const char*)>  output;
+        Delegate<void(const std::string&)> outputStr;
     };
 
 }

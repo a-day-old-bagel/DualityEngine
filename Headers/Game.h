@@ -70,7 +70,7 @@ namespace DualityEngine {
         // Some more delegates for the bank
         BankDelegates bankDelegates = {
             DELEGATE(&Game::systems_discover, this),
-            DELEGATE(&Game::systems_scrutinize, this), outputDelegate
+            DELEGATE(&Game::systems_scrutinize, this), outputDelegate, outputStrDelegate
         };
         
         //</editor-fold>

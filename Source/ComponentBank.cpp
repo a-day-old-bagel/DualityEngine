@@ -18,17 +18,72 @@ ComponentBank::~ComponentBank(){
 
 bool ComponentBank::switchToCam(const DUA_id& ID){
     try{
-        if (components_soul.at(ID).state & FREECAM){
+        if ((components_soul.at(ID).components) & FREECAM){
             activeCamera = ID;
         } else {
-            dlgt->output("That entity doesn't have a camera.\n");
+            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a camera.\n");
             return false;
         }
     }catch(const std::out_of_range& oorException){
-        dlgt->output("No entity exists at that ID.\n");
+        dlgt->outputStr("No entity exists at ID " + std::to_string(ID) + "\n");
         return false;
     }
     return true;
+}
+bool ComponentBank::switchToControl(const DUA_id& ID){
+    try{
+        if ((components_soul.at(ID).components) & CONTROL){
+            activeControl = ID;
+        } else {
+            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a control interface.\n");
+            return false;
+        }
+    }catch(const std::out_of_range& oorException){
+        dlgt->outputStr("No entity exists at ID " + std::to_string(ID) + "\n");
+        return false;
+    }
+    return true;
+}
+
+//void ComponentBank::updatePositionMatrices(const DUA_id& ID){ // THESE NEED TO BE RECURSIVE
+//    try{
+//        components_position.at(ID).transform = glm::translate(identMat, components_position.at(ID).position);
+//    }catch(const std::out_of_range& oorException){
+//        dlgt->outputStr("ERROR: access to nonexistent position for matrix update at ID " + std::to_string(ID) + "\n");
+//    }
+//}
+//void ComponentBank::updateRotationMatrices(const DUA_id& ID){
+//    try{
+//        pTempRotation = &(components_rotation.at(ID));
+//        pTempRotation->transform = glm::eulerAngleYXZ(pTempRotation->orientation.y, pTempRotation->orientation.x, pTempRotation->orientation.z);
+//    }catch(const std::out_of_range& oorException){
+//        dlgt->outputStr("ERROR: access to nonexistent rotation for matrix update at ID " + std::to_string(ID) + "\n");
+//    }
+//}
+glm::mat4 ComponentBank::getPosMat(const DUA_id& ID){
+    try {
+        if (getComponents(ID) & POSITION){
+            return components_position.at(ID).getMatrix();
+        } else {
+            return duaIdentMat4;
+        }
+    }catch(const std::out_of_range& oorException){
+        dlgt->outputStr("ERROR: access to nonexistent position for matrix retrieval at ID " + std::to_string(ID) + "\n");
+    }
+}
+glm::mat4 ComponentBank::getRotMat(const DUA_id& ID){
+    try {
+        if (getComponents(ID) & ORIENTATION){
+            return components_orientation.at(ID).getMatrix();
+        } else {
+            return duaIdentMat4;
+        }
+    }catch(const std::out_of_range& oorException){
+        dlgt->outputStr("ERROR: access to nonexistent orientation for matrix retrieval at ID " + std::to_string(ID) + "\n");
+    }
+}
+glm::mat4 ComponentBank::getModMat(const DUA_id& ID){
+    return getPosMat(ID) * getRotMat(ID);
 }
 
 /*******************************************************************************
@@ -38,11 +93,11 @@ void ComponentBank::clean(){
     components_soul.clear();
     components_model.clear();
     components_position.clear();
-    components_positionChild.clear();
-    components_positionParent.clear();
-    components_positionVeloc.clear();
-    components_rotation.clear();
-    components_rotationVeloc.clear();
+    components_spatialChild.clear();
+    components_spatialParent.clear();
+    components_linearVeloc.clear();
+    components_orientation.clear();
+    components_angularVeloc.clear();
     components_control.clear();
     components_pointLight.clear();
     components_directionalLight.clear();
@@ -77,23 +132,23 @@ componentType* ComponentBank::getComponentPtr(const DUA_id &ID, const char* comp
 Model* ComponentBank::getModelPtr(const DUA_id &ID){
     return getComponentPtr(ID, "model", components_model);
 }
-PositionVeloc* ComponentBank::getPositionVelocPtr(const DUA_id &ID){
-    return getComponentPtr(ID, "linear velocity", components_positionVeloc);
+LinearVelocity* ComponentBank::getLinearVelocPtr(const DUA_id &ID){
+    return getComponentPtr(ID, "linear velocity", components_linearVeloc);
 }
 Position* ComponentBank::getPositionPtr(const DUA_id &ID){
     return getComponentPtr(ID, "position", components_position);
 }
-PositionChild* ComponentBank::getPositionChildPtr(const DUA_id& ID){
-    return getComponentPtr(ID, "position child", components_positionChild);
+SpatialChild* ComponentBank::getSpatialChildPtr(const DUA_id& ID){
+    return getComponentPtr(ID, "position child", components_spatialChild);
 }
-PositionParent* ComponentBank::getPositionParentPtr(const DUA_id& ID){
-    return getComponentPtr(ID, "position parent", components_positionParent);
+SpatialParent* ComponentBank::getSpatialParentPtr(const DUA_id& ID){
+    return getComponentPtr(ID, "position parent", components_spatialParent);
 }
-Rotation* ComponentBank::getRotationPtr(const DUA_id& ID){
-    return getComponentPtr(ID, "rotation", components_rotation);
+Orientation* ComponentBank::getOrientationPtr(const DUA_id& ID){
+    return getComponentPtr(ID, "rotation", components_orientation);
 }
-RotationVeloc* ComponentBank::getRotationVelocPtr(const DUA_id& ID){
-    return getComponentPtr(ID, "angular velocity", components_rotationVeloc);
+AngularVelocity* ComponentBank::getAngularVelocPtr(const DUA_id& ID){
+    return getComponentPtr(ID, "angular velocity", components_angularVeloc);
 }
 Control* ComponentBank::getControlPtr(const DUA_id &ID){
     return getComponentPtr(ID, "control", components_control);
@@ -196,29 +251,29 @@ void ComponentBank::addModel(const DUA_id &ID, const char* fileName){
     if (tryAddFlagToSoul(MODEL, ID))
         tryAddComponent(ID, "model", components_model, fileName);
 }
-void ComponentBank::addPositionVeloc(const DUA_id &ID, const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ){
+void ComponentBank::addLinearVeloc(const DUA_id &ID, const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ){
     if (tryAddFlagToSoul(LINVELOC, ID))
-        tryAddComponent(ID, "linear velocity", components_positionVeloc, velX, velY, velZ);
+        tryAddComponent(ID, "linear velocity", components_linearVeloc, velX, velY, velZ);
 }
 void ComponentBank::addPosition(const DUA_id &ID, const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ){
     if (tryAddFlagToSoul(POSITION, ID))
         tryAddComponent(ID, "position", components_position, posX, posY, posZ);
 }
-void ComponentBank::addPositionChild(const DUA_id& ID, const DUA_id& refID){
-    if (tryAddFlagToSoul(POSCHILD, ID))
-        tryAddComponent(ID, "position child", components_positionChild, refID);
+void ComponentBank::addSpatialChild(const DUA_id& ID, const DUA_id& refID){
+    if (tryAddFlagToSoul(SPATCHILD, ID))
+        tryAddComponent(ID, "position child", components_spatialChild, refID);
 }
-void ComponentBank::addPositionParent(const DUA_id& ID, const DUA_id& refID){
-    if (tryAddFlagToSoul(POSPARENT, ID))
-        tryAddComponent(ID, "position parent", components_positionParent, refID);
+void ComponentBank::addSpatialParent(const DUA_id& ID, const DUA_id& refID){
+    if (tryAddFlagToSoul(SPATPARENT, ID))
+        tryAddComponent(ID, "position parent", components_spatialParent, refID);
 }
-void ComponentBank::addRotation(const DUA_id& ID, const DUA_dbl& rotX, const DUA_dbl& rotY, const DUA_dbl& rotZ){
-    if (tryAddFlagToSoul(ROTATION, ID))
-        tryAddComponent(ID, "rotation", components_rotation, rotX, rotY, rotZ);
+void ComponentBank::addOrientation(const DUA_id& ID, const DUA_dbl& rotX, const DUA_dbl& rotY, const DUA_dbl& rotZ){
+    if (tryAddFlagToSoul(ORIENTATION, ID))
+        tryAddComponent(ID, "rotation", components_orientation, rotX, rotY, rotZ);
 }
-void ComponentBank::addRotationVeloc(const DUA_id& ID, const DUA_dbl& angX, const DUA_dbl& angY, const DUA_dbl& angZ){
+void ComponentBank::addAngularVeloc(const DUA_id& ID, const DUA_dbl& angX, const DUA_dbl& angY, const DUA_dbl& angZ){
     if (tryAddFlagToSoul(ANGVELOC, ID))
-        tryAddComponent(ID, "angular velocity", components_rotationVeloc, angX, angY, angZ);
+        tryAddComponent(ID, "angular velocity", components_angularVeloc, angX, angY, angZ);
 }
 void ComponentBank::addControl(const DUA_id &ID){
     if (tryAddFlagToSoul(CONTROL, ID))
@@ -251,9 +306,12 @@ void ComponentBank::addCollision(const DUA_id& ID){
         tryAddComponent(ID, "collision", components_collision);
 }
 void ComponentBank::addCameraFree(const DUA_id& ID, DUA_float fov, DUA_float zNear, DUA_float zFar, DUA_dbl eyeX, DUA_dbl eyeY, DUA_dbl eyeZ, DUA_dbl focusX, DUA_dbl focusY, DUA_dbl focusZ, DUA_dbl upX, DUA_dbl upY, DUA_dbl upZ){
-    if (tryAddFlagToSoul(FREECAM, ID))
-        if (tryAddComponent(ID, "free camera", components_freeCam, fov, zNear, zFar, eyeX, eyeY, eyeZ, focusX, focusY, focusZ, upX, upY, upZ))
-            components_soul.at(ID).state |= (RECALCVIEWMAT | RECALCPROJMAT);
+    if (tryAddFlagToSoul(FREECAM, ID)){
+        if (tryAddComponent(ID, "free camera", components_freeCam, fov, zNear, zFar, eyeX, eyeY, eyeZ, focusX, focusY, focusZ, upX, upY, upZ)){
+            components_soul.at(ID).state |= RECALCVIEWMAT | RECALCPROJMAT;
+            dlgt->output("goood");
+        }
+    }        
 }
 
 /*******************************************************************************
@@ -314,28 +372,28 @@ void ComponentBank::deleteModel(const DUA_id &ID){
     if (tryRemoveComponent(ID, "model", components_model))
         tryRemoveFlagFromSoul(MODEL, ID);
 }
-void ComponentBank::deletePositionVeloc(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "linear velocity", components_positionVeloc))
+void ComponentBank::deleteLinearVeloc(const DUA_id &ID){
+    if (tryRemoveComponent(ID, "linear velocity", components_linearVeloc))
         tryRemoveFlagFromSoul(LINVELOC, ID);
 }
 void ComponentBank::deletePosition(const DUA_id &ID){
     if (tryRemoveComponent(ID, "position", components_position))
         tryRemoveFlagFromSoul(POSITION, ID);
 }
-void ComponentBank::deletePositionChild(const DUA_id& ID){
-    if (tryRemoveComponent(ID, "position child", components_positionChild))
-        tryRemoveFlagFromSoul(POSCHILD, ID);
+void ComponentBank::deleteSpatialChild(const DUA_id& ID){
+    if (tryRemoveComponent(ID, "position child", components_spatialChild))
+        tryRemoveFlagFromSoul(SPATCHILD, ID);
 }
-void ComponentBank::deletePositionParent(const DUA_id& ID){
-    if (tryRemoveComponent(ID, "position parent", components_positionParent))
-        tryRemoveFlagFromSoul(POSPARENT, ID);
+void ComponentBank::deleteSpatialParent(const DUA_id& ID){
+    if (tryRemoveComponent(ID, "position parent", components_spatialParent))
+        tryRemoveFlagFromSoul(SPATPARENT, ID);
 }
-void ComponentBank::deleteRotation(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "rotation", components_rotation))
-        tryRemoveFlagFromSoul(ROTATION, ID);
+void ComponentBank::deleteOrientation(const DUA_id &ID){
+    if (tryRemoveComponent(ID, "rotation", components_orientation))
+        tryRemoveFlagFromSoul(ORIENTATION, ID);
 }
-void ComponentBank::deleteRotationVeloc(const DUA_id& ID){
-    if (tryRemoveComponent(ID, "angular velocity", components_rotationVeloc))
+void ComponentBank::deleteAngularVeloc(const DUA_id& ID){
+    if (tryRemoveComponent(ID, "angular velocity", components_angularVeloc))
         tryRemoveFlagFromSoul(ANGVELOC, ID);
 }
 void ComponentBank::deleteControl(const DUA_id &ID){
@@ -385,7 +443,7 @@ DUA_compFlag ComponentBank::getComponents(const DUA_id& ID){
 DUA_stateFlag ComponentBank::getState(const DUA_id& ID){
     DUA_stateFlag flags;
     try {
-        return components_soul.at(ID).components;
+        return components_soul.at(ID).state;
     } catch(const std::out_of_range& oorException) {
         return DUA_INVALID_STATE;
     }
@@ -451,18 +509,18 @@ bool ComponentBank::deleteEntity(const DUA_id& ID){
     try {
         
         if (flags & MODEL) deleteModel(ID);
-        if (flags & LINVELOC) deletePositionVeloc(ID);
+        if (flags & LINVELOC) deleteLinearVeloc(ID);
         if (flags & POSITION) deletePosition(ID);
-        if (flags & POSCHILD) deletePositionChild(ID);
-        if (flags & POSPARENT) deletePositionParent(ID);
+        if (flags & SPATCHILD) deleteSpatialChild(ID);
+        if (flags & SPATPARENT) deleteSpatialParent(ID);
         if (flags & CONTROL) deleteControl(ID);
         if (flags & LPOINT) deletePointLight(ID);
         if (flags & LDIRECT) deleteDirectionalLight(ID);
         if (flags & LAMBIENT) deleteAmbientLight(ID);
         if (flags & OWNER) deleteOwner(ID);
         if (flags & SCORE) deleteScore(ID);
-        if (flags & ROTATION) deleteRotation(ID);
-        if (flags & ANGVELOC) deleteRotationVeloc(ID);
+        if (flags & ORIENTATION) deleteOrientation(ID);
+        if (flags & ANGVELOC) deleteAngularVeloc(ID);
         if (flags & COLLISION) deleteCollision(ID);
         if (flags & FREECAM) deleteCameraFree(ID);
 

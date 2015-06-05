@@ -55,8 +55,10 @@ bool System_Render_Master::setUpEnvironment(std::stringstream& engineOut)
         } else {
             engineOut << "Display " << monitorUsed << " reports: " << display.w << "x" << display.h << "@" << display.refresh_rate << std::endl;
             if (monitorUsed == Settings::whichMonitor){
-                Settings::screenResX = display.w;
-                Settings::screenResY = display.h;
+                #ifdef DUA_FULLSCREEN
+                    Settings::screenResX = display.w;
+                    Settings::screenResY = display.h;
+                #endif
                 Settings::screenAspectRatio = (float) Settings::screenResX / (float) Settings::screenResY;
                 engineOut << "Running on display " << monitorUsed << std::endl;
             } else {

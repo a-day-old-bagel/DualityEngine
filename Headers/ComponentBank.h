@@ -8,6 +8,11 @@
 #ifndef COMPONENTBANK_H
 #define	COMPONENTBANK_H
 
+// This prevents a ton of compiler warnings
+#ifndef GLM_FORCE_RADIANS
+#define GLM_FORCE_RADIANS
+#endif
+
 #include <unordered_map>
 #include <cstdint>
 #include <sstream>
@@ -21,7 +26,7 @@
 #include "PositionChild.h"
 #include "PositionParent.h"
 #include "PositionVeloc.h"
-#include "Rotation.h"
+#include "Orientation.h"
 #include "RotationVeloc.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
@@ -30,6 +35,9 @@
 #include "Score.h"
 #include "Collision.h"
 #include "CameraFree.h"
+
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 
 namespace DualityEngine {
 
@@ -40,12 +48,12 @@ namespace DualityEngine {
         std::unordered_map<DUA_id, Soul>              components_soul;
         std::unordered_map<DUA_id, Model>             components_model;
         std::unordered_map<DUA_id, Position>          components_position;
-        std::unordered_map<DUA_id, PositionChild>     components_positionChild;
-        std::unordered_map<DUA_id, PositionParent>    components_positionParent;
-        std::unordered_map<DUA_id, PositionVeloc>     components_positionVeloc;
+        std::unordered_map<DUA_id, SpatialChild>      components_spatialChild;
+        std::unordered_map<DUA_id, SpatialParent>     components_spatialParent;
+        std::unordered_map<DUA_id, LinearVelocity>    components_linearVeloc;
         std::unordered_map<DUA_id, Collision>         components_collision;
-        std::unordered_map<DUA_id, Rotation>          components_rotation;
-        std::unordered_map<DUA_id, RotationVeloc>     components_rotationVeloc;
+        std::unordered_map<DUA_id, Orientation>       components_orientation;
+        std::unordered_map<DUA_id, AngularVelocity>   components_angularVeloc;
         std::unordered_map<DUA_id, Control>           components_control;
         std::unordered_map<DUA_id, PointLight>        components_pointLight;
         std::unordered_map<DUA_id, DirectionalLight>  components_directionalLight;
@@ -84,11 +92,11 @@ namespace DualityEngine {
             DUA_COMP_TUPLE{"soul", "soul", 0},
             DUA_COMP_TUPLE{"model", "model", MODEL},
             DUA_COMP_TUPLE{"position", "position", POSITION},
-            DUA_COMP_TUPLE{"positional child", "poschild", POSCHILD},
-            DUA_COMP_TUPLE{"positional parent", "posparent", POSPARENT},
+            DUA_COMP_TUPLE{"spatial child", "spatchild", SPATCHILD},
+            DUA_COMP_TUPLE{"spatial parent", "spatparent", SPATPARENT},
             DUA_COMP_TUPLE{"linear velocity", "linveloc", LINVELOC},
             DUA_COMP_TUPLE{"collision", "collision", COLLISION},
-            DUA_COMP_TUPLE{"rotation", "rotation", ROTATION},
+            DUA_COMP_TUPLE{"orientation", "orientation", ORIENTATION},
             DUA_COMP_TUPLE{"angular velocity", "angveloc", ANGVELOC},
             DUA_COMP_TUPLE{"control", "control", CONTROL},
             DUA_COMP_TUPLE{"point light", "lpoint", LPOINT},
@@ -100,8 +108,15 @@ namespace DualityEngine {
         }};
         
         
+        DUA_id activeControl = DUA_NULL_ID;
+        bool switchToControl(const DUA_id &id);
+        
         DUA_id activeCamera = DUA_NULL_ID;
         bool switchToCam(const DUA_id &id);
+        
+        glm::mat4 getPosMat(const DUA_id&);
+        glm::mat4 getRotMat(const DUA_id&);
+        glm::mat4 getModMat(const DUA_id&);
         
         
         // Constructor for new states
@@ -116,12 +131,12 @@ namespace DualityEngine {
 
         /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
         Model* getModelPtr(const DUA_id &ID);
-        PositionVeloc* getPositionVelocPtr(const DUA_id &ID);
+        LinearVelocity* getLinearVelocPtr(const DUA_id &ID);
         Position* getPositionPtr(const DUA_id &ID);
-        Rotation* getRotationPtr(const DUA_id &ID);
-        RotationVeloc* getRotationVelocPtr(const DUA_id &ID);
-        PositionChild* getPositionChildPtr(const DUA_id &ID);
-        PositionParent* getPositionParentPtr(const DUA_id &ID);
+        Orientation* getOrientationPtr(const DUA_id &ID);
+        AngularVelocity* getAngularVelocPtr(const DUA_id &ID);
+        SpatialChild* getSpatialChildPtr(const DUA_id &ID);
+        SpatialParent* getSpatialParentPtr(const DUA_id &ID);
         Control* getControlPtr(const DUA_id &ID);
         PointLight* getPointLightPtr(const DUA_id &ID);
         DirectionalLight* getDirectionalLightPtr(const DUA_id &ID);
@@ -136,12 +151,12 @@ namespace DualityEngine {
 //        bool addComponent(const DUA_id &ID, const char* compType, const types& ... args);
         
         void addModel(const DUA_id &ID, const char* fileName);
-        void addPositionVeloc(const DUA_id &ID, const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ);
+        void addLinearVeloc(const DUA_id &ID, const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ);
         void addPosition(const DUA_id &ID, const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ);
-        void addRotation(const DUA_id &ID, const DUA_dbl &rotX, const DUA_dbl &rotY, const DUA_dbl &rotZ);
-        void addRotationVeloc(const DUA_id &ID, const DUA_dbl &angX, const DUA_dbl &angY, const DUA_dbl &angZ);
-        void addPositionChild(const DUA_id &ID, const DUA_id &refID);
-        void addPositionParent(const DUA_id &ID, const DUA_id &refID);
+        void addOrientation(const DUA_id &ID, const DUA_dbl &rotX, const DUA_dbl &rotY, const DUA_dbl &rotZ);
+        void addAngularVeloc(const DUA_id &ID, const DUA_dbl &angX, const DUA_dbl &angY, const DUA_dbl &angZ);
+        void addSpatialChild(const DUA_id &ID, const DUA_id &refID);
+        void addSpatialParent(const DUA_id &ID, const DUA_id &refID);
         void addControl(const DUA_id &ID);
         void addPointLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue,
                                   const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ);
@@ -155,12 +170,12 @@ namespace DualityEngine {
 
         /* COMPONENT DELETION */
         void deleteModel(const DUA_id &ID);
-        void deletePositionVeloc(const DUA_id &ID);
+        void deleteLinearVeloc(const DUA_id &ID);
         void deletePosition(const DUA_id &ID);
-        void deleteRotation(const DUA_id &ID);
-        void deleteRotationVeloc(const DUA_id &ID);
-        void deletePositionChild(const DUA_id &ID);
-        void deletePositionParent(const DUA_id &ID);
+        void deleteOrientation(const DUA_id &ID);
+        void deleteAngularVeloc(const DUA_id &ID);
+        void deleteSpatialChild(const DUA_id &ID);
+        void deleteSpatialParent(const DUA_id &ID);
         void deleteControl(const DUA_id &ID);
         void deletePointLight(const DUA_id &ID);
         void deleteDirectionalLight(const DUA_id &ID);

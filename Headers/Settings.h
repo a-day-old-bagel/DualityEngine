@@ -10,6 +10,11 @@
 #ifndef DUA_SETTINGS_H
 #define	DUA_SETTINGS_H
 
+// This prevents a ton of compiler warnings
+#ifndef GLM_FORCE_RADIANS
+#define GLM_FORCE_RADIANS
+#endif
+
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
@@ -58,7 +63,7 @@ namespace DualityEngine {
     {
         VALID_COMPS     = 0x1,      // If this bit is 0, error code. Must be on for all souls.
         POSITION        = 0x2,      // Bit 1
-        ROTATION        = 0x4,
+        ORIENTATION     = 0x4,
         LINVELOC        = 0x8,
         ANGVELOC        = 0x10,
         COLLISION       = 0x20,
@@ -67,8 +72,8 @@ namespace DualityEngine {
         LAMBIENT        = 0x100,
         LDIRECT         = 0x200,
         LPOINT          = 0x400,
-        POSCHILD        = 0x800,
-        POSPARENT       = 0x1000,
+        SPATCHILD        = 0x800,
+        SPATPARENT       = 0x1000,
         OWNER           = 0x2000,
         SCORE           = 0x4000,        
         FREECAM         = 0x8000    // Bit 16
@@ -83,7 +88,7 @@ namespace DualityEngine {
     enum DUA_stateFlags : DUA_stateFlag
     {
         VALID_STATE     = 0x1,      // If this bit is 0, error code. Must be on for all souls.
-        INACTIVE        = 0x2,      // Bit 1
+        ACTIVE          = 0x2,      // Bit 1
         REMOVAL         = 0x4,      // Bit 2
         HASMOVED        = 0x8,      //
         RECALCPROJMAT   = 0x10,
@@ -94,10 +99,11 @@ namespace DualityEngine {
     
     #define DUA_NULL_ID 0                           // used for entity error states
     #define DUA_START_ID 1                          // ID assignment begins with 1
-    #define DUA_DEFAULT_STATE VALID_STATE           // State entities start with
+    #define DUA_DEFAULT_STATE VALID_STATE | ACTIVE  // State entities start with
     #define DUA_INVALID_STATE 0x0                   // For returning errors
     #define DUA_DEFAULT_COMPONENTS VALID_COMPS      // Components entities start with (none)
     #define DUA_INVALID_COMPONENTS  0x0             // For returning errors
+    extern const glm::mat4 duaIdentMat4;
 
     /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */
     
@@ -113,7 +119,14 @@ namespace DualityEngine {
 
     #define DUA_WHICH_MONITOR 0  
 
+    //#define DUA_FULLSCREEN
+
+    #ifdef DUA_FULLSCREEN
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
+    #else
+    #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL
+    #endif
+
     #define DUA_DEFAULT_SCREENRES_X 800
     #define DUA_DEFAULT_SCREENRES_Y 600
     #define DUA_DEFAULT_FOV 45.0f

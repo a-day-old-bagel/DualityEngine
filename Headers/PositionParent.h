@@ -16,9 +16,9 @@
 
 namespace DualityEngine {
     
-    struct PositionParent : public Component
+    struct SpatialParent : public Component
     {
-        PositionParent(const DUA_id &ref){
+        SpatialParent(const DUA_id &ref){
             entityRef = ref;
         }
         DUA_id entityRef;
