@@ -37,6 +37,7 @@ namespace DualityEngine {
         std::string getName();
         virtual void discoverID (const DUA_id& ID);
         virtual void scrutinizeID (const DUA_id& ID);
+        virtual void forceRemoveComp(const DUA_id& ID, const DUA_compFlag&);
         virtual bool init(std::stringstream& output){}
         virtual void tick(){}
         void pause();

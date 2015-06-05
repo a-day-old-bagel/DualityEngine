@@ -32,9 +32,10 @@ void Game::Main(){
  * sets up game
  *************************************/
 void Game::NewGame(){ 
-    pauseSystems();
-    cleanGameData();    
-    resumeSystems();
+    if (pauseSystems()){
+        cleanGameData();    
+        resumeSystems();
+    }
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Load Game">
@@ -92,7 +93,7 @@ void Game::Quit(){
  * the threads in the process.
  *************************************/
 bool Game::engageEngines(){
-    graphicsEngine.addSystem(&renderingSystem);
+    graphicsEngine.addSystem(&renderMasterSystem);
     graphicsEngine.addSystem(&renderModelsSystem);
     graphicsEngine.addSystem(&renderConsoleSystem);
     graphicsEngine.engage();
@@ -116,7 +117,7 @@ bool Game::waitForSystemsToPause(){
     bool done = false;
     while(!done){
         done = true;
-        done &= renderingSystem.isPauseConfirmed();
+        done &= renderMasterSystem.isPauseConfirmed();
         done &= renderConsoleSystem.isPauseConfirmed();
         done &= renderModelsSystem.isPauseConfirmed();
         done &= physicsMoveSystem.isPauseConfirmed();
@@ -138,7 +139,7 @@ bool Game::waitForSystemsToPause(){
 bool Game::pauseSystems(){
     physicsMoveSystem.pause();
     physicsCollisionSystem.pause();
-    renderingSystem.pause();
+    renderMasterSystem.pause();
     renderConsoleSystem.pause();
     renderModelsSystem.pause();
     userControlSystem.pause();
@@ -161,7 +162,7 @@ bool Game::pauseSystems(){
 bool Game::resumeSystems(){
     physicsMoveSystem.resume();
     physicsCollisionSystem.resume();
-    renderingSystem.resume();
+    renderMasterSystem.resume();
     renderConsoleSystem.resume();
     renderModelsSystem.resume();
     userControlSystem.resume();
@@ -179,7 +180,7 @@ bool Game::resumeSystems(){
 bool Game::killSystems(){
     renderModelsSystem.quit();
     renderConsoleSystem.quit();
-    renderingSystem.quit();
+    renderMasterSystem.quit();
     physicsMoveSystem.quit();
     physicsCollisionSystem.quit();
     userControlSystem.quit();
@@ -225,6 +226,18 @@ void Game::systems_scrutinize(const DUA_id &ID){
     renderModelsSystem.scrutinizeID(ID);
     physicsMoveSystem.scrutinizeID(ID);
     physicsCollisionSystem.scrutinizeID(ID);
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Systems Force Remove">
+/**************************************
+ * SYSTEMS FORCE REMOVE
+ * Systems that keep no registries do not
+ * need to do this either.
+ *************************************/
+void Game::systems_forceRemove(const DUA_id& ID, const DUA_compFlag& component){
+    renderModelsSystem.forceRemoveComp(ID, component);
+    physicsMoveSystem.forceRemoveComp(ID, component);
+    physicsCollisionSystem.forceRemoveComp(ID, component);
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Submit Script Command">

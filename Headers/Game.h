@@ -46,7 +46,7 @@ namespace DualityEngine {
         Delegate<void(const std::string&)> submitCommand = DELEGATE(&Game::submitScriptCommand, this);
         // control delegates of top level functions to give to the UserControl system
         ControlDelegates controlDelegates = {
-            quitDelegate,
+            quitDelegate, DELEGATE(&Game::NewGame, this),
             DELEGATE(&Game::Pause, this),
             DELEGATE(&Game::Resume, this),
             DELEGATE(&Console::applyBackspace, &console),
@@ -70,7 +70,8 @@ namespace DualityEngine {
         // Some more delegates for the bank
         BankDelegates bankDelegates = {
             DELEGATE(&Game::systems_discover, this),
-            DELEGATE(&Game::systems_scrutinize, this), outputDelegate, outputStrDelegate
+            DELEGATE(&Game::systems_scrutinize, this),
+            DELEGATE(&Game::systems_forceRemove, this), outputDelegate, outputStrDelegate
         };
         
         //</editor-fold>
@@ -82,7 +83,7 @@ namespace DualityEngine {
         //<editor-fold defaultstate="collapsed" desc="Systems to operate on the components, providing game mechanics">
 
         // A system to render all graphical components (manages openGL calls)
-        System_Render_Master renderingSystem = System_Render_Master(&bank);
+        System_Render_Master renderMasterSystem = System_Render_Master(&bank);
         
         System_Render_Console renderConsoleSystem = System_Render_Console(&bank, &console);
         
@@ -122,6 +123,7 @@ namespace DualityEngine {
         bool resumeSystems();
         void systems_discover(const DUA_id &ID);
         void systems_scrutinize(const DUA_id &ID);
+        void systems_forceRemove(const DUA_id &ID, const DUA_compFlag& component);
         void submitScriptCommand(const std::string& command);
         // More internal functions to come...
 

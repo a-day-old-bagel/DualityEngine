@@ -38,16 +38,17 @@ bool System_Render_Models::setUpResources(std::stringstream& engineOut)
     success &= debugCube.Init(engineOut);
     
     DUA_id camID = bank->createEntity("cam");
-    bank->addPosition(camID, 0, 0, 3);
+    bank->addPosition(camID, 0, 0, 4);
     bank->addOrientation(camID, 0, 0, 0);
     bank->addCameraFree(camID, 1.1, 1.f, 1000.f, 0.f, 0.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f); //fov in rads
     bank->addControl(camID);
     bank->switchToControl(camID);
     bank->switchToCam(camID);
     
-    dbgCube = bank->createEntity("debug cube");
+    dbgCube = bank->createEntity("debugCube");
+    bank->addModel(dbgCube, "foo");
     bank->addPosition(dbgCube, 0, 0, 0);
-    bank->addOrientation(dbgCube, 0, 0, 0);
+    bank->addOrientation(dbgCube, pi, 0, 0);
     bank->addLinearVeloc(dbgCube, 0, 0, 0);
     bank->addAngularVeloc(dbgCube, 0, 0.006, 0);
              
@@ -59,9 +60,11 @@ bool System_Render_Models::setUpResources(std::stringstream& engineOut)
 void System_Render_Models::tick()
 {    
     if (aquireView()){
-        debugCube.render(bank->getModMat(dbgCube), pCamCurrent->viewProjection);
-//        glm::mat4 rotmat = bank->getModMat(dbgCube);
-//        printf("%f %f %f\n", rotmat[0].x, rotmat[0].y, rotmat[0].z);
+//        debugCube.render(bank->getModMat(dbgCube), pCamCurrent->viewProjection);
+        
+        for (auto ID : registeredIDs[0]){
+            debugCube.render(bank->getModMat(ID), pCamCurrent->viewProjection);
+        }
     }
 }
 //</editor-fold>

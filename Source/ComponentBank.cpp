@@ -45,21 +45,6 @@ bool ComponentBank::switchToControl(const DUA_id& ID){
     return true;
 }
 
-//void ComponentBank::updatePositionMatrices(const DUA_id& ID){ // THESE NEED TO BE RECURSIVE
-//    try{
-//        components_position.at(ID).transform = glm::translate(identMat, components_position.at(ID).position);
-//    }catch(const std::out_of_range& oorException){
-//        dlgt->outputStr("ERROR: access to nonexistent position for matrix update at ID " + std::to_string(ID) + "\n");
-//    }
-//}
-//void ComponentBank::updateRotationMatrices(const DUA_id& ID){
-//    try{
-//        pTempRotation = &(components_rotation.at(ID));
-//        pTempRotation->transform = glm::eulerAngleYXZ(pTempRotation->orientation.y, pTempRotation->orientation.x, pTempRotation->orientation.z);
-//    }catch(const std::out_of_range& oorException){
-//        dlgt->outputStr("ERROR: access to nonexistent rotation for matrix update at ID " + std::to_string(ID) + "\n");
-//    }
-//}
 glm::mat4 ComponentBank::getPosMat(const DUA_id& ID){
     try {
         if (getComponents(ID) & POSITION){
@@ -338,13 +323,14 @@ void ComponentBank::tryRemoveFlagFromSoul(const DUA_compFlag &flag, const DUA_id
  * above, except there aren't any variadic arguments at the end.
  ******************************************************************************/
 template<class componentType>
-bool ComponentBank::tryRemoveComponent(const DUA_id &ID, const char* compName, std::unordered_map<DUA_id, componentType> &table){
+bool ComponentBank::tryRemoveComponent(const DUA_id &ID, const char* compName, const DUA_compFlag& compFlag, std::unordered_map<DUA_id, componentType> &table){
+    dlgt->systemsForceRemove(ID, compFlag);
     if (table.erase(ID) == 0){
         std::string error = "No " + std::string(compName) + " component exists to be removed at ID " + std::to_string(ID) + "\n";
         dlgt->output(error.c_str());
         return false;
     }
-    dlgt->systemsScrutinize(ID);
+    //dlgt->systemsScrutinize(ID);
     return true;
 }
 /*******************************************************************************
@@ -353,7 +339,7 @@ bool ComponentBank::tryRemoveComponent(const DUA_id &ID, const char* compName, s
  * it's private, and wrapped by "deleteEntity," so don't worry about it.
  ******************************************************************************/
 bool ComponentBank::deleteSoul(const DUA_id &ID){
-    return tryRemoveComponent(ID, "soul", components_soul);
+    return tryRemoveComponent(ID, "soul", 0, components_soul);
 }
 /*******************************************************************************
  * DELETE [COMPONENT] WRAPPER FUNCTIONS:
@@ -369,63 +355,64 @@ bool ComponentBank::deleteSoul(const DUA_id &ID){
  * cause double error messages to be output in most of the failure cases.
  ******************************************************************************/
 void ComponentBank::deleteModel(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "model", components_model))
+    if (tryRemoveComponent(ID, "model", MODEL, components_model))
         tryRemoveFlagFromSoul(MODEL, ID);
 }
 void ComponentBank::deleteLinearVeloc(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "linear velocity", components_linearVeloc))
+    if (tryRemoveComponent(ID, "linear velocity", LINVELOC, components_linearVeloc))
         tryRemoveFlagFromSoul(LINVELOC, ID);
 }
 void ComponentBank::deletePosition(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "position", components_position))
+    if (tryRemoveComponent(ID, "position", POSITION, components_position))
         tryRemoveFlagFromSoul(POSITION, ID);
 }
 void ComponentBank::deleteSpatialChild(const DUA_id& ID){
-    if (tryRemoveComponent(ID, "position child", components_spatialChild))
+    if (tryRemoveComponent(ID, "position child", SPATCHILD, components_spatialChild))
         tryRemoveFlagFromSoul(SPATCHILD, ID);
 }
 void ComponentBank::deleteSpatialParent(const DUA_id& ID){
-    if (tryRemoveComponent(ID, "position parent", components_spatialParent))
+    if (tryRemoveComponent(ID, "position parent", SPATPARENT, components_spatialParent))
         tryRemoveFlagFromSoul(SPATPARENT, ID);
 }
 void ComponentBank::deleteOrientation(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "rotation", components_orientation))
+    if (tryRemoveComponent(ID, "rotation", ORIENTATION, components_orientation))
         tryRemoveFlagFromSoul(ORIENTATION, ID);
 }
 void ComponentBank::deleteAngularVeloc(const DUA_id& ID){
-    if (tryRemoveComponent(ID, "angular velocity", components_angularVeloc))
+    if (tryRemoveComponent(ID, "angular velocity", ANGVELOC, components_angularVeloc))
         tryRemoveFlagFromSoul(ANGVELOC, ID);
 }
 void ComponentBank::deleteControl(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "control", components_control))
+    if (tryRemoveComponent(ID, "control", CONTROL, components_control))
         tryRemoveFlagFromSoul(CONTROL, ID);
 }
 void ComponentBank::deletePointLight(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "point light", components_pointLight))
+    if (tryRemoveComponent(ID, "point light", LPOINT, components_pointLight))
         tryRemoveFlagFromSoul(LPOINT, ID);
 }
 void ComponentBank::deleteDirectionalLight(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "directional light", components_directionalLight))
+    if (tryRemoveComponent(ID, "directional light", LDIRECT, components_directionalLight))
         tryRemoveFlagFromSoul(LDIRECT, ID);
 }
 void ComponentBank::deleteAmbientLight(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "ambient light", components_ambientLight))
+    if (tryRemoveComponent(ID, "ambient light", LAMBIENT, components_ambientLight))
         tryRemoveFlagFromSoul(LAMBIENT, ID);
 }
 void ComponentBank::deleteOwner(const DUA_id& ID){
-    if (tryRemoveComponent(ID, "owner", components_owner))
+    if (tryRemoveComponent(ID, "owner", OWNER, components_owner))
         tryRemoveFlagFromSoul(OWNER, ID);
 }
 void ComponentBank::deleteScore(const DUA_id& ID){
-    if (tryRemoveComponent(ID, "score", components_score))
+    if (tryRemoveComponent(ID, "score", SCORE, components_score))
         tryRemoveFlagFromSoul(SCORE, ID);
 }
 void ComponentBank::deleteCollision(const DUA_id& ID){
-    if (tryRemoveComponent(ID, "collision", components_collision))
+    if (tryRemoveComponent(ID, "collision", COLLISION, components_collision))
         tryRemoveFlagFromSoul(COLLISION, ID);
 }
 void ComponentBank::deleteCameraFree(const DUA_id& ID){
-    if (tryRemoveComponent(ID, "free camera", components_freeCam))
+    if (activeCamera == ID) activeCamera = DUA_NULL_ID;
+    if (tryRemoveComponent(ID, "free camera", FREECAM, components_freeCam))
         tryRemoveFlagFromSoul(FREECAM, ID);
 }
 

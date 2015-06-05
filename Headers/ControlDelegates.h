@@ -15,6 +15,7 @@ namespace DualityEngine {
 
     struct ControlDelegates {
         Delegate<void()> quit;
+        Delegate<void()> newGame;
         Delegate<void()> pause;
         Delegate<void()> resume;
         Delegate<void()> backspaceCommand;

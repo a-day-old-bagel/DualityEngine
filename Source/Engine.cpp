@@ -144,6 +144,8 @@ int DualityEngine::EngineThreadFunction(void* data)
             } else if (system->isPaused()) {
                 if (!system->isPauseConfirmed()){
                     system->confirmPaused();
+                    std::string foobar = system->getName() + " confirmed pause.\n";
+                    (*output)(foobar.c_str());
                 }
             }
         }

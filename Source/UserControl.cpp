@@ -120,7 +120,7 @@ void System_UserControl::handleMenuCommand(const std::string& command){
     if (args[0] == "exit"){
         dlgt->quit();
     } else if (args[0] == "new"){
-        dlgt->output("new game command not yet implemented\n");
+        dlgt->newGame();
     } else if (args[0] == "load"){
         dlgt->output("load game command not yet implemented\n");
     } else if (args[0] == "save"){

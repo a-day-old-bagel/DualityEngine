@@ -103,12 +103,14 @@ namespace DualityEngine {
     #define DUA_INVALID_STATE 0x0                   // For returning errors
     #define DUA_DEFAULT_COMPONENTS VALID_COMPS      // Components entities start with (none)
     #define DUA_INVALID_COMPONENTS  0x0             // For returning errors
-    extern const glm::mat4 duaIdentMat4;
-
-    /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */
+    
+    /* META SWITCHES */
     
 //    #define DUA_DEBUG_CONSOLE_TO_COUT
     #define DUA_OLD_VIDEO_DRIVERS // This needs to be commented out in order to use OpenGL 3.3 instead of just 3.0.
+//    #define DUA_FULLSCREEN
+
+    /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */   
 
     #define DUA_GLVERSION_MAJOR 3
     #ifndef DUA_OLD_VIDEO_DRIVERS
@@ -117,9 +119,7 @@ namespace DualityEngine {
         #define DUA_GLVERSION_MINOR 0
     #endif
 
-    #define DUA_WHICH_MONITOR 0  
-
-    //#define DUA_FULLSCREEN
+    #define DUA_WHICH_MONITOR 1 
 
     #ifdef DUA_FULLSCREEN
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -146,8 +146,14 @@ namespace DualityEngine {
         namespace Console{
             extern int locX, locY, width, height, charW, charH, marginX, marginY, spacingX, spacingY;
             extern std::string fontName;
+            extern glm::vec3 bkgndColor;
+            extern glm::vec3 textColor;
         }
     }
+    extern const glm::mat4 duaIdentMat4;
+    extern const double pi;
+    extern const double halfPi;
+    extern const double quarterPi;
 }
 
 #endif	/* DUA_SETTINGS_H */

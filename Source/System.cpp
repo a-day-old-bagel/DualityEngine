@@ -56,6 +56,18 @@ void System::scrutinizeID(const DUA_id& ID){
     }
 }
 
+void System::forceRemoveComp(const DUA_id& ID, const DUA_compFlag& component){
+    for (int i = 0; i < registeredIDs.size(); i++){
+        if (requiredComponents[i] & component){
+            std::vector<DUA_id>::iterator it =
+            std::find(registeredIDs[i].begin(), registeredIDs[i].end(), ID);
+            if (it != registeredIDs[i].end()){
+                registeredIDs[i].erase(it);    // remove that entity (ID) from the list
+            }
+        }
+    }
+}
+
 void System::pause(){
     if (!paused){
         paused = true;

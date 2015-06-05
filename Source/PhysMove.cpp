@@ -31,11 +31,7 @@ void System_PhysMove::tick()
     for (auto ID : registeredIDs[1]){
         if (bank->getState(ID) & ACTIVE){
             bank->getOrientationPtr(ID)->rotate(bank->getAngularVelocPtr(ID)->velAngular);
-            bank->stateOn(ID, RECALCVIEWMAT);
-//            if (ticker % 1000 == 0)
-//                printf("ticker %u", ticker);
-//            ticker++;
-            
+            bank->stateOn(ID, RECALCVIEWMAT);            
         }
     }
     for (auto ID : registeredIDs[2]){

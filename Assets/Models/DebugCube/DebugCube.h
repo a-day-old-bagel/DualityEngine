@@ -172,11 +172,11 @@ namespace DualityEngine {
         // these define the colored pixels that will be used in the bitmap data below.
         #define EDG 0x00, 0xFF, 0xFF // cyan
         #define CNR 0x00, 0xB0, 0xB0 // dark cyan
-        #define BGD 0xCC, 0xCC, 0xCC // light grey
+        #define BGD 0x3F, 0x3E, 0x30 // light grey
         #define CL1 0xFF, 0xA2, 0x28 // orange
         #define CL2 0x33, 0xFF, 0x00 // bright green
         #define CL3 0xEE, 0x49, 0xFF // barney purple
-        #define CL4 0x00, 0x00, 0xFF // screen o' death blue
+        #define CL4 0x20, 0x20, 0xFF // screen o' death blue
         #define CL5 0xFF, 0xFF, 0x00 // yellow
         #define CL6 0xFF, 0x33, 0x33 // scarlet
         // raw bitmap data for the texture:
@@ -278,10 +278,6 @@ namespace DualityEngine {
             return true;
         }
         void render(const glm::mat4& m, const glm::mat4& vp) {
-//            model = glm::rotate (model, 0.003f, glm::vec3 (1, 0, 0));
-//            model = glm::rotate (model, 0.007f, glm::vec3 (0, 1, 0));
-//            model = glm::rotate (model, 0.002f, glm::vec3 (0, 0, 1));
-//            mvp = vp * model;
             mvp = vp * m;
 
             glActiveTexture (GL_TEXTURE0);

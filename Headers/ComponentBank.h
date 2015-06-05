@@ -62,8 +62,7 @@ namespace DualityEngine {
         std::unordered_map<DUA_id, Score>             components_score;
         std::unordered_map<DUA_id, CameraFree>        components_freeCam;
         
-        /* BANK MANAGEMENT */
-        BankDelegates* dlgt;
+        
         
         /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
         template<class componentType>
@@ -78,13 +77,16 @@ namespace DualityEngine {
         /* COMPONENT DELETION */
         void tryRemoveFlagFromSoul(const DUA_compFlag &flag, const DUA_id &ID);
         template<class componentType>
-        bool tryRemoveComponent(const DUA_id &ID, const char* compName, std::unordered_map<DUA_id, componentType> &table);
+        bool tryRemoveComponent(const DUA_id &ID, const char* compName, const DUA_compFlag& compFlag, std::unordered_map<DUA_id, componentType> &table);
         bool deleteSoul(const DUA_id &ID);
         
         /* ENTITY CREATION */
         DUA_id generateID();
 
     public:
+        
+        /* BANK MANAGEMENT */
+        BankDelegates* dlgt;
         
         #define DUA_COMP_TUPLE std::tuple<std::string, std::string, DUA_compFlag>
         #define DUA_COMPCOLL(x, y) std::get<y>(bank->componentCollections[x])
