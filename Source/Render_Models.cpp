@@ -71,11 +71,13 @@ void System_Render_Models::tick()
 bool System_Render_Models::aquireView(){
     if (bank->activeCamera != localActiveCamera){
         localActiveCamera = bank->activeCamera;
-        pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
+        if (localActiveCamera != DUA_NULL_ID){
+            pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
+        }
     }
     if (localActiveCamera != DUA_NULL_ID){
         if (bank->getState(localActiveCamera) & RECALCVIEWMAT){            
-            pCamCurrent->updateView(bank->getModMat(localActiveCamera));            
+            pCamCurrent->updateView(bank->getRotMat(localActiveCamera), bank->getPosMat(localActiveCamera));            
         }
         if (bank->getState(localActiveCamera) & RECALCPROJMAT){
             pCamCurrent->updateProjection();

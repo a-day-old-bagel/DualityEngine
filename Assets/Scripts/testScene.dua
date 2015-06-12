@@ -1,0 +1,27 @@
+# Duality Engine script
+# first one ever made, created by Galen Cochrane on 11 June 2015
+# just makes a couple debug boxes, the camera, etc.
+
+version 0.00.00
+
+newent player
+add freecam 0 1 0.5 1000 0 0 0 0 0 -1 0 1 0
+add position 0 0 0 4
+add orientation 0 0 0 0
+add control 0
+control 0
+cam 0
+
+newent box0
+add position 1 0 0 0
+add orientation 1 3.14159265358979 0 0
+add angveloc 1 0.003 0.002 0
+add model 1 modelNameDoesn'tMatterYet
+add control 1
+add freecam 1 1 0.5 1000
+
+newent box1
+add position 2 3 0 0
+add orientation 2 0 0 3.14159265358979
+add angveloc 2 0.003 0.002 0
+add model 2 modelNameDoesn'tMatterYet

@@ -120,7 +120,12 @@ void System_UserControl::handleMenuCommand(const std::string& command){
     if (args[0] == "exit"){
         dlgt->quit();
     } else if (args[0] == "new"){
-        dlgt->newGame();
+        if (numArgs == 1){
+            dlgt->newGame();
+        } else if (numArgs == 2){
+            dlgt->newGame();
+            dlgt->runScript(args[1]);
+        }
     } else if (args[0] == "load"){
         dlgt->output("load game command not yet implemented\n");
     } else if (args[0] == "save"){
@@ -136,8 +141,10 @@ void System_UserControl::handleControlKeys(const Uint8* keyStates){
     
     if (bank->activeControl != localActiveControl){
         localActiveControl = bank->activeControl;
-        pPositionCurrent = bank->getPositionPtr(localActiveControl);
-        pControlCurrent = bank->getControlPtr(localActiveControl);
+        if (localActiveControl != DUA_NULL_ID){
+            pPositionCurrent = bank->getPositionPtr(localActiveControl);
+            pControlCurrent = bank->getControlPtr(localActiveControl);
+        }
     }
     
     if (localActiveControl != DUA_NULL_ID){

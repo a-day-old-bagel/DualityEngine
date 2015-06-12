@@ -9,6 +9,9 @@
 #define	GAME_H
 
 //<editor-fold defaultstate="collapsed" desc="Includes">
+#include <fstream>
+#include <vector>
+
 #include "Render_Master.h"
 #include "Render_Console.h"
 #include "Render_Models.h"
@@ -62,7 +65,8 @@ namespace DualityEngine {
             submitCommand,
             DELEGATE(&Console::getLogLineFromBack, &console),
             DELEGATE(&Console::setState, &console),
-            DELEGATE(&Console::traverseLog, &console)
+            DELEGATE(&Console::traverseLog, &console),
+            DELEGATE(&Game::RunScript, this)
         };
         ScriptingDelegates scriptingDelegates = {
             outputDelegate, outputStrDelegate
@@ -118,8 +122,8 @@ namespace DualityEngine {
         bool engageEngines();
         bool killSystems();
         bool cleanGameData();
-        bool pauseSystems();
-        bool waitForSystemsToPause();
+        bool pauseBankDependentSystems();
+        bool waitForBankDependentSystemsToPause();
         bool resumeSystems();
         void systems_discover(const DUA_id &ID);
         void systems_scrutinize(const DUA_id &ID);
@@ -131,6 +135,7 @@ namespace DualityEngine {
         //<editor-fold defaultstate="collapsed" desc="High-level 'interface' methods">
 
         void NewGame();
+        void RunScript(const std::string&);
         void LoadGame(const std::string&);
         void SaveGame(const std::string&);
         void Pause();

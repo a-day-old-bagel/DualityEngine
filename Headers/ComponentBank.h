@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include <cstdint>
 #include <sstream>
+#include <iostream>
 
 #include "BankDelegates.h"
 #include "Settings.h"

@@ -32,9 +32,38 @@ void Game::Main(){
  * sets up game
  *************************************/
 void Game::NewGame(){ 
-    if (pauseSystems()){
+    if (pauseBankDependentSystems()){
         cleanGameData();    
         resumeSystems();
+        outputDelegate("New world created.\n");
+    }
+}
+//</editor-fold>
+//<editor-fold defaultstate="collapsed" desc="Run Script">
+/**************************************
+ * RUN SCRIPT
+ *************************************/
+void Game::RunScript(const std::string& fileName){
+    std::vector<std::string> lines;
+    std::string lineReader;
+    std::ifstream infile (fileName, std::ios_base::in);
+    while (getline(infile, lineReader, '\n')){
+      lines.push_back (lineReader);
+    }
+//    outputStrDelegate(std::to_string(lines.size()));
+    if (lines.empty()){
+        outputStrDelegate(fileName + ": file either not found, unreadable, or empty.\n");
+    } else {
+        for (int i = 0; i < lines.size();){
+            if (lines.at(i).empty() || lines.at(i).at(0) == '#'){
+                lines.erase(lines.begin() + i);
+            } else {
+                ++i;
+            }
+        }
+        for (auto line : lines){
+            scriptingSystem.submitCommand(line);
+        }
     }
 }
 //</editor-fold>
@@ -43,7 +72,7 @@ void Game::NewGame(){
  * LOAD GAME
  *************************************/
 void Game::LoadGame(const std::string& saveName){
-    pauseSystems();
+    pauseBankDependentSystems();
     cleanGameData();
     bank.load(saveName.c_str());
     resumeSystems();
@@ -54,7 +83,7 @@ void Game::LoadGame(const std::string& saveName){
  * SAVE GAME
  *************************************/
 void Game::SaveGame(const std::string& saveName){
-    pauseSystems();
+    pauseBankDependentSystems();
     bank.save(saveName.c_str());
     resumeSystems();
 }
@@ -62,6 +91,12 @@ void Game::SaveGame(const std::string& saveName){
 //<editor-fold defaultstate="collapsed" desc="Pause">
 /**************************************
  * PAUSE
+ * only pauses the systems that make the
+ * game world seem dynamic, such as the
+ * movement systems and the collision system.
+ * Pausing rendering systems would
+ * look crappy and pausing the control systems
+ * would just be stupid.
  *************************************/
 void Game::Pause(){
     physicsMoveSystem.pause();
@@ -111,19 +146,15 @@ bool Game::engageEngines(){
 /**************************************
  * WAIT FOR SYSTEMS TO PAUSE
  *************************************/
-bool Game::waitForSystemsToPause(){
+bool Game::waitForBankDependentSystemsToPause(){
     
     int startTime = SDL_GetTicks();
     bool done = false;
     while(!done){
         done = true;
-        done &= renderMasterSystem.isPauseConfirmed();
-        done &= renderConsoleSystem.isPauseConfirmed();
         done &= renderModelsSystem.isPauseConfirmed();
         done &= physicsMoveSystem.isPauseConfirmed();
         done &= physicsCollisionSystem.isPauseConfirmed();
-        done &= userControlSystem.isPauseConfirmed();
-        done &= scriptingSystem.isPauseConfirmed();
         
         if (SDL_GetTicks() - startTime > Settings::systemsPauseTimeout){
             return false;
@@ -136,20 +167,16 @@ bool Game::waitForSystemsToPause(){
 /**************************************
  * PAUSE ENGINES
  *************************************/
-bool Game::pauseSystems(){
+bool Game::pauseBankDependentSystems(){
     physicsMoveSystem.pause();
     physicsCollisionSystem.pause();
-    renderMasterSystem.pause();
-    renderConsoleSystem.pause();
     renderModelsSystem.pause();
-    userControlSystem.pause();
-    scriptingSystem.pause();
     
-    if (waitForSystemsToPause()){
-        outputDelegate("All systems paused.\n");
+    if (waitForBankDependentSystemsToPause()){
+//        outputDelegate("All bank-dependent systems paused.\n");
         return true;
     } else {
-        outputDelegate("Systems pause timed out!\n");
+        outputDelegate("bank-dependent systems' pause timed out!\n");
         resumeSystems();
         return false;
     }

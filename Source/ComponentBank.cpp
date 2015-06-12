@@ -75,6 +75,10 @@ glm::mat4 ComponentBank::getModMat(const DUA_id& ID){
  * BANK MANAGEMENT SECTION
  ******************************************************************************/
 void ComponentBank::clean(){
+    
+    activeCamera = DUA_NULL_ID;
+    activeControl = DUA_NULL_ID;
+    
     components_soul.clear();
     components_model.clear();
     components_position.clear();
@@ -91,6 +95,8 @@ void ComponentBank::clean(){
     components_score.clear();
     components_collision.clear();
     components_freeCam.clear();
+    
+    nextID = DUA_START_ID;
 }
 void ComponentBank::save(const char* saveName){
     
@@ -464,9 +470,9 @@ DUA_id ComponentBank::generateID(){
  ******************************************************************************/
 DUA_id ComponentBank::createEntity(const char* name){
     DUA_id ID = generateID();
-    if (addSoul(ID, name))
+    if (addSoul(ID, name)){
         return ID;
-    else {
+    } else {
         std::string error = "New entity " + std::string(name) + " not created!\n";
         dlgt->output(error.c_str());
         return DUA_NULL_ID;        

@@ -8,7 +8,7 @@
 #include "../Headers/Game.h"
 
 /*************************************************
- * Pretty simple so far...
+ * This looks simple enough, right?
  ************************************************/
 int main()
 {
