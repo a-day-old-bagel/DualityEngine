@@ -96,6 +96,23 @@ void ComponentBank::clean(){
     components_collision.clear();
     components_freeCam.clear();
     
+    components_soul = std::unordered_map<DUA_id, Soul>();
+    components_model = std::unordered_map<DUA_id, Model>();
+    components_position = std::unordered_map<DUA_id, Position>();
+    components_spatialChild = std::unordered_map<DUA_id, SpatialChild>();
+    components_spatialParent = std::unordered_map<DUA_id, SpatialParent>();
+    components_linearVeloc = std::unordered_map<DUA_id, LinearVelocity>();
+    components_orientation = std::unordered_map<DUA_id, Orientation>();
+    components_angularVeloc = std::unordered_map<DUA_id, AngularVelocity>();
+    components_control = std::unordered_map<DUA_id, Control>();
+    components_pointLight = std::unordered_map<DUA_id, PointLight>();
+    components_directionalLight = std::unordered_map<DUA_id, DirectionalLight>();
+    components_ambientLight = std::unordered_map<DUA_id, AmbientLight>();
+    components_owner = std::unordered_map<DUA_id, Owner>();
+    components_score = std::unordered_map<DUA_id, Score>();
+    components_collision = std::unordered_map<DUA_id, Collision>();
+    components_freeCam = std::unordered_map<DUA_id, CameraFree>();
+    
     nextID = DUA_START_ID;
 }
 void ComponentBank::save(const char* saveName){
@@ -129,6 +146,14 @@ LinearVelocity* ComponentBank::getLinearVelocPtr(const DUA_id &ID){
 Position* ComponentBank::getPositionPtr(const DUA_id &ID){
     return getComponentPtr(ID, "position", components_position);
 }
+//LinearVelocity* ComponentBank::getLinearVelocPtr(const DUA_id &ID){
+//    tempCompPtr = getComponentPtr(ID, "linear velocity", components_linearVeloc);
+//    return tempCompPtr == NULL ? &duaZeroVec3 : (LinearVelocity*)tempCompPtr;
+//}
+//Position* ComponentBank::getPositionPtr(const DUA_id &ID){
+//    tempCompPtr = getComponentPtr(ID, "position", components_position);
+//    return tempCompPtr == NULL ? &duaZeroVec3 : (Position*)tempCompPtr;
+//}
 SpatialChild* ComponentBank::getSpatialChildPtr(const DUA_id& ID){
     return getComponentPtr(ID, "position child", components_spatialChild);
 }
@@ -300,7 +325,6 @@ void ComponentBank::addCameraFree(const DUA_id& ID, DUA_float fov, DUA_float zNe
     if (tryAddFlagToSoul(FREECAM, ID)){
         if (tryAddComponent(ID, "free camera", components_freeCam, fov, zNear, zFar, eyeX, eyeY, eyeZ, focusX, focusY, focusZ, upX, upY, upZ)){
             components_soul.at(ID).state |= RECALCVIEWMAT | RECALCPROJMAT;
-            dlgt->output("goood");
         }
     }        
 }

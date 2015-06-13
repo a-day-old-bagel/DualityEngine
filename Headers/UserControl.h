@@ -34,6 +34,7 @@ namespace DualityEngine {
         ~System_UserControl();
         void tick() override;
         bool init(std::stringstream& output) override;
+        void clean() override;
     };
 
 }

@@ -21,10 +21,16 @@ System_UserControl::~System_UserControl(){
     dlgt = NULL;
 }
 
-bool System_UserControl::init(std::stringstream& output){
+bool System_UserControl::init(std::stringstream& output){    
     return true;
 }
 
+void System_UserControl::clean(){
+    System::clean();
+    DUA_id localActiveControl = DUA_NULL_ID;
+    pControlCurrent = NULL;
+    pPositionCurrent = NULL;
+}
 
 void System_UserControl::tick(){
     const Uint8* keyStates = SDL_GetKeyboardState(NULL);
@@ -93,9 +99,11 @@ void System_UserControl::tick(){
             }
         }
         else if(sdlEvent.type == SDL_TEXTINPUT){
-            if(!((keyStates[SDL_SCANCODE_C] || keyStates[SDL_SCANCODE_V])
-                                            && SDL_GetModState() & KMOD_CTRL)){
-                dlgt->appendToCommand(sdlEvent.text.text);
+            if (consoleIsActive){
+                if(!((keyStates[SDL_SCANCODE_C] || keyStates[SDL_SCANCODE_V])
+                                                && SDL_GetModState() & KMOD_CTRL)){
+                    dlgt->appendToCommand(sdlEvent.text.text);
+                }
             }
         }
     }

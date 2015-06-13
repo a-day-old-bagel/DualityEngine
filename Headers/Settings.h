@@ -112,6 +112,8 @@ namespace DualityEngine {
 
     /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */   
 
+    #define DUA_VERSION "v0.01.01"
+    
     #define DUA_GLVERSION_MAJOR 3
     #ifndef DUA_OLD_VIDEO_DRIVERS
         #define DUA_GLVERSION_MINOR 3
@@ -150,6 +152,7 @@ namespace DualityEngine {
             extern glm::vec3 textColor;
         }
     }
+//    extern const glm::vec3 duaZeroVec3;
     extern const glm::mat4 duaIdentMat4;
     extern const double pi;
     extern const double halfPi;

@@ -34,8 +34,8 @@ void Game::Main(){
 void Game::NewGame(){ 
     if (pauseBankDependentSystems()){
         cleanGameData();    
-        resumeSystems();
-        outputDelegate("New world created.\n");
+        resumeBankDependentSystems();
+        outputDelegate("World cleared.\n");
     }
 }
 //</editor-fold>
@@ -44,15 +44,16 @@ void Game::NewGame(){
  * RUN SCRIPT
  *************************************/
 void Game::RunScript(const std::string& fileName){
+    std::string filePath = "Assets/Scripts/" + fileName + ".dua";
     std::vector<std::string> lines;
     std::string lineReader;
-    std::ifstream infile (fileName, std::ios_base::in);
+    std::ifstream infile (filePath, std::ios_base::in);
     while (getline(infile, lineReader, '\n')){
       lines.push_back (lineReader);
     }
-//    outputStrDelegate(std::to_string(lines.size()));
+    
     if (lines.empty()){
-        outputStrDelegate(fileName + ": file either not found, unreadable, or empty.\n");
+        outputStrDelegate(filePath + ": file either not found, unreadable, or empty.\n");
     } else {
         for (int i = 0; i < lines.size();){
             if (lines.at(i).empty() || lines.at(i).at(0) == '#'){
@@ -61,8 +62,32 @@ void Game::RunScript(const std::string& fileName){
                 ++i;
             }
         }
-        for (auto line : lines){
-            scriptingSystem.submitCommand(line);
+        
+        if (lines.size() < 2){
+            outputStrDelegate(filePath + ": not a valid Duality script.\n");
+        } else {
+            std::stringstream firstTwoLines(lines.at(0) + " " + lines.at(1));
+            std::string headerTypeDeclaration, headerVersion, headerNumEntities;
+            firstTwoLines >> headerTypeDeclaration;
+            firstTwoLines >> headerVersion;
+            firstTwoLines >> headerNumEntities;
+            headerNumEntities.clear();
+            firstTwoLines >> headerNumEntities;
+            if (headerTypeDeclaration != "DualityEngineScript" || headerVersion != DUA_VERSION){
+                outputStrDelegate(filePath + ": invalid Duality script or wrong version.");
+            } else {
+
+                // DO SOMETHING WITH NUMENTITIES - RESERVE SPACE IN HASH TABLES, ETC.
+
+                lines.erase(lines.begin(), lines.begin() + 1);
+
+                for (auto line : lines){
+                    scriptingSystem.submitCommand(line);
+                    SDL_Delay(1);       // MAKES MORE STABLE FOR SOME REASON - FIX THIS.
+                }
+
+                outputStrDelegate(fileName + " script has completed.\n");
+            }
         }
     }
 }
@@ -75,7 +100,7 @@ void Game::LoadGame(const std::string& saveName){
     pauseBankDependentSystems();
     cleanGameData();
     bank.load(saveName.c_str());
-    resumeSystems();
+    resumeBankDependentSystems();
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Save Game">
@@ -85,7 +110,7 @@ void Game::LoadGame(const std::string& saveName){
 void Game::SaveGame(const std::string& saveName){
     pauseBankDependentSystems();
     bank.save(saveName.c_str());
-    resumeSystems();
+    resumeBankDependentSystems();
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Pause">
@@ -154,7 +179,8 @@ bool Game::waitForBankDependentSystemsToPause(){
         done = true;
         done &= renderModelsSystem.isPauseConfirmed();
         done &= physicsMoveSystem.isPauseConfirmed();
-        done &= physicsCollisionSystem.isPauseConfirmed();
+        done &= physicsCollisionSystem.isPauseConfirmed();  //PROBLEMS WITH THIS BEING EXECUTED FROM CONTROL SYS... THREAD LOCKS
+        //done &= userControlSystem.isPauseConfirmed();
         
         if (SDL_GetTicks() - startTime > Settings::systemsPauseTimeout){
             return false;
@@ -168,16 +194,19 @@ bool Game::waitForBankDependentSystemsToPause(){
  * PAUSE ENGINES
  *************************************/
 bool Game::pauseBankDependentSystems(){
-    physicsMoveSystem.pause();
-    physicsCollisionSystem.pause();
+    if (!console.menuIsActive){
+        physicsMoveSystem.pause();
+        physicsCollisionSystem.pause();     // ADD CONTROL SYSTEM
+    }
     renderModelsSystem.pause();
+    userControlSystem.pause();
     
     if (waitForBankDependentSystemsToPause()){
 //        outputDelegate("All bank-dependent systems paused.\n");
         return true;
     } else {
         outputDelegate("bank-dependent systems' pause timed out!\n");
-        resumeSystems();
+        resumeBankDependentSystems();
         return false;
     }
 }
@@ -186,14 +215,16 @@ bool Game::pauseBankDependentSystems(){
 /**************************************
  * RESUME ENGINES
  *************************************/
-bool Game::resumeSystems(){
-    physicsMoveSystem.resume();
-    physicsCollisionSystem.resume();
-    renderMasterSystem.resume();
-    renderConsoleSystem.resume();
+bool Game::resumeBankDependentSystems(){
+    if (!console.menuIsActive){
+        physicsMoveSystem.resume();
+        physicsCollisionSystem.resume();
+    }
+//    renderMasterSystem.resume();
+//    renderConsoleSystem.resume();
     renderModelsSystem.resume();
     userControlSystem.resume();
-    scriptingSystem.resume();
+//    scriptingSystem.resume();
     return true;
 }
 //</editor-fold>

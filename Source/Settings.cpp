@@ -1,6 +1,7 @@
 #include "../Headers/Settings.h"
 
 namespace DualityEngine {
+//    const glm::vec3 duaZeroVec3 = {0.0 , 0.0 , 0.0};
     const glm::mat4 duaIdentMat4 = glm::mat4(1.0);
     const double pi = 3.141592653589793;
     const double halfPi = pi * 0.5;

@@ -22,22 +22,54 @@ bool System_PhysMove::init(std::stringstream& output)
 
 void System_PhysMove::tick()
 {
+//    for (auto ID : registeredIDs[0]){
+//        if (bank->getState(ID) & ACTIVE){
+//            positionPtr = bank->getPositionPtr(ID);
+//            if (positionPtr != NULL){
+//                linVelocPtr = bank->getLinearVelocPtr(ID);
+//                if (linVelocPtr != NULL){
+//                    positionPtr->translate(linVelocPtr->velLinear);
+//                    bank->stateOn(ID, RECALCVIEWMAT);
+//                }
+//            }
+//        }
+//    }
+//    for (auto ID : registeredIDs[1]){
+//        if (bank->getState(ID) & ACTIVE){
+//            orientationPtr = bank->getOrientationPtr(ID);
+//            if (orientationPtr != NULL){
+//                angVelocPtr = bank->getAngularVelocPtr(ID);
+//                if (angVelocPtr != NULL){
+//                    orientationPtr->rotate(angVelocPtr->velAngular);
+//                    bank->stateOn(ID, RECALCVIEWMAT);
+//                }
+//            }
+//        }
+//    }
+    
+    
     for (auto ID : registeredIDs[0]){
         if (bank->getState(ID) & ACTIVE){
             bank->getPositionPtr(ID)->translate(bank->getLinearVelocPtr(ID)->velLinear);
             bank->stateOn(ID, RECALCVIEWMAT);
         }
     }
+    bool hasDoneOne = true;
+    if (registeredIDs[1].size())
+        bool hasDoneOne = false;
     for (auto ID : registeredIDs[1]){
         if (bank->getState(ID) & ACTIVE){
+            hasDoneOne = true;
             bank->getOrientationPtr(ID)->rotate(bank->getAngularVelocPtr(ID)->velAngular);
-            bank->stateOn(ID, RECALCVIEWMAT);            
+            bank->stateOn(ID, RECALCVIEWMAT); 
+            
         }
     }
+    if (!hasDoneOne) std::cout << "rotateFail\n";
     for (auto ID : registeredIDs[2]){
         if (bank->getState(ID) & (ACTIVE | RECALCVIEWMAT) == (ACTIVE | RECALCVIEWMAT)){
             bank->getControlPtr(ID)->transform(bank->getRotMat(ID));
         }
     }
-    SDL_Delay(10);
+    SDL_Delay(2);
 }

@@ -124,7 +124,7 @@ namespace DualityEngine {
         bool cleanGameData();
         bool pauseBankDependentSystems();
         bool waitForBankDependentSystemsToPause();
-        bool resumeSystems();
+        bool resumeBankDependentSystems();
         void systems_discover(const DUA_id &ID);
         void systems_scrutinize(const DUA_id &ID);
         void systems_forceRemove(const DUA_id &ID, const DUA_compFlag& component);

@@ -11,6 +11,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <iostream>
 
 #include "ComponentBank.h"
 
@@ -33,7 +34,7 @@ namespace DualityEngine {
     public:        
         System(ComponentBank* bank, std::string name, int numRegisters);
         ~System();
-        void clean();
+        virtual void clean();
         std::string getName();
         virtual void discoverID (const DUA_id& ID);
         virtual void scrutinizeID (const DUA_id& ID);
