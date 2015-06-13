@@ -23,12 +23,13 @@ namespace DualityEngine {
             eyeOrig = {eyeX, eyeY, eyeZ, 1.0};
             focusOrig = {focusX, focusY, focusZ, 1.0};
             upOrig = {upX, upY, upZ, 1.0};
-            updateView(glm::mat4(1.0));
+            updateView(glm::mat4(1.0), glm::mat4(1.0));
             updateProjection();
             updateViewProjection();
         }
-        inline void updateView(glm::mat4 transform){
-            view = glm::lookAt(DUA_vec3(transform * eyeOrig), DUA_vec3(transform * focusOrig), DUA_vec3(transform * upOrig));            
+        inline void updateView(glm::mat4 rotation, glm::mat4 translation){
+            glm::mat4 transform = translation * rotation;
+            view = glm::lookAt(DUA_vec3(transform * eyeOrig), DUA_vec3(transform * focusOrig), DUA_vec3(rotation * upOrig));            
         }
         inline void updateProjection(){
             projection = glm::perspective(fov, Settings::screenAspectRatio, zNear, zFar);

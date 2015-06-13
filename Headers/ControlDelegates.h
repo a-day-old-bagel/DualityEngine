@@ -33,6 +33,7 @@ namespace DualityEngine {
         Delegate<std::string(int)> getLogFromBack;
         Delegate<void(bool, bool)> setConsoleState;
         Delegate<void(int)> logTraverse;
+        Delegate<void(const std::string&)> runScript;
     };
 
 }

@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include <cstdint>
 #include <sstream>
+#include <iostream>
 
 #include "BankDelegates.h"
 #include "Settings.h"
@@ -131,6 +132,12 @@ namespace DualityEngine {
         void save(const char* saveName);
         void load(const char* saveName);
 
+//        void* tempCompPtr = NULL;
+//        const Position zeroPosition = Position(0, 0, 0);
+//        const LinearVelocity zeroLinVeloc = LinearVelocity(0, 0, 0);
+//        const Orientation zeroOrientation = Orientation(0, 0, 0);
+//        const AngularVelocity zeroAngVeloc = AngularVelocity(0, 0, 0);
+        
         /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
         Model* getModelPtr(const DUA_id &ID);
         LinearVelocity* getLinearVelocPtr(const DUA_id &ID);

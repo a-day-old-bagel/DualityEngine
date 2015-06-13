@@ -37,20 +37,20 @@ bool System_Render_Models::setUpResources(std::stringstream& engineOut)
     
     success &= debugCube.Init(engineOut);
     
-    DUA_id camID = bank->createEntity("cam");
-    bank->addPosition(camID, 0, 0, 4);
-    bank->addOrientation(camID, 0, 0, 0);
-    bank->addCameraFree(camID, 1.1, 1.f, 1000.f, 0.f, 0.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f); //fov in rads
-    bank->addControl(camID);
-    bank->switchToControl(camID);
-    bank->switchToCam(camID);
-    
-    dbgCube = bank->createEntity("debugCube");
-    bank->addModel(dbgCube, "foo");
-    bank->addPosition(dbgCube, 0, 0, 0);
-    bank->addOrientation(dbgCube, pi, 0, 0);
-    bank->addLinearVeloc(dbgCube, 0, 0, 0);
-    bank->addAngularVeloc(dbgCube, 0, 0.006, 0);
+//    DUA_id camID = bank->createEntity("cam");
+//    bank->addPosition(camID, 0, 0, 4);
+//    bank->addOrientation(camID, 0, 0, 0);
+//    bank->addCameraFree(camID, 1.1, 1.f, 1000.f, 0.f, 0.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f); //fov in rads
+//    bank->addControl(camID);
+//    bank->switchToControl(camID);
+//    bank->switchToCam(camID);
+//    
+//    dbgCube = bank->createEntity("debugCube");
+//    bank->addModel(dbgCube, "foo");
+//    bank->addPosition(dbgCube, 0, 0, 0);
+//    bank->addOrientation(dbgCube, pi, 0, 0);
+//    bank->addLinearVeloc(dbgCube, 0, 0, 0);
+//    bank->addAngularVeloc(dbgCube, 0, 0.006, 0);
              
     return success;
 }
@@ -71,11 +71,13 @@ void System_Render_Models::tick()
 bool System_Render_Models::aquireView(){
     if (bank->activeCamera != localActiveCamera){
         localActiveCamera = bank->activeCamera;
-        pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
+        if (localActiveCamera != DUA_NULL_ID){
+            pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
+        }
     }
     if (localActiveCamera != DUA_NULL_ID){
         if (bank->getState(localActiveCamera) & RECALCVIEWMAT){            
-            pCamCurrent->updateView(bank->getModMat(localActiveCamera));            
+            pCamCurrent->updateView(bank->getRotMat(localActiveCamera), bank->getPosMat(localActiveCamera));            
         }
         if (bank->getState(localActiveCamera) & RECALCPROJMAT){
             pCamCurrent->updateProjection();
