@@ -1,7 +1,7 @@
 # Duality Engine Script file created by Galen Cochrane on 11 June 2015
 # this is the first attempt at making a scene script for Duality.
 # just makes a couple debug boxes, the camera, etc.
-# comment lines MUST START with # - no writing comments on same line as command. 
+# comment lines MUST BEGIN with # - no writing comments on same line as command. 
 
 DualityEngineScript v0.01.01
 numberOfEntities 3
