@@ -96,22 +96,22 @@ void ComponentBank::clean(){
     components_collision.clear();
     components_freeCam.clear();
     
-    components_soul = std::unordered_map<DUA_id, Soul>();
-    components_model = std::unordered_map<DUA_id, Model>();
-    components_position = std::unordered_map<DUA_id, Position>();
-    components_spatialChild = std::unordered_map<DUA_id, SpatialChild>();
-    components_spatialParent = std::unordered_map<DUA_id, SpatialParent>();
-    components_linearVeloc = std::unordered_map<DUA_id, LinearVelocity>();
-    components_orientation = std::unordered_map<DUA_id, Orientation>();
-    components_angularVeloc = std::unordered_map<DUA_id, AngularVelocity>();
-    components_control = std::unordered_map<DUA_id, Control>();
-    components_pointLight = std::unordered_map<DUA_id, PointLight>();
-    components_directionalLight = std::unordered_map<DUA_id, DirectionalLight>();
-    components_ambientLight = std::unordered_map<DUA_id, AmbientLight>();
-    components_owner = std::unordered_map<DUA_id, Owner>();
-    components_score = std::unordered_map<DUA_id, Score>();
-    components_collision = std::unordered_map<DUA_id, Collision>();
-    components_freeCam = std::unordered_map<DUA_id, CameraFree>();
+//    components_soul = std::unordered_map<DUA_id, Soul>();
+//    components_model = std::unordered_map<DUA_id, Model>();
+//    components_position = std::unordered_map<DUA_id, Position>();
+//    components_spatialChild = std::unordered_map<DUA_id, SpatialChild>();
+//    components_spatialParent = std::unordered_map<DUA_id, SpatialParent>();
+//    components_linearVeloc = std::unordered_map<DUA_id, LinearVelocity>();
+//    components_orientation = std::unordered_map<DUA_id, Orientation>();
+//    components_angularVeloc = std::unordered_map<DUA_id, AngularVelocity>();
+//    components_control = std::unordered_map<DUA_id, Control>();
+//    components_pointLight = std::unordered_map<DUA_id, PointLight>();
+//    components_directionalLight = std::unordered_map<DUA_id, DirectionalLight>();
+//    components_ambientLight = std::unordered_map<DUA_id, AmbientLight>();
+//    components_owner = std::unordered_map<DUA_id, Owner>();
+//    components_score = std::unordered_map<DUA_id, Score>();
+//    components_collision = std::unordered_map<DUA_id, Collision>();
+//    components_freeCam = std::unordered_map<DUA_id, CameraFree>();
     
     nextID = DUA_START_ID;
 }

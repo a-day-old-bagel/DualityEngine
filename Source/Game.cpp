@@ -81,9 +81,13 @@ void Game::RunScript(const std::string& fileName){
 
                 lines.erase(lines.begin(), lines.begin() + 1);
 
-                for (auto line : lines){
-                    scriptingSystem.submitCommand(line);
-                    SDL_Delay(1);       // MAKES MORE STABLE FOR SOME REASON - FIX THIS.
+                if (pauseBankDependentSystems()){
+                    SDL_Delay(1);
+                    for (auto line : lines){
+                        scriptingSystem.submitCommand(line);
+                        //SDL_Delay(1);       // MAKES MORE STABLE FOR SOME REASON - FIX THIS.
+                    }
+                    resumeBankDependentSystems();
                 }
 
                 outputStrDelegate(fileName + " script has completed.\n");
@@ -179,6 +183,8 @@ bool Game::waitForBankDependentSystemsToPause(){
         done = true;
         done &= renderModelsSystem.isPauseConfirmed();
         done &= physicsMoveSystem.isPauseConfirmed();
+        done &= renderMasterSystem.isPauseConfirmed();
+        done &= renderConsoleSystem.isPauseConfirmed();
         done &= physicsCollisionSystem.isPauseConfirmed();  //PROBLEMS WITH THIS BEING EXECUTED FROM CONTROL SYS... THREAD LOCKS
         //done &= userControlSystem.isPauseConfirmed();
         
@@ -194,12 +200,12 @@ bool Game::waitForBankDependentSystemsToPause(){
  * PAUSE ENGINES
  *************************************/
 bool Game::pauseBankDependentSystems(){
-    if (!console.menuIsActive){
-        physicsMoveSystem.pause();
-        physicsCollisionSystem.pause();     // ADD CONTROL SYSTEM
-    }
+    physicsMoveSystem.pause();
+    physicsCollisionSystem.pause();     // ADD CONTROL SYSTEM
     renderModelsSystem.pause();
     userControlSystem.pause();
+    renderMasterSystem.pause();
+    renderConsoleSystem.pause();
     
     if (waitForBankDependentSystemsToPause()){
 //        outputDelegate("All bank-dependent systems paused.\n");
@@ -216,12 +222,12 @@ bool Game::pauseBankDependentSystems(){
  * RESUME ENGINES
  *************************************/
 bool Game::resumeBankDependentSystems(){
-    if (!console.menuIsActive){
+    if (!console.menuIsActive){ // to not accidentally resume game before menu is exited
         physicsMoveSystem.resume();
         physicsCollisionSystem.resume();
     }
-//    renderMasterSystem.resume();
-//    renderConsoleSystem.resume();
+    renderMasterSystem.resume();
+    renderConsoleSystem.resume();
     renderModelsSystem.resume();
     userControlSystem.resume();
 //    scriptingSystem.resume();
@@ -258,6 +264,16 @@ bool Game::cleanGameData(){
     renderModelsSystem.clean();
     physicsMoveSystem.clean();
     physicsCollisionSystem.clean();
+    userControlSystem.clean();
+    
+//    renderMasterSystem = System_Render_Master(&bank);
+//    renderConsoleSystem = System_Render_Console(&bank, &console);
+//    renderModelsSystem = System_Render_Models(&bank);
+//    physicsMoveSystem = System_PhysMove(&bank);
+//    physicsCollisionSystem = System_PhysCollide(&bank);
+//    userControlSystem = System_UserControl(&bank, &controlDelegates);
+//    scriptingSystem = System_Scripting(&bank, &scriptingDelegates);
+    
     bank.clean();
     return true;
 }
