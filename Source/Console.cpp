@@ -45,6 +45,10 @@ std::string Console::getLogLineFromBack(int lineFromBack){
     return getLogLine(logLines.size() - lineFromBack - 1);
 }
 
+std::string Console::getCurrentLogLine(){
+    return getLogLineFromBack(logLineTraverser);
+}
+
 std::string Console::getPendingCommand(){
     return pendingCommand;
 }

@@ -1,7 +1,14 @@
 # Duality Engine Script file created by Galen Cochrane on 11 June 2015
 # this is the first attempt at making a scene script for Duality.
 # just makes a couple debug boxes, the camera, etc.
-# comment lines MUST BEGIN with # - no writing comments on same line as command. 
+
+# comment lines MUST BEGIN with # - no writing comments on same line as command, no spaces or other chars before #.
+
+# The first two non-empty, non-comment lines MUST BE as follows - the word DualityEngineScript
+# followed by a version string, then the word numberOfEntities followed by however
+# many entities you think will be created over the course of the scene.  This does
+# not need to be exact as it is only for pre-allocating space in the component hash maps,
+# which should yield a performance gain by reducing the frequency of hash map expansions.
 
 DualityEngineScript v0.01.01
 numberOfEntities 3

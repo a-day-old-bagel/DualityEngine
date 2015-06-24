@@ -40,6 +40,7 @@ namespace DualityEngine {
         std::string getLog ();
         std::string getLogLine (int line);
         std::string getLogLineFromBack (int lineFromBack);
+        std::string getCurrentLogLine();
         std::string getPendingCommand();
         void setState(bool console, bool menu);
         void addToCommand (const char* text);

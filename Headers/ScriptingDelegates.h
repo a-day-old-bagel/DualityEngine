@@ -16,6 +16,9 @@ namespace DualityEngine {
     struct ScriptingDelegates {
         Delegate<void(const char*)> output;
         Delegate<void(const std::string&)> outputStr;
+        Delegate<void()> quit;
+        Delegate<void()> newGame;
+        Delegate<void(const std::string&)> runScript;
     };
 
 }

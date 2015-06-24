@@ -25,10 +25,13 @@ namespace DualityEngine {
         bool MenuIsActive = false;
         DUA_id localActiveControl = DUA_NULL_ID;
         Control* pControlCurrent;
+        Control* pDummyControl;
         Position* pPositionCurrent;
+        Position* pDummyPosition;
         const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*        new, load, save, exit         *\n****************************************\n";
         void handleMenuCommand(const std::string& command);
         void handleControlKeys(const Uint8* keyStates);
+        void checkActiveControl();
     public:
         System_UserControl(ComponentBank* bank, ControlDelegates* delegates);
         ~System_UserControl();

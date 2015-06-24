@@ -41,6 +41,7 @@ namespace DualityEngine {
         ~System_Render_Models();
         void tick() override;    
         bool init(std::stringstream& output) override;
+        void clean() override;
     };
 
 }

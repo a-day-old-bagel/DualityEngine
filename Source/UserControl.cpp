@@ -19,17 +19,23 @@ System_UserControl::System_UserControl(ComponentBank* bank, ControlDelegates* de
 
 System_UserControl::~System_UserControl(){
     dlgt = NULL;
+    delete pDummyControl;
+    delete pDummyPosition;
+    pDummyControl = NULL;
+    pDummyPosition = NULL;
 }
 
-bool System_UserControl::init(std::stringstream& output){    
+bool System_UserControl::init(std::stringstream& output){
+    pDummyControl = new Control();
+    pDummyPosition = new Position(0,0,0);
     return true;
 }
 
 void System_UserControl::clean(){
     System::clean();
     DUA_id localActiveControl = DUA_NULL_ID;
-    pControlCurrent = NULL;
-    pPositionCurrent = NULL;
+    pControlCurrent = pDummyControl;
+    pPositionCurrent = pDummyPosition;
 }
 
 void System_UserControl::tick(){
@@ -92,7 +98,7 @@ void System_UserControl::tick(){
                 } else if(sdlEvent.key.keysym.sym == SDLK_PAGEDOWN){
                     dlgt->logTraverse(-1);
                 } else if(sdlEvent.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL){
-                    SDL_SetClipboardText(dlgt->getLogFromBack(0).c_str());
+                    SDL_SetClipboardText(dlgt->getCurrentLogLine().c_str());
                 } else if(sdlEvent.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL){
                     dlgt->appendToCommand(SDL_GetClipboardText());                    
                 }
@@ -108,52 +114,42 @@ void System_UserControl::tick(){
         }
     }
     
+    checkActiveControl();
     if(!consoleIsActive){
         handleControlKeys(keyStates);
     }
 }
 
 void System_UserControl::handleMenuCommand(const std::string& command){
+    
     if(command.empty()) return;
     std::stringstream commandLine(command);
-    std::vector<std::string> args;
-    std::string temp;
-    while (commandLine >> temp){
-        args.push_back(temp);
-        temp.clear();
-    }
-    const int numArgs = args.size();
-    if (numArgs < 1) return;
+    std::string arg0;
+    commandLine >> arg0;
     
-    if (args[0] == "exit"){
-        dlgt->quit();
-    } else if (args[0] == "new"){
-        if (numArgs == 1){
-            dlgt->newGame();
-        } else if (numArgs == 2){
-            dlgt->newGame();
-            dlgt->runScript(args[1]);
-        }
-    } else if (args[0] == "load"){
-        dlgt->output("load game command not yet implemented\n");
-    } else if (args[0] == "save"){
-        dlgt->output("save game command not yet implemented\n");
-    } else if (args[0] == "help"){
-        dlgt->output("You're in the menu. Type one of the following: 'new', 'load', 'save', or 'exit'.\nPress ESC to exit the menu.\n");
+    if (arg0 == "exit" || arg0 == "new" || arg0 == "save" || arg0 == "load"){
+        dlgt->submitScriptCommand(command);
+    } else if (arg0 == "help"){        
+        dlgt->submitScriptCommand(command);
     } else {
-        dlgt->outputStr("Not a menu option: " + args[0]);
+        dlgt->outputStr("Not a menu option: " + arg0 + ". Only the commands 'new', 'load', 'save', and 'exit' may be accessed from the menu. Press ESC to exit the menu, or type \"help\".");
+    }
+}
+
+void System_UserControl::checkActiveControl(){
+    if (bank->activeControl != localActiveControl) {
+        localActiveControl = bank->activeControl;
+        if (localActiveControl != DUA_NULL_ID) {
+            pPositionCurrent = bank->getPositionPtr(localActiveControl);
+            pControlCurrent = bank->getControlPtr(localActiveControl);
+        } else {
+            pPositionCurrent = pDummyPosition;
+            pControlCurrent = pDummyControl;
+        }
     }
 }
 
 void System_UserControl::handleControlKeys(const Uint8* keyStates){
-    
-    if (bank->activeControl != localActiveControl){
-        localActiveControl = bank->activeControl;
-        if (localActiveControl != DUA_NULL_ID){
-            pPositionCurrent = bank->getPositionPtr(localActiveControl);
-            pControlCurrent = bank->getControlPtr(localActiveControl);
-        }
-    }
     
     if (localActiveControl != DUA_NULL_ID){
         if(keyStates[SDL_SCANCODE_W]){

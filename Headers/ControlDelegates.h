@@ -31,6 +31,7 @@ namespace DualityEngine {
         Delegate<std::string()> consoleEnter;
         Delegate<void(const std::string&)> submitScriptCommand;
         Delegate<std::string(int)> getLogFromBack;
+        Delegate<std::string()> getCurrentLogLine;
         Delegate<void(bool, bool)> setConsoleState;
         Delegate<void(int)> logTraverse;
         Delegate<void(const std::string&)> runScript;

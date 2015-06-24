@@ -5,6 +5,7 @@
  * Created on January 27, 2015, 9:14 PM
  ************************************************/
 
+#include <fstream>
 #include "../Headers/Game.h"
 
 using namespace DualityEngine;
@@ -22,7 +23,8 @@ void Game::Main(){
         
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);
-    SDL_WaitThread(graphicsThread, NULL);  
+    SDL_WaitThread(graphicsThread, NULL);
+    SDL_WaitThread(scriptingThread, NULL);
 }
 //</editor-fold>
 
@@ -90,7 +92,7 @@ void Game::RunScript(const std::string& fileName){
                     resumeBankDependentSystems();
                 }
 
-                outputStrDelegate(fileName + " script has completed.\n");
+                //outputStrDelegate(fileName + " script has completed.\n");
             }
         }
     }
@@ -147,6 +149,10 @@ void Game::Resume(){
  *************************************/
 void Game::Quit(){
     killSystems();
+    std::ofstream logFile;
+    logFile.open("log.txt", std::ios::trunc);
+    logFile << console.getLog();
+    logFile.close();
 }
 //</editor-fold>
 
@@ -165,8 +171,10 @@ bool Game::engageEngines(){
     physicsEngine.addSystem(&physicsMoveSystem);
     physicsEngine.addSystem(&physicsCollisionSystem);
     physicsEngine.addSystem(&userControlSystem);
-    physicsEngine.addSystem(&scriptingSystem);
     physicsEngine.engage();
+    
+    scriptingEngine.addSystem(&scriptingSystem);
+    scriptingEngine.engage();
     
     return true;
 }
@@ -186,7 +194,7 @@ bool Game::waitForBankDependentSystemsToPause(){
         done &= renderMasterSystem.isPauseConfirmed();
         done &= renderConsoleSystem.isPauseConfirmed();
         done &= physicsCollisionSystem.isPauseConfirmed();  //PROBLEMS WITH THIS BEING EXECUTED FROM CONTROL SYS... THREAD LOCKS
-        //done &= userControlSystem.isPauseConfirmed();
+        done &= userControlSystem.isPauseConfirmed();
         
         if (SDL_GetTicks() - startTime > Settings::systemsPauseTimeout){
             return false;
@@ -230,7 +238,7 @@ bool Game::resumeBankDependentSystems(){
     renderConsoleSystem.resume();
     renderModelsSystem.resume();
     userControlSystem.resume();
-//    scriptingSystem.resume();
+    
     return true;
 }
 //</editor-fold>

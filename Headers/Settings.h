@@ -129,7 +129,7 @@ namespace DualityEngine {
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL
     #endif
 
-    #define DUA_DEFAULT_SCREENRES_X 800
+    #define DUA_DEFAULT_SCREENRES_X 1024
     #define DUA_DEFAULT_SCREENRES_Y 600
     #define DUA_DEFAULT_FOV 45.0f
     #define DUA_DEFAULT_ZPLANENEAR 0.1f

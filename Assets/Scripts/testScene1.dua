@@ -1,0 +1,37 @@
+# Duality Engine Script file created by Galen Cochrane on 20 June 2015
+# Updated version of testScene0 that makes use of new variable names for entity IDs.
+
+# comment lines MUST BEGIN with # - no writing comments on same line as command, no spaces or other chars before #.
+
+# The first two non-empty, non-comment lines MUST BE as follows - the word DualityEngineScript
+# followed by a version string, then the word numberOfEntities followed by however
+# many entities you think will be created over the course of the scene.  This does
+# not need to be exact as it is only for pre-allocating space in the component hash maps,
+# which should yield a performance gain by reducing the frequency of hash map expansions.
+
+DualityEngineScript v0.01.01
+numberOfEntities 3
+
+box0 = newent box0
+add position box0 0 0 0
+add orientation box0 3.14159265358979 0 0
+add angveloc box0 0 0.002 0
+add model box0 modelNameDoesNothingYet
+add control box0
+add freecam box0 1 0.5 1000 0 0 0 0 0 -1 0 1 0
+
+box1 = newent box1
+add position box1 3 0 0
+add orientation box1 0 0 3.14159265358979
+add angveloc box1 0 -0.002 0
+add model box1 modelNameDoesNothingYet
+
+player = newent player
+add freecam player 1 0.5 1000 0 0 0 0 0 -1 0 1 0
+add position player 0 0 4
+add orientation player 0 0 0
+add control player
+add model player modelNameDoesNothingYet
+
+control player
+cam player

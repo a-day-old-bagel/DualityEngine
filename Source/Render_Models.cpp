@@ -92,3 +92,8 @@ bool System_Render_Models::aquireView(){
     }
     
 }
+void System_Render_Models::clean(){
+    System::clean();
+    localActiveCamera = DUA_NULL_ID;
+    pCamCurrent = NULL;
+}

@@ -64,12 +64,14 @@ namespace DualityEngine {
             DELEGATE(&Console::submitCommand, &console),
             submitCommand,
             DELEGATE(&Console::getLogLineFromBack, &console),
+            DELEGATE(&Console::getCurrentLogLine, &console),
             DELEGATE(&Console::setState, &console),
             DELEGATE(&Console::traverseLog, &console),
             DELEGATE(&Game::RunScript, this)
         };
         ScriptingDelegates scriptingDelegates = {
-            outputDelegate, outputStrDelegate
+            outputDelegate, outputStrDelegate, quitDelegate,
+            DELEGATE(&Game::NewGame, this), DELEGATE(&Game::RunScript, this)
         };
         // Some more delegates for the bank
         BankDelegates bankDelegates = {
@@ -112,7 +114,11 @@ namespace DualityEngine {
         // An engine (with accompanying thread) to run all physics Systems (and control system)
         SDL_Thread* physicsThread = NULL;
         SystemEngine physicsEngine = SystemEngine(&physicsThread, "Duality Physics Engine",
-                                                  &outputDelegate, &quitDelegate);        
+                                                  &outputDelegate, &quitDelegate);
+        
+        SDL_Thread* scriptingThread = NULL;
+        SystemEngine scriptingEngine = SystemEngine(&scriptingThread, "Duality Scripting Engine",
+                                                    &outputDelegate, &quitDelegate);
         // More engines to come...
 
         //</editor-fold>        
