@@ -26,13 +26,14 @@ namespace DualityEngine {
     private:
         const glm::vec3 textColor = /*{0.5, 0.8, 1.0};//{1.0, 0.8, 0.0};*/{0.5, 1.0, 0.3};
         const glm::vec3 bkgdColor = /*{0.1, 0.05, 0.0};//{0.0, 0.0, 0.1};*/{0.05, 0.05, 0.05};
-        const char firstAsciiChar = ' ';
-        const char lastAsciiChar = '~';
-        const std::string commPromptNorm = ">: ";
-        const std::string commPromptMenu = "MENU>: ";
+        const char firstAsciiChar = ' ';    // this is the first ascii char representable
+        const char lastAsciiChar = '~';     // and this is the last (look at ascii table)
+        const std::string commPromptNorm = ">: "; // this appears as the prompt for the console when not in the menu
+        const std::string commPromptMenu = "MENU>: "; // this appears as the prompt when in the menu
         const int numTexPanels = lastAsciiChar - firstAsciiChar + 2; //+2 is for the 'unknown char/background' quad plus the off-by-one.
         const float texPanelAdvance = 1.0 / (float)numTexPanels;    // this is how far the GPU texture sampler will have to move to get to the next character in the texture atlas.
         
+        // All of these are openGL-specific fields required to render the console
         GLuint buffers[3];
         GLuint texture;
         GLuint VAOloc_text;
@@ -42,7 +43,11 @@ namespace DualityEngine {
         GLuint attrLoc_uvCoo;
         GLuint unifLoc_color;
         
+        // This is a pointer to a Console object whose text will be rendered by this system.
         Console* console;
+        
+        // All of these are re-used each draw as temporary variables to help in the positioning of the char quads
+        // and the reading of text from the console object.
         std::string lineReader;
         int lineReaderSize;
         std::string graphicalLine;
@@ -57,10 +62,13 @@ namespace DualityEngine {
         float cursorAdvanceX;
         float cursorHalfWidth;
         float cursorHeight;
+        
+        // These are arrays to hold data that's buffered to the GPU each draw.
         DUA_float* bodySubArray;
         DUA_float* commSubArray;
         DUA_float cursorSubArray[6];
         
+        // These are set upon initialization and should be cleaned up some time...
         int charWidth;
         int charHeight;
         int charStepX;
@@ -71,7 +79,7 @@ namespace DualityEngine {
         int innerHeight;        
         int numCharsX; 
         int numCharsY_body;
-        const int numCharsY_comm = 1;   // don't change this for now - not completely supported.        
+        const int numCharsY_comm = 1;   // don't change this for now - multi-line command line not completely supported yet (if ever).        
         int screenOffsetX;
         int screenOffsetY;        
         int sizeVertArray;
@@ -79,8 +87,13 @@ namespace DualityEngine {
         int marginWidth;
         int marginHeight;
         
+        // Called once upon initialization, sets vertex positions for the character quads, background quad, and cursor triangle.
         bool generateAndBufferGeometry (std::stringstream& output);
+        
+        // Called once upon init, creates the texture (image) of the font atlas that is then given to the GPU.
         bool generateAndBufferFontAtlas(std::stringstream& output, const char* fontFile);
+        
+        // called each draw (as long as text has changed), this calculates the new texture atlas UVs for each char quad.
         void updateBuffersWithCurrentConsoleText();
 
     public:

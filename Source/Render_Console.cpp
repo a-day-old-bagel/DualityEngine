@@ -1,5 +1,10 @@
 /****************************************************************
  * Galen Cochrane, 1 FEB 2015
+ * 
+ * This is one of my messiest systems...
+ * I hope to clean it up someday.
+ * It needs more abstraction.  I want to make a text box base class,
+ * for example.
  ****************************************************************/
 #include "../Headers/Render_Console.h"
 

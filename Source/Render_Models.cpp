@@ -60,7 +60,6 @@ bool System_Render_Models::setUpResources(std::stringstream& engineOut)
 void System_Render_Models::tick()
 {    
     if (aquireView()){
-//        debugCube.render(bank->getModMat(dbgCube), pCamCurrent->viewProjection);
         
         for (auto ID : registeredIDs[0]){
             debugCube.render(bank->getModMat(ID), pCamCurrent->viewProjection);
