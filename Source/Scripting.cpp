@@ -190,27 +190,31 @@ void System_Scripting::parseCommand(const std::string& command){
                 handleBadUsage(args[0]);
             }
         } else if (args[1] == "="){
-            if (args[2] == "newent"){
-                if (numArgs == 4){
-                    DUA_id newID = bank->createEntity(args[1].c_str());
-                    if (newID != DUA_NULL_ID) {
-                        //entityVariables.insert(std::pair<std::string, DUA_id>(args[0], newID));
-                        entityVariables[args[0]] = newID;
-                        dlgt->outputStr(std::to_string(newID) + " has been assigned to variable: (CTRL-C to copy)\n" + args[0]);
-                    } else {
-                        dlgt->outputStr("Failed to create " + args[1] + "!\n");
-                    }
-                } else {
-                    handleBadUsage(args[2]);
-                }
-            } else {
-                dlgt->output("Bad assignment. Use \"[variable] = newent [name]\".");
-            }
+            parseAssignment(args);
         } else {
             dlgt->outputStr("Bad command: " + args[0] + ". Type \"help\" for a list of commands.\n");
         }
     }catch(const char* error){
         dlgt->output(error);
+    }
+}
+
+void System_Scripting::parseAssignment(const std::vector<std::string>& args){
+    int numRhsArgs = args.size() - 2;
+    if (args[2] == "newent") {
+        if (numRhsArgs == 2) {
+            DUA_id newID = bank->createEntity(args[0].c_str());
+            if (newID != DUA_NULL_ID) {
+                entityVariables[args[0]] = newID;
+                dlgt->outputStr("Entity " + std::to_string(newID) + " has been assigned variable: (CTRL-C to copy)\n" + args[0]);
+            } else {
+                dlgt->outputStr("Failed to create " + args[1] + "!\n");
+            }
+        } else {
+            handleBadUsage(args[2]);
+        }
+    } else {
+        dlgt->output("Bad assignment. Use \"[variable] = newent [name]\".");
     }
 }
 

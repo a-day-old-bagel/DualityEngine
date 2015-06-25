@@ -19,7 +19,7 @@ ComponentBank::~ComponentBank(){
 bool ComponentBank::switchToCam(const DUA_id& ID){
     try{
         if ((components_soul.at(ID).components) & FREECAM){
-            activeCamera = ID;
+            activeCameraID = ID;
         } else {
             dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a camera.\n");
             return false;
@@ -33,7 +33,7 @@ bool ComponentBank::switchToCam(const DUA_id& ID){
 bool ComponentBank::switchToControl(const DUA_id& ID){
     try{
         if ((components_soul.at(ID).components) & CONTROL){
-            activeControl = ID;
+            activeControlID = ID;
         } else {
             dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a control interface.\n");
             return false;
@@ -76,8 +76,8 @@ glm::mat4 ComponentBank::getModMat(const DUA_id& ID){
  ******************************************************************************/
 void ComponentBank::clean(){
     
-    activeCamera = DUA_NULL_ID;
-    activeControl = DUA_NULL_ID;
+    activeCameraID = DUA_NULL_ID;
+    activeControlID = DUA_NULL_ID;
     
     components_soul.clear();
     components_model.clear();
@@ -441,7 +441,7 @@ void ComponentBank::deleteCollision(const DUA_id& ID){
         tryRemoveFlagFromSoul(COLLISION, ID);
 }
 void ComponentBank::deleteCameraFree(const DUA_id& ID){
-    if (activeCamera == ID) activeCamera = DUA_NULL_ID;
+    if (activeCameraID == ID) activeCameraID = DUA_NULL_ID;
     if (tryRemoveComponent(ID, "free camera", FREECAM, components_freeCam))
         tryRemoveFlagFromSoul(FREECAM, ID);
 }

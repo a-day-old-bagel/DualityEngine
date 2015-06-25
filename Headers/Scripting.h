@@ -115,6 +115,7 @@ namespace DualityEngine {
         DUA_colorByte prsClr(const std::string& colorValue);
         void parseCommand(const std::string& command);
         void parseAddCommand(const std::vector<std::string>& args);
+        void parseAssignment(const std::vector<std::string>& args);
         void parseRemoveCommand(const std::vector<std::string>& args);
         void handleBadUsage(const std::string& command);
     public:

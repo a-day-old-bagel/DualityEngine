@@ -1,29 +1,60 @@
 /****************************************************************
  * Galen Cochrane, 1 FEB 2015
  ****************************************************************/
-#include "../Headers/Render_Models.h"
+#include "../Headers/Render_BiTcubes.h"
 
 using namespace DualityEngine;
 
+
+
+#define UN
+#define US
+#define UE
+#define UW
+#define DN
+#define DS
+#define DE
+#define DW
+#define NU
+#define ND
+#define NE
+#define NW
+#define SU
+#define SD
+#define SE
+#define SW
+#define EU
+#define ED
+#define EN
+#define ES
+#define WU
+#define WD
+#define WN
+#define WS
+
+
+
+
+
 //<editor-fold defaultstate="collapsed" desc="Constructor">
-System_Render_Models::System_Render_Models(ComponentBank* bank)
-                  : System(bank, "Model Rendering System", 1) 
+System_Render_BiTcubes::System_Render_BiTcubes(ComponentBank* bank)
+                  : System(bank, "Sky Rendering System", 0) 
 {
-    requiredComponents.at(0) = MODEL | POSITION | ORIENTATION;
+    
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Destructor">
-System_Render_Models::~System_Render_Models()
+System_Render_BiTcubes::~System_Render_BiTcubes()
 {
     
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Init">
-bool System_Render_Models::init(std::stringstream& engineOut)
+bool System_Render_BiTcubes::init(std::stringstream& engineOut)
 {    
     // Load graphics assets and buffer them to GPU
     if(!setUpResources(engineOut)) {
-        engineOut << "Unable to initialize graphics resources!" << std::endl;
+        engineOut << "Unable to initialize sky resources!" << std::endl;
         return false;
     }
     return true;
@@ -31,43 +62,24 @@ bool System_Render_Models::init(std::stringstream& engineOut)
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Set Up Resources">
 
-bool System_Render_Models::setUpResources(std::stringstream& engineOut)
+bool System_Render_BiTcubes::setUpResources(std::stringstream& engineOut)
 {
     bool success = true;
     
-    success &= debugCube.Init(engineOut);
-    
-//    DUA_id camID = bank->createEntity("cam");
-//    bank->addPosition(camID, 0, 0, 4);
-//    bank->addOrientation(camID, 0, 0, 0);
-//    bank->addCameraFree(camID, 1.1, 1.f, 1000.f, 0.f, 0.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f); //fov in rads
-//    bank->addControl(camID);
-//    bank->switchToControl(camID);
-//    bank->switchToCam(camID);
-//    
-//    dbgCube = bank->createEntity("debugCube");
-//    bank->addModel(dbgCube, "foo");
-//    bank->addPosition(dbgCube, 0, 0, 0);
-//    bank->addOrientation(dbgCube, pi, 0, 0);
-//    bank->addLinearVeloc(dbgCube, 0, 0, 0);
-//    bank->addAngularVeloc(dbgCube, 0, 0.006, 0);
              
     return success;
 }
 
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Tick">
-void System_Render_Models::tick()
+void System_Render_BiTcubes::tick()
 {    
     if (aquireView()){
         
-        for (auto ID : registeredIDs[0]){
-            debugCube.render(bank->getModMat(ID), pCamCurrent->viewProjection);
-        }
     }
 }
 //</editor-fold>
-bool System_Render_Models::aquireView(){
+bool System_Render_BiTcubes::aquireView(){
     if (bank->activeCameraID != localActiveCamera){
         localActiveCamera = bank->activeCameraID;
         if (localActiveCamera != DUA_NULL_ID){
@@ -91,7 +103,7 @@ bool System_Render_Models::aquireView(){
     }
     
 }
-void System_Render_Models::clean(){
+void System_Render_BiTcubes::clean(){
     System::clean();
     localActiveCamera = DUA_NULL_ID;
     pCamCurrent = NULL;

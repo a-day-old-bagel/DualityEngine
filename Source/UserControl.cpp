@@ -137,8 +137,8 @@ void System_UserControl::handleMenuCommand(const std::string& command){
 }
 
 void System_UserControl::checkActiveControl(){
-    if (bank->activeControl != localActiveControl) {
-        localActiveControl = bank->activeControl;
+    if (bank->activeControlID != localActiveControl) {
+        localActiveControl = bank->activeControlID;
         if (localActiveControl != DUA_NULL_ID) {
             pPositionCurrent = bank->getPositionPtr(localActiveControl);
             pControlCurrent = bank->getControlPtr(localActiveControl);

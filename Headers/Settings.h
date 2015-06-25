@@ -107,7 +107,7 @@ namespace DualityEngine {
     /* META SWITCHES */
     
 //    #define DUA_DEBUG_CONSOLE_TO_COUT
-    //#define DUA_OLD_VIDEO_DRIVERS // This needs to be commented out in order to use OpenGL 3.3 instead of just 3.0.
+    #define DUA_OLD_VIDEO_DRIVERS // This needs to be commented out in order to use OpenGL 3.3 instead of just 3.0.
 //    #define DUA_FULLSCREEN
 
     /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */   
@@ -121,7 +121,7 @@ namespace DualityEngine {
         #define DUA_GLVERSION_MINOR 0
     #endif
 
-    #define DUA_WHICH_MONITOR 0 
+    #define DUA_WHICH_MONITOR 1 
 
     #ifdef DUA_FULLSCREEN
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP

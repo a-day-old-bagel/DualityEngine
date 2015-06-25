@@ -111,10 +111,10 @@ namespace DualityEngine {
         }};
         
         
-        DUA_id activeControl = DUA_NULL_ID;
+        DUA_id activeControlID = DUA_NULL_ID;
         bool switchToControl(const DUA_id &id);
         
-        DUA_id activeCamera = DUA_NULL_ID;
+        DUA_id activeCameraID = DUA_NULL_ID;
         bool switchToCam(const DUA_id &id);
         
         glm::mat4 getPosMat(const DUA_id&);

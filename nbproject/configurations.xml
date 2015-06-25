@@ -112,9 +112,11 @@
         <itemPath>Headers/PhysCollide.h</itemPath>
         <itemPath>Headers/PhysMove.h</itemPath>
         <itemPath>Headers/RenderOld.h</itemPath>
+        <itemPath>Headers/Render_BiTcubes.h</itemPath>
         <itemPath>Headers/Render_Console.h</itemPath>
         <itemPath>Headers/Render_Master.h</itemPath>
         <itemPath>Headers/Render_Models.h</itemPath>
+        <itemPath>Headers/Render_Sky.h</itemPath>
         <itemPath>Headers/Scripting.h</itemPath>
         <itemPath>Headers/System.h</itemPath>
         <itemPath>Headers/UserControl.h</itemPath>
@@ -169,9 +171,11 @@
         <itemPath>Source/PhysCollide.cpp</itemPath>
         <itemPath>Source/PhysMove.cpp</itemPath>
         <itemPath>Source/RenderOld.cpp</itemPath>
+        <itemPath>Source/Render_BiTcubes.cpp</itemPath>
         <itemPath>Source/Render_Console.cpp</itemPath>
         <itemPath>Source/Render_Master.cpp</itemPath>
         <itemPath>Source/Render_Models.cpp</itemPath>
+        <itemPath>Source/Render_Sky.cpp</itemPath>
         <itemPath>Source/Scripting.cpp</itemPath>
         <itemPath>Source/System.cpp</itemPath>
         <itemPath>Source/UserControl.cpp</itemPath>
@@ -370,11 +374,15 @@
       </item>
       <item path="Headers/RenderOld.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Render_BiTcubes.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Render_Console.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Render_Master.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Render_Models.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Render_Sky.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/RotationVeloc.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -432,11 +440,15 @@
       </item>
       <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Source/Render_BiTcubes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="Source/Render_Console.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Render_Master.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Render_Models.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Render_Sky.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Scripting.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -636,11 +648,15 @@
       </item>
       <item path="Headers/RenderOld.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Render_BiTcubes.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Render_Console.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Render_Master.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Render_Models.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/Render_Sky.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/RotationVeloc.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -698,11 +714,15 @@
       </item>
       <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Source/Render_BiTcubes.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="Source/Render_Console.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Render_Master.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Render_Models.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Render_Sky.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Scripting.cpp" ex="false" tool="1" flavor2="0">
       </item>
