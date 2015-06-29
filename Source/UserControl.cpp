@@ -21,13 +21,16 @@ System_UserControl::~System_UserControl(){
     dlgt = NULL;
     delete pDummyControl;
     delete pDummyPosition;
+    delete pDummyOrientation;
     pDummyControl = NULL;
     pDummyPosition = NULL;
+    pDummyOrientation = NULL;
 }
 
 bool System_UserControl::init(std::stringstream& output){
     pDummyControl = new Control();
     pDummyPosition = new Position(0,0,0);
+    pDummyOrientation = new Orientation(0,0,0);
     return true;
 }
 
@@ -36,6 +39,7 @@ void System_UserControl::clean(){
     DUA_id localActiveControl = DUA_NULL_ID;
     pControlCurrent = pDummyControl;
     pPositionCurrent = pDummyPosition;
+    pOrientationCurrent = pDummyOrientation;
 }
 
 void System_UserControl::tick(){
@@ -141,10 +145,12 @@ void System_UserControl::checkActiveControl(){
         localActiveControl = bank->activeControlID;
         if (localActiveControl != DUA_NULL_ID) {
             pPositionCurrent = bank->getPositionPtr(localActiveControl);
-            pControlCurrent = bank->getControlPtr(localActiveControl);
+            pControlCurrent = bank->getControlPtr(localActiveControl);      // CHANGE BANK::SWITCHTOCONTROL ONCE THINGS ARE BETTER
+            pOrientationCurrent = bank->getOrientationPtr(localActiveControl);
         } else {
             pPositionCurrent = pDummyPosition;
             pControlCurrent = pDummyControl;
+            pOrientationCurrent = pDummyOrientation;
         }
     }
 }
@@ -174,6 +180,10 @@ void System_UserControl::handleControlKeys(const Uint8* keyStates){
         }
         if(keyStates[SDL_SCANCODE_LCTRL]){
                 pPositionCurrent->translate(DUA_vec3(pControlCurrent->up) * -0.008f);
+                bank->stateOn(localActiveControl, RECALCVIEWMAT);
+        }
+        if(keyStates[SDL_SCANCODE_UP]){
+                pOrientationCurrent->rotate(DUA_vec3(0.005, 0, 0));
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
     }

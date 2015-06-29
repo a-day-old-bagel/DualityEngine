@@ -19,9 +19,13 @@ ComponentBank::~ComponentBank(){
 bool ComponentBank::switchToCam(const DUA_id& ID){
     try{
         if ((components_soul.at(ID).components) & FREECAM){
-            activeCameraID = ID;
+            if((components_soul.at(ID).components) & (POSITION | ORIENTATION)){
+                activeCameraID = ID;
+            } else {
+                dlgt->outputStr("entity " + std::to_string(ID) + " needs a position and orientation.");
+            }
         } else {
-            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a camera.\n");
+            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a camera.");
             return false;
         }
     }catch(const std::out_of_range& oorException){
@@ -33,9 +37,13 @@ bool ComponentBank::switchToCam(const DUA_id& ID){
 bool ComponentBank::switchToControl(const DUA_id& ID){
     try{
         if ((components_soul.at(ID).components) & CONTROL){
-            activeControlID = ID;
+            if((components_soul.at(ID).components) & (POSITION | ORIENTATION)){
+                activeControlID = ID;
+            } else {
+                dlgt->outputStr("entity " + std::to_string(ID) + " needs a position and orientation.");
+            }
         } else {
-            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a control interface.\n");
+            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a control interface.");
             return false;
         }
     }catch(const std::out_of_range& oorException){

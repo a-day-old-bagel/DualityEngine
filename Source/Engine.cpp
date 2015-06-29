@@ -104,8 +104,12 @@ int DualityEngine::EngineThreadFunction(void* data)
         tempOut << "    " << i + 1 << ". " << systems->at(i)->getName() << std::endl;
     tempOut << THREAD_END_BLOCK_OUTPUT;
     
-    // Output the thread's reports to console.
-    (*output)(tempOut.str().c_str());
+    try{
+        // Output the thread's reports to console.  //KEEPS GIVING ME TROUBLE
+        (*output)(tempOut.str().c_str());
+    }catch(...){
+        (*output)("Some System Crapped."); 
+    }
     
     // Clear the thread's output.
     tempOut.str(std::string());

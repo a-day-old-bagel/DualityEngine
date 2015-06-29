@@ -34,21 +34,12 @@
       <logicalFolder name="f1" displayName="Shaders" projectFiles="true">
         <itemPath>Assets/Shaders/GUI_Console.frag</itemPath>
         <itemPath>Assets/Shaders/GUI_Console.vert</itemPath>
-        <itemPath>Assets/Shaders/debug.frag</itemPath>
-        <itemPath>Assets/Shaders/debug.vert</itemPath>
         <itemPath>Assets/Shaders/debugCube.frag</itemPath>
         <itemPath>Assets/Shaders/debugCube.vert</itemPath>
-        <itemPath>Assets/Shaders/foo.frag</itemPath>
-        <itemPath>Assets/Shaders/foo.vert</itemPath>
-        <itemPath>Assets/Shaders/lighting.fs</itemPath>
-        <itemPath>Assets/Shaders/lighting.vs</itemPath>
-        <itemPath>Assets/Shaders/lighting2.fs</itemPath>
-        <itemPath>Assets/Shaders/redTri_3_0.frag</itemPath>
-        <itemPath>Assets/Shaders/redTri_3_0.vert</itemPath>
-        <itemPath>Assets/Shaders/redTri_3_3.frag</itemPath>
-        <itemPath>Assets/Shaders/redTri_3_3.vert</itemPath>
-        <itemPath>Assets/Shaders/simple.frag</itemPath>
-        <itemPath>Assets/Shaders/simple.vert</itemPath>
+        <itemPath>Assets/Shaders/noCam.frag</itemPath>
+        <itemPath>Assets/Shaders/noCam.vert</itemPath>
+        <itemPath>Assets/Shaders/skyQuad.frag</itemPath>
+        <itemPath>Assets/Shaders/skyQuad.vert</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="Textures" projectFiles="true">
         <itemPath>Assets/Textures/debugBoxTinyNumbered.bmp</itemPath>
@@ -76,6 +67,7 @@
           </logicalFolder>
           <logicalFolder name="f2" displayName="Textures" projectFiles="true">
             <itemPath>Headers/TextureRepository.h</itemPath>
+            <itemPath>Headers/loadCubeMap.h</itemPath>
             <itemPath>Headers/loadTexture.h</itemPath>
             <itemPath>Headers/texture.h</itemPath>
           </logicalFolder>
@@ -84,7 +76,6 @@
           <itemPath>Headers/SoundRepository.h</itemPath>
         </logicalFolder>
         <itemPath>Headers/FileIO.h</itemPath>
-        <itemPath>Headers/stb_image.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="Components" projectFiles="true">
         <logicalFolder name="f1" displayName="Collections" projectFiles="true">
@@ -112,11 +103,11 @@
         <itemPath>Headers/PhysCollide.h</itemPath>
         <itemPath>Headers/PhysMove.h</itemPath>
         <itemPath>Headers/RenderOld.h</itemPath>
+        <itemPath>Headers/Render_Background.h</itemPath>
         <itemPath>Headers/Render_BiTcubes.h</itemPath>
         <itemPath>Headers/Render_Console.h</itemPath>
         <itemPath>Headers/Render_Master.h</itemPath>
         <itemPath>Headers/Render_Models.h</itemPath>
-        <itemPath>Headers/Render_Sky.h</itemPath>
         <itemPath>Headers/Scripting.h</itemPath>
         <itemPath>Headers/System.h</itemPath>
         <itemPath>Headers/UserControl.h</itemPath>
@@ -124,6 +115,7 @@
       <logicalFolder name="f1" displayName="Utilities" projectFiles="true">
         <itemPath>Headers/BankDelegates.h</itemPath>
         <itemPath>Headers/ControlDelegates.h</itemPath>
+        <itemPath>Assets/GUI/NoCamBackground/DebugBackground.h</itemPath>
         <itemPath>Assets/Models/DebugCube/DebugCube.h</itemPath>
         <itemPath>Headers/Delegate.h</itemPath>
         <itemPath>Assets/GUI/GUI_Console.h</itemPath>
@@ -151,6 +143,7 @@
             <itemPath>Source/loadShaders.cpp</itemPath>
           </logicalFolder>
           <logicalFolder name="f3" displayName="Textures" projectFiles="true">
+            <itemPath>Source/loadCubeMap.cpp</itemPath>
             <itemPath>Source/texture.cpp</itemPath>
           </logicalFolder>
         </logicalFolder>
@@ -171,11 +164,11 @@
         <itemPath>Source/PhysCollide.cpp</itemPath>
         <itemPath>Source/PhysMove.cpp</itemPath>
         <itemPath>Source/RenderOld.cpp</itemPath>
+        <itemPath>Source/Render_Background.cpp</itemPath>
         <itemPath>Source/Render_BiTcubes.cpp</itemPath>
         <itemPath>Source/Render_Console.cpp</itemPath>
         <itemPath>Source/Render_Master.cpp</itemPath>
         <itemPath>Source/Render_Models.cpp</itemPath>
-        <itemPath>Source/Render_Sky.cpp</itemPath>
         <itemPath>Source/Scripting.cpp</itemPath>
         <itemPath>Source/System.cpp</itemPath>
         <itemPath>Source/UserControl.cpp</itemPath>
@@ -221,6 +214,11 @@
       </compileType>
       <item path="Assets/GUI/GUI_Console.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Assets/GUI/NoCamBackground/DebugBackground.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Assets/Models/Cereal/CerealBowlObjFromBlenderSep.mtl"
             ex="false"
             tool="3"
@@ -285,35 +283,17 @@
       </item>
       <item path="Assets/Shaders/GUI_Console.vert" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/debug.frag" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/debug.vert" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Assets/Shaders/debugCube.frag" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Shaders/debugCube.vert" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/foo.frag" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/noCam.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/foo.vert" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/noCam.vert" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/lighting.fs" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/skyQuad.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/lighting.vs" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/lighting2.fs" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/redTri_3_0.frag" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/redTri_3_0.vert" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/redTri_3_3.frag" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/redTri_3_3.vert" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/simple.frag" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/simple.vert" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/skyQuad.vert" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Textures/debugBoxTinyNumbered.bmp"
             ex="false"
@@ -374,6 +354,8 @@
       </item>
       <item path="Headers/RenderOld.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Render_Background.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Render_BiTcubes.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Render_Console.h" ex="false" tool="3" flavor2="0">
@@ -381,8 +363,6 @@
       <item path="Headers/Render_Master.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Render_Models.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Headers/Render_Sky.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/RotationVeloc.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -408,6 +388,8 @@
       </item>
       <item path="Headers/lighting_technique.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/loadCubeMap.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/loadMesh.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/loadShaders.h" ex="false" tool="3" flavor2="0">
@@ -415,8 +397,6 @@
       <item path="Headers/loadTexture.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/mesh.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Headers/stb_image.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/technique.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -440,6 +420,8 @@
       </item>
       <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Source/Render_Background.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="Source/Render_BiTcubes.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Render_Console.cpp" ex="false" tool="1" flavor2="0">
@@ -447,8 +429,6 @@
       <item path="Source/Render_Master.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Render_Models.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Source/Render_Sky.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Scripting.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -461,6 +441,8 @@
       <item path="Source/UserControl.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/lighting_technique.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/loadCubeMap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/loadShaders.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -495,6 +477,11 @@
       </compileType>
       <item path="Assets/GUI/GUI_Console.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Assets/GUI/NoCamBackground/DebugBackground.h"
+            ex="false"
+            tool="3"
+            flavor2="0">
+      </item>
       <item path="Assets/Models/Cereal/CerealBowlObjFromBlenderSep.mtl"
             ex="false"
             tool="3"
@@ -559,35 +546,17 @@
       </item>
       <item path="Assets/Shaders/GUI_Console.vert" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/debug.frag" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/debug.vert" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Assets/Shaders/debugCube.frag" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Shaders/debugCube.vert" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/foo.frag" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/noCam.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/foo.vert" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/noCam.vert" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/lighting.fs" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/skyQuad.frag" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Assets/Shaders/lighting.vs" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/lighting2.fs" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/redTri_3_0.frag" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/redTri_3_0.vert" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/redTri_3_3.frag" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/redTri_3_3.vert" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/simple.frag" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Assets/Shaders/simple.vert" ex="false" tool="3" flavor2="0">
+      <item path="Assets/Shaders/skyQuad.vert" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Textures/debugBoxTinyNumbered.bmp"
             ex="false"
@@ -648,6 +617,8 @@
       </item>
       <item path="Headers/RenderOld.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Render_Background.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Render_BiTcubes.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Render_Console.h" ex="false" tool="3" flavor2="0">
@@ -655,8 +626,6 @@
       <item path="Headers/Render_Master.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Render_Models.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Headers/Render_Sky.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/RotationVeloc.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -682,6 +651,8 @@
       </item>
       <item path="Headers/lighting_technique.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/loadCubeMap.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/loadMesh.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/loadShaders.h" ex="false" tool="3" flavor2="0">
@@ -689,8 +660,6 @@
       <item path="Headers/loadTexture.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/mesh.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Headers/stb_image.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/technique.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -714,6 +683,8 @@
       </item>
       <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Source/Render_Background.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="Source/Render_BiTcubes.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Render_Console.cpp" ex="false" tool="1" flavor2="0">
@@ -721,8 +692,6 @@
       <item path="Source/Render_Master.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Render_Models.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Source/Render_Sky.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Scripting.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -735,6 +704,8 @@
       <item path="Source/UserControl.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/lighting_technique.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/loadCubeMap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/loadShaders.cpp" ex="false" tool="1" flavor2="0">
       </item>

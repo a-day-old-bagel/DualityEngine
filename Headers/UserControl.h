@@ -28,6 +28,8 @@ namespace DualityEngine {
         Control* pDummyControl;
         Position* pPositionCurrent;
         Position* pDummyPosition;
+        Orientation* pOrientationCurrent;
+        Orientation* pDummyOrientation;
         const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*        new, load, save, exit         *\n****************************************\n";
         void handleMenuCommand(const std::string& command);
         void handleControlKeys(const Uint8* keyStates);

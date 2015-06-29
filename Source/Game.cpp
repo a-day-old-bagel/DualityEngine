@@ -10,9 +10,9 @@
 
 using namespace DualityEngine;
 
-//<editor-fold defaultstate="collapsed" desc="Begin">
+//<editor-fold defaultstate="collapsed" desc="MAIN">
 /**************************************
- * BEGIN
+ * MAIN
  * called once from where the game is
  * instantiated. Maybe will bring up a
  * main menu at some point...
@@ -25,6 +25,12 @@ void Game::Main(){
     SDL_WaitThread(physicsThread, NULL);
     SDL_WaitThread(graphicsThread, NULL);
     SDL_WaitThread(scriptingThread, NULL);
+    
+    // Save game console log as text file
+    std::ofstream logFile;
+    logFile.open("log.txt", std::ios::trunc);
+    logFile << console.getLog();
+    logFile.close();
 }
 //</editor-fold>
 
@@ -149,10 +155,6 @@ void Game::Resume(){
  *************************************/
 void Game::Quit(){
     killSystems();
-    std::ofstream logFile;
-    logFile.open("log.txt", std::ios::trunc);
-    logFile << console.getLog();
-    logFile.close();
 }
 //</editor-fold>
 
@@ -164,6 +166,7 @@ void Game::Quit(){
  *************************************/
 bool Game::engageEngines(){
     graphicsEngine.addSystem(&renderMasterSystem);
+    graphicsEngine.addSystem(&renderBackgroundSystem);
     graphicsEngine.addSystem(&renderModelsSystem);
     graphicsEngine.addSystem(&renderConsoleSystem);
     graphicsEngine.engage();
@@ -191,6 +194,7 @@ bool Game::waitForBankDependentSystemsToPause(){
         done = true;
         done &= renderModelsSystem.isPauseConfirmed();
         done &= physicsMoveSystem.isPauseConfirmed();
+        done &= renderBackgroundSystem.isPauseConfirmed();
         done &= renderMasterSystem.isPauseConfirmed();
         done &= renderConsoleSystem.isPauseConfirmed();
         done &= physicsCollisionSystem.isPauseConfirmed();  //PROBLEMS WITH THIS BEING EXECUTED FROM CONTROL SYS... THREAD LOCKS
@@ -212,6 +216,7 @@ bool Game::pauseBankDependentSystems(){
     physicsCollisionSystem.pause();     // ADD CONTROL SYSTEM
     renderModelsSystem.pause();
     userControlSystem.pause();
+    renderBackgroundSystem.pause();
     renderMasterSystem.pause();
     renderConsoleSystem.pause();
     
@@ -237,6 +242,7 @@ bool Game::resumeBankDependentSystems(){
     renderMasterSystem.resume();
     renderConsoleSystem.resume();
     renderModelsSystem.resume();
+    renderBackgroundSystem.resume();
     userControlSystem.resume();
     
     return true;
@@ -253,6 +259,7 @@ bool Game::killSystems(){
     renderModelsSystem.quit();
     renderConsoleSystem.quit();
     renderMasterSystem.quit();
+    renderBackgroundSystem.quit();
     physicsMoveSystem.quit();
     physicsCollisionSystem.quit();
     userControlSystem.quit();
@@ -270,6 +277,7 @@ bool Game::killSystems(){
  *************************************/
 bool Game::cleanGameData(){
     renderModelsSystem.clean();
+    renderBackgroundSystem.clean();
     physicsMoveSystem.clean();
     physicsCollisionSystem.clean();
     userControlSystem.clean();

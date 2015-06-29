@@ -15,6 +15,7 @@
 #include "Render_Master.h"
 #include "Render_Console.h"
 #include "Render_Models.h"
+#include "Render_Background.h"
 #include "PhysMove.h"
 #include "PhysCollide.h"
 #include "UserControl.h"
@@ -94,6 +95,8 @@ namespace DualityEngine {
         System_Render_Console renderConsoleSystem = System_Render_Console(&bank, &console);
         
         System_Render_Models renderModelsSystem = System_Render_Models(&bank);
+        
+        System_Render_Background renderBackgroundSystem = System_Render_Background(&bank);
         // A system to update all spatial components according to motion components
         System_PhysMove physicsMoveSystem = System_PhysMove(&bank);
         // A system to check collisions between all spatial components according to collision components

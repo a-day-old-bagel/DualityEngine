@@ -12,7 +12,7 @@ using namespace DualityEngine;
 
 //<editor-fold defaultstate="collapsed" desc="Constructor">
 System_Render_Console::System_Render_Console(ComponentBank* bank, Console* console)
-                  : System(bank, "Rendering System", 0) 
+                  : System(bank, "Console Rendering System", 0) 
 {
     this->console = console;
 }
@@ -32,7 +32,6 @@ System_Render_Console::~System_Render_Console()
 //<editor-fold defaultstate="collapsed" desc="Init">
 bool System_Render_Console::init(std::stringstream& output)
 {
-    output << "\nBeginning initialization of console GUI.\n";
     this->console = console;
 
     screenOffsetX = Settings::Console::locX;
@@ -85,7 +84,6 @@ bool System_Render_Console::init(std::stringstream& output)
 
     if (!generateAndBufferGeometry(output)) return false;
 
-    output << "Console GUI has initialized.\n\n";
     return true;
 }
 //</editor-fold>
