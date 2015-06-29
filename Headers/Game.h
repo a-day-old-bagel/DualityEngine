@@ -78,7 +78,30 @@ namespace DualityEngine {
         BankDelegates bankDelegates = {
             DELEGATE(&Game::systems_discover, this),
             DELEGATE(&Game::systems_scrutinize, this),
-            DELEGATE(&Game::systems_forceRemove, this), outputDelegate, outputStrDelegate
+            DELEGATE(&Game::systems_forceRemove, this),
+            quitDelegate, DELEGATE(&Game::NewGame, this),
+            DELEGATE(&Game::Pause, this),
+            DELEGATE(&Game::Resume, this),
+            DELEGATE(&Game::RunScript, this),
+            DELEGATE(&Game::pauseBankDependentSystems, this),
+            DELEGATE(&Game::waitForBankDependentSystemsToPause, this),
+            DELEGATE(&Game::resumeBankDependentSystems, this),
+            DELEGATE(&Console::applyBackspace, &console),
+            DELEGATE(&Console::applyDelete, &console),
+            DELEGATE(&Console::clearCommand, &console),
+            DELEGATE(&Console::upOneCommand, &console),
+            DELEGATE(&Console::downOneCommand, &console),
+            DELEGATE(&Console::leftCursor, &console),
+            DELEGATE(&Console::rightCursor, &console),
+            outputDelegate, outputStrDelegate,
+            DELEGATE(&Console::addToCommand, &console),
+            DELEGATE(&Console::submitCommand, &console),
+            submitCommand,
+            DELEGATE(&Console::getLogLineFromBack, &console),
+            DELEGATE(&Console::getCurrentLogLine, &console),
+            DELEGATE(&Console::setState, &console),
+            DELEGATE(&Console::traverseLog, &console)
+            
         };
         
         //</editor-fold>

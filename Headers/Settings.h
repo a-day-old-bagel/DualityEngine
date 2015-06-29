@@ -121,7 +121,7 @@ namespace DualityEngine {
         #define DUA_GLVERSION_MINOR 0
     #endif
 
-    #define DUA_WHICH_MONITOR 0 
+    #define DUA_WHICH_MONITOR 1 
 
     #ifdef DUA_FULLSCREEN
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP

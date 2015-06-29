@@ -18,8 +18,31 @@ namespace DualityEngine {
         Delegate<void(const DUA_id&)> systemsDiscover;
         Delegate<void(const DUA_id&)> systemsScrutinize;
         Delegate<void(const DUA_id&, const DUA_compFlag&)> systemsForceRemove;
-        Delegate<void(const char*)>  output;
+        Delegate<void()> quit;
+        Delegate<void()> newGame;
+        Delegate<void()> pause;
+        Delegate<void()> resume;
+        Delegate<void(const std::string&)> runScript;
+        Delegate<bool()> pauseDependentSystems;
+        Delegate<bool()> waitForDependentSystemsPause;
+        Delegate<bool()> resumeDependentSystems;
+        Delegate<void()> backspaceCommand;
+        Delegate<void()> deleteCommand;
+        Delegate<void()> clearCommand;
+        Delegate<void()> upOneCommand;
+        Delegate<void()> downOneCommand;
+        Delegate<void()> leftCursor;
+        Delegate<void()> rightCursor;
+        Delegate<void(const char*)> output;
         Delegate<void(const std::string&)> outputStr;
+        Delegate<void(const char*)> appendToCommand;        
+        Delegate<std::string()> consoleEnter;
+        Delegate<void(const std::string&)> submitScriptCommand;
+        Delegate<std::string(int)> getLogFromBack;
+        Delegate<std::string()> getCurrentLogLine;
+        Delegate<void(bool, bool)> setConsoleState;
+        Delegate<void(int)> logTraverse;
+        
     };
 
 }

@@ -6,7 +6,9 @@
  * 
  ******************************************************************************/
 
-#include "../Headers/UserControl.h"
+//#include "../Headers/UserControl.h"
+#include <SDL.h>
+#include <fstream>
 #include "Scripting.h"
 
 using namespace DualityEngine;
@@ -32,6 +34,65 @@ void System_Scripting::tick(){
         commandQueue.pop();
     }
     SDL_Delay(10);
+}
+
+void System_Scripting::submitScript(const std::string& fileName){
+    std::string filePath = "Assets/Scripts/" + fileName + ".dua";
+    std::vector<std::string> lines;
+    std::string lineReader;
+    std::ifstream infile (filePath, std::ios_base::in);
+    while (getline(infile, lineReader, '\n')){
+      lines.push_back (lineReader);
+    }
+    
+    if (lines.empty()){
+        bank->dlgt->outputStr(filePath + ": file either not found, unreadable, or empty.\n");
+    } else {
+        for (int i = 0; i < lines.size();){
+            if (lines.at(i).empty() || lines.at(i).at(0) == '#'){
+                lines.erase(lines.begin() + i);
+            } else {
+                ++i;
+            }
+        }
+        
+        int numHeaderLinesToErase = 1;
+        
+        if (lines.size() < 2){
+            bank->dlgt->outputStr(filePath + ": not a valid Duality script.\n");
+        } else {
+            std::stringstream firstTwoLines(lines.at(0) + " " + lines.at(1));
+            std::string headerTypeDeclaration, headerVersion, headerNumEntities;
+            firstTwoLines >> headerTypeDeclaration;
+            firstTwoLines >> headerVersion;
+            firstTwoLines >> headerNumEntities;
+            if (headerNumEntities != "numberOfEntities"){
+                bank->dlgt->outputStr(filePath + ": \"numberOfEntities\" not found. Continuing.");
+            } else {
+                numHeaderLinesToErase = 2;
+                headerNumEntities.clear();
+                firstTwoLines >> headerNumEntities;
+                // DO SOMETHING WITH NUMENTITIES - RESERVE SPACE IN HASH TABLES, ETC.
+            }
+            if (headerTypeDeclaration != "DualityEngineScript" || headerVersion != DUA_VERSION){
+                bank->dlgt->outputStr(filePath + ": invalid Duality script or wrong version.");
+            } else {               
+
+                lines.erase(lines.begin(), lines.begin() + numHeaderLinesToErase);
+
+                if (bank->dlgt->pauseDependentSystems()){
+                    //SDL_Delay(1);
+                    for (auto line : lines){
+                        submitCommand(line);
+                        //SDL_Delay(1);       // MAKES MORE STABLE FOR SOME REASON - FIX THIS.
+                    }
+                    bank->dlgt->resumeDependentSystems();
+                }
+
+                //outputStrDelegate(fileName + " script has completed.\n");
+            }
+        }
+    }
 }
 
 void System_Scripting::submitCommand(const std::string& command){

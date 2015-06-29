@@ -186,6 +186,18 @@ void System_UserControl::handleControlKeys(const Uint8* keyStates){
                 pOrientationCurrent->rotate(DUA_vec3(0.005, 0, 0));
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
+        if(keyStates[SDL_SCANCODE_DOWN]){
+                pOrientationCurrent->rotate(DUA_vec3(-0.005, 0, 0));
+                bank->stateOn(localActiveControl, RECALCVIEWMAT);
+        }
+        if(keyStates[SDL_SCANCODE_LEFT]){
+                pOrientationCurrent->rotate(DUA_vec3(0, 0.005, 0));
+                bank->stateOn(localActiveControl, RECALCVIEWMAT);
+        }
+        if(keyStates[SDL_SCANCODE_RIGHT]){
+                pOrientationCurrent->rotate(DUA_vec3(0, -0.005, 0));
+                bank->stateOn(localActiveControl, RECALCVIEWMAT);
+        }
     }
 }
 

@@ -71,6 +71,8 @@ void Game::RunScript(const std::string& fileName){
             }
         }
         
+        int numHeaderLinesToErase = 1;
+        
         if (lines.size() < 2){
             outputStrDelegate(filePath + ": not a valid Duality script.\n");
         } else {
@@ -79,18 +81,22 @@ void Game::RunScript(const std::string& fileName){
             firstTwoLines >> headerTypeDeclaration;
             firstTwoLines >> headerVersion;
             firstTwoLines >> headerNumEntities;
-            headerNumEntities.clear();
-            firstTwoLines >> headerNumEntities;
+            if (headerNumEntities != "numberOfEntities"){
+                outputStrDelegate(filePath + ": \"numberOfEntities\" not found. Continuing.");
+            } else {
+                numHeaderLinesToErase = 2;
+                headerNumEntities.clear();
+                firstTwoLines >> headerNumEntities;
+                // DO SOMETHING WITH NUMENTITIES - RESERVE SPACE IN HASH TABLES, ETC.
+            }
             if (headerTypeDeclaration != "DualityEngineScript" || headerVersion != DUA_VERSION){
                 outputStrDelegate(filePath + ": invalid Duality script or wrong version.");
-            } else {
+            } else {               
 
-                // DO SOMETHING WITH NUMENTITIES - RESERVE SPACE IN HASH TABLES, ETC.
-
-                lines.erase(lines.begin(), lines.begin() + 1);
+                lines.erase(lines.begin(), lines.begin() + numHeaderLinesToErase);
 
                 if (pauseBankDependentSystems()){
-                    SDL_Delay(1);
+                    //SDL_Delay(1);
                     for (auto line : lines){
                         scriptingSystem.submitCommand(line);
                         //SDL_Delay(1);       // MAKES MORE STABLE FOR SOME REASON - FIX THIS.

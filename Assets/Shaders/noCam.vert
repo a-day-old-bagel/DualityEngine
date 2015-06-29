@@ -2,11 +2,11 @@
 
 in vec4 Vertex;
 
-smooth out vec2 texPosition;
+out vec2 texPosition;
 
 void main() {
     
-    texPosition = Vertex.xy;
+    texPosition = vec2(Vertex.x * 4 + 0.3, -Vertex.y * 4);
     
     gl_Position = Vertex;
 }

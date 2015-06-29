@@ -47,7 +47,7 @@ bool System_Render_Master::setUpEnvironment(std::stringstream& engineOut)
         return false;
     }
     
-    int monitorUsed = 0;
+    int monitorUsed;
     for (monitorUsed = 0; monitorUsed <= Settings::whichMonitor; monitorUsed++){
         if (SDL_GetCurrentDisplayMode(monitorUsed, &display)){
             engineOut << "Could not get display mode for monitor " << monitorUsed << ": " << SDL_GetError() << std::endl;
@@ -76,7 +76,7 @@ bool System_Render_Master::setUpEnvironment(std::stringstream& engineOut)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);    
     // Create the SDL window
     pWindow = SDL_CreateWindow("Duality Engine",
-                    Settings::monitorOffsetX, Settings::monitorOffsetY,
+                    Settings::monitorOffsetX + (display.w - Settings::screenResX), Settings::monitorOffsetY + (display.h - Settings::screenResY),
                     Settings::screenResX, Settings::screenResY,
                     DUA_SDL_SCREENOPTIONS);    
     // If the window couldn't be created for whatever reason

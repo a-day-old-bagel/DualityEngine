@@ -30,10 +30,13 @@ namespace DualityEngine {
         GLuint unifLoc_MVP;
         GLuint unifLoc_M;
         GLuint txtrLoc_diffuse;
+        GLuint unifLoc_lightDir;
+        
+        // Directional light used in shader (for now)
+        DUA_vec3 lightDir = glm::vec3(0.9759, -0.19518, 0.09759);
         
         // Transform matrices used in rendering
         glm::mat4 mvp = glm::mat4(1.0f);
-        glm::mat4 model = glm::mat4(1.0f);
         
         // Vertices of the cube mesh
         const DUA_float vertices[72] = { // A cube has 8 corners, each of which are represented three times - once for each connecting face.
@@ -237,6 +240,7 @@ namespace DualityEngine {
             unifLoc_MVP     = glGetUniformLocation(shdrLoc, "MVP");
             unifLoc_M       = glGetUniformLocation(shdrLoc, "M");
             txtrLoc_diffuse = glGetUniformLocation(shdrLoc, "tex_diffuse");
+            unifLoc_lightDir = glGetUniformLocation(shdrLoc, "lightDirection");
             
             // buffer part    
             glGenVertexArrays(1, &VAOloc);
@@ -285,8 +289,9 @@ namespace DualityEngine {
             
             glUseProgram (shdrLoc);
             glUniformMatrix4fv (unifLoc_MVP, 1, GL_FALSE, &mvp[0][0]);
-            glUniformMatrix4fv (unifLoc_M, 1, GL_FALSE, &model[0][0]);
+            glUniformMatrix4fv (unifLoc_M, 1, GL_FALSE, &m[0][0]);
             glUniform1i (txtrLoc_diffuse, 0);
+            glUniform3fv(unifLoc_lightDir, 1, &lightDir[0]);
             glBindVertexArray (VAOloc);           
             
             glDrawElements (GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, 0);

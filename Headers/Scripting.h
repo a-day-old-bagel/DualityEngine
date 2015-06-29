@@ -124,6 +124,7 @@ namespace DualityEngine {
         void tick() override;
         bool init(std::stringstream& output) override;
         void submitCommand(const std::string&);
+        void submitScript(const std::string& fileName);
     };
 
 }
