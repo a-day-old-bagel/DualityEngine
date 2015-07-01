@@ -31,6 +31,7 @@ namespace DualityEngine {
         GLuint unifLoc_M;
         GLuint txtrLoc_diffuse;
         GLuint unifLoc_lightDir;
+        bool hasInitialized = false;
         
         // Directional light used in shader (for now)
         DUA_vec3 lightDir = glm::vec3(0.9759, -0.19518, 0.09759);
@@ -222,10 +223,12 @@ namespace DualityEngine {
         
         DebugCube() {}
         ~DebugCube() {
-            glDeleteBuffers (4, buffers);
-            glDeleteProgram (shdrLoc);
-            glDeleteTextures (1, &texture);
-            glDeleteVertexArrays (1, &VAOloc);
+            if (hasInitialized){
+                glDeleteBuffers (4, buffers);
+                glDeleteProgram (shdrLoc);
+                glDeleteTextures (1, &texture);
+                glDeleteVertexArrays (1, &VAOloc);
+            }
         }
         bool Init(std::stringstream& output) {
             
@@ -278,6 +281,7 @@ namespace DualityEngine {
             glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
             glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     
+            hasInitialized = true;
             output << "Debug cube has initialized.\n\n";
             return true;
         }

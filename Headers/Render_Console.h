@@ -32,6 +32,7 @@ namespace DualityEngine {
         const std::string commPromptMenu = "MENU>: "; // this appears as the prompt when in the menu
         const int numTexPanels = lastAsciiChar - firstAsciiChar + 2; //+2 is for the 'unknown char/background' quad plus the off-by-one.
         const float texPanelAdvance = 1.0 / (float)numTexPanels;    // this is how far the GPU texture sampler will have to move to get to the next character in the texture atlas.
+        bool hasInitialized = false;
         
         // All of these are openGL-specific fields required to render the console
         GLuint buffers[3];

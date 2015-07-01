@@ -8,6 +8,10 @@
 #include "../Headers/Console.h"
 using namespace DualityEngine;
 
+Console::~Console(){
+    std::cout << getLog();
+}
+
 void Console::output(const char* text){
     std::stringstream temp(text);
     std::string line;

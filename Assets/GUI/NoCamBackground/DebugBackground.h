@@ -16,6 +16,7 @@ namespace DualityEngine {
         GLuint shdrLoc;
         GLuint attrLoc_verts;
         GLuint txtrLoc;
+        bool hasInitialized = false;
         
         
        DUA_float corners[16] = {-1.0, -1.0, 0.5, 1.0,
@@ -50,10 +51,12 @@ namespace DualityEngine {
         
         DebugBackground() {}
         ~DebugBackground() {
-            glDeleteBuffers (1, &vertices);
-            glDeleteProgram (shdrLoc);
-            glDeleteTextures (1, &texture);
-            glDeleteVertexArrays (1, &VAOloc);
+            if (hasInitialized){
+                glDeleteBuffers (1, &vertices);
+                glDeleteProgram (shdrLoc);
+                glDeleteTextures (1, &texture);
+                glDeleteVertexArrays (1, &VAOloc);
+            }
         }
         bool Init(std::stringstream& output) {
             
@@ -85,6 +88,7 @@ namespace DualityEngine {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     
+            hasInitialized = true;
             output << "noCam background has initialized.\n\n";
             return true;
         }

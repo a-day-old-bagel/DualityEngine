@@ -35,6 +35,7 @@ namespace DualityEngine {
         bool bodyHasChangedVisually = true;
         bool commHasChangedVisually = true;
         
+        ~Console();
         void output (const char* text);
         void outputStr (const std::string& text);
         std::string getLog ();

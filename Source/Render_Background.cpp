@@ -57,12 +57,14 @@ bool System_Render_Background::setUpResources(std::stringstream& engineOut)
     glEnableVertexAttribArray(attrLoc_verts);
     glVertexAttribPointer(attrLoc_verts, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-    success &= loadCubeMap ("Assets/Textures/cubeMaps/seaBack.png",
-                            "Assets/Textures/cubeMaps/seaFront.png",
-                            "Assets/Textures/cubeMaps/seaTop.png",
-                            "Assets/Textures/cubeMaps/seaBottom.png",
-                            "Assets/Textures/cubeMaps/seaLeft.png",
-                            "Assets/Textures/cubeMaps/seaRight.png",
+    #define WHICHSKYMAP "Meadow"
+    #define WHICHSKYFILETYPE "jpg"
+    success &= loadCubeMap (std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/negz."  WHICHSKYFILETYPE).c_str(),
+                            std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/posz."  WHICHSKYFILETYPE).c_str(),
+                            std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/posy."  WHICHSKYFILETYPE).c_str(),
+                            std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/negy."  WHICHSKYFILETYPE).c_str(),
+                            std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/negx."  WHICHSKYFILETYPE).c_str(),
+                            std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/posx."  WHICHSKYFILETYPE).c_str(),
                             &texture, engineOut);   
              
     return success;

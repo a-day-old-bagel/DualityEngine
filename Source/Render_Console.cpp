@@ -21,12 +21,15 @@ System_Render_Console::System_Render_Console(ComponentBank* bank, Console* conso
 System_Render_Console::~System_Render_Console()
 {
     this->console = NULL;
-    glDeleteBuffers(3, buffers);
-    glDeleteProgram(shdrLoc);
-    glDeleteTextures(1, &texture);
-    glDeleteVertexArrays(1, &VAOloc_text);
-    delete[] bodySubArray;
-    delete[] commSubArray;
+    
+    if (hasInitialized){
+        glDeleteBuffers(3, buffers);
+        glDeleteProgram(shdrLoc);
+        glDeleteTextures(1, &texture);
+        glDeleteVertexArrays(1, &VAOloc_text);
+        delete[] bodySubArray;
+        delete[] commSubArray;
+    }
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Init">
@@ -84,6 +87,7 @@ bool System_Render_Console::init(std::stringstream& output)
 
     if (!generateAndBufferGeometry(output)) return false;
 
+    hasInitialized = true;
     return true;
 }
 //</editor-fold>
