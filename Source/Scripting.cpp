@@ -15,13 +15,13 @@ using namespace DualityEngine;
 
 //<editor-fold>
 
-System_Scripting::System_Scripting(ComponentBank* bank, ScriptingDelegates* delegates)
+System_Scripting::System_Scripting(ComponentBank* bank)//, ScriptingDelegates* delegates)
                   : System(bank, "Scripting System", 0){
-    this->dlgt = delegates;
+//    this->dlgt = delegates;
 }
 
 System_Scripting::~System_Scripting(){
-    dlgt = NULL;
+//    dlgt = NULL;
 }
 
 bool System_Scripting::init(std::stringstream& output){
@@ -81,15 +81,11 @@ void System_Scripting::submitScript(const std::string& fileName){
                 lines.erase(lines.begin(), lines.begin() + numHeaderLinesToErase);
 
                 if (bank->dlgt->pauseDependentSystems()){
-                    //SDL_Delay(1);
                     for (auto line : lines){
                         submitCommand(line);
-                        //SDL_Delay(1);       // MAKES MORE STABLE FOR SOME REASON - FIX THIS.
                     }
                     bank->dlgt->resumeDependentSystems();
                 }
-
-                //outputStrDelegate(fileName + " script has completed.\n");
             }
         }
     }
@@ -117,9 +113,9 @@ void System_Scripting::parseCommand(const std::string& command){
             if (numArgs == 2){
                 DUA_id newID = bank->createEntity(args[1].c_str());
                 if (newID != DUA_NULL_ID){
-                    dlgt->outputStr(std::to_string(newID));
+                    bank->dlgt->outputStr(std::to_string(newID));
                 } else {
-                    dlgt->outputStr("Failed to create " + args[1] + "!\n");
+                    bank->dlgt->outputStr("Failed to create " + args[1] + "!\n");
                 }
             } else {
                 handleBadUsage(args[0]);
@@ -147,42 +143,42 @@ void System_Scripting::parseCommand(const std::string& command){
                 std::vector<DUA_id> IDs;
                 if (bank->getIDs(args[1], IDs)){
                     if (IDs.size() > 0){
-                        dlgt->outputStr("Entity IDs associated with the name \"" + args[1] + "\": \n");
+                        bank->dlgt->outputStr("Entity IDs associated with the name \"" + args[1] + "\": \n");
                         for (auto id : IDs){
-                            dlgt->outputStr(std::to_string(id) + "\n");
+                            bank->dlgt->outputStr(std::to_string(id) + "\n");
                         }
                     } else {
-                        dlgt->outputStr("No entities exist named \"" + args[1] + "\".\n");
+                        bank->dlgt->outputStr("No entities exist named \"" + args[1] + "\".\n");
                     }
                 } else {
-                    dlgt->output("ERROR: ComponentBank::getID threw an exception!\n");
+                    bank->dlgt->output("ERROR: ComponentBank::getID threw an exception!\n");
                 }
             } else {
                 handleBadUsage(args[0]);
             }
         } else if (args[0] == "help"){
             if (numArgs == 1){
-                dlgt->output("Here are the existing commands:\n");
+                bank->dlgt->output("Here are the existing commands:\n");
                 for (auto command : commandUsages){
-                    dlgt->outputStr("    " + command.second);
+                    bank->dlgt->outputStr("    " + command.second);
                 }
-                dlgt->output("Type \"help components\" to see a list of available components, \"help [command]\" for command-specific help. Use PageUp/PageDown to scroll.");
+                bank->dlgt->output("Type \"help components\" to see a list of available components, \"help [command]\" for command-specific help. Use PageUp/PageDown to scroll.");
             } else if (numArgs == 2){
                 if (commandHelps.count(args[1])){
-                    dlgt->outputStr("The " + args[1] + " command " + commandHelps[args[1]] + "\n" +
+                    bank->dlgt->outputStr("The " + args[1] + " command " + commandHelps[args[1]] + "\n" +
                                     "Usage: " + commandUsages[args[1]] + "\n" +
                                     "Example: " + commandExamples[args[1]] + "\n");
                 }else if (componentHelps.count(args[1])){
-                    dlgt->outputStr("The " + args[1] + " component " + componentHelps[args[1]] + "\n" +
+                    bank->dlgt->outputStr("The " + args[1] + " component " + componentHelps[args[1]] + "\n" +
                                     "Arguments: " + componentArgs[args[1]].first + "\n");
                 }else if (args[1] == "components"){
                     std::string compList;
                     for ( auto it = componentHelps.begin(); it != componentHelps.end(); ++it ) {
                         compList.append(it->first + ", ");
                     }
-                    dlgt->outputStr("Available components are:\n" + compList + "\nUse \"help [component]\" for more info on a specific component.\n");
+                    bank->dlgt->outputStr("Available components are:\n" + compList + "\nUse \"help [component]\" for more info on a specific component.\n");
                 } else {
-                    dlgt->outputStr("No documentation for: " + args[1] + "\n");
+                    bank->dlgt->outputStr("No documentation for: " + args[1] + "\n");
                 }
             } else {
                 handleBadUsage(args[0]);
@@ -191,7 +187,7 @@ void System_Scripting::parseCommand(const std::string& command){
             if (numArgs == 2){
                 std::string outStr = bank->listComponents(prsID(args[1]));
                 if (!outStr.empty()){
-                    dlgt->outputStr(outStr);
+                    bank->dlgt->outputStr(outStr);
                 }
             } else {
                 handleBadUsage(args[0]);
@@ -200,7 +196,7 @@ void System_Scripting::parseCommand(const std::string& command){
             if (numArgs == 2){
                 std::string outStr = bank->getName(prsID(args[1]));
                 if (!outStr.empty()){
-                    dlgt->outputStr(outStr);
+                    bank->dlgt->outputStr(outStr);
                 }
             } else {
                 handleBadUsage(args[0]);
@@ -219,44 +215,50 @@ void System_Scripting::parseCommand(const std::string& command){
             }
         } else if (args[0] == "exit") {
             if (numArgs == 1){
-                dlgt->quit();
+                bank->dlgt->quit();
             } else {
                 handleBadUsage(args[0]);
             }
         } else if (args[0] == "new") {
             if (numArgs == 1) {
-                dlgt->newGame();
+                bank->dlgt->newGame();
             } else if (numArgs == 2) {
-                dlgt->newGame();
-                dlgt->runScript(args[1]);
+                bank->dlgt->newGame();
+                bank->dlgt->runScript(args[1]);
             } else {
                 handleBadUsage(args[0]);
             }
         } else if (args[0] == "run") {
             if (numArgs == 2) {
-                dlgt->runScript(args[1]);
+                bank->dlgt->runScript(args[1]);
             } else {
                 handleBadUsage(args[0]);
             }
         } else if (args[0] == "load") {
             if (numArgs == 2){
-                dlgt->output("load game command not yet implemented\n");
+                bank->dlgt->output("load game command not yet implemented\n");
             } else {
                 handleBadUsage(args[0]);
             }
         } else if (args[0] == "save") {
             if (numArgs == 2){
-                dlgt->output("save game command not yet implemented\n");
+                bank->dlgt->output("save game command not yet implemented\n");
             } else {
                 handleBadUsage(args[0]);
             }
         } else if (args[1] == "="){
             parseAssignment(args);
+        } else if (args[0] == "sky"){
+            if (numArgs == 3){
+                bank->dlgt->switchSky(args[1], args[2]);
+            } else {
+                handleBadUsage(args[0]);
+            }
         } else {
-            dlgt->outputStr("Bad command: " + args[0] + ". Type \"help\" for a list of commands.\n");
+            bank->dlgt->outputStr("Bad command: " + args[0] + ". Type \"help\" for a list of commands.\n");
         }
     }catch(const char* error){
-        dlgt->output(error);
+        bank->dlgt->output(error);
     }
 }
 
@@ -267,15 +269,15 @@ void System_Scripting::parseAssignment(const std::vector<std::string>& args){
             DUA_id newID = bank->createEntity(args[0].c_str());
             if (newID != DUA_NULL_ID) {
                 entityVariables[args[0]] = newID;
-                dlgt->outputStr("Entity " + std::to_string(newID) + " has been assigned variable: (CTRL-C to copy)\n" + args[0]);
+                bank->dlgt->outputStr("Entity " + std::to_string(newID) + " has been assigned variable: (CTRL-C to copy)\n" + args[0]);
             } else {
-                dlgt->outputStr("Failed to create " + args[1] + "!\n");
+                bank->dlgt->outputStr("Failed to create " + args[1] + "!\n");
             }
         } else {
             handleBadUsage(args[2]);
         }
     } else {
-        dlgt->output("Bad assignment. Use \"[variable] = newent [name]\".");
+        bank->dlgt->output("Bad assignment. Use \"[variable] = newent [name]\".");
     }
 }
 
@@ -285,8 +287,8 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
         int numCompArgs = args.size() - 3;
         if (componentHelps.count(args[1])){
             if (numCompArgs != componentArgs[args[1]].second){
-                dlgt->outputStr("Wrong number of arguments for a " + args[1] + " component.\n");
-                dlgt->outputStr(componentArgs[args[1]].first);
+                bank->dlgt->outputStr("Wrong number of arguments for a " + args[1] + " component.\n");
+                bank->dlgt->outputStr(componentArgs[args[1]].first);
                 return;
             }
         }
@@ -323,10 +325,10 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
         }else if (args[1] == DUA_COMPCOLL(15,1)){
             bank->addCameraFree(entID, prsFlt(args[3]), prsFlt(args[4]), prsFlt(args[5]), prsDbl(args[6]), prsDbl(args[7]), prsDbl(args[8]), prsDbl(args[9]), prsDbl(args[10]), prsDbl(args[11]), prsDbl(args[12]), prsDbl(args[13]), prsDbl(args[14]));
         }else{
-            dlgt->outputStr("Unknown component: " + args[1] + "\n");
+            bank->dlgt->outputStr("Unknown component: " + args[1] + "\n");
         }
     } catch(const char* error) {
-        dlgt->output(error);
+        bank->dlgt->output(error);
     }
 }
 
@@ -367,10 +369,10 @@ void System_Scripting::parseRemoveCommand(const std::vector<std::string>& args){
         }else if (args[1] == DUA_COMPCOLL(15,1)){
             bank->deleteCameraFree(entID);
         }else{
-            dlgt->outputStr("Unknown component: " + args[1] + "\n");
+            bank->dlgt->outputStr("Unknown component: " + args[1] + "\n");
         }
     } catch(const char* error) {
-        dlgt->output(error);
+        bank->dlgt->output(error);
     }
 }
 
@@ -439,8 +441,8 @@ DUA_colorByte System_Scripting::prsClr(const std::string& colorValue){
 }
 
 void System_Scripting::handleBadUsage(const std::string& command){
-    dlgt->outputStr("Incorrect usage of " + command + ". Use \"help " + command + "\" for more info. Correct usage is:");
-    dlgt->outputStr("    " + commandUsages[command]);
+    bank->dlgt->outputStr("Incorrect usage of " + command + ". Use \"help " + command + "\" for more info. Correct usage is:");
+    bank->dlgt->outputStr("    " + commandUsages[command]);
 }
 
 //</editor-fold>

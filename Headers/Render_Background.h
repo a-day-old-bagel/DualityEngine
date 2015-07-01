@@ -33,6 +33,8 @@ namespace DualityEngine {
         DUA_id localActiveCamera = DUA_NULL_ID;
         CameraFree* pCamCurrent;
         DebugBackground noCamBackground;
+        std::string* queuedFileName = NULL;
+        std::string* queuedFileType = NULL;
         
         GLuint vertices;
         GLuint texture;
@@ -45,13 +47,15 @@ namespace DualityEngine {
 
         bool setUpResources(std::stringstream& engineOut);
         bool aquireView();
+        bool useCubeMap(std::string& fileName, std::string& fileType);
 
     public:
         System_Render_Background(ComponentBank* bank);
         ~System_Render_Background();
         void tick() override;    
         bool init(std::stringstream& output) override;
-        void clean() override;
+        void clean() override;        
+        void queueSkyChange(std::string& fileName, std::string& fileType);
     };
 
 }

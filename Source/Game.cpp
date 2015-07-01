@@ -24,15 +24,17 @@ void Game::Main(){
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);
     SDL_WaitThread(graphicsThread, NULL);
-    SDL_WaitThread(scriptingThread, NULL);
-    
+    SDL_WaitThread(scriptingThread, NULL);   
+}
+//</editor-fold>
+
+Game::~Game(){
     // Save game console log as text file
     std::ofstream logFile;
     logFile.open("log.txt", std::ios::trunc);
     logFile << console.getLog();
     logFile.close();
 }
-//</editor-fold>
 
 //<editor-fold defaultstate="collapsed" desc="New Game">
 /**************************************
@@ -206,7 +208,7 @@ bool Game::waitForBankDependentSystemsToPause(){
         done &= physicsCollisionSystem.isPauseConfirmed();  //PROBLEMS WITH THIS BEING EXECUTED FROM CONTROL SYS... THREAD LOCKS
         done &= userControlSystem.isPauseConfirmed();
         
-        if (SDL_GetTicks() - startTime > Settings::systemsPauseTimeout){
+        if (SDL_GetTicks() - startTime > Settings::Systems::systemsPauseTimeout){
             return false;
         }
     }

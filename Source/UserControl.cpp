@@ -12,13 +12,13 @@ using namespace DualityEngine;
 
 //<editor-fold>
 
-System_UserControl::System_UserControl(ComponentBank* bank, ControlDelegates* delegates)
+System_UserControl::System_UserControl(ComponentBank* bank)//, ControlDelegates* delegates)
                   : System(bank, "Control System", 0){
-    this->dlgt = delegates;
+//    this->dlgt = delegates;
 }
 
 System_UserControl::~System_UserControl(){
-    dlgt = NULL;
+//    dlgt = NULL;
     delete pDummyControl;
     delete pDummyPosition;
     delete pDummyOrientation;
@@ -49,8 +49,8 @@ void System_UserControl::tick(){
     while(SDL_PollEvent(&sdlEvent) != 0){
         //User requests quit
         if(sdlEvent.type == SDL_QUIT){
-            dlgt->quit();
-            dlgt->output("\nFORCED EXIT\n\n");
+            bank->dlgt->quit();
+            bank->dlgt->output("\nFORCED EXIT\n\n");
         }
         else if(sdlEvent.type == SDL_KEYDOWN){
             if(sdlEvent.key.keysym.sym == SDLK_ESCAPE){
@@ -60,51 +60,51 @@ void System_UserControl::tick(){
                         consoleIsActive = true;
                         SDL_StartTextInput();
                     }
-                    dlgt->clearCommand();
-                    dlgt->output(menuText.c_str());
-                    dlgt->pause();
+                    bank->dlgt->clearCommand();
+                    bank->dlgt->output(menuText.c_str());
+                    bank->dlgt->pause();
                 } else {
                     consoleIsActive = false;
                     SDL_StopTextInput();
-                    dlgt->resume();
+                    bank->dlgt->resume();
                 }
-                dlgt->setConsoleState(consoleIsActive, MenuIsActive);
+                bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);
             }
             if(sdlEvent.key.keysym.sym == SDLK_BACKQUOTE){
                 if (!MenuIsActive){
                     consoleIsActive = !consoleIsActive;
                     consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
-                    dlgt->setConsoleState(consoleIsActive, MenuIsActive);
+                    bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);
                 }
             }
             if (consoleIsActive){
                 if(sdlEvent.key.keysym.sym == SDLK_BACKSPACE){
-                    dlgt->backspaceCommand();
+                    bank->dlgt->backspaceCommand();
                 } else if(sdlEvent.key.keysym.sym == SDLK_DELETE){
-                    dlgt->deleteCommand();
+                    bank->dlgt->deleteCommand();
                 } else if(sdlEvent.key.keysym.sym == SDLK_RETURN){
-                    std::string command = dlgt->consoleEnter();
+                    std::string command = bank->dlgt->consoleEnter();
                     if (MenuIsActive){
                         handleMenuCommand(command);
                     } else {
-                        dlgt->submitScriptCommand(command);
+                        bank->dlgt->submitScriptCommand(command);
                     }
                 } else if(sdlEvent.key.keysym.sym == SDLK_UP){
-                    dlgt->upOneCommand();
+                    bank->dlgt->upOneCommand();
                 } else if(sdlEvent.key.keysym.sym == SDLK_DOWN){
-                    dlgt->downOneCommand();
+                    bank->dlgt->downOneCommand();
                 } else if(sdlEvent.key.keysym.sym == SDLK_LEFT){
-                    dlgt->leftCursor();
+                    bank->dlgt->leftCursor();
                 } else if(sdlEvent.key.keysym.sym == SDLK_RIGHT){
-                    dlgt->rightCursor();
+                    bank->dlgt->rightCursor();
                 } else if(sdlEvent.key.keysym.sym == SDLK_PAGEUP){
-                    dlgt->logTraverse(1);
+                    bank->dlgt->logTraverse(1);
                 } else if(sdlEvent.key.keysym.sym == SDLK_PAGEDOWN){
-                    dlgt->logTraverse(-1);
+                    bank->dlgt->logTraverse(-1);
                 } else if(sdlEvent.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL){
-                    SDL_SetClipboardText(dlgt->getCurrentLogLine().c_str());
+                    SDL_SetClipboardText(bank->dlgt->getCurrentLogLine().c_str());
                 } else if(sdlEvent.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL){
-                    dlgt->appendToCommand(SDL_GetClipboardText());                    
+                    bank->dlgt->appendToCommand(SDL_GetClipboardText());                    
                 }
             }
         }
@@ -112,7 +112,7 @@ void System_UserControl::tick(){
             if (consoleIsActive){
                 if(!((keyStates[SDL_SCANCODE_C] || keyStates[SDL_SCANCODE_V])
                                                 && SDL_GetModState() & KMOD_CTRL)){
-                    dlgt->appendToCommand(sdlEvent.text.text);
+                    bank->dlgt->appendToCommand(sdlEvent.text.text);
                 }
             }
         }
@@ -132,11 +132,11 @@ void System_UserControl::handleMenuCommand(const std::string& command){
     commandLine >> arg0;
     
     if (arg0 == "exit" || arg0 == "new" || arg0 == "save" || arg0 == "load"){
-        dlgt->submitScriptCommand(command);
+        bank->dlgt->submitScriptCommand(command);
     } else if (arg0 == "help"){        
-        dlgt->submitScriptCommand(command);
+        bank->dlgt->submitScriptCommand(command);
     } else {
-        dlgt->outputStr("Not a menu option: " + arg0 + ". Only the commands 'new', 'load', 'save', and 'exit' may be accessed from the menu. Press ESC to exit the menu, or type \"help\".");
+        bank->dlgt->outputStr("Not a menu option: " + arg0 + ". Only the commands 'new', 'load', 'save', and 'exit' may be accessed from the menu. Press ESC to exit the menu, or type \"help\".");
     }
 }
 

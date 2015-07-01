@@ -49,8 +49,6 @@ void SystemEngine::engage()
 }
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Work Thread Function">
-#define THREAD_BEGIN_BLOCK_OUTPUT "@============@  " << threadName << " initialization log BEGINS  @============@\n\n"
-#define THREAD_END_BLOCK_OUTPUT std::endl << "@============@  " << threadName << " initialization log ENDS  @============@\n\n"
 int DualityEngine::EngineThreadFunction(void* data)
 {
     System* system;
@@ -61,10 +59,14 @@ int DualityEngine::EngineThreadFunction(void* data)
     std::string threadName = threadData->threadName;
     Delegate<void()>* quitGame = threadData->quit;
     
-    bool escape = false;   
+    std::string initBlockText_Begin = "@============@  " + threadName + " initialization log BEGINS  @============@\n\n";
+    std::string initBlockText_End   = "\n@============@  " + threadName + " initialization log ENDS  @============@\n\n";
+    
+    bool systemsInitializedCorrectly = true;
+    bool escape = false; 
     
     // Initialization of each system running on this thread
-    tempOut << THREAD_BEGIN_BLOCK_OUTPUT;
+    tempOut << initBlockText_Begin;
     for (int i = 0; i < systems->size(); i++)
     {
         system = systems->at(i);
@@ -73,10 +75,12 @@ int DualityEngine::EngineThreadFunction(void* data)
             if (!(system->init(tempOut)))
             {
                 tempOut << system->getName() << " failed to initialize! Terminating "
-                        << threadName << "!\n" << THREAD_END_BLOCK_OUTPUT;
+                        << threadName << "!\n" << initBlockText_End;
                 (*output)(tempOut.str().c_str());
-                (*quitGame)();
-                return -1;
+//                (*quitGame)();
+//                return -1;
+                systemsInitializedCorrectly = false;
+                break;
             }
             else
                 tempOut << system->getName() << " has initialized.\n\n";
@@ -90,73 +94,75 @@ int DualityEngine::EngineThreadFunction(void* data)
             } catch (...) {
                 tempOut << "Unknown Exception. ";
             }
-            tempOut << "Terminating " << threadName << "!\n" << THREAD_END_BLOCK_OUTPUT;
+            tempOut << "Terminating " << threadName << "!\n" << initBlockText_End;
 
             (*output)(tempOut.str().c_str());
-            (*quitGame)();
-            return -1;
+//            (*quitGame)();
+//            return -1;
+            systemsInitializedCorrectly = false;
+            break;
         }
     }
     
-    // Printout of what's running on this thread
-    tempOut << threadName << " is entering main loop running the following systems:\n";
-    for (int i = 0; i < systems->size(); i++)
-        tempOut << "    " << i + 1 << ". " << systems->at(i)->getName() << std::endl;
-    tempOut << THREAD_END_BLOCK_OUTPUT;
-    
-    try{
-        // Output the thread's reports to console.  //KEEPS GIVING ME TROUBLE
-        (*output)(tempOut.str().c_str());
-    }catch(...){
-        (*output)("Some System Crapped."); 
-    }
-    
-    // Clear the thread's output.
-    tempOut.str(std::string());
-    tempOut.clear();
-    
-    // Main engine loop
-    while (!escape)
-    {
+    if (systemsInitializedCorrectly){
+        // Printout of what's running on this thread
+        tempOut << threadName << " is entering main loop running the following systems:\n";
         for (int i = 0; i < systems->size(); i++)
+            tempOut << "    " << i + 1 << ". " << systems->at(i)->getName() << std::endl;
+        tempOut << initBlockText_End;
+
+        // Output the thread's reports to console.
+        (*output)(tempOut.str().c_str());
+
+        // Clear the thread's output.
+        tempOut.str(std::string());
+        tempOut.clear();
+
+        // Main engine loop
+        while (!escape)
         {
-            system = systems->at(i);
-            if (system->isQuit()){
-                tempOut << system->getName() << " has received a call to quit.\n";
-                escape = true;                
-            } else if (!system->isPaused()) {
-                try{
-                    system->tick();
-                } catch (const char* err) {
-                    tempOut << "ERROR in " << system->getName() << ": " << err << std::endl;
-                    (*quitGame)();
-                    escape = true;
-                } catch (...) {
-                    tempOut << "EXCEPTION thrown in " << system->getName() << ": ";
-                    std::exception_ptr eptr = std::current_exception();
-                    try {
-                        std::rethrow_exception(eptr);
-                    } catch (const std::exception& e) {
-                        tempOut << "\"" << e.what() << "\"\n";
-                    } catch (...) {
-                        tempOut << "Unknown exception.\n";
+            escape = true;
+            for (int i = 0; i < systems->size(); i++)
+            {
+                system = systems->at(i);
+                if (system->isQuit()){
+                    tempOut << system->getName() << " aknowledges the call to exit.\n";
+                } else if (system->isPaused()){
+                    escape = false;
+                    if (!system->isPauseConfirmed()){
+                        system->confirmPaused();                 
                     }
-                            
-                    (*quitGame)();
-                    escape = true;
-                }
-            } else if (system->isPaused()) {
-                if (!system->isPauseConfirmed()){
-                    system->confirmPaused();
-//                    std::string foobar = system->getName() + " confirmed pause.\n";
-//                    (*output)(foobar.c_str());                    
+                } else {
+                    escape = false;
+                    try{
+                        system->tick();             // THIS IS THE IMPORTANT LINE
+                    } catch (const char* err) {
+                        tempOut << "@@@    ERROR in " << system->getName() << ": " << err << std::endl;
+                        (*quitGame)();
+                        escape = true;
+                    } catch (...) {
+                        tempOut << "@@@    EXCEPTION thrown in " << system->getName() << ": ";
+                        std::exception_ptr eptr = std::current_exception();
+                        try {
+                            std::rethrow_exception(eptr);
+                        } catch (const std::exception& e) {
+                            tempOut << "\"" << e.what() << "\"\n";
+                        } catch (...) {
+                            tempOut << "Unknown exception.\n";
+                        }
+
+                        (*quitGame)();
+                    }
                 }
             }
         }
+        tempOut << "Terminating " << threadName << "\n\n";
+
+        // Output the thread's reports to standard out.
+        (*output)(tempOut.str().c_str());
+    } else {
+        (*output)("Game cannot continue after failed initialization of system(s).");
+        (*quitGame)();
     }
-    tempOut << "Terminating " << threadName << "\n\n";
-    
-    // Output the thread's reports to standard out.
-    (*output)(tempOut.str().c_str());
 }
 //</editor-fold>

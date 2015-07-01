@@ -114,12 +114,10 @@
       </logicalFolder>
       <logicalFolder name="f1" displayName="Utilities" projectFiles="true">
         <itemPath>Headers/BankDelegates.h</itemPath>
-        <itemPath>Headers/ControlDelegates.h</itemPath>
         <itemPath>Assets/GUI/NoCamBackground/DebugBackground.h</itemPath>
         <itemPath>Assets/Models/DebugCube/DebugCube.h</itemPath>
         <itemPath>Headers/Delegate.h</itemPath>
         <itemPath>Assets/GUI/GUI_Console.h</itemPath>
-        <itemPath>Headers/ScriptingDelegates.h</itemPath>
         <itemPath>Headers/Settings.h</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -318,8 +316,6 @@
       </item>
       <item path="Headers/Control.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Headers/ControlDelegates.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Headers/Delegate.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/DirectionalLight.h" ex="false" tool="3" flavor2="0">
@@ -369,8 +365,6 @@
       <item path="Headers/Score.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Scripting.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Headers/ScriptingDelegates.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Settings.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -581,8 +575,6 @@
       </item>
       <item path="Headers/Control.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Headers/ControlDelegates.h" ex="false" tool="3" flavor2="0">
-      </item>
       <item path="Headers/Delegate.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/DirectionalLight.h" ex="false" tool="3" flavor2="0">
@@ -632,8 +624,6 @@
       <item path="Headers/Score.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Scripting.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Headers/ScriptingDelegates.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Settings.h" ex="false" tool="3" flavor2="0">
       </item>

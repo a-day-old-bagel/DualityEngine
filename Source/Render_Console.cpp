@@ -57,11 +57,11 @@ bool System_Render_Console::init(std::stringstream& output)
     marginWidth = (innerWidth % charStepX) / 2 + Settings::Console::marginX;
     marginHeight = (-1) * (-innerHeight % -charStepY) / 3 - Settings::Console::marginY; // openGL flips y+ is up
 
-    cursorHalfWidth = (float) Settings::Console::charW / (float) Settings::screenResX;
-    cursorHeight = (float) Settings::Console::charH / (float) Settings::screenResY;
-    cursorZeroPosX = (screenOffsetX + marginWidth/* + charStepX * commPromptNorm.size()*/) / ((float) Settings::screenResX * 0.5f) - 1;
-    cursorAdvanceX = (charStepX) / ((float) Settings::screenResX * 0.5);
-    cursorPosY = (screenOffsetY + totalHeight - marginHeight) / ((float) Settings::screenResY * 0.5f) + 1;
+    cursorHalfWidth = (float) Settings::Console::charW / (float) Settings::Display::screenResX;
+    cursorHeight = (float) Settings::Console::charH / (float) Settings::Display::screenResY;
+    cursorZeroPosX = (screenOffsetX + marginWidth/* + charStepX * commPromptNorm.size()*/) / ((float) Settings::Display::screenResX * 0.5f) - 1;
+    cursorAdvanceX = (charStepX) / ((float) Settings::Display::screenResX * 0.5);
+    cursorPosY = (screenOffsetY + totalHeight - marginHeight) / ((float) Settings::Display::screenResY * 0.5f) + 1;
 
     cursorSubArray[1] = cursorPosY;
     cursorSubArray[3] = cursorPosY - cursorHeight;
@@ -131,14 +131,14 @@ bool System_Render_Console::generateAndBufferGeometry(std::stringstream& output)
     memset(UVs, 0, sizeVertArray);
 
     // Generate the backgroud quad
-        verts[sizeVertArray - 8] =                screenOffsetX  / ((float)Settings::screenResX * 0.5f) - 1;
-        verts[sizeVertArray - 7] =                screenOffsetY  / ((float)Settings::screenResY * 0.5f) + 1;            
-        verts[sizeVertArray - 6] = (totalWidth  + screenOffsetX) / ((float)Settings::screenResX * 0.5f) - 1;
-        verts[sizeVertArray - 5] =                screenOffsetY  / ((float)Settings::screenResY * 0.5f) + 1;            
-        verts[sizeVertArray - 4] =                screenOffsetX  / ((float)Settings::screenResX * 0.5f) - 1;
-        verts[sizeVertArray - 3] = (totalHeight + screenOffsetY) / ((float)Settings::screenResY * 0.5f) + 1;            
-        verts[sizeVertArray - 2] = (totalWidth  + screenOffsetX) / ((float)Settings::screenResX * 0.5f) - 1;
-        verts[sizeVertArray - 1] = (totalHeight + screenOffsetY) / ((float)Settings::screenResY * 0.5f) + 1;
+        verts[sizeVertArray - 8] =                screenOffsetX  / ((float)Settings::Display::screenResX * 0.5f) - 1;
+        verts[sizeVertArray - 7] =                screenOffsetY  / ((float)Settings::Display::screenResY * 0.5f) + 1;            
+        verts[sizeVertArray - 6] = (totalWidth  + screenOffsetX) / ((float)Settings::Display::screenResX * 0.5f) - 1;
+        verts[sizeVertArray - 5] =                screenOffsetY  / ((float)Settings::Display::screenResY * 0.5f) + 1;            
+        verts[sizeVertArray - 4] =                screenOffsetX  / ((float)Settings::Display::screenResX * 0.5f) - 1;
+        verts[sizeVertArray - 3] = (totalHeight + screenOffsetY) / ((float)Settings::Display::screenResY * 0.5f) + 1;            
+        verts[sizeVertArray - 2] = (totalWidth  + screenOffsetX) / ((float)Settings::Display::screenResX * 0.5f) - 1;
+        verts[sizeVertArray - 1] = (totalHeight + screenOffsetY) / ((float)Settings::Display::screenResY * 0.5f) + 1;
 
         const float offSetToCenterX = ((float)charWidth - 2) / (float)charWidth;
         const float offSetToCenterY = ((float)charHeight + 2) / (float)charHeight;
@@ -182,17 +182,17 @@ bool System_Render_Console::generateAndBufferGeometry(std::stringstream& output)
     for (int i = 0; i < numCharsY_body; i++){
         for (int j = 0; j < numCharsX; j++){
             // Vertices of each character quad - four per quad
-            verts[STRIDE(8) +  0] = ((marginWidth  + j * charStepX) + screenOffsetX) / ((float)Settings::screenResX * 0.5) - 1;
-            verts[STRIDE(8) +  1] = ((marginHeight + i * charStepY) + screenOffsetY) / ((float)Settings::screenResY * 0.5) + 1;
+            verts[STRIDE(8) +  0] = ((marginWidth  + j * charStepX) + screenOffsetX) / ((float)Settings::Display::screenResX * 0.5) - 1;
+            verts[STRIDE(8) +  1] = ((marginHeight + i * charStepY) + screenOffsetY) / ((float)Settings::Display::screenResY * 0.5) + 1;
 
-            verts[STRIDE(8) +  2] = ((marginWidth  + j * charStepX  + charWidth) + screenOffsetX) / ((float)Settings::screenResX * 0.5) - 1;
-            verts[STRIDE(8) +  3] = ((marginHeight + i * charStepY) + screenOffsetY) / ((float)Settings::screenResY * 0.5) + 1;
+            verts[STRIDE(8) +  2] = ((marginWidth  + j * charStepX  + charWidth) + screenOffsetX) / ((float)Settings::Display::screenResX * 0.5) - 1;
+            verts[STRIDE(8) +  3] = ((marginHeight + i * charStepY) + screenOffsetY) / ((float)Settings::Display::screenResY * 0.5) + 1;
 
-            verts[STRIDE(8) +  4] = ((marginWidth  + j * charStepX) + screenOffsetX) / ((float)Settings::screenResX * 0.5) - 1;
-            verts[STRIDE(8) +  5] = ((marginHeight + i * charStepY + charHeight) + screenOffsetY) / ((float)Settings::screenResY * 0.5) + 1;
+            verts[STRIDE(8) +  4] = ((marginWidth  + j * charStepX) + screenOffsetX) / ((float)Settings::Display::screenResX * 0.5) - 1;
+            verts[STRIDE(8) +  5] = ((marginHeight + i * charStepY + charHeight) + screenOffsetY) / ((float)Settings::Display::screenResY * 0.5) + 1;
 
-            verts[STRIDE(8) +  6] = ((marginWidth  + j * charStepX  + charWidth) + screenOffsetX) / ((float)Settings::screenResX * 0.5) - 1;
-            verts[STRIDE(8) +  7] = ((marginHeight + i * charStepY + charHeight) + screenOffsetY) / ((float)Settings::screenResY * 0.5) + 1;
+            verts[STRIDE(8) +  6] = ((marginWidth  + j * charStepX  + charWidth) + screenOffsetX) / ((float)Settings::Display::screenResX * 0.5) - 1;
+            verts[STRIDE(8) +  7] = ((marginHeight + i * charStepY + charHeight) + screenOffsetY) / ((float)Settings::Display::screenResY * 0.5) + 1;
 
             // Two triangles drawn per character quad
             indices[STRIDE(6) + 0] = STRIDE(4) +  0;
@@ -209,17 +209,17 @@ bool System_Render_Console::generateAndBufferGeometry(std::stringstream& output)
     for (int i = numCharsY_body; i < numCharsY_body + numCharsY_comm; i++){
         for (int j = 0; j < numCharsX; j++){
             // Vertices of each character quad - four per quad
-            verts[STRIDE(8) +  0] = ((    marginWidth  + j * charStepX) + screenOffsetX) / ((float)Settings::screenResX * 0.5) - 1;
-            verts[STRIDE(8) +  1] = ((2 * marginHeight + i * charStepY) + screenOffsetY) / ((float)Settings::screenResY * 0.5) + 1;
+            verts[STRIDE(8) +  0] = ((    marginWidth  + j * charStepX) + screenOffsetX) / ((float)Settings::Display::screenResX * 0.5) - 1;
+            verts[STRIDE(8) +  1] = ((2 * marginHeight + i * charStepY) + screenOffsetY) / ((float)Settings::Display::screenResY * 0.5) + 1;
 
-            verts[STRIDE(8) +  2] = ((    marginWidth  + j * charStepX  + charWidth) + screenOffsetX) / ((float)Settings::screenResX * 0.5) - 1;
-            verts[STRIDE(8) +  3] = ((2 * marginHeight + i * charStepY) + screenOffsetY) / ((float)Settings::screenResY * 0.5) + 1;
+            verts[STRIDE(8) +  2] = ((    marginWidth  + j * charStepX  + charWidth) + screenOffsetX) / ((float)Settings::Display::screenResX * 0.5) - 1;
+            verts[STRIDE(8) +  3] = ((2 * marginHeight + i * charStepY) + screenOffsetY) / ((float)Settings::Display::screenResY * 0.5) + 1;
 
-            verts[STRIDE(8) +  4] = ((    marginWidth  + j * charStepX) + screenOffsetX) / ((float)Settings::screenResX * 0.5) - 1;
-            verts[STRIDE(8) +  5] = ((2 * marginHeight + i * charStepY + charHeight) + screenOffsetY) / ((float)Settings::screenResY * 0.5) + 1;
+            verts[STRIDE(8) +  4] = ((    marginWidth  + j * charStepX) + screenOffsetX) / ((float)Settings::Display::screenResX * 0.5) - 1;
+            verts[STRIDE(8) +  5] = ((2 * marginHeight + i * charStepY + charHeight) + screenOffsetY) / ((float)Settings::Display::screenResY * 0.5) + 1;
 
-            verts[STRIDE(8) +  6] = ((    marginWidth  + j * charStepX  + charWidth) + screenOffsetX) / ((float)Settings::screenResX * 0.5) - 1;
-            verts[STRIDE(8) +  7] = ((2 * marginHeight + i * charStepY + charHeight) + screenOffsetY) / ((float)Settings::screenResY * 0.5) + 1;
+            verts[STRIDE(8) +  6] = ((    marginWidth  + j * charStepX  + charWidth) + screenOffsetX) / ((float)Settings::Display::screenResX * 0.5) - 1;
+            verts[STRIDE(8) +  7] = ((2 * marginHeight + i * charStepY + charHeight) + screenOffsetY) / ((float)Settings::Display::screenResY * 0.5) + 1;
 
             // Two triangles drawn per character quad
             indices[STRIDE(6) + 0] = STRIDE(4) +  0;

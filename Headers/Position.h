@@ -21,7 +21,7 @@ namespace DualityEngine {
             matrixIsCurrent = false;
         }
         inline void updateMatrix(){
-            transform = glm::translate(duaIdentMat4, position);
+            transform = glm::translate(Constants::duaIdentMat4, position);
             matrixIsCurrent = true;
         }
         inline glm::mat4 getMatrix(){

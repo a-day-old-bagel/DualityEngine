@@ -21,8 +21,6 @@
 #include "UserControl.h"
 #include "Scripting.h"
 #include "Engine.h"
-#include "ControlDelegates.h"
-#include "ScriptingDelegates.h"
 #include "BankDelegates.h"
 #include "Console.h"
 //</editor-fold>
@@ -48,33 +46,7 @@ namespace DualityEngine {
         Delegate<void(const std::string&)> outputStrDelegate = DELEGATE(&Console::outputStr, &console);
         // Delegate to submit a command to the scripting system
         Delegate<void(const std::string&)> submitCommand = DELEGATE(&Game::submitScriptCommand, this);
-        // control delegates of top level functions to give to the UserControl system
-        ControlDelegates controlDelegates = {
-            quitDelegate, DELEGATE(&Game::NewGame, this),
-            DELEGATE(&Game::Pause, this),
-            DELEGATE(&Game::Resume, this),
-            DELEGATE(&Console::applyBackspace, &console),
-            DELEGATE(&Console::applyDelete, &console),
-            DELEGATE(&Console::clearCommand, &console),
-            DELEGATE(&Console::upOneCommand, &console),
-            DELEGATE(&Console::downOneCommand, &console),
-            DELEGATE(&Console::leftCursor, &console),
-            DELEGATE(&Console::rightCursor, &console),
-            outputDelegate, outputStrDelegate,
-            DELEGATE(&Console::addToCommand, &console),
-            DELEGATE(&Console::submitCommand, &console),
-            submitCommand,
-            DELEGATE(&Console::getLogLineFromBack, &console),
-            DELEGATE(&Console::getCurrentLogLine, &console),
-            DELEGATE(&Console::setState, &console),
-            DELEGATE(&Console::traverseLog, &console),
-            DELEGATE(&Game::RunScript, this)
-        };
-        ScriptingDelegates scriptingDelegates = {
-            outputDelegate, outputStrDelegate, quitDelegate,
-            DELEGATE(&Game::NewGame, this), DELEGATE(&Game::RunScript, this)
-        };
-        // Some more delegates for the bank
+        // Delegates that all systems will be able to access if they need to. I decided to just pile them all into one container.
         BankDelegates bankDelegates = {
             DELEGATE(&Game::systems_discover, this),
             DELEGATE(&Game::systems_scrutinize, this),
@@ -100,7 +72,8 @@ namespace DualityEngine {
             DELEGATE(&Console::getLogLineFromBack, &console),
             DELEGATE(&Console::getCurrentLogLine, &console),
             DELEGATE(&Console::setState, &console),
-            DELEGATE(&Console::traverseLog, &console)
+            DELEGATE(&Console::traverseLog, &console),
+            DELEGATE(&System_Render_Background::queueSkyChange, &renderBackgroundSystem)
             
         };
         
@@ -125,9 +98,9 @@ namespace DualityEngine {
         // A system to check collisions between all spatial components according to collision components
         System_PhysCollide physicsCollisionSystem = System_PhysCollide(&bank);
         // A system to handle user input
-        System_UserControl userControlSystem = System_UserControl(&bank, &controlDelegates);
+        System_UserControl userControlSystem = System_UserControl(&bank);//, &controlDelegates);
         // A system to handle scripting input from the console or from a file.
-        System_Scripting scriptingSystem = System_Scripting(&bank, &scriptingDelegates);
+        System_Scripting scriptingSystem = System_Scripting(&bank);//, &scriptingDelegates);
         // More systems to come...
 
         //</editor-fold>
@@ -179,7 +152,7 @@ namespace DualityEngine {
         
     public:
         Game() {};
-        ~Game() {};
+        ~Game();
         void Main();
     };
 

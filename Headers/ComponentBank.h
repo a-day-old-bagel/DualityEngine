@@ -86,9 +86,10 @@ namespace DualityEngine {
 
     public:
         
-        /* BANK MANAGEMENT */
+        /* PUBLIC DELEGATES */
         BankDelegates* dlgt;
         
+        /* COMPONENT DICTIONARY */
         #define DUA_COMP_TUPLE std::tuple<std::string, std::string, DUA_compFlag>
         #define DUA_COMPCOLL(x, y) std::get<y>(bank->componentCollections[x])
         const std::array<const std::tuple<std::string, std::string, DUA_compFlag>, 16> componentCollections = {{

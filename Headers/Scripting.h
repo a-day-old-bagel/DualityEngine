@@ -10,7 +10,6 @@
 #define	SCRIPTING_H
 
 #include "System.h"
-#include "ScriptingDelegates.h"
 #include <queue>
 
 namespace DualityEngine {
@@ -18,7 +17,7 @@ namespace DualityEngine {
     class System_Scripting : public System
     {
     private:
-        ScriptingDelegates* dlgt;
+//        ScriptingDelegates* dlgt;
         std::queue<std::string> commandQueue;
         std::unordered_map<std::string, DUA_id> entityVariables = {};
         std::unordered_map<std::string, const std::string> commandUsages = {
@@ -36,7 +35,8 @@ namespace DualityEngine {
             {"new" , "new OR new [script]"},
             {"save" , "save [save name]    (no spaces in names)"},
             {"load" , "load [save name]    (no spaces in names)"},
-            {"run" , "run [script]"}
+            {"run" , "run [script]"},
+            {"sky","sky [cubemap name] [cubemap file type]"}
         };
         std::unordered_map<std::string, const std::string> commandExamples = {
             {"newent" , "\"newent testEntity\" creates a new entity (new soul) named \"testEntity\""},
@@ -53,7 +53,8 @@ namespace DualityEngine {
             {"new" , "\"new\" creates an empty world (game state). \"new testScene\" creates an empty game state, then runs the script \"testScene\"."},
             {"save" , "\"save myGame\" creates a new saved state called \"myGame\" that you can load later."},
             {"load" , "\"load myGame\" discards the current game state and instead loads the saved state named \"myGame\"."},
-            {"run" , "\"run myScript\" executes the duality script named \"myScript\"."}
+            {"run" , "\"run myScript\" executes the duality script named \"myScript\"."},
+            {"sky","\"sky mathy png\" loads the \"mathy\" cubemap of file type \"png\" into the skyquad."}
         };
         std::unordered_map<std::string, const std::string> commandHelps = {
             {"newent" , "creates a new entity, displaying its assigned ID (CTRL-C to copy the ID afterwards)."},
@@ -70,7 +71,8 @@ namespace DualityEngine {
             {"new" , "discards any currently running game and presents an empty world."},
             {"save" , "stores the current game state to the hard drive under a given name to be loaded later. Overwrites saves with the same name."},
             {"load" , "discards any current game state and presents the game state stored under a given name."},
-            {"run" , "executes a script, regardless of current game state (scripted variable names may be overwritten, saves may be corrupted, etc). Use at your own peril."}
+            {"run" , "executes a script, regardless of current game state (scripted variable names may be overwritten, saves may be corrupted, etc). Use at your own peril."},
+            {"sky","sky replaces the cubemap currently rendered in the sky (the 'skybox,' thought it's not a box) with a cubemap of the user's choice."}
         };
         std::unordered_map<std::string, const std::string> componentHelps = {
             {DUA_COMPCOLL(0, 1) , "is something that every entity starts out with. Souls cannot be created or destroyed directly."},
@@ -119,7 +121,7 @@ namespace DualityEngine {
         void parseRemoveCommand(const std::vector<std::string>& args);
         void handleBadUsage(const std::string& command);
     public:
-        System_Scripting(ComponentBank* bank, ScriptingDelegates* delegates);
+        System_Scripting(ComponentBank* bank);//, ScriptingDelegates* delegates);
         ~System_Scripting();
         void tick() override;
         bool init(std::stringstream& output) override;

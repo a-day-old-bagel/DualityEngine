@@ -57,17 +57,45 @@ bool System_Render_Background::setUpResources(std::stringstream& engineOut)
     glEnableVertexAttribArray(attrLoc_verts);
     glVertexAttribPointer(attrLoc_verts, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-    #define WHICHSKYMAP "interstellar"
-    #define WHICHSKYFILETYPE "tga"
-    success &= loadCubeMap (std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/negz."  WHICHSKYFILETYPE).c_str(),
-                            std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/posz."  WHICHSKYFILETYPE).c_str(),
-                            std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/posy."  WHICHSKYFILETYPE).c_str(),
-                            std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/negy."  WHICHSKYFILETYPE).c_str(),
-                            std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/negx."  WHICHSKYFILETYPE).c_str(),
-                            std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/posx."  WHICHSKYFILETYPE).c_str(),
-                            &texture, engineOut);   
+    success &= loadCubeMapInitial (
+            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/negz." + Settings::Sky::fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/posz." + Settings::Sky::fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/posy." + Settings::Sky::fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/negy." + Settings::Sky::fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/negx." + Settings::Sky::fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/posx." + Settings::Sky::fileType).c_str(),
+            &texture, engineOut);
+    
+    readAndBufferCubeMap (
+            std::string("Assets/Textures/cubeMaps/mathy/negz.png").c_str(),
+            std::string("Assets/Textures/cubeMaps/mathy/posz.png").c_str(),
+            std::string("Assets/Textures/cubeMaps/mathy/posy.png").c_str(),
+            std::string("Assets/Textures/cubeMaps/mathy/negy.png").c_str(),
+            std::string("Assets/Textures/cubeMaps/mathy/negx.png").c_str(),
+            std::string("Assets/Textures/cubeMaps/mathy/posx.png").c_str(),
+            &texture, bank->dlgt->outputStr);
              
     return success;
+}
+
+void System_Render_Background::queueSkyChange(std::string& fileName, std::string& fileType){
+    queuedFileName = new std::string(fileName);
+    queuedFileType = new std::string(fileType);
+}
+
+bool System_Render_Background::useCubeMap(std::string& fileName, std::string& fileType){
+//    glActiveTexture (GL_TEXTURE2);
+//    glBindTexture (GL_TEXTURE_CUBE_MAP, texture);
+//    glUseProgram (shdrLoc);
+    glBindVertexArray (VAOloc);
+    return readAndBufferCubeMap (
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/negz." + fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/posz." + fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/posy." + fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/negy." + fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/negx." + fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/posx." + fileType).c_str(),
+            &texture, bank->dlgt->outputStr);
 }
 
 void System_Render_Background::tick()
@@ -84,13 +112,24 @@ void System_Render_Background::tick()
         glUniform1i (txtrLoc, 2);
         glBindVertexArray (VAOloc);
 
-        //glDrawElements (GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, 0);
         glDrawArrays(GL_QUADS, 0, 4);    
     
     } else {
         noCamBackground.render();
     }
     glDepthMask (GL_TRUE);
+    
+    if (queuedFileName){
+        if (queuedFileType){
+//            bank->dlgt->output("foo0");
+            useCubeMap(*queuedFileName, *queuedFileType);
+//            bank->dlgt->output("foo1");
+            delete queuedFileName, queuedFileType;
+//            bank->dlgt->output("foo2");
+            queuedFileName, queuedFileType = NULL;
+//            bank->dlgt->output("foo3");
+        }
+    }
 }
 
 bool System_Render_Background::aquireView(){

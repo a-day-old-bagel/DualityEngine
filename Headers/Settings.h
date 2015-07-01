@@ -38,7 +38,7 @@ namespace DualityEngine {
     typedef glm::vec3       DUA_vec3;        // wrapper for a 3D vector
     typedef glm::vec2       DUA_vec2;        // wrapper for a 2D vector
     
-    /* MACROS */
+    /* FUNCTIONAL MACROS */
     
     // This is the function used to convert strings to ID numbers (currently unsigned ints)
     #define DUA_STR_TO_ID(str, base) std::stoul(str, nullptr, base)
@@ -48,7 +48,6 @@ namespace DualityEngine {
     #define DUA_STR_TO_FLOAT(str) std::stof(str)
     // This is the function used to convert strings to DUA_colorByte
     #define DUA_STR_TO_COLOR(str, base) std::stoul(str, nullptr, base)
-
     // This is used when passing buffer offsets to the GPU via openGL
     #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
 
@@ -121,7 +120,7 @@ namespace DualityEngine {
         #define DUA_GLVERSION_MINOR 0
     #endif
 
-    #define DUA_WHICH_MONITOR 0 
+    #define DUA_WHICH_MONITOR 2
 
     #ifdef DUA_FULLSCREEN
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
@@ -136,14 +135,22 @@ namespace DualityEngine {
     #define DUA_DEFAULT_ZPLANEFAR 100.f
     #define DUA_DEFAULT_CONSOLEWIDTH 800
     #define DUA_DEFAULT_CONSOLEHEIGHT 600
+    #define DUA_DEFAULT_SKYMAP "interstellar"
+    #define DUA_DEFAULT_SKYFILETYPE "tga"
 
     /* RUN-TIME MUTABLE SETTINGS *AKA GLOBAL VARIABLES* */
     
     namespace Settings{
-        extern int screenResX, screenResY;
-        extern float screenAspectRatio;
-        extern int whichMonitor, monitorOffsetX, monitorOffsetY;
-        extern int systemsPauseTimeout;
+        
+        namespace Systems{
+            extern int systemsPauseTimeout;
+        }
+        
+        namespace Display{
+            extern int screenResX, screenResY;
+            extern float screenAspectRatio;
+            extern int whichMonitor, monitorOffsetX, monitorOffsetY;
+        }
         
         namespace Console{
             extern int locX, locY, width, height, charW, charH, marginX, marginY, spacingX, spacingY;
@@ -151,12 +158,18 @@ namespace DualityEngine {
             extern glm::vec3 bkgndColor;
             extern glm::vec3 textColor;
         }
+        
+        namespace Sky{
+            extern std::string fileName, fileType;
+        }
     }
-//    extern const glm::vec3 duaZeroVec3;
-    extern const glm::mat4 duaIdentMat4;
-    extern const double pi;
-    extern const double halfPi;
-    extern const double quarterPi;
+    
+    namespace Constants {
+        extern const glm::mat4 duaIdentMat4;
+        extern const double pi;
+        extern const double halfPi;
+        extern const double quarterPi;
+    }
 }
 
 #endif	/* DUA_SETTINGS_H */

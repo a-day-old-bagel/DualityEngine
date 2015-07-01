@@ -7,7 +7,7 @@ using namespace DualityEngine;
 
 //<editor-fold defaultstate="collapsed" desc="Constructor">
 System_Render_Master::System_Render_Master(ComponentBank* bank)
-                  : System(bank, "Console Rendering System", 0) 
+                  : System(bank, "Master Rendering System", 0) 
 {
     
 }
@@ -48,27 +48,33 @@ bool System_Render_Master::setUpEnvironment(std::stringstream& engineOut)
     }
     
     int monitorUsed;
-    for (monitorUsed = 0; monitorUsed <= Settings::whichMonitor; monitorUsed++){
+    for (monitorUsed = 0; monitorUsed <= Settings::Display::whichMonitor; ++monitorUsed){
         if (SDL_GetCurrentDisplayMode(monitorUsed, &display)){
             engineOut << "Could not get display mode for monitor " << monitorUsed << ": " << SDL_GetError() << std::endl;
-            return false;
+            if (monitorUsed > 0){
+                engineOut << "Attempting to use display " << monitorUsed - 1 << std::endl;
+                --monitorUsed;
+                break;
+            } else {            
+                return false;
+            }
         } else {
             engineOut << "Display " << monitorUsed << " reports: " << display.w << "x" << display.h << "@" << display.refresh_rate << std::endl;
-            if (monitorUsed == Settings::whichMonitor){
+            if (monitorUsed == Settings::Display::whichMonitor){
                 #ifdef DUA_FULLSCREEN
-                    Settings::screenResX = display.w;
-                    Settings::screenResY = display.h;
+                    Settings::Display::screenResX = display.w;
+                    Settings::Display::screenResY = display.h;
                 #endif
-                Settings::screenAspectRatio = (float) Settings::screenResX / (float) Settings::screenResY;
+                Settings::Display::screenAspectRatio = (float) Settings::Display::screenResX / (float) Settings::Display::screenResY;
                 engineOut << "Running on display " << monitorUsed << std::endl;
             } else {
-                Settings::monitorOffsetX += display.w;
+                Settings::Display::monitorOffsetX += display.w;
             }
         }
     }
     
-    Settings::Console::width = Settings::screenResX;
-    Settings::Console::height = Settings::screenResY / 2;
+    Settings::Console::width = Settings::Display::screenResX;
+    Settings::Console::height = Settings::Display::screenResY / 2;
     
     // Specify OpenGL version and profile
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, DUA_GLVERSION_MAJOR);
@@ -76,8 +82,9 @@ bool System_Render_Master::setUpEnvironment(std::stringstream& engineOut)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);    
     // Create the SDL window
     pWindow = SDL_CreateWindow("Duality Engine",
-                    Settings::monitorOffsetX + (display.w - Settings::screenResX * 1.5), Settings::monitorOffsetY + (display.h - Settings::screenResY * 1.5),
-                    Settings::screenResX, Settings::screenResY,
+                    Settings::Display::monitorOffsetX + (display.w - Settings::Display::screenResX) * 0.5,
+                    Settings::Display::monitorOffsetY + (display.h - Settings::Display::screenResY) * 0.5,
+                    Settings::Display::screenResX, Settings::Display::screenResY,
                     DUA_SDL_SCREENOPTIONS);    
     // If the window couldn't be created for whatever reason
     if (pWindow == NULL) {

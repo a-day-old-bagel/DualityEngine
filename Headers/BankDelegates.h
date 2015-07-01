@@ -42,6 +42,7 @@ namespace DualityEngine {
         Delegate<std::string()> getCurrentLogLine;
         Delegate<void(bool, bool)> setConsoleState;
         Delegate<void(int)> logTraverse;
+        Delegate<void(std::string&, std::string&)> switchSky;
         
     };
 

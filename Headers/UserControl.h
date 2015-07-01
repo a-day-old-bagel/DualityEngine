@@ -11,15 +11,13 @@
 
 #include <SDL.h>
 #include "System.h"
-//#include <glm/glm.hpp>
-#include "ControlDelegates.h"
 
 namespace DualityEngine {
 
     class System_UserControl : public System
     {
     private:
-        ControlDelegates* dlgt;
+//        ControlDelegates* dlgt;
         SDL_Event sdlEvent;
         bool consoleIsActive = false;
         bool MenuIsActive = false;
@@ -35,7 +33,7 @@ namespace DualityEngine {
         void handleControlKeys(const Uint8* keyStates);
         void checkActiveControl();
     public:
-        System_UserControl(ComponentBank* bank, ControlDelegates* delegates);
+        System_UserControl(ComponentBank* bank);//, ControlDelegates* delegates);
         ~System_UserControl();
         void tick() override;
         bool init(std::stringstream& output) override;
