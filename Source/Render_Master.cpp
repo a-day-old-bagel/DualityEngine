@@ -76,7 +76,7 @@ bool System_Render_Master::setUpEnvironment(std::stringstream& engineOut)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);    
     // Create the SDL window
     pWindow = SDL_CreateWindow("Duality Engine",
-                    Settings::monitorOffsetX + (display.w - Settings::screenResX), Settings::monitorOffsetY + (display.h - Settings::screenResY),
+                    Settings::monitorOffsetX + (display.w - Settings::screenResX * 1.5), Settings::monitorOffsetY + (display.h - Settings::screenResY * 1.5),
                     Settings::screenResX, Settings::screenResY,
                     DUA_SDL_SCREENOPTIONS);    
     // If the window couldn't be created for whatever reason

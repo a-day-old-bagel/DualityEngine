@@ -57,8 +57,8 @@ bool System_Render_Background::setUpResources(std::stringstream& engineOut)
     glEnableVertexAttribArray(attrLoc_verts);
     glVertexAttribPointer(attrLoc_verts, 4, GL_FLOAT, GL_FALSE, 0, 0);
 
-    #define WHICHSKYMAP "Meadow"
-    #define WHICHSKYFILETYPE "jpg"
+    #define WHICHSKYMAP "interstellar"
+    #define WHICHSKYFILETYPE "tga"
     success &= loadCubeMap (std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/negz."  WHICHSKYFILETYPE).c_str(),
                             std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/posz."  WHICHSKYFILETYPE).c_str(),
                             std::string("Assets/Textures/cubeMaps/"  WHICHSKYMAP  "/posy."  WHICHSKYFILETYPE).c_str(),
