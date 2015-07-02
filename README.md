@@ -57,4 +57,10 @@ This is ideal for online games that draw game data froma server.
 It also makes saving and loading game states naturally very simple.
 
 ----------
-###Duality Engine also aims to investigate the world of **Physically Based Rendering**, and maybe go one step further, investigating the possibility of a fully **unified physics engine** that can handle the typically ray-based lighting calculations of modern PBR and the calculation of kinematic interactions of game objects using a single model.
+###Duality Engine also aims to investigate the worlds of **Physically Based Rendering** and procedurally generated destructible terrains and objects, possibly via **non-cubic voxels.** 
+
+_____________________
+###**Controls**
+####use  ~  (tilde) to access the in-game console, into which you may type "help" to see a listing of available commands.
+####Given an entity possessing camera, position, orientation, and control components, movement controls are set up in the standard WASD-mouse configuration (or arrow keys to rotate view also work for now). 
+
