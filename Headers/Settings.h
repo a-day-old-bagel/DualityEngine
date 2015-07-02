@@ -103,10 +103,12 @@ namespace DualityEngine {
     #define DUA_DEFAULT_COMPONENTS VALID_COMPS      // Components entities start with (none)
     #define DUA_INVALID_COMPONENTS  0x0             // For returning errors
     
-    /* META SWITCHES */
+    /* SWITCHES */
     
 //    #define DUA_DEBUG_CONSOLE_TO_COUT
+    
     #define DUA_OLD_VIDEO_DRIVERS // This needs to be commented out in order to use OpenGL 3.3 instead of just 3.0.
+
 //    #define DUA_FULLSCREEN
 
     /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */   
@@ -135,8 +137,8 @@ namespace DualityEngine {
     #define DUA_DEFAULT_ZPLANEFAR 100.f
     #define DUA_DEFAULT_CONSOLEWIDTH 800
     #define DUA_DEFAULT_CONSOLEHEIGHT 600
-    #define DUA_DEFAULT_SKYMAP "interstellar"
-    #define DUA_DEFAULT_SKYFILETYPE "tga"
+    #define DUA_DEFAULT_SKYMAP "Sea"
+    #define DUA_DEFAULT_SKYFILETYPE "png"
 
     /* RUN-TIME MUTABLE SETTINGS *AKA GLOBAL VARIABLES* */
     

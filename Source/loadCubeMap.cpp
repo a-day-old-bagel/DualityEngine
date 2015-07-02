@@ -3,33 +3,6 @@
 #include "stb_image.h"
 
 using namespace DualityEngine;
-    
-bool DualityEngine::loadCubeMapInitial (const char* front,
-                                        const char* back,
-                                        const char* top,
-                                        const char* bottom,
-                                        const char* left,
-                                        const char* right,
-                                        GLuint* tex_cube,
-                                        std::stringstream& engineOut) {
-
-    // generate cubemap texture
-    glGenTextures (1, tex_cube);
-
-    // read texture from disk and buffer to GPU
-    if (!readAndBufferCubeMap(front, back, top, bottom, left, right, tex_cube, engineOut))
-        return false;
-
-    // format cube map texture
-    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
-    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-    engineOut << "Cube map loaded successfully.\n";    
-    return true;
-}
 
 bool DualityEngine::readAndBufferCubeMap(const char* front,
                                          const char* back,

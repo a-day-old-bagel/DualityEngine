@@ -47,6 +47,7 @@ namespace DualityEngine {
 
         bool setUpResources(std::stringstream& engineOut);
         bool aquireView();
+        bool useCubeMap(std::string& fileName, std::string& fileType, std::stringstream& engineOut);
         bool useCubeMap(std::string& fileName, std::string& fileType);
 
     public:

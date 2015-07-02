@@ -55,25 +55,20 @@ bool System_Render_Background::setUpResources(std::stringstream& engineOut)
     glBindBuffer(GL_ARRAY_BUFFER, vertices);
     glBufferData(GL_ARRAY_BUFFER, sizeof(DUA_float) * 16, corners, GL_STATIC_DRAW);
     glEnableVertexAttribArray(attrLoc_verts);
-    glVertexAttribPointer(attrLoc_verts, 4, GL_FLOAT, GL_FALSE, 0, 0);
-
-    success &= loadCubeMapInitial (
-            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/negz." + Settings::Sky::fileType).c_str(),
-            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/posz." + Settings::Sky::fileType).c_str(),
-            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/posy." + Settings::Sky::fileType).c_str(),
-            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/negy." + Settings::Sky::fileType).c_str(),
-            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/negx." + Settings::Sky::fileType).c_str(),
-            std::string("Assets/Textures/cubeMaps/" + Settings::Sky::fileName + "/posx." + Settings::Sky::fileType).c_str(),
-            &texture, engineOut);
+    glVertexAttribPointer(attrLoc_verts, 4, GL_FLOAT, GL_FALSE, 0, 0);    
     
-    readAndBufferCubeMap (
-            std::string("Assets/Textures/cubeMaps/mathy/negz.png").c_str(),
-            std::string("Assets/Textures/cubeMaps/mathy/posz.png").c_str(),
-            std::string("Assets/Textures/cubeMaps/mathy/posy.png").c_str(),
-            std::string("Assets/Textures/cubeMaps/mathy/negy.png").c_str(),
-            std::string("Assets/Textures/cubeMaps/mathy/negx.png").c_str(),
-            std::string("Assets/Textures/cubeMaps/mathy/posx.png").c_str(),
-            &texture, bank->dlgt->outputStr);
+    // generate texture
+    glGenTextures (1, &texture);    
+
+    // load as a cube map
+    success &= useCubeMap(Settings::Sky::fileName, Settings::Sky::fileType, engineOut);
+    
+    // format cube map texture
+    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri (GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
              
     return success;
 }
@@ -84,10 +79,6 @@ void System_Render_Background::queueSkyChange(std::string& fileName, std::string
 }
 
 bool System_Render_Background::useCubeMap(std::string& fileName, std::string& fileType){
-//    glActiveTexture (GL_TEXTURE2);
-//    glBindTexture (GL_TEXTURE_CUBE_MAP, texture);
-//    glUseProgram (shdrLoc);
-    glBindVertexArray (VAOloc);
     return readAndBufferCubeMap (
             std::string("Assets/Textures/cubeMaps/" + fileName + "/negz." + fileType).c_str(),
             std::string("Assets/Textures/cubeMaps/" + fileName + "/posz." + fileType).c_str(),
@@ -96,6 +87,17 @@ bool System_Render_Background::useCubeMap(std::string& fileName, std::string& fi
             std::string("Assets/Textures/cubeMaps/" + fileName + "/negx." + fileType).c_str(),
             std::string("Assets/Textures/cubeMaps/" + fileName + "/posx." + fileType).c_str(),
             &texture, bank->dlgt->outputStr);
+}
+
+bool System_Render_Background::useCubeMap(std::string& fileName, std::string& fileType, std::stringstream& engineOut){
+    return readAndBufferCubeMap (
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/negz." + fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/posz." + fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/posy." + fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/negy." + fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/negx." + fileType).c_str(),
+            std::string("Assets/Textures/cubeMaps/" + fileName + "/posx." + fileType).c_str(),
+            &texture, engineOut);
 }
 
 void System_Render_Background::tick()
@@ -121,13 +123,9 @@ void System_Render_Background::tick()
     
     if (queuedFileName){
         if (queuedFileType){
-//            bank->dlgt->output("foo0");
             useCubeMap(*queuedFileName, *queuedFileType);
-//            bank->dlgt->output("foo1");
             delete queuedFileName, queuedFileType;
-//            bank->dlgt->output("foo2");
             queuedFileName, queuedFileType = NULL;
-//            bank->dlgt->output("foo3");
         }
     }
 }

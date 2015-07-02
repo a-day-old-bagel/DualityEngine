@@ -15,15 +15,6 @@
 #define	LOADCUBEMAP_H
 
 namespace DualityEngine{
-
-    bool loadCubeMapInitial (const char* front,
-                             const char* back,
-                             const char* top,
-                             const char* bottom,
-                             const char* left,
-                             const char* right,
-                             GLuint* tex_cube,
-                             std::stringstream& engineOut);
     
     bool readAndBufferCubeMap(const char* front,
                               const char* back,
