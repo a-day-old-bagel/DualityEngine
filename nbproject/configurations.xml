@@ -118,6 +118,7 @@
         <itemPath>Assets/Models/DebugCube/DebugCube.h</itemPath>
         <itemPath>Headers/Delegate.h</itemPath>
         <itemPath>Assets/GUI/GUI_Console.h</itemPath>
+        <itemPath>Headers/HashMap.h</itemPath>
         <itemPath>Headers/Settings.h</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -172,6 +173,7 @@
         <itemPath>Source/UserControl.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="Utilities" projectFiles="true">
+        <itemPath>Source/HashMap.cpp</itemPath>
         <itemPath>Source/Settings.cpp</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -326,6 +328,8 @@
       </item>
       <item path="Headers/Game.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/HashMap.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/MeshRepository.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Model.h" ex="false" tool="3" flavor2="0">
@@ -407,6 +411,8 @@
       <item path="Source/FileIO.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Game.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/HashMap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/PhysCollide.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -585,6 +591,8 @@
       </item>
       <item path="Headers/Game.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/HashMap.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/MeshRepository.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Model.h" ex="false" tool="3" flavor2="0">
@@ -666,6 +674,8 @@
       <item path="Source/FileIO.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Game.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/HashMap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/PhysCollide.cpp" ex="false" tool="1" flavor2="0">
       </item>

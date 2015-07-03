@@ -72,7 +72,7 @@ namespace DualityEngine {
             {"save" , "stores the current game state to the hard drive under a given name to be loaded later. Overwrites saves with the same name."},
             {"load" , "discards any current game state and presents the game state stored under a given name."},
             {"run" , "executes a script, regardless of current game state (scripted variable names may be overwritten, saves may be corrupted, etc). Use at your own peril."},
-            {"sky","sky replaces the cubemap currently rendered in the sky (the 'skybox,' thought it's not a box) with a cubemap of the user's choice."}
+            {"sky","sky replaces the cubemap currently rendered in the background (the 'skybox,' though it's not a box) with a cubemap of the user's choice."}
         };
         std::unordered_map<std::string, const std::string> componentHelps = {
             {DUA_COMPCOLL(0, 1) , "is something that every entity starts out with. Souls cannot be created or destroyed directly."},

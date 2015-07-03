@@ -41,6 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Source/Engine.o \
 	${OBJECTDIR}/Source/FileIO.o \
 	${OBJECTDIR}/Source/Game.o \
+	${OBJECTDIR}/Source/HashMap.o \
 	${OBJECTDIR}/Source/PhysCollide.o \
 	${OBJECTDIR}/Source/PhysMove.o \
 	${OBJECTDIR}/Source/RenderOld.o \
@@ -116,6 +117,11 @@ ${OBJECTDIR}/Source/Game.o: Source/Game.cpp
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Game.o Source/Game.cpp
+
+${OBJECTDIR}/Source/HashMap.o: Source/HashMap.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/HashMap.o Source/HashMap.cpp
 
 ${OBJECTDIR}/Source/PhysCollide.o: Source/PhysCollide.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
