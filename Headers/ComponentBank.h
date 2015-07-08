@@ -13,13 +13,21 @@
 #define GLM_FORCE_RADIANS
 #endif
 
-#include <unordered_map>
 #include <cstdint>
 #include <sstream>
 #include <iostream>
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+
+// It's pointless to do separate compilation on these at this point, but I do it
+// anyway for style consistency
+#include "HashMap.h"
+#include "../Source/HashMap.cpp"
+
 #include "BankDelegates.h"
 #include "Settings.h"
+
 #include "Soul.h"
 #include "Model.h"
 #include "Control.h"
@@ -37,48 +45,45 @@
 #include "Collision.h"
 #include "CameraFree.h"
 
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtx/euler_angles.hpp>
-
 namespace DualityEngine {
 
     class ComponentBank
     {
         DUA_id nextID;
         
-        std::unordered_map<DUA_id, Soul>              components_soul;
-        std::unordered_map<DUA_id, Model>             components_model;
-        std::unordered_map<DUA_id, Position>          components_position;
-        std::unordered_map<DUA_id, SpatialChild>      components_spatialChild;
-        std::unordered_map<DUA_id, SpatialParent>     components_spatialParent;
-        std::unordered_map<DUA_id, LinearVelocity>    components_linearVeloc;
-        std::unordered_map<DUA_id, Collision>         components_collision;
-        std::unordered_map<DUA_id, Orientation>       components_orientation;
-        std::unordered_map<DUA_id, AngularVelocity>   components_angularVeloc;
-        std::unordered_map<DUA_id, Control>           components_control;
-        std::unordered_map<DUA_id, PointLight>        components_pointLight;
-        std::unordered_map<DUA_id, DirectionalLight>  components_directionalLight;
-        std::unordered_map<DUA_id, AmbientLight>      components_ambientLight;
-        std::unordered_map<DUA_id, Owner>             components_owner;
-        std::unordered_map<DUA_id, Score>             components_score;
-        std::unordered_map<DUA_id, CameraFree>        components_freeCam;
+        HashMap<DUA_id, Soul>              components_soul;
+        HashMap<DUA_id, Model>             components_model;
+        HashMap<DUA_id, Position>          components_position;
+        HashMap<DUA_id, SpatialChild>      components_spatialChild;
+        HashMap<DUA_id, SpatialParent>     components_spatialParent;
+        HashMap<DUA_id, LinearVelocity>    components_linearVeloc;
+        HashMap<DUA_id, Collision>         components_collision;
+        HashMap<DUA_id, Orientation>       components_orientation;
+        HashMap<DUA_id, AngularVelocity>   components_angularVeloc;
+        HashMap<DUA_id, Control>           components_control;
+        HashMap<DUA_id, PointLight>        components_pointLight;
+        HashMap<DUA_id, DirectionalLight>  components_directionalLight;
+        HashMap<DUA_id, AmbientLight>      components_ambientLight;
+        HashMap<DUA_id, Owner>             components_owner;
+        HashMap<DUA_id, Score>             components_score;
+        HashMap<DUA_id, CameraFree>        components_freeCam;
         
         
         
         /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
         template<class componentType>
-        componentType* getComponentPtr(const DUA_id&, const char*, std::unordered_map<DUA_id, componentType>&);
+        componentType* getComponentPtr(const DUA_id&, const char*, HashMap<DUA_id, componentType>&);
         
         /* COMPONENT CREATION */
         bool tryAddFlagToSoul(const DUA_compFlag &flag,const DUA_id &ID);
         template<class componentType, typename ... types>
-        bool tryAddComponent(const DUA_id &ID, const char* compName, std::unordered_map<DUA_id, componentType> &table, const types& ... args);
+        bool tryAddComponent(const DUA_id &ID, const char* compName, HashMap<DUA_id, componentType> &table, const types& ... args);
         bool addSoul(const DUA_id &ID, const char* name);
         
         /* COMPONENT DELETION */
         void tryRemoveFlagFromSoul(const DUA_compFlag &flag, const DUA_id &ID);
         template<class componentType>
-        bool tryRemoveComponent(const DUA_id &ID, const char* compName, const DUA_compFlag& compFlag, std::unordered_map<DUA_id, componentType> &table);
+        bool tryRemoveComponent(const DUA_id &ID, const char* compName, const DUA_compFlag& compFlag, HashMap<DUA_id, componentType> &table);
         bool deleteSoul(const DUA_id &ID);
         
         /* ENTITY CREATION */

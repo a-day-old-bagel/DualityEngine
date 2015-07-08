@@ -2,35 +2,53 @@
 
 using namespace DualityEngine;
 
-HashMap::HashMap(){
+template<class K, class V>
+HashMap<K,V>::HashMap(){
     
 }
 
-HashMap::~HashMap(){
+template<class K, class V>
+HashMap<K,V>::~HashMap(){
     
 }
 
-V& HashMap::at(const K& key){
+template<class K, class V>
+V& HashMap<K,V>::at(const K& key){
     return internalMap.at(key);
 }
 
-void HashMap::clear(){
+template<class K, class V>
+void HashMap<K,V>::clear() noexcept{
     internalMap.clear();
 }
 
-bool HashMap::contains(const K& key) const{
+template<class K, class V>
+bool HashMap<K,V>::contains(const K& key) const{
     return (bool)internalMap.count(key);
 }
 
+template<class K, class V>
 template <class... Args>
-bool HashMap::emplace ( Args&&... args ){
-    return internalMap.emplace(args...).second;
+bool HashMap<K,V>::emplace ( Args&&... args ){
+    return internalMap.emplace(std::forward<Args>(args)...).second;
 }
 
-bool HashMap::erase(const K& key){
+template<class K, class V>
+bool HashMap<K,V>::erase(const K& key){
     return (bool)internalMap.erase(key);
 }
 
-void HashMap::reserve(std::size_t n){
+template<class K, class V>
+void HashMap<K,V>::reserve(std::size_t n){
     internalMap.reserve(n);
+}
+
+template<class K, class V>
+typename HashMap<K,V>::const_iterator HashMap<K,V>::begin() const {
+    return internalMap.begin();
+}
+
+template<class K, class V>
+typename HashMap<K,V>::const_iterator HashMap<K,V>::end() const {
+    return internalMap.end();
 }

@@ -3,6 +3,7 @@
  ****************************************************************/
 
 #include "../Headers/ComponentBank.h"
+#include "../Headers/HashMap.h"
 
 using namespace DualityEngine;
 
@@ -104,23 +105,6 @@ void ComponentBank::clean(){
     components_collision.clear();
     components_freeCam.clear();
     
-//    components_soul = std::unordered_map<DUA_id, Soul>();
-//    components_model = std::unordered_map<DUA_id, Model>();
-//    components_position = std::unordered_map<DUA_id, Position>();
-//    components_spatialChild = std::unordered_map<DUA_id, SpatialChild>();
-//    components_spatialParent = std::unordered_map<DUA_id, SpatialParent>();
-//    components_linearVeloc = std::unordered_map<DUA_id, LinearVelocity>();
-//    components_orientation = std::unordered_map<DUA_id, Orientation>();
-//    components_angularVeloc = std::unordered_map<DUA_id, AngularVelocity>();
-//    components_control = std::unordered_map<DUA_id, Control>();
-//    components_pointLight = std::unordered_map<DUA_id, PointLight>();
-//    components_directionalLight = std::unordered_map<DUA_id, DirectionalLight>();
-//    components_ambientLight = std::unordered_map<DUA_id, AmbientLight>();
-//    components_owner = std::unordered_map<DUA_id, Owner>();
-//    components_score = std::unordered_map<DUA_id, Score>();
-//    components_collision = std::unordered_map<DUA_id, Collision>();
-//    components_freeCam = std::unordered_map<DUA_id, CameraFree>();
-    
     nextID = DUA_START_ID;
 }
 void ComponentBank::save(const char* saveName){
@@ -135,7 +119,7 @@ void ComponentBank::load(const char* saveName){
  * COMPONENT POINTER GETTERS SECTION - I KNOW THESE ARE A BAD IDEA.
  ******************************************************************************/
 template<class componentType>
-componentType* ComponentBank::getComponentPtr(const DUA_id &ID, const char* compName, std::unordered_map<DUA_id, componentType> &table){
+componentType* ComponentBank::getComponentPtr(const DUA_id &ID, const char* compName, HashMap<DUA_id, componentType> &table){
     try {
         return &(table.at(ID));
     }  catch(const std::out_of_range& oorException) {
@@ -231,8 +215,8 @@ bool ComponentBank::tryAddFlagToSoul(const DUA_compFlag &flag, const DUA_id &ID)
  * [arg0], [arg1], ... ,[lastArg]);
  ******************************************************************************/
 template<class componentType, typename ... types>
-bool ComponentBank::tryAddComponent(const DUA_id &ID, const char* compName, std::unordered_map<DUA_id, componentType> &table, const types& ... args){
-    if ((table.emplace(std::piecewise_construct, std::forward_as_tuple(ID), std::forward_as_tuple(args...))).second == false){
+bool ComponentBank::tryAddComponent(const DUA_id &ID, const char* compName, HashMap<DUA_id, componentType> &table, const types& ... args){
+    if ((table.emplace(std::piecewise_construct, std::forward_as_tuple(ID), std::forward_as_tuple(args...))) == false){
         std::string error = std::string(compName) + " component already exists at ID " + std::to_string(ID) + "\n";
         dlgt->output(error.c_str());
         return false;
@@ -361,7 +345,7 @@ void ComponentBank::tryRemoveFlagFromSoul(const DUA_compFlag &flag, const DUA_id
  * above, except there aren't any variadic arguments at the end.
  ******************************************************************************/
 template<class componentType>
-bool ComponentBank::tryRemoveComponent(const DUA_id &ID, const char* compName, const DUA_compFlag& compFlag, std::unordered_map<DUA_id, componentType> &table){
+bool ComponentBank::tryRemoveComponent(const DUA_id &ID, const char* compName, const DUA_compFlag& compFlag, HashMap<DUA_id, componentType> &table){
     dlgt->systemsForceRemove(ID, compFlag);
     if (table.erase(ID) == 0){
         std::string error = "No " + std::string(compName) + " component exists to be removed at ID " + std::to_string(ID) + "\n";

@@ -31,10 +31,14 @@ namespace DualityEngine{
                 template <class... Args>
             bool emplace ( Args&&... args );
             bool erase ( const K& key );
-            void reserve ( std::size_t n );                
+            void reserve ( std::size_t n );
+            
+                typedef typename std::unordered_map<K, V>::const_iterator const_iterator;
+            const_iterator begin() const;// { return internalMap.begin(); }
+            const_iterator end() const;// { return internalMap.end(); }
             
     };
-    
+     
 }
 
 #endif	/* HASHMAP_H */
