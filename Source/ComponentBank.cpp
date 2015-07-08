@@ -11,73 +11,28 @@ using namespace DualityEngine;
 ComponentBank::ComponentBank(BankDelegates* dlgt){
     nextID = DUA_START_ID;
     this->dlgt = dlgt;
+    
+    pSpaceControlDummy = new SpaceControl(0, 0, 0, 0, 0, 0, 0, 0, 0);
+    pLinVelocDummy = new LinearVelocity(0, 0, 0);
+    pCtrlOrientDummy = new Orientation(0, 0, 0);
+    defaultControl();
+    
+    pFreeCameraDummy = new CameraFree(1, 0.5, 1000, 0, 0, 0, 0, 0, -1, 0, 1, 0);
+    defaultCam();
 }
 
 ComponentBank::~ComponentBank(){
     dlgt = NULL;
-}
-
-bool ComponentBank::switchToCam(const DUA_id& ID){
-    try{
-        if ((components_soul.at(ID).components) & FREECAM){
-            if((components_soul.at(ID).components) & (POSITION | ORIENTATION)){
-                activeCameraID = ID;
-            } else {
-                dlgt->outputStr("entity " + std::to_string(ID) + " needs a position and orientation.");
-            }
-        } else {
-            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a camera.");
-            return false;
-        }
-    }catch(const std::out_of_range& oorException){
-        dlgt->outputStr("No entity exists at ID " + std::to_string(ID) + "\n");
-        return false;
-    }
-    return true;
-}
-bool ComponentBank::switchToControl(const DUA_id& ID){
-    try{
-        if ((components_soul.at(ID).components) & CONTROL){
-            if((components_soul.at(ID).components) & (POSITION | ORIENTATION)){
-                activeControlID = ID;
-            } else {
-                dlgt->outputStr("entity " + std::to_string(ID) + " needs a position and orientation.");
-            }
-        } else {
-            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a control interface.");
-            return false;
-        }
-    }catch(const std::out_of_range& oorException){
-        dlgt->outputStr("No entity exists at ID " + std::to_string(ID) + "\n");
-        return false;
-    }
-    return true;
-}
-
-glm::mat4 ComponentBank::getPosMat(const DUA_id& ID){
-    try {
-        if (getComponents(ID) & POSITION){
-            return components_position.at(ID).getMatrix();
-        } else {
-            return Constants::duaIdentMat4;
-        }
-    }catch(const std::out_of_range& oorException){
-        dlgt->outputStr("ERROR: access to nonexistent position for matrix retrieval at ID " + std::to_string(ID) + "\n");
-    }
-}
-glm::mat4 ComponentBank::getRotMat(const DUA_id& ID){
-    try {
-        if (getComponents(ID) & ORIENTATION){
-            return components_orientation.at(ID).getMatrix();
-        } else {
-            return Constants::duaIdentMat4;
-        }
-    }catch(const std::out_of_range& oorException){
-        dlgt->outputStr("ERROR: access to nonexistent orientation for matrix retrieval at ID " + std::to_string(ID) + "\n");
-    }
-}
-glm::mat4 ComponentBank::getModMat(const DUA_id& ID){
-    return getPosMat(ID) * getRotMat(ID);
+    
+    delete pSpaceControlDummy;
+    delete pLinVelocDummy;
+    delete pCtrlOrientDummy;
+    pSpaceControlDummy = NULL;
+    pLinVelocDummy = NULL;
+    pCtrlOrientDummy = NULL;
+    
+    delete pFreeCameraDummy;
+    pFreeCameraDummy = NULL;
 }
 
 /*******************************************************************************
@@ -85,8 +40,8 @@ glm::mat4 ComponentBank::getModMat(const DUA_id& ID){
  ******************************************************************************/
 void ComponentBank::clean(){
     
-    activeCameraID = DUA_NULL_ID;
-    activeControlID = DUA_NULL_ID;
+    activeFreeCameraID = DUA_NULL_ID;
+    activeSpaceControlID = DUA_NULL_ID;
     
     components_soul.clear();
     components_model.clear();
@@ -96,7 +51,7 @@ void ComponentBank::clean(){
     components_linearVeloc.clear();
     components_orientation.clear();
     components_angularVeloc.clear();
-    components_control.clear();
+    components_spacecontrol.clear();
     components_pointLight.clear();
     components_directionalLight.clear();
     components_ambientLight.clear();
@@ -138,14 +93,6 @@ LinearVelocity* ComponentBank::getLinearVelocPtr(const DUA_id &ID){
 Position* ComponentBank::getPositionPtr(const DUA_id &ID){
     return getComponentPtr(ID, "position", components_position);
 }
-//LinearVelocity* ComponentBank::getLinearVelocPtr(const DUA_id &ID){
-//    tempCompPtr = getComponentPtr(ID, "linear velocity", components_linearVeloc);
-//    return tempCompPtr == NULL ? &duaZeroVec3 : (LinearVelocity*)tempCompPtr;
-//}
-//Position* ComponentBank::getPositionPtr(const DUA_id &ID){
-//    tempCompPtr = getComponentPtr(ID, "position", components_position);
-//    return tempCompPtr == NULL ? &duaZeroVec3 : (Position*)tempCompPtr;
-//}
 SpatialChild* ComponentBank::getSpatialChildPtr(const DUA_id& ID){
     return getComponentPtr(ID, "position child", components_spatialChild);
 }
@@ -158,8 +105,8 @@ Orientation* ComponentBank::getOrientationPtr(const DUA_id& ID){
 AngularVelocity* ComponentBank::getAngularVelocPtr(const DUA_id& ID){
     return getComponentPtr(ID, "angular velocity", components_angularVeloc);
 }
-Control* ComponentBank::getControlPtr(const DUA_id &ID){
-    return getComponentPtr(ID, "control", components_control);
+SpaceControl* ComponentBank::getSpaceControlPtr(const DUA_id &ID){
+    return getComponentPtr(ID, "control", components_spacecontrol);
 }
 PointLight* ComponentBank::getPointLightPtr(const DUA_id &ID){
     return getComponentPtr(ID, "point light", components_pointLight);
@@ -283,9 +230,9 @@ void ComponentBank::addAngularVeloc(const DUA_id& ID, const DUA_dbl& angX, const
     if (tryAddFlagToSoul(ANGVELOC, ID))
         tryAddComponent(ID, "angular velocity", components_angularVeloc, angX, angY, angZ);
 }
-void ComponentBank::addControl(const DUA_id &ID){
-    if (tryAddFlagToSoul(CONTROL, ID))
-        tryAddComponent(ID, "control", components_control);
+void ComponentBank::addSpaceControl(const DUA_id &ID, const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& roll, const DUA_dbl& pitch, const DUA_dbl& yaw){
+    if (tryAddFlagToSoul(CONTROLSS, ID))
+        tryAddComponent(ID, "control", components_spacecontrol, fw, bk, lf, rt, up, dn, roll, pitch, yaw);
 }
 void ComponentBank::addPointLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue,
                                   const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ){
@@ -352,7 +299,6 @@ bool ComponentBank::tryRemoveComponent(const DUA_id &ID, const char* compName, c
         dlgt->output(error.c_str());
         return false;
     }
-    //dlgt->systemsScrutinize(ID);
     return true;
 }
 /*******************************************************************************
@@ -404,9 +350,9 @@ void ComponentBank::deleteAngularVeloc(const DUA_id& ID){
     if (tryRemoveComponent(ID, "angular velocity", ANGVELOC, components_angularVeloc))
         tryRemoveFlagFromSoul(ANGVELOC, ID);
 }
-void ComponentBank::deleteControl(const DUA_id &ID){
-    if (tryRemoveComponent(ID, "control", CONTROL, components_control))
-        tryRemoveFlagFromSoul(CONTROL, ID);
+void ComponentBank::deleteSpaceControl(const DUA_id &ID){
+    if (tryRemoveComponent(ID, "control", CONTROLSS, components_spacecontrol))
+        tryRemoveFlagFromSoul(CONTROLSS, ID);
 }
 void ComponentBank::deletePointLight(const DUA_id &ID){
     if (tryRemoveComponent(ID, "point light", LPOINT, components_pointLight))
@@ -433,7 +379,7 @@ void ComponentBank::deleteCollision(const DUA_id& ID){
         tryRemoveFlagFromSoul(COLLISION, ID);
 }
 void ComponentBank::deleteCameraFree(const DUA_id& ID){
-    if (activeCameraID == ID) activeCameraID = DUA_NULL_ID;
+    if (activeFreeCameraID == ID) activeFreeCameraID = DUA_NULL_ID;
     if (tryRemoveComponent(ID, "free camera", FREECAM, components_freeCam))
         tryRemoveFlagFromSoul(FREECAM, ID);
 }
@@ -522,7 +468,7 @@ bool ComponentBank::deleteEntity(const DUA_id& ID){
         if (flags & POSITION) deletePosition(ID);
         if (flags & SPATCHILD) deleteSpatialChild(ID);
         if (flags & SPATPARENT) deleteSpatialParent(ID);
-        if (flags & CONTROL) deleteControl(ID);
+        if (flags & CONTROLSS) deleteSpaceControl(ID);
         if (flags & LPOINT) deletePointLight(ID);
         if (flags & LDIRECT) deleteDirectionalLight(ID);
         if (flags & LAMBIENT) deleteAmbientLight(ID);
@@ -608,4 +554,120 @@ std::string ComponentBank::listComponents(const DUA_id &ID){
         output << "Could not list components: No entity exists with ID " << ID;
     }    
     return output.str();
+}
+
+
+
+
+/*******************************************************************************
+ * CONVENIENCE CONSTRUCTS METHODS
+ ******************************************************************************/
+
+
+bool ComponentBank::updateActiveCamera(){
+    if (activeFreeCameraID != DUA_NULL_ID){
+        if (getState(activeFreeCameraID) & RECALCVIEWMAT){            
+            pFreeCameraCurrent->updateView(getRotMat(activeFreeCameraID), getPosMat(activeFreeCameraID));            
+        }
+        if (getState(activeFreeCameraID) & RECALCPROJMAT){
+            pFreeCameraCurrent->updateProjection();
+        }
+        if (getState(activeFreeCameraID) & (RECALCVIEWMAT | RECALCPROJMAT)){
+            pFreeCameraCurrent->updateViewProjection();
+            stateOff(activeFreeCameraID, RECALCVIEWMAT | RECALCPROJMAT);
+        }
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool ComponentBank::switchToCam(const DUA_id& ID){
+    try{
+        if ((components_soul.at(ID).components) & FREECAM){
+            if((components_soul.at(ID).components) & (POSITION | ORIENTATION) == (POSITION | ORIENTATION)){
+                activeFreeCameraID = ID;
+                pFreeCameraCurrent = getCameraFreePtr(ID);
+            } else {
+                dlgt->outputStr("entity " + std::to_string(ID) + " requires position and orientation.");
+                return false;
+            }
+        } else {
+            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a camera.");
+            return false;
+        }
+    }catch(const std::out_of_range& oorException){
+        dlgt->outputStr("No entity exists at ID " + std::to_string(ID) + "\n");
+        return false;
+    }
+    return true;
+}
+void ComponentBank::scrutinizeCam(const DUA_id& ID){
+    if (activeFreeCameraID == ID){
+        defaultCam();
+    }
+}
+void ComponentBank::defaultCam(){
+    activeFreeCameraID = DUA_NULL_ID
+    pFreeCameraCurrent = pFreeCameraDummy;
+}
+
+bool ComponentBank::switchToControl(const DUA_id& ID){
+    try{
+        if ((components_soul.at(ID).components) & CONTROLSS){
+            if((components_soul.at(ID).components) & (POSITION | ORIENTATION | LINVELOC) == (POSITION | ORIENTATION | LINVELOC)){
+                activeSpaceControlID = ID;
+                pSpaceControlCurrent = getSpaceControlPtr(ID);
+                pLinVelocCurrent = getLinearVelocPtr(ID);
+                pCtrlOrientCurrent = getOrientationPtr(ID);
+            } else {
+                dlgt->outputStr("entity " + std::to_string(ID) + " requires position, orientation, and linear velocity.");
+                return false;
+            }
+        } else {
+            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a control interface.");
+            return false;
+        }
+    }catch(const std::out_of_range& oorException){
+        dlgt->outputStr("No entity exists at ID " + std::to_string(ID) + "\n");
+        return false;
+    }
+    return true;
+}
+void ComponentBank::scrutinizeControl(const DUA_id& ID){
+    if (activeSpaceControlID == ID){
+        defaultControl();
+    }
+}
+void ComponentBank::defaultControl(){
+    activeSpaceControlID = DUA_NULL_ID;
+    pSpaceControlCurrent = pSpaceControlDummy;
+    pLinVelocCurrent = pLinVelocDummy;
+    pCtrlOrientCurrent = pCtrlOrientDummy;
+}
+
+glm::mat4 ComponentBank::getPosMat(const DUA_id& ID){
+    try {
+        if (getComponents(ID) & POSITION){
+            return components_position.at(ID).getMatrix();
+        } else {
+            return Constants::duaIdentMat4;
+        }
+    }catch(const std::out_of_range& oorException){
+        dlgt->outputStr("ERROR: access to nonexistent position for matrix retrieval at ID " + std::to_string(ID) + "\n");
+    }
+}
+glm::mat4 ComponentBank::getRotMat(const DUA_id& ID){
+    try {
+        if (getComponents(ID) & ORIENTATION){
+            return components_orientation.at(ID).getMatrix();
+        } else {
+            return Constants::duaIdentMat4;
+        }
+    }catch(const std::out_of_range& oorException){
+        dlgt->outputStr("ERROR: access to nonexistent orientation for matrix retrieval at ID " + std::to_string(ID) + "\n");
+    }
+}
+glm::mat4 ComponentBank::getModMat(const DUA_id& ID){
+    return getPosMat(ID) * getRotMat(ID);
 }

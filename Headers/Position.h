@@ -30,11 +30,20 @@ namespace DualityEngine {
             }
             return transform;
         }
-        inline void translate(glm::vec3 translation){
-            position += translation;
+        inline void translate(const DUA_dbl &x, const DUA_dbl &y, const DUA_dbl &z){
+            position.x += x;
+            position.y += y;
+            position.z += z;
             matrixIsCurrent = false;
         }
-        DUA_vec3 position;
+        inline void translate(const glm::vec3& translation){
+            translate(translation.x, translation.y, translation.z);            
+        }
+        inline void translate(const glm::vec4& translation){
+            translate(translation.x, translation.y, translation.z);            
+        }
+        
+        glm::vec3 position;
         glm::mat4 transform;    // TOTAL sum including parents
         bool matrixIsCurrent;
     };

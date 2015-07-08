@@ -17,23 +17,20 @@ namespace DualityEngine {
     class System_UserControl : public System
     {
     private:
-//        ControlDelegates* dlgt;
         SDL_Event sdlEvent;
         bool consoleIsActive = false;
         bool MenuIsActive = false;
         DUA_id localActiveControl = DUA_NULL_ID;
-        Control* pControlCurrent;
-        Control* pDummyControl;
+        SpaceControl* pControlCurrent;
         Position* pPositionCurrent;
-        Position* pDummyPosition;
+        LinearVelocity* pLinVelocCurrent;
         Orientation* pOrientationCurrent;
-        Orientation* pDummyOrientation;
-        const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*        new, load, save, exit         *\n****************************************\n";
+        const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*     new, load, save, exit, help      *\n****************************************\n";
         void handleMenuCommand(const std::string& command);
         void handleControlKeys(const Uint8* keyStates);
-        void checkActiveControl();
+        bool ensureActiveControl();
     public:
-        System_UserControl(ComponentBank* bank);//, ControlDelegates* delegates);
+        System_UserControl(ComponentBank* bank);
         ~System_UserControl();
         void tick() override;
         bool init(std::stringstream& output) override;

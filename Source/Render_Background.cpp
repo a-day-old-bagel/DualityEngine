@@ -42,7 +42,7 @@ bool System_Render_Background::setUpResources(std::stringstream& engineOut)
     shdrLoc = loadShaders("Assets/Shaders/skyQuad.vert", "Assets/Shaders/skyQuad.frag", engineOut);
 
     attrLoc_verts = glGetAttribLocation(shdrLoc, "Vertex");
-    txtrLoc = glGetUniformLocation(shdrLoc, "cubeTexture");
+    unifLoc_txtur = glGetUniformLocation(shdrLoc, "cubeTexture");
     unifLoc_projM = glGetUniformLocation(shdrLoc, "projMat");
     unifLoc_viewM = glGetUniformLocation(shdrLoc, "viewMat");
     
@@ -111,7 +111,7 @@ void System_Render_Background::tick()
         glUseProgram (shdrLoc);
         glUniformMatrix4fv (unifLoc_projM, 1, GL_FALSE, &(pCamCurrent->projection)[0][0]);
         glUniformMatrix4fv (unifLoc_viewM, 1, GL_FALSE, &(pCamCurrent->view)[0][0]);
-        glUniform1i (txtrLoc, 2);
+        glUniform1i (unifLoc_txtur, 2);
         glBindVertexArray (VAOloc);
 
         glDrawArrays(GL_QUADS, 0, 4);    
@@ -131,8 +131,8 @@ void System_Render_Background::tick()
 }
 
 bool System_Render_Background::aquireView(){
-    if (bank->activeCameraID != localActiveCamera){
-        localActiveCamera = bank->activeCameraID;
+    if (bank->activeFreeCameraID != localActiveCamera){
+        localActiveCamera = bank->activeFreeCameraID;
         if (localActiveCamera != DUA_NULL_ID){
             pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
         }

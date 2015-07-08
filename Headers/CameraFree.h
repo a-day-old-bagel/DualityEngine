@@ -29,7 +29,7 @@ namespace DualityEngine {
         }
         inline void updateView(glm::mat4 rotation, glm::mat4 translation){
             glm::mat4 transform = translation * rotation;
-            view = glm::lookAt(DUA_vec3(transform * eyeOrig), DUA_vec3(transform * focusOrig), DUA_vec3(rotation * upOrig));            
+            view = glm::lookAt(glm::vec3(transform * eyeOrig), glm::vec3(transform * focusOrig), glm::vec3(rotation * upOrig));            
         }
         inline void updateProjection(){
             projection = glm::perspective(fov, Settings::Display::screenAspectRatio, zNear, zFar);

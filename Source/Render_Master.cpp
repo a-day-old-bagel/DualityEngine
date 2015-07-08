@@ -129,5 +129,8 @@ void System_Render_Master::tick()
     SDL_GL_SwapWindow( pWindow );    
     glClear(GL_DEPTH_BUFFER_BIT);
     //...rendering to framebuffer starts again in other systems after this...
+    
+    // update view just once for all rendering systems this frame.
+    bank->updateActiveCamera();
 }
 //</editor-fold>

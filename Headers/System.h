@@ -30,6 +30,7 @@ namespace DualityEngine {
         std::vector<std::vector<DUA_id>> registeredIDs;   // These are collections so that a system can operate
         std::vector<DUA_compFlag> requiredComponents;     // on more than one kind of entity if it needs to.
 //      std::string messageQueue;   // might want in future for message output from systems...
+        uint tockFreq = 1;  // every 'tockFreq' times 'tock' is called, it's code will execute. (periodic loop not linked to 'tick')
         
     public:        
         System(ComponentBank* bank, std::string name, int numRegisters);
@@ -41,6 +42,7 @@ namespace DualityEngine {
         virtual void forceRemoveComp(const DUA_id& ID, const DUA_compFlag&);
         virtual bool init(std::stringstream& output){}
         virtual void tick(){}
+        virtual void tock(){}
         void pause();
         void resume();
         void confirmPaused();

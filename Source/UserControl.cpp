@@ -10,44 +10,47 @@
 
 using namespace DualityEngine;
 
-//<editor-fold>
 
-System_UserControl::System_UserControl(ComponentBank* bank)//, ControlDelegates* delegates)
+System_UserControl::System_UserControl(ComponentBank* bank)
                   : System(bank, "Control System", 0){
-//    this->dlgt = delegates;
+    
 }
 
 System_UserControl::~System_UserControl(){
-//    dlgt = NULL;
-    delete pDummyControl;
-    delete pDummyPosition;
-    delete pDummyOrientation;
-    pDummyControl = NULL;
-    pDummyPosition = NULL;
-    pDummyOrientation = NULL;
+//    delete pDummyControl;
+//    delete pDummyPosition;
+//    delete pDummyLinVeloc;
+//    delete pDummyOrientation;
+//    pDummyControl = NULL;
+//    pDummyPosition = NULL;
+//    pDummyLinVeloc = NULL;
+//    pDummyOrientation = NULL;
 }
 
 bool System_UserControl::init(std::stringstream& output){
-    pDummyControl = new Control();
-    pDummyPosition = new Position(0,0,0);
-    pDummyOrientation = new Orientation(0,0,0);
+//    pDummyControl = new Control();
+//    pDummyPosition = new Position(0,0,0);
+//    pDummyLinVeloc = new LinearVelocity(0,0,0);
+//    pDummyOrientation = new Orientation(0,0,0);
     return true;
 }
 
 void System_UserControl::clean(){
     System::clean();
     DUA_id localActiveControl = DUA_NULL_ID;
-    pControlCurrent = pDummyControl;
-    pPositionCurrent = pDummyPosition;
-    pOrientationCurrent = pDummyOrientation;
+//    pControlCurrent = pDummyControl;
+//    pPositionCurrent = pDummyPosition;
+//    pOrientationCurrent = pDummyOrientation;
+//    pLinVelocCurrent = pDummyLinVeloc;
 }
 
 void System_UserControl::tick(){
+    
+    // Get current keyboard state
     const Uint8* keyStates = SDL_GetKeyboardState(NULL);
     
-    //Handle events on queue
+    // Handle events on SDL event queue
     while(SDL_PollEvent(&sdlEvent) != 0){
-        //User requests quit
         if(sdlEvent.type == SDL_QUIT){
             bank->dlgt->quit();
             bank->dlgt->output("\nFORCED EXIT\n\n");
@@ -118,8 +121,8 @@ void System_UserControl::tick(){
         }
     }
     
-    checkActiveControl();
-    if(!consoleIsActive){
+
+    if(!consoleIsActive && ensureActiveControl()){
         handleControlKeys(keyStates);
     }
 }
@@ -136,69 +139,68 @@ void System_UserControl::handleMenuCommand(const std::string& command){
     } else if (arg0 == "help"){        
         bank->dlgt->submitScriptCommand(command);
     } else {
-        bank->dlgt->outputStr("Not a menu option: " + arg0 + ". Only the commands 'new', 'load', 'save', and 'exit' may be accessed from the menu. Press ESC to exit the menu, or type \"help\".");
+        bank->dlgt->outputStr("Not a menu option: " + arg0 + ". Only commands 'new', 'load', 'save', 'exit', and 'help' may be accessed from the menu. Press ESC to leave the menu. ~ key accesses console during play.");
     }
 }
 
-void System_UserControl::checkActiveControl(){
-    if (bank->activeControlID != localActiveControl) {
-        localActiveControl = bank->activeControlID;
-        if (localActiveControl != DUA_NULL_ID) {
-            pPositionCurrent = bank->getPositionPtr(localActiveControl);
-            pControlCurrent = bank->getControlPtr(localActiveControl);      // CHANGE BANK::SWITCHTOCONTROL ONCE THINGS ARE BETTER
-            pOrientationCurrent = bank->getOrientationPtr(localActiveControl);
-        } else {
-            pPositionCurrent = pDummyPosition;
-            pControlCurrent = pDummyControl;
-            pOrientationCurrent = pDummyOrientation;
-        }
+bool System_UserControl::ensureActiveControl(){
+    if (bank->activeSpaceControlID != localActiveControl) {
+        localActiveControl = bank->activeSpaceControlID;
+        pPositionCurrent = bank->getPositionPtr(localActiveControl);
+        pLinVelocCurrent = bank->getLinearVelocPtr(localActiveControl);
+        pControlCurrent = bank->getSpaceControlPtr(localActiveControl);      // CHANGE BANK::SWITCHTOCONTROL ONCE THINGS ARE BETTER
+        pOrientationCurrent = bank->getOrientationPtr(localActiveControl);
     }
+    if (localActiveControl != DUA_NULL_ID){
+        return true;
+    }
+    return false;
 }
 
 void System_UserControl::handleControlKeys(const Uint8* keyStates){
     
-    if (localActiveControl != DUA_NULL_ID){
+//    if (localActiveControl != DUA_NULL_ID){
         if(keyStates[SDL_SCANCODE_W]){
-                pPositionCurrent->translate(DUA_vec3(pControlCurrent->forward) * 0.008f);
+                pLinVelocCurrent->applyImpulse(pControlCurrent->forward * 0.0001f);
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
         if(keyStates[SDL_SCANCODE_S]){
-                pPositionCurrent->translate(DUA_vec3(pControlCurrent->forward) * -0.008f);
+                pLinVelocCurrent->applyImpulse(pControlCurrent->forward * -0.0001f);
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
         if(keyStates[SDL_SCANCODE_A]){
-                pPositionCurrent->translate(DUA_vec3(pControlCurrent->right) * -0.008f);
+                pLinVelocCurrent->applyImpulse(pControlCurrent->right * -0.0001f);
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
         if(keyStates[SDL_SCANCODE_D]){
-                pPositionCurrent->translate(DUA_vec3(pControlCurrent->right) * 0.008f);
+                pLinVelocCurrent->applyImpulse(pControlCurrent->right * 0.0001f);
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
         if(keyStates[SDL_SCANCODE_LSHIFT]){
-                pPositionCurrent->translate(DUA_vec3(pControlCurrent->up) * 0.008f);
+                pLinVelocCurrent->applyImpulse(pControlCurrent->up * 0.0001f);
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
         if(keyStates[SDL_SCANCODE_LCTRL]){
-                pPositionCurrent->translate(DUA_vec3(pControlCurrent->up) * -0.008f);
+                pLinVelocCurrent->applyImpulse(pControlCurrent->up * -0.0001f);
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
         if(keyStates[SDL_SCANCODE_UP]){
-                pOrientationCurrent->rotate(DUA_vec3(0.005, 0, 0));
+                pOrientationCurrent->rotate(0.005, 0, 0);
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
         if(keyStates[SDL_SCANCODE_DOWN]){
-                pOrientationCurrent->rotate(DUA_vec3(-0.005, 0, 0));
+                pOrientationCurrent->rotate(-0.005, 0, 0);
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
         if(keyStates[SDL_SCANCODE_LEFT]){
-                pOrientationCurrent->rotate(DUA_vec3(0, 0.005, 0));
+                pOrientationCurrent->rotate(0, 0.005, 0);
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
         if(keyStates[SDL_SCANCODE_RIGHT]){
-                pOrientationCurrent->rotate(DUA_vec3(0, -0.005, 0));
+                pOrientationCurrent->rotate(0, -0.005, 0);
                 bank->stateOn(localActiveControl, RECALCVIEWMAT);
         }
-    }
+//    }
 }
 
 //</editor-fold>

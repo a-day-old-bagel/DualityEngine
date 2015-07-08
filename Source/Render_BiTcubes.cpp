@@ -80,8 +80,8 @@ void System_Render_BiTcubes::tick()
 }
 //</editor-fold>
 bool System_Render_BiTcubes::aquireView(){
-    if (bank->activeCameraID != localActiveCamera){
-        localActiveCamera = bank->activeCameraID;
+    if (bank->activeFreeCameraID != localActiveCamera){
+        localActiveCamera = bank->activeFreeCameraID;
         if (localActiveCamera != DUA_NULL_ID){
             pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
         }

@@ -31,11 +31,19 @@ namespace DualityEngine {
             }
             return transform;
         }
-        inline void rotate(glm::vec3 rotation){
-            orientation += rotation;
+        inline void rotate(const DUA_dbl& x, const DUA_dbl& y, const DUA_dbl& z){
+            orientation.x += x;
+            orientation.y += y;
+            orientation.z += z;
             matrixIsCurrent = false;
         }
-        DUA_vec3 orientation;
+        inline void rotate(const glm::vec3& rotation){
+            rotate(rotation.x, rotation.y, rotation.z);
+        }
+        inline void rotate(const glm::vec4& rotation){
+            rotate(rotation.x, rotation.y, rotation.z);
+        }
+        glm::vec3 orientation;
         glm::mat4 transform;    // TOTAL sum including parents
         bool matrixIsCurrent;
     };

@@ -18,7 +18,7 @@ namespace DualityEngine {
         AmbientLight(const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue){
             color = {red, green, blue};
         }
-        DUA_vec3 color;
+        glm::vec3 color;
     };
 
 }

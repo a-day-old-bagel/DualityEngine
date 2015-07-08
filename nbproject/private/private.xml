@@ -8,18 +8,23 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/home/adayoldbagel/DualityEngine/Headers/Scripting.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Headers/loadCubeMap.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Headers/Render_Background.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/Settings.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Headers/Game.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/Orientation.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/ComponentBank.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/Render_Models.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/Render_Master.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/Control_SS.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/Render_Models.h</file>
             <file>file:/home/adayoldbagel/DualityEngine/Headers/UserControl.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/loadCubeMap.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/Render_Console.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/ComponentBank.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/PhysMove.cpp</file>
             <file>file:/home/adayoldbagel/DualityEngine/Headers/Settings.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Headers/BankDelegates.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/AngularVelocity.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/Control_SS.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/SpaceControl.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/Position.h</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Headers/LinearVelocity.h</file>
             <file>file:/home/adayoldbagel/DualityEngine/Source/Scripting.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/Game.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/Render_Background.cpp</file>
+            <file>file:/home/adayoldbagel/DualityEngine/Source/UserControl.cpp</file>
         </group>
     </open-files>
 </project-private>

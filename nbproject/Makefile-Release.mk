@@ -38,6 +38,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Source/Box.o \
 	${OBJECTDIR}/Source/ComponentBank.o \
 	${OBJECTDIR}/Source/Console.o \
+	${OBJECTDIR}/Source/Control_SS.o \
 	${OBJECTDIR}/Source/Engine.o \
 	${OBJECTDIR}/Source/FileIO.o \
 	${OBJECTDIR}/Source/Game.o \
@@ -102,6 +103,11 @@ ${OBJECTDIR}/Source/Console.o: Source/Console.cpp
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Console.o Source/Console.cpp
+
+${OBJECTDIR}/Source/Control_SS.o: Source/Control_SS.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Source
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Control_SS.o Source/Control_SS.cpp
 
 ${OBJECTDIR}/Source/Engine.o: Source/Engine.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source

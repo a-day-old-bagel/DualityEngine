@@ -35,8 +35,8 @@ namespace DualityEngine {
         bool hasInitialized = false;
         
         // Directional light used in shader (for now)
-        DUA_vec3 lightDir = glm::vec3(0.698535, 0.698535, -0.15523);
-        DUA_vec3 lightColor = glm::vec3(0.15, 0.2, 0.1);
+        glm::vec3 lightDir = glm::vec3(0.698535, 0.698535, -0.15523);
+        glm::vec3 lightColor = glm::vec3(0.15, 0.2, 0.1);
         
         // Transform matrices used in rendering
         glm::mat4 mvp = glm::mat4(1.0f);
@@ -114,7 +114,7 @@ namespace DualityEngine {
         };
         // This is just a helper to create the correct UVs. It will not be used as object data.
         // the values here are based on the layout of the texture image.
-        const DUA_vec2 faces[6][4] = {
+        const glm::vec2 faces[6][4] = {
             {{0.0, 0.75}, {0.5, 0.75}, {0.0,  0.5}, {0.5,  0.5}},
             {{0.5, 0.75}, {1.0, 0.75}, {0.5,  0.5}, {1.0,  0.5}},
             {{0.0,  0.5}, {0.5,  0.5}, {0.0, 0.25}, {0.5, 0.25}},

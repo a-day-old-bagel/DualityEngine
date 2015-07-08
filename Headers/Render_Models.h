@@ -27,14 +27,14 @@ namespace DualityEngine {
     {
     private:
                 
-        DUA_id localActiveCamera = DUA_NULL_ID;
-        CameraFree* pCamCurrent;
+//        DUA_id localActiveCamera = DUA_NULL_ID;
+//        CameraFree* pCamCurrent;
        
         DUA_id dbgCube;
         DebugCube debugCube;
 
         bool setUpResources(std::stringstream& engineOut);
-        bool aquireView();
+//        bool aquireView();
 
     public:
         System_Render_Models(ComponentBank* bank);

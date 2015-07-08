@@ -10,7 +10,6 @@
 
 using namespace DualityEngine;
 
-//<editor-fold defaultstate="collapsed" desc="MAIN">
 /**************************************
  * MAIN
  * called once from where the game is
@@ -26,8 +25,10 @@ void Game::Main(){
     SDL_WaitThread(graphicsThread, NULL);
     SDL_WaitThread(scriptingThread, NULL);   
 }
-//</editor-fold>
 
+/**************************************
+ * DESTRUCTOR
+ *************************************/
 Game::~Game(){
     // Save game console log as text file
     std::ofstream logFile;
@@ -36,7 +37,11 @@ Game::~Game(){
     logFile.close();
 }
 
-//<editor-fold defaultstate="collapsed" desc="New Game">
+
+/*******************************************************************************
+ *                  INTERNAL METHODS
+ ******************************************************************************/
+
 /**************************************
  * NEW GAME : Game Initializer
  * sets up game
@@ -48,71 +53,7 @@ void Game::NewGame(){
         outputDelegate("World cleared.\n");
     }
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Run Script">
-/**************************************
- * RUN SCRIPT
- *************************************/
-void Game::RunScript(const std::string& fileName){
-    std::string filePath = "Assets/Scripts/" + fileName + ".dua";
-    std::vector<std::string> lines;
-    std::string lineReader;
-    std::ifstream infile (filePath, std::ios_base::in);
-    while (getline(infile, lineReader, '\n')){
-      lines.push_back (lineReader);
-    }
-    
-    if (lines.empty()){
-        outputStrDelegate(filePath + ": file either not found, unreadable, or empty.\n");
-    } else {
-        for (int i = 0; i < lines.size();){
-            if (lines.at(i).empty() || lines.at(i).at(0) == '#'){
-                lines.erase(lines.begin() + i);
-            } else {
-                ++i;
-            }
-        }
-        
-        int numHeaderLinesToErase = 1;
-        
-        if (lines.size() < 2){
-            outputStrDelegate(filePath + ": not a valid Duality script.\n");
-        } else {
-            std::stringstream firstTwoLines(lines.at(0) + " " + lines.at(1));
-            std::string headerTypeDeclaration, headerVersion, headerNumEntities;
-            firstTwoLines >> headerTypeDeclaration;
-            firstTwoLines >> headerVersion;
-            firstTwoLines >> headerNumEntities;
-            if (headerNumEntities != "numberOfEntities"){
-                outputStrDelegate(filePath + ": \"numberOfEntities\" not found. Continuing.");
-            } else {
-                numHeaderLinesToErase = 2;
-                headerNumEntities.clear();
-                firstTwoLines >> headerNumEntities;
-                // DO SOMETHING WITH NUMENTITIES - RESERVE SPACE IN HASH TABLES, ETC.
-            }
-            if (headerTypeDeclaration != "DualityEngineScript" || headerVersion != DUA_VERSION){
-                outputStrDelegate(filePath + ": invalid Duality script or wrong version.");
-            } else {               
 
-                lines.erase(lines.begin(), lines.begin() + numHeaderLinesToErase);
-
-                if (pauseBankDependentSystems()){
-                    //SDL_Delay(1);
-                    for (auto line : lines){
-                        scriptingSystem.submitCommand(line);
-                        //SDL_Delay(1);       // MAKES MORE STABLE FOR SOME REASON - FIX THIS.
-                    }
-                    resumeBankDependentSystems();
-                }
-
-                //outputStrDelegate(fileName + " script has completed.\n");
-            }
-        }
-    }
-}
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Load Game">
 /**************************************
  * LOAD GAME
  *************************************/
@@ -122,8 +63,7 @@ void Game::LoadGame(const std::string& saveName){
     bank.load(saveName.c_str());
     resumeBankDependentSystems();
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Save Game">
+
 /**************************************
  * SAVE GAME
  *************************************/
@@ -132,23 +72,18 @@ void Game::SaveGame(const std::string& saveName){
     bank.save(saveName.c_str());
     resumeBankDependentSystems();
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Pause">
+
 /**************************************
  * PAUSE
  * only pauses the systems that make the
  * game world seem dynamic, such as the
- * movement systems and the collision system.
- * Pausing rendering systems would
- * look crappy and pausing the control systems
- * would just be stupid.
+ * physics movement systems
  *************************************/
 void Game::Pause(){
     physicsMoveSystem.pause();
     physicsCollisionSystem.pause();
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Resume">
+
 /**************************************
  * RESUME
  *************************************/
@@ -156,41 +91,46 @@ void Game::Resume(){
     physicsMoveSystem.resume();
     physicsCollisionSystem.resume();
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Quit">
+
 /**************************************
  * QUIT
  *************************************/
 void Game::Quit(){
     killSystems();
 }
-//</editor-fold>
 
-//<editor-fold defaultstate="collapsed" desc="Engage Engines">
+
+/*******************************************************************************
+ *                  INTERNAL METHODS
+ ******************************************************************************/
+
 /**************************************
  * ENGAGE ENGINES
- * starts each engine, creating all
- * the threads in the process.
+ * assigns the appropriate systems to
+ * each engine then starts the engines.
+ * Systems' tick functions will receive
+ * looping calls in the order in which
+ * they are added to their respective
+ * engines. See below for examples.
  *************************************/
 bool Game::engageEngines(){
-    graphicsEngine.addSystem(&renderMasterSystem);
-    graphicsEngine.addSystem(&renderBackgroundSystem);
-    graphicsEngine.addSystem(&renderModelsSystem);
-    graphicsEngine.addSystem(&renderConsoleSystem);
-    graphicsEngine.engage();
+    graphicsEngine.addSystem(&renderMasterSystem);      // display last frame buffer then clear the buffer
+    graphicsEngine.addSystem(&renderBackgroundSystem);  // render the background (sky) first
+    graphicsEngine.addSystem(&renderModelsSystem);      // render the models next
+    graphicsEngine.addSystem(&renderConsoleSystem);     // render the console (GUI) last (on top).
+    graphicsEngine.engage();                            // spawn thread to repeatedly do the above.
     
-    physicsEngine.addSystem(&physicsMoveSystem);
-    physicsEngine.addSystem(&physicsCollisionSystem);
-    physicsEngine.addSystem(&userControlSystem);
-    physicsEngine.engage();
+    physicsEngine.addSystem(&physicsMoveSystem);        // apply velocity * time to each position
+    physicsEngine.addSystem(&physicsCollisionSystem);   // check collisions between objects
+    physicsEngine.addSystem(&userControlSystem);        // apply user's physical control impulses
+    physicsEngine.engage();                             // spawn thread to repeatedly do the above.
     
-    scriptingEngine.addSystem(&scriptingSystem);
-    scriptingEngine.engage();
+    scriptingEngine.addSystem(&scriptingSystem);        // check for new commands in the queue
+    scriptingEngine.engage();                           // spawn thread to repeatedly do the above.
     
     return true;
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Wait For Systems To Pause">
+
 /**************************************
  * WAIT FOR SYSTEMS TO PAUSE
  *************************************/
@@ -214,14 +154,13 @@ bool Game::waitForBankDependentSystemsToPause(){
     }
     return true;
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Pause Systems">
+
 /**************************************
  * PAUSE ENGINES
  *************************************/
 bool Game::pauseBankDependentSystems(){
     physicsMoveSystem.pause();
-    physicsCollisionSystem.pause();     // ADD CONTROL SYSTEM
+    physicsCollisionSystem.pause();
     renderModelsSystem.pause();
     userControlSystem.pause();
     renderBackgroundSystem.pause();
@@ -229,7 +168,6 @@ bool Game::pauseBankDependentSystems(){
     renderConsoleSystem.pause();
     
     if (waitForBankDependentSystemsToPause()){
-//        outputDelegate("All bank-dependent systems paused.\n");
         return true;
     } else {
         outputDelegate("bank-dependent systems' pause timed out!\n");
@@ -237,8 +175,7 @@ bool Game::pauseBankDependentSystems(){
         return false;
     }
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Resume Systems">
+
 /**************************************
  * RESUME ENGINES
  *************************************/
@@ -255,8 +192,7 @@ bool Game::resumeBankDependentSystems(){
     
     return true;
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Kill Systems">
+
 /**************************************
  * KILL SYSTEMS
  * Tell each system to quit, which
@@ -274,8 +210,7 @@ bool Game::killSystems(){
     scriptingSystem.quit();
     return true;
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Clean Game Data">
+
 /**************************************
  * CLEAN GAME DATA
  * Only cleans the bank and the systems
@@ -290,19 +225,10 @@ bool Game::cleanGameData(){
     physicsCollisionSystem.clean();
     userControlSystem.clean();
     
-//    renderMasterSystem = System_Render_Master(&bank);
-//    renderConsoleSystem = System_Render_Console(&bank, &console);
-//    renderModelsSystem = System_Render_Models(&bank);
-//    physicsMoveSystem = System_PhysMove(&bank);
-//    physicsCollisionSystem = System_PhysCollide(&bank);
-//    userControlSystem = System_UserControl(&bank, &controlDelegates);
-//    scriptingSystem = System_Scripting(&bank, &scriptingDelegates);
-    
     bank.clean();
     return true;
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Systems Discover">
+
 /**************************************
  * SYSTEMS DISCOVER
  * Systems that keep no registries do not
@@ -313,8 +239,7 @@ void Game::systems_discover(const DUA_id &ID){
     physicsMoveSystem.discoverID(ID);
     physicsCollisionSystem.discoverID(ID);
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Systems Scrutinize">
+
 /**************************************
  * SYSTEMS SCRUTINIZE
  * Systems that keep no registries do not
@@ -325,8 +250,7 @@ void Game::systems_scrutinize(const DUA_id &ID){
     physicsMoveSystem.scrutinizeID(ID);
     physicsCollisionSystem.scrutinizeID(ID);
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Systems Force Remove">
+
 /**************************************
  * SYSTEMS FORCE REMOVE
  * Systems that keep no registries do not
@@ -337,15 +261,3 @@ void Game::systems_forceRemove(const DUA_id& ID, const DUA_compFlag& component){
     physicsMoveSystem.forceRemoveComp(ID, component);
     physicsCollisionSystem.forceRemoveComp(ID, component);
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Submit Script Command">
-/**************************************
- * SUBMIT SCRIPT COMMAND
- * sends a single line (command with args)
- * to the scripting system for parsing
- * and execution (or error handling)
- *************************************/
-void Game::submitScriptCommand(const std::string& command){
-    scriptingSystem.submitCommand(command);
-}
-//</editor-fold>

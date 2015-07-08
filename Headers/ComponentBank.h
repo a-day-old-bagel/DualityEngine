@@ -20,7 +20,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-// It's pointless to do separate compilation on these at this point, but I do it
+// It's pointless to do separate compilation on HashMap at this point, but I do it
 // anyway for style consistency
 #include "HashMap.h"
 #include "../Source/HashMap.cpp"
@@ -30,13 +30,13 @@
 
 #include "Soul.h"
 #include "Model.h"
-#include "Control.h"
+#include "SpaceControl.h"
 #include "Position.h"
 #include "PositionChild.h"
 #include "PositionParent.h"
-#include "PositionVeloc.h"
+#include "LinearVelocity.h"
 #include "Orientation.h"
-#include "RotationVeloc.h"
+#include "AngularVelocity.h"
 #include "PointLight.h"
 #include "DirectionalLight.h"
 #include "AmbientLight.h"
@@ -60,24 +60,22 @@ namespace DualityEngine {
         HashMap<DUA_id, Collision>         components_collision;
         HashMap<DUA_id, Orientation>       components_orientation;
         HashMap<DUA_id, AngularVelocity>   components_angularVeloc;
-        HashMap<DUA_id, Control>           components_control;
+        HashMap<DUA_id, SpaceControl>      components_spacecontrol;
         HashMap<DUA_id, PointLight>        components_pointLight;
         HashMap<DUA_id, DirectionalLight>  components_directionalLight;
         HashMap<DUA_id, AmbientLight>      components_ambientLight;
         HashMap<DUA_id, Owner>             components_owner;
         HashMap<DUA_id, Score>             components_score;
-        HashMap<DUA_id, CameraFree>        components_freeCam;
+        HashMap<DUA_id, CameraFree>        components_freeCam;       
         
-        
-        
-        /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
+        /* COMPONENT POINTER GETTERS - A NECESSARY EVIL (SO SAYETH THE OPTIMIZER) */
         template<class componentType>
         componentType* getComponentPtr(const DUA_id&, const char*, HashMap<DUA_id, componentType>&);
         
         /* COMPONENT CREATION */
-        bool tryAddFlagToSoul(const DUA_compFlag &flag,const DUA_id &ID);
+        bool tryAddFlagToSoul(const DUA_compFlag &flag, const DUA_id &ID);
         template<class componentType, typename ... types>
-        bool tryAddComponent(const DUA_id &ID, const char* compName, HashMap<DUA_id, componentType> &table, const types& ... args);
+        bool tryAddComponent(const DUA_id &ID, const char* compName, HashMap<DUA_id, componentType> &, const types& ... args);
         bool addSoul(const DUA_id &ID, const char* name);
         
         /* COMPONENT DELETION */
@@ -89,44 +87,7 @@ namespace DualityEngine {
         /* ENTITY CREATION */
         DUA_id generateID();
 
-    public:
-        
-        /* PUBLIC DELEGATES */
-        BankDelegates* dlgt;
-        
-        /* COMPONENT DICTIONARY */
-        #define DUA_COMP_TUPLE std::tuple<std::string, std::string, DUA_compFlag>
-        #define DUA_COMPCOLL(x, y) std::get<y>(bank->componentCollections[x])
-        const std::array<const std::tuple<std::string, std::string, DUA_compFlag>, 16> componentCollections = {{
-            DUA_COMP_TUPLE{"soul", "soul", 0},
-            DUA_COMP_TUPLE{"model", "model", MODEL},
-            DUA_COMP_TUPLE{"position", "position", POSITION},
-            DUA_COMP_TUPLE{"spatial child", "spatchild", SPATCHILD},
-            DUA_COMP_TUPLE{"spatial parent", "spatparent", SPATPARENT},
-            DUA_COMP_TUPLE{"linear velocity", "linveloc", LINVELOC},
-            DUA_COMP_TUPLE{"collision", "collision", COLLISION},
-            DUA_COMP_TUPLE{"orientation", "orientation", ORIENTATION},
-            DUA_COMP_TUPLE{"angular velocity", "angveloc", ANGVELOC},
-            DUA_COMP_TUPLE{"control", "control", CONTROL},
-            DUA_COMP_TUPLE{"point light", "lpoint", LPOINT},
-            DUA_COMP_TUPLE{"directional light", "ldirect", LDIRECT},
-            DUA_COMP_TUPLE{"ambient light", "lambient", LAMBIENT},
-            DUA_COMP_TUPLE{"owner", "owner", OWNER},
-            DUA_COMP_TUPLE{"score", "score", SCORE},
-            DUA_COMP_TUPLE{"free camera", "freecam", FREECAM}
-        }};
-        
-        
-        DUA_id activeControlID = DUA_NULL_ID;
-        bool switchToControl(const DUA_id &id);
-        
-        DUA_id activeCameraID = DUA_NULL_ID;
-        bool switchToCam(const DUA_id &id);
-        
-        glm::mat4 getPosMat(const DUA_id&);
-        glm::mat4 getRotMat(const DUA_id&);
-        glm::mat4 getModMat(const DUA_id&);
-        
+    public:        
         
         // Constructor for new states
         ComponentBank(BankDelegates* dlgt);
@@ -137,12 +98,6 @@ namespace DualityEngine {
         void clean();
         void save(const char* saveName);
         void load(const char* saveName);
-
-//        void* tempCompPtr = NULL;
-//        const Position zeroPosition = Position(0, 0, 0);
-//        const LinearVelocity zeroLinVeloc = LinearVelocity(0, 0, 0);
-//        const Orientation zeroOrientation = Orientation(0, 0, 0);
-//        const AngularVelocity zeroAngVeloc = AngularVelocity(0, 0, 0);
         
         /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
         Model* getModelPtr(const DUA_id &ID);
@@ -152,7 +107,7 @@ namespace DualityEngine {
         AngularVelocity* getAngularVelocPtr(const DUA_id &ID);
         SpatialChild* getSpatialChildPtr(const DUA_id &ID);
         SpatialParent* getSpatialParentPtr(const DUA_id &ID);
-        Control* getControlPtr(const DUA_id &ID);
+        SpaceControl* getSpaceControlPtr(const DUA_id &ID);
         PointLight* getPointLightPtr(const DUA_id &ID);
         DirectionalLight* getDirectionalLightPtr(const DUA_id &ID);
         AmbientLight* getAmbientLightPtr(const DUA_id &ID);
@@ -172,7 +127,7 @@ namespace DualityEngine {
         void addAngularVeloc(const DUA_id &ID, const DUA_dbl &angX, const DUA_dbl &angY, const DUA_dbl &angZ);
         void addSpatialChild(const DUA_id &ID, const DUA_id &refID);
         void addSpatialParent(const DUA_id &ID, const DUA_id &refID);
-        void addControl(const DUA_id &ID);
+        void addSpaceControl(const DUA_id &ID, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&);
         void addPointLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue,
                                   const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ);
         void addDirectionalLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue,
@@ -191,7 +146,7 @@ namespace DualityEngine {
         void deleteAngularVeloc(const DUA_id &ID);
         void deleteSpatialChild(const DUA_id &ID);
         void deleteSpatialParent(const DUA_id &ID);
-        void deleteControl(const DUA_id &ID);
+        void deleteSpaceControl(const DUA_id &ID);
         void deletePointLight(const DUA_id &ID);
         void deleteDirectionalLight(const DUA_id &ID);
         void deleteAmbientLight(const DUA_id &ID);
@@ -222,6 +177,72 @@ namespace DualityEngine {
         bool getIDs(std::string& name, std::vector<DUA_id>& IDs);
         std::string getName(const DUA_id &ID);
         std::string listComponents(const DUA_id &ID);
+        
+        
+        
+        /*****************************
+         * HEREAFTER FOLLOW VARIOUS HELPFUL CONSTRUCTS NOT FUNDAMENTAL TO COMPONENT BANK.
+         * MOST OF THEM ARE HERE TO BE SHARED BY ALL SYSTEMS, AND ARE THINGS UNSUITED FOR
+         * SETTINGS.H
+         *****************************/
+        
+        /* PUBLIC DELEGATES */
+        BankDelegates* dlgt;        
+        
+        /* HANDY-DANDY COMPONENT DICTIONARY */        
+        // this is a wierd multi-type dictionary thing to hold associations between
+        // (full name [index 0], abbreviated/command name [index 1], and enumerator [index 2])
+        // for any given type of component. Used predominantly in scripting system.
+        // It makes it much easier to change these values globally.
+        
+        // this is what you use to access an element from a system. x for component type, y for which attribute
+        #define DUA_COMPCOLL(x, y) std::get<y>(bank->componentCollections[x])
+        // unfortunately a typedef won't do what I want here...
+        #define DUA_COMP_TUPLE std::tuple<std::string, std::string, DUA_compFlag>
+        
+        const std::array<const DUA_COMP_TUPLE, 16> componentCollections = {{
+            DUA_COMP_TUPLE{"soul", "soul", 0},
+            DUA_COMP_TUPLE{"model", "model", MODEL},
+            DUA_COMP_TUPLE{"position", "position", POSITION},
+            DUA_COMP_TUPLE{"spatial child", "spatchild", SPATCHILD},
+            DUA_COMP_TUPLE{"spatial parent", "spatparent", SPATPARENT},
+            DUA_COMP_TUPLE{"linear velocity", "linveloc", LINVELOC},
+            DUA_COMP_TUPLE{"collision", "collision", COLLISION},
+            DUA_COMP_TUPLE{"orientation", "orientation", ORIENTATION},
+            DUA_COMP_TUPLE{"angular velocity", "angveloc", ANGVELOC},
+            DUA_COMP_TUPLE{"space-y control", "spacecontrol", CONTROLSS},
+            DUA_COMP_TUPLE{"point light", "lpoint", LPOINT},
+            DUA_COMP_TUPLE{"directional light", "ldirect", LDIRECT},
+            DUA_COMP_TUPLE{"ambient light", "lambient", LAMBIENT},
+            DUA_COMP_TUPLE{"owner", "owner", OWNER},
+            DUA_COMP_TUPLE{"score", "score", SCORE},
+            DUA_COMP_TUPLE{"free camera", "freecam", FREECAM}
+        }};
+        
+        
+        DUA_id activeSpaceControlID = DUA_NULL_ID;
+        SpaceControl* pSpaceControlCurrent;
+        LinearVelocity* pLinVelocCurrent;
+        Orientation* pCtrlOrientCurrent;
+        SpaceControl* pSpaceControlDummy;
+        LinearVelocity* pLinVelocDummy;
+        Orientation* pCtrlOrientDummy;
+        bool switchToControl(const DUA_id &id);
+        void scrutinizeControl(const DUA_id &id);
+        void defaultControl();
+        
+        DUA_id activeFreeCameraID = DUA_NULL_ID;
+        CameraFree* pFreeCameraCurrent;
+        CameraFree* pFreeCameraDummy;
+        bool updateActiveCamera();
+        bool switchToCam(const DUA_id &id);
+        void scrutinizeCam(const DUA_id &id);
+        void defaultCam();
+        
+        /* TRANSFORM MATRIX GETTERS */
+        glm::mat4 getPosMat(const DUA_id&);     // translation matrix
+        glm::mat4 getRotMat(const DUA_id&);     // rotation matrix
+        glm::mat4 getModMat(const DUA_id&);     // full model matrix (combines above two)
     };
 
 }

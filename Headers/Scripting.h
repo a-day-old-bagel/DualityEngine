@@ -17,7 +17,7 @@ namespace DualityEngine {
     class System_Scripting : public System
     {
     private:
-//        ScriptingDelegates* dlgt;
+        
         std::queue<std::string> commandQueue;
         std::unordered_map<std::string, DUA_id> entityVariables = {};
         std::unordered_map<std::string, const std::string> commandUsages = {
@@ -82,7 +82,7 @@ namespace DualityEngine {
             {DUA_COMPCOLL(8, 1) , "gives an entity an angular velocity (spin)."},
             {DUA_COMPCOLL(6, 1) , "allows an entity to collide with other entities if it has a position and geometry."},
             {DUA_COMPCOLL(1, 1) , "makes an entity visible by giving it a 3D model representation."},
-            {DUA_COMPCOLL(9, 1) , "allows an entity to be controlled by the user."},
+            {DUA_COMPCOLL(9, 1) , "allows an entity to be controlled like a space ship, with thrust vectors and stuff..."},
             {DUA_COMPCOLL(12, 1), "attaches an ambient light to an entity."},
             {DUA_COMPCOLL(11, 1), "attaches a directional light to an entity."},
             {DUA_COMPCOLL(10, 1), "attaches a point light to an entity."},
@@ -100,7 +100,7 @@ namespace DualityEngine {
             {DUA_COMPCOLL(8, 1) , {"[X angular velocity] [Y angular velocity] [Z angular velocity]" , 3}},
             {DUA_COMPCOLL(6, 1) , {"none" , 0}},
             {DUA_COMPCOLL(1, 1) , {"[filepath to model]" , 1}},
-            {DUA_COMPCOLL(9, 1) , {"none" , 0}},
+            {DUA_COMPCOLL(9, 1) , {"[global thrust power] OR thrust powers [forward] [back] [left] [right] [up] [down] [roll] [pitch] [yaw]" , 9}},
             {DUA_COMPCOLL(12, 1), {"[R] [G] [B]" , 3}},
             {DUA_COMPCOLL(11, 1), {"[R] [G] [B] [X vector component] [Y vector component] [Z vector component]" , 6}},
             {DUA_COMPCOLL(10, 1), {"[R] [G] [B] [X-coordinate] [Y-coordinate] [Z-coordinate]" , 6}},
@@ -117,16 +117,17 @@ namespace DualityEngine {
         DUA_colorByte prsClr(const std::string& colorValue);
         void parseCommand(const std::string& command);
         void parseAddCommand(const std::vector<std::string>& args);
+        void parseKeyword_all(const std::vector<std::string>& args);
         void parseAssignment(const std::vector<std::string>& args);
         void parseRemoveCommand(const std::vector<std::string>& args);
         void handleBadUsage(const std::string& command);
     public:
-        System_Scripting(ComponentBank* bank);//, ScriptingDelegates* delegates);
+        System_Scripting(ComponentBank*);
         ~System_Scripting();
         void tick() override;
-        bool init(std::stringstream& output) override;
+        bool init(std::stringstream&) override;
         void submitCommand(const std::string&);
-        void submitScript(const std::string& fileName);
+        void submitScript(const std::string&);
     };
 
 }

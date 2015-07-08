@@ -35,8 +35,6 @@ namespace DualityEngine {
     typedef uint32_t        DUA_uint32;
     typedef float           DUA_float;       // wrapper for the 64 bitfloating point values used by the game
     typedef double          DUA_dbl;         // wrapper for the 32 bit floating point values used by the game
-    typedef glm::vec3       DUA_vec3;        // wrapper for a 3D vector
-    typedef glm::vec2       DUA_vec2;        // wrapper for a 2D vector
     
     /* FUNCTIONAL MACROS */
     
@@ -67,12 +65,12 @@ namespace DualityEngine {
         ANGVELOC        = 0x10,
         COLLISION       = 0x20,
         MODEL           = 0x40,
-        CONTROL         = 0x80,
+        CONTROLSS       = 0x80,
         LAMBIENT        = 0x100,
         LDIRECT         = 0x200,
         LPOINT          = 0x400,
-        SPATCHILD        = 0x800,
-        SPATPARENT       = 0x1000,
+        SPATCHILD       = 0x800,
+        SPATPARENT      = 0x1000,
         OWNER           = 0x2000,
         SCORE           = 0x4000,        
         FREECAM         = 0x8000    // Bit 16

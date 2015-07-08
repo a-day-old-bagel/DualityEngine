@@ -19,8 +19,8 @@ namespace DualityEngine {
             color = {red, green, blue};
             direction = {dirX, dirY, dirZ};
         }
-        DUA_vec3 color;
-        DUA_vec3 direction;
+        glm::vec3 color;
+        glm::vec3 direction;
     };
 
 }

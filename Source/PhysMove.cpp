@@ -3,11 +3,11 @@
 using namespace DualityEngine;
 
 System_PhysMove::System_PhysMove(ComponentBank* bank)
-                         : System(bank, "Physics Movement System", 3)
+                         : System(bank, "Physics Movement System", 2)
 {
     requiredComponents.at(0) = POSITION | LINVELOC ;
     requiredComponents.at(1) = ORIENTATION | ANGVELOC ;
-    requiredComponents.at(2) = CONTROL | ORIENTATION;
+    
 }
 
 System_PhysMove::~System_PhysMove()
@@ -66,10 +66,6 @@ void System_PhysMove::tick()
         }
     }
     if (!hasDoneOne) std::cout << "rotateFail\n";
-    for (auto ID : registeredIDs[2]){
-        if (bank->getState(ID) & (ACTIVE | RECALCVIEWMAT) == (ACTIVE | RECALCVIEWMAT)){
-            bank->getControlPtr(ID)->transform(bank->getRotMat(ID));
-        }
-    }
+    
     SDL_Delay(2);
 }

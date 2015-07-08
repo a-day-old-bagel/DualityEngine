@@ -6,22 +6,20 @@
  * 
  ******************************************************************************/
 
-//#include "../Headers/UserControl.h"
 #include <SDL.h>
 #include <fstream>
 #include "Scripting.h"
 
 using namespace DualityEngine;
 
-//<editor-fold>
 
-System_Scripting::System_Scripting(ComponentBank* bank)//, ScriptingDelegates* delegates)
+System_Scripting::System_Scripting(ComponentBank* bank)
                   : System(bank, "Scripting System", 0){
-//    this->dlgt = delegates;
+    
 }
 
 System_Scripting::~System_Scripting(){
-//    dlgt = NULL;
+    
 }
 
 bool System_Scripting::init(std::stringstream& output){
@@ -33,7 +31,7 @@ void System_Scripting::tick(){
         parseCommand(commandQueue.front());
         commandQueue.pop();
     }
-    SDL_Delay(10);
+    SDL_Delay(20);
 }
 
 void System_Scripting::submitScript(const std::string& fileName){
@@ -162,7 +160,7 @@ void System_Scripting::parseCommand(const std::string& command){
                 for (auto command : commandUsages){
                     bank->dlgt->outputStr("    " + command.second);
                 }
-                bank->dlgt->output("Type \"help components\" to see a list of available components, \"help [command]\" for command-specific help. Use PageUp/PageDown to scroll.");
+                bank->dlgt->output("Type \"help components\" to see a list of available components, \"help [command]\" for command-specific help. ~ key accesses console during play. Use PageUp/PageDown to scroll.");
             } else if (numArgs == 2){
                 if (commandHelps.count(args[1])){
                     bank->dlgt->outputStr("The " + args[1] + " command " + commandHelps[args[1]] + "\n" +
@@ -287,6 +285,10 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
         int numCompArgs = args.size() - 3;
         if (componentHelps.count(args[1])){
             if (numCompArgs != componentArgs[args[1]].second){
+                if (numCompArgs == 2 && args[3] == "all"){
+                    parseKeyword_all(args);
+                    return;
+                }
                 bank->dlgt->outputStr("Wrong number of arguments for a " + args[1] + " component.\n");
                 bank->dlgt->outputStr(componentArgs[args[1]].first);
                 return;
@@ -309,7 +311,7 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
         }else if (args[1] == DUA_COMPCOLL(8,1)){
             bank->addAngularVeloc(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(9,1)){
-            bank->addControl(entID);
+            bank->addSpaceControl(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]), prsDbl(args[6]), prsDbl(args[7]), prsDbl(args[8]), prsDbl(args[9]), prsDbl(args[10]), prsDbl(args[11]));
         }else if (args[1] == DUA_COMPCOLL(12,1)){
             bank->addAmbientLight(entID, prsClr(args[3]), prsClr(args[4]), prsClr(args[5]));
         }else if (args[1] == DUA_COMPCOLL(11,1)){
@@ -326,6 +328,20 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
             bank->addCameraFree(entID, prsFlt(args[3]), prsFlt(args[4]), prsFlt(args[5]), prsDbl(args[6]), prsDbl(args[7]), prsDbl(args[8]), prsDbl(args[9]), prsDbl(args[10]), prsDbl(args[11]), prsDbl(args[12]), prsDbl(args[13]), prsDbl(args[14]));
         }else{
             bank->dlgt->outputStr("Unknown component: " + args[1] + "\n");
+        }
+    } catch(const char* error) {
+        bank->dlgt->output(error);
+    }
+}
+
+void System_Scripting::parseKeyword_all(const std::vector<std::string>& args){
+    try{
+        DUA_id entID = prsID(args[2]);
+        if      (args[1] == DUA_COMPCOLL(9,1)){
+            DUA_dbl pwr = prsDbl(args[4]);
+            bank->addSpaceControl(entID, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr);
+        }else{
+            bank->dlgt->outputStr("\"all\" keyword not supported for component: " + args[1] + "\n");
         }
     } catch(const char* error) {
         bank->dlgt->output(error);
@@ -353,7 +369,7 @@ void System_Scripting::parseRemoveCommand(const std::vector<std::string>& args){
         }else if (args[1] == DUA_COMPCOLL(8,1)){
             bank->deleteAngularVeloc(entID);
         }else if (args[1] == DUA_COMPCOLL(9,1)){
-            bank->deleteControl(entID);
+            bank->deleteSpaceControl(entID);
         }else if (args[1] == DUA_COMPCOLL(12,1)){
             bank->deleteAmbientLight(entID);
         }else if (args[1] == DUA_COMPCOLL(11,1)){
@@ -414,9 +430,6 @@ DUA_float System_Scripting::prsFlt(const std::string& floatString){
     DUA_float flt = -1;
     try {
         flt = DUA_STR_TO_FLOAT(floatString);
-//        if (flt > std::numeric_limits<DUA_float>::max() || flt > std::numeric_limits<DUA_float>::min()) {
-//            throw std::out_of_range("DUA_float");
-//        }
     } catch (std::invalid_argument& invalidException) {
         throw std::string("Not a valid value: " + floatString + "\n").c_str();
     } catch (std::out_of_range& oorException) {
@@ -429,7 +442,7 @@ DUA_colorByte System_Scripting::prsClr(const std::string& colorValue){
     DUA_colorByte colorVal = -1;
     try {
         colorVal = DUA_STR_TO_COLOR(colorValue, 10);
-        if (colorVal > std::numeric_limits<Uint8>::max() || colorVal < 0) {
+        if (colorVal > 255 || colorVal < 0) {
             throw std::out_of_range("DUA_colorByte");
         }
     } catch (std::invalid_argument& invalidException) {

@@ -40,7 +40,7 @@ namespace DualityEngine {
         GLuint texture;
         GLuint VAOloc;
         GLuint shdrLoc;
-        GLuint txtrLoc;
+        GLuint unifLoc_txtur;
         GLuint attrLoc_verts;
         GLuint unifLoc_projM;
         GLuint unifLoc_viewM;

@@ -19,7 +19,7 @@ namespace DualityEngine {
         AngularVelocity(const DUA_dbl &rotX, const DUA_dbl &rotY, const DUA_dbl &rotZ){
             velAngular = {rotX, rotY, rotZ};
         }
-        DUA_vec3 velAngular;
+        glm::vec3 velAngular;
     };
 
 }

@@ -16,8 +16,9 @@ box0 = newent fooBox
 add position box0 0 0 0
 add orientation box0 0 0 0
 add angveloc box0 0 0.002 0
+add linveloc box0 0 0 0
 add model box0 modelNameDoesNothingYet
-add control box0
+add spacecontrol box0
 add freecam box0 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
 box1 = newent barBox
@@ -30,7 +31,9 @@ player = newent player
 add freecam player 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 add position player 0 0 4
 add orientation player 0 0 0
-add control player
+add linveloc player 0 0 0
+add angveloc player 0 0 0
+add spacecontrol player
 add model player modelNameDoesNothingYet
 
 control player
