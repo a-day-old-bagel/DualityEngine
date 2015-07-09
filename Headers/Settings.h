@@ -111,7 +111,7 @@ namespace DualityEngine {
 
     /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */   
 
-    #define DUA_VERSION "v0.01.01"
+    #define DUA_VERSION "v0.01.02"
     
     #define DUA_GLVERSION_MAJOR 3
     #ifndef DUA_OLD_VIDEO_DRIVERS

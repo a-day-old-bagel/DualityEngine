@@ -26,22 +26,17 @@ namespace DualityEngine {
     class System_Render_Models : public System
     {
     private:
-                
-//        DUA_id localActiveCamera = DUA_NULL_ID;
-//        CameraFree* pCamCurrent;
        
         DUA_id dbgCube;
         DebugCube debugCube;
 
         bool setUpResources(std::stringstream& engineOut);
-//        bool aquireView();
 
     public:
         System_Render_Models(ComponentBank* bank);
         ~System_Render_Models();
         void tick() override;    
         bool init(std::stringstream& output) override;
-        void clean() override;
     };
 
 }

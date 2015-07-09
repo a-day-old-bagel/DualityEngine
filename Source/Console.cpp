@@ -9,7 +9,7 @@
 using namespace DualityEngine;
 
 Console::~Console(){
-    std::cout << getLog();
+    //std::cout << getLog();
 }
 
 void Console::output(const char* text){

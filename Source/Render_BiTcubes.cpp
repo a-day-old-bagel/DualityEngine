@@ -74,37 +74,6 @@ bool System_Render_BiTcubes::setUpResources(std::stringstream& engineOut)
 //<editor-fold defaultstate="collapsed" desc="Tick">
 void System_Render_BiTcubes::tick()
 {    
-    if (aquireView()){
-        
-    }
-}
-//</editor-fold>
-bool System_Render_BiTcubes::aquireView(){
-    if (bank->activeFreeCameraID != localActiveCamera){
-        localActiveCamera = bank->activeFreeCameraID;
-        if (localActiveCamera != DUA_NULL_ID){
-            pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
-        }
-    }
-    if (localActiveCamera != DUA_NULL_ID){
-        if (bank->getState(localActiveCamera) & RECALCVIEWMAT){            
-            pCamCurrent->updateView(bank->getRotMat(localActiveCamera), bank->getPosMat(localActiveCamera));            
-        }
-        if (bank->getState(localActiveCamera) & RECALCPROJMAT){
-            pCamCurrent->updateProjection();
-        }
-        if (bank->getState(localActiveCamera) & (RECALCVIEWMAT | RECALCPROJMAT)){
-            pCamCurrent->updateViewProjection();
-            bank->stateOff(localActiveCamera, RECALCVIEWMAT | RECALCPROJMAT);
-        }
-        return true;
-    } else {
-        return false;
-    }
     
 }
-void System_Render_BiTcubes::clean(){
-    System::clean();
-    localActiveCamera = DUA_NULL_ID;
-    pCamCurrent = NULL;
-}
+//</editor-fold>

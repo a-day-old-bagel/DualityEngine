@@ -20,21 +20,14 @@ namespace DualityEngine {
         SDL_Event sdlEvent;
         bool consoleIsActive = false;
         bool MenuIsActive = false;
-        DUA_id localActiveControl = DUA_NULL_ID;
-        SpaceControl* pControlCurrent;
-        Position* pPositionCurrent;
-        LinearVelocity* pLinVelocCurrent;
-        Orientation* pOrientationCurrent;
         const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*     new, load, save, exit, help      *\n****************************************\n";
         void handleMenuCommand(const std::string& command);
         void handleControlKeys(const Uint8* keyStates);
-        bool ensureActiveControl();
     public:
         System_UserControl(ComponentBank* bank);
         ~System_UserControl();
         void tick() override;
         bool init(std::stringstream& output) override;
-        void clean() override;
     };
 
 }

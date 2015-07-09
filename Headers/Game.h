@@ -18,6 +18,7 @@
 #include "PhysMove.h"
 #include "PhysCollide.h"
 #include "UserControl.h"
+#include "Control_SS.h"
 #include "Scripting.h"
 #include "Engine.h"
 #include "BankDelegates.h"
@@ -52,6 +53,8 @@ namespace DualityEngine {
         System_PhysMove physicsMoveSystem = System_PhysMove(&bank);
         // check collisions between all spatial components according to collision components
         System_PhysCollide physicsCollisionSystem = System_PhysCollide(&bank);
+        // apply user's key presses in a spaceship-like way to currently controlled entity
+        System_Control_SS spaceShipControlSystem = System_Control_SS(&bank);
         
         // handle user input
         System_UserControl userControlSystem = System_UserControl(&bank);

@@ -82,6 +82,7 @@ void Game::SaveGame(const std::string& saveName){
 void Game::Pause(){
     physicsMoveSystem.pause();
     physicsCollisionSystem.pause();
+    spaceShipControlSystem.pause();
 }
 
 /**************************************
@@ -90,6 +91,7 @@ void Game::Pause(){
 void Game::Resume(){
     physicsMoveSystem.resume();
     physicsCollisionSystem.resume();
+    spaceShipControlSystem.resume();
 }
 
 /**************************************
@@ -122,7 +124,8 @@ bool Game::engageEngines(){
     
     physicsEngine.addSystem(&physicsMoveSystem);        // apply velocity * time to each position
     physicsEngine.addSystem(&physicsCollisionSystem);   // check collisions between objects
-    physicsEngine.addSystem(&userControlSystem);        // apply user's physical control impulses
+    physicsEngine.addSystem(&userControlSystem);        // accept user input
+    physicsEngine.addSystem(&spaceShipControlSystem);
     physicsEngine.engage();                             // spawn thread to repeatedly do the above.
     
     scriptingEngine.addSystem(&scriptingSystem);        // check for new commands in the queue
@@ -147,6 +150,7 @@ bool Game::waitForBankDependentSystemsToPause(){
         done &= renderConsoleSystem.isPauseConfirmed();
         done &= physicsCollisionSystem.isPauseConfirmed();  //PROBLEMS WITH THIS BEING EXECUTED FROM CONTROL SYS... THREAD LOCKS
         done &= userControlSystem.isPauseConfirmed();
+        done &= spaceShipControlSystem.isPauseConfirmed();
         
         if (SDL_GetTicks() - startTime > Settings::Systems::systemsPauseTimeout){
             return false;
@@ -166,6 +170,7 @@ bool Game::pauseBankDependentSystems(){
     renderBackgroundSystem.pause();
     renderMasterSystem.pause();
     renderConsoleSystem.pause();
+    spaceShipControlSystem.pause();
     
     if (waitForBankDependentSystemsToPause()){
         return true;
@@ -189,6 +194,7 @@ bool Game::resumeBankDependentSystems(){
     renderModelsSystem.resume();
     renderBackgroundSystem.resume();
     userControlSystem.resume();
+    spaceShipControlSystem.resume();
     
     return true;
 }
@@ -208,6 +214,7 @@ bool Game::killSystems(){
     physicsCollisionSystem.quit();
     userControlSystem.quit();
     scriptingSystem.quit();
+    spaceShipControlSystem.quit();
     return true;
 }
 

@@ -13,8 +13,8 @@ ComponentBank::ComponentBank(BankDelegates* dlgt){
     this->dlgt = dlgt;
     
     pSpaceControlDummy = new SpaceControl(0, 0, 0, 0, 0, 0, 0, 0, 0);
-    pLinVelocDummy = new LinearVelocity(0, 0, 0);
-    pCtrlOrientDummy = new Orientation(0, 0, 0);
+    pSpcCtrlLinVelocDummy = new LinearVelocity(0, 0, 0);
+    pSpcCtrlOrientDummy = new Orientation(0, 0, 0);
     defaultControl();
     
     pFreeCameraDummy = new CameraFree(1, 0.5, 1000, 0, 0, 0, 0, 0, -1, 0, 1, 0);
@@ -25,11 +25,11 @@ ComponentBank::~ComponentBank(){
     dlgt = NULL;
     
     delete pSpaceControlDummy;
-    delete pLinVelocDummy;
-    delete pCtrlOrientDummy;
+    delete pSpcCtrlLinVelocDummy;
+    delete pSpcCtrlOrientDummy;
     pSpaceControlDummy = NULL;
-    pLinVelocDummy = NULL;
-    pCtrlOrientDummy = NULL;
+    pSpcCtrlLinVelocDummy = NULL;
+    pSpcCtrlOrientDummy = NULL;
     
     delete pFreeCameraDummy;
     pFreeCameraDummy = NULL;
@@ -327,10 +327,12 @@ void ComponentBank::deleteModel(const DUA_id &ID){
         tryRemoveFlagFromSoul(MODEL, ID);
 }
 void ComponentBank::deleteLinearVeloc(const DUA_id &ID){
+    scrutinizeControl(ID);
     if (tryRemoveComponent(ID, "linear velocity", LINVELOC, components_linearVeloc))
         tryRemoveFlagFromSoul(LINVELOC, ID);
 }
 void ComponentBank::deletePosition(const DUA_id &ID){
+    scrutinizeCam(ID);
     if (tryRemoveComponent(ID, "position", POSITION, components_position))
         tryRemoveFlagFromSoul(POSITION, ID);
 }
@@ -343,6 +345,8 @@ void ComponentBank::deleteSpatialParent(const DUA_id& ID){
         tryRemoveFlagFromSoul(SPATPARENT, ID);
 }
 void ComponentBank::deleteOrientation(const DUA_id &ID){
+    scrutinizeCam(ID);
+    scrutinizeControl(ID);
     if (tryRemoveComponent(ID, "rotation", ORIENTATION, components_orientation))
         tryRemoveFlagFromSoul(ORIENTATION, ID);
 }
@@ -351,6 +355,7 @@ void ComponentBank::deleteAngularVeloc(const DUA_id& ID){
         tryRemoveFlagFromSoul(ANGVELOC, ID);
 }
 void ComponentBank::deleteSpaceControl(const DUA_id &ID){
+    scrutinizeControl(ID);
     if (tryRemoveComponent(ID, "control", CONTROLSS, components_spacecontrol))
         tryRemoveFlagFromSoul(CONTROLSS, ID);
 }
@@ -379,7 +384,7 @@ void ComponentBank::deleteCollision(const DUA_id& ID){
         tryRemoveFlagFromSoul(COLLISION, ID);
 }
 void ComponentBank::deleteCameraFree(const DUA_id& ID){
-    if (activeFreeCameraID == ID) activeFreeCameraID = DUA_NULL_ID;
+    scrutinizeCam(ID);
     if (tryRemoveComponent(ID, "free camera", FREECAM, components_freeCam))
         tryRemoveFlagFromSoul(FREECAM, ID);
 }
@@ -605,10 +610,11 @@ bool ComponentBank::switchToCam(const DUA_id& ID){
 void ComponentBank::scrutinizeCam(const DUA_id& ID){
     if (activeFreeCameraID == ID){
         defaultCam();
+        dlgt->outputStr("View from camera " + std::to_string(ID) + " has been rendered impossible.");
     }
 }
 void ComponentBank::defaultCam(){
-    activeFreeCameraID = DUA_NULL_ID
+    activeFreeCameraID = DUA_NULL_ID;
     pFreeCameraCurrent = pFreeCameraDummy;
 }
 
@@ -618,8 +624,8 @@ bool ComponentBank::switchToControl(const DUA_id& ID){
             if((components_soul.at(ID).components) & (POSITION | ORIENTATION | LINVELOC) == (POSITION | ORIENTATION | LINVELOC)){
                 activeSpaceControlID = ID;
                 pSpaceControlCurrent = getSpaceControlPtr(ID);
-                pLinVelocCurrent = getLinearVelocPtr(ID);
-                pCtrlOrientCurrent = getOrientationPtr(ID);
+                pSpcCtrlLinVelocCurrent = getLinearVelocPtr(ID);
+                pSpcCtrlOrientCurrent = getOrientationPtr(ID);
             } else {
                 dlgt->outputStr("entity " + std::to_string(ID) + " requires position, orientation, and linear velocity.");
                 return false;
@@ -629,7 +635,7 @@ bool ComponentBank::switchToControl(const DUA_id& ID){
             return false;
         }
     }catch(const std::out_of_range& oorException){
-        dlgt->outputStr("No entity exists at ID " + std::to_string(ID) + "\n");
+        dlgt->outputStr("No entity exists at ID " + std::to_string(ID));
         return false;
     }
     return true;
@@ -637,13 +643,14 @@ bool ComponentBank::switchToControl(const DUA_id& ID){
 void ComponentBank::scrutinizeControl(const DUA_id& ID){
     if (activeSpaceControlID == ID){
         defaultControl();
+        dlgt->outputStr("Control of entity" + std::to_string(ID) + " has been lost.");
     }
 }
 void ComponentBank::defaultControl(){
     activeSpaceControlID = DUA_NULL_ID;
     pSpaceControlCurrent = pSpaceControlDummy;
-    pLinVelocCurrent = pLinVelocDummy;
-    pCtrlOrientCurrent = pCtrlOrientDummy;
+    pSpcCtrlLinVelocCurrent = pSpcCtrlLinVelocDummy;
+    pSpcCtrlOrientCurrent = pSpcCtrlOrientDummy;
 }
 
 glm::mat4 ComponentBank::getPosMat(const DUA_id& ID){

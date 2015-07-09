@@ -21,33 +21,7 @@ bool System_PhysMove::init(std::stringstream& output)
 }
 
 void System_PhysMove::tick()
-{
-//    for (auto ID : registeredIDs[0]){
-//        if (bank->getState(ID) & ACTIVE){
-//            positionPtr = bank->getPositionPtr(ID);
-//            if (positionPtr != NULL){
-//                linVelocPtr = bank->getLinearVelocPtr(ID);
-//                if (linVelocPtr != NULL){
-//                    positionPtr->translate(linVelocPtr->velLinear);
-//                    bank->stateOn(ID, RECALCVIEWMAT);
-//                }
-//            }
-//        }
-//    }
-//    for (auto ID : registeredIDs[1]){
-//        if (bank->getState(ID) & ACTIVE){
-//            orientationPtr = bank->getOrientationPtr(ID);
-//            if (orientationPtr != NULL){
-//                angVelocPtr = bank->getAngularVelocPtr(ID);
-//                if (angVelocPtr != NULL){
-//                    orientationPtr->rotate(angVelocPtr->velAngular);
-//                    bank->stateOn(ID, RECALCVIEWMAT);
-//                }
-//            }
-//        }
-//    }
-    
-    
+{    
     for (auto ID : registeredIDs[0]){
         if (bank->getState(ID) & ACTIVE){
             bank->getPositionPtr(ID)->translate(bank->getLinearVelocPtr(ID)->velLinear);

@@ -222,11 +222,11 @@ namespace DualityEngine {
         
         DUA_id activeSpaceControlID = DUA_NULL_ID;
         SpaceControl* pSpaceControlCurrent;
-        LinearVelocity* pLinVelocCurrent;
-        Orientation* pCtrlOrientCurrent;
+        LinearVelocity* pSpcCtrlLinVelocCurrent;
+        Orientation* pSpcCtrlOrientCurrent;
         SpaceControl* pSpaceControlDummy;
-        LinearVelocity* pLinVelocDummy;
-        Orientation* pCtrlOrientDummy;
+        LinearVelocity* pSpcCtrlLinVelocDummy;
+        Orientation* pSpcCtrlOrientDummy;
         bool switchToControl(const DUA_id &id);
         void scrutinizeControl(const DUA_id &id);
         void defaultControl();

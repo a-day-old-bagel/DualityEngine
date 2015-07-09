@@ -8,6 +8,7 @@
 #ifndef SPACECONTROL_H
 #define	SPACECONTROL_H
 
+#include <cstring>
 #include <glm/glm.hpp>
 #include "Component.h"
 
@@ -17,8 +18,8 @@ namespace DualityEngine {
         enum inputDirections{
             FORWARD  = 0,
             BACKWARD = 1,
-            LEFT     = 2,
-            RIGHT    = 3,
+            RIGHT    = 2,
+            LEFT     = 3,
             UP       = 4,
             DOWN     = 5,
             ROLL     = 6,
@@ -42,28 +43,33 @@ namespace DualityEngine {
             thrust[ControlSS::YAW]      = yaw;
             
         }
-        inline void transform(const glm::mat4& transform){
-            forward = transform * forwardOrig;
-            right = transform * rightOrig;
-            up = transform * upOrig;
+        inline void transform(const glm::mat4& transMat){
+            transform(glm::mat3(transMat));
+        }
+        inline void transform(const glm::mat3& transMat){
+            currentAxes[0] = transMat * forwardOrig;
+            currentAxes[1] = transMat * rightOrig;
+            currentAxes[2] = transMat * upOrig;
+
         }
         inline void zeroInputs(){
-            memset(inputs,0,sizeof(inputs));
+            for (uint i = 0; i < 10; ++i){
+                inputs[i] = 0;
+            }
         }
-        inline void applyInput(const int whichInput, const DUA_dbl& value){
+        inline void applyInput(const int whichInput, const DUA_float& value){
             inputs[whichInput] += value;
         }
-        glm::vec4 forwardOrig = {0, 0, -1, 1};
-        glm::vec4 rightOrig = {1, 0, 0, 1};
-        glm::vec4 upOrig = {0, 1, 0, 1};
+        glm::vec3 forwardOrig = {0, 0, -1};
+        glm::vec3 rightOrig = {1, 0, 0};
+        glm::vec3 upOrig = {0, 1, 0};
         
-        glm::vec4 forward = forwardOrig;
-        glm::vec4 right = rightOrig;
-        glm::vec4 up = upOrig;
+        glm::vec3 currentAxes[3];
         
-        // forward, backward, left, right, up, down roll, pitch, yaw, break
-        DUA_dbl inputs[10] = {0};
-        DUA_dbl thrust[9] = {1};  // lacks break, which is just scalar 0-1 value and uses the 6 directional thrusts.        
+        // forward, backward, right, left, up, down roll, pitch, yaw, break
+        // all input values range from 0 - 1.
+        DUA_float inputs[10] = {0};
+        DUA_float thrust[9] = {1.0};  // lacks break, which uses the 6 directional thrusts.        
         
     };
 

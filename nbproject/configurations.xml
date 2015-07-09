@@ -103,7 +103,6 @@
         <itemPath>Headers/Control_SS.h</itemPath>
         <itemPath>Headers/PhysCollide.h</itemPath>
         <itemPath>Headers/PhysMove.h</itemPath>
-        <itemPath>Headers/RenderOld.h</itemPath>
         <itemPath>Headers/Render_Background.h</itemPath>
         <itemPath>Headers/Render_BiTcubes.h</itemPath>
         <itemPath>Headers/Render_Console.h</itemPath>
@@ -120,6 +119,7 @@
         <itemPath>Headers/Delegate.h</itemPath>
         <itemPath>Assets/GUI/GUI_Console.h</itemPath>
         <itemPath>Headers/HashMap.h</itemPath>
+        <itemPath>Headers/Maths.h</itemPath>
         <itemPath>Headers/Settings.h</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -164,7 +164,6 @@
         <itemPath>Source/Control_SS.cpp</itemPath>
         <itemPath>Source/PhysCollide.cpp</itemPath>
         <itemPath>Source/PhysMove.cpp</itemPath>
-        <itemPath>Source/RenderOld.cpp</itemPath>
         <itemPath>Source/Render_Background.cpp</itemPath>
         <itemPath>Source/Render_BiTcubes.cpp</itemPath>
         <itemPath>Source/Render_Console.cpp</itemPath>
@@ -336,6 +335,8 @@
       </item>
       <item path="Headers/LinearVelocity.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Maths.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/MeshRepository.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Model.h" ex="false" tool="3" flavor2="0">
@@ -355,8 +356,6 @@
       <item path="Headers/PositionChild.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/PositionParent.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Headers/RenderOld.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Render_Background.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -423,8 +422,6 @@
       <item path="Source/PhysCollide.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/PhysMove.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Render_Background.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -603,6 +600,8 @@
       </item>
       <item path="Headers/LinearVelocity.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Maths.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/MeshRepository.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Model.h" ex="false" tool="3" flavor2="0">
@@ -622,8 +621,6 @@
       <item path="Headers/PositionChild.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/PositionParent.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Headers/RenderOld.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Render_Background.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -690,8 +687,6 @@
       <item path="Source/PhysCollide.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/PhysMove.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Source/RenderOld.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Render_Background.cpp" ex="false" tool="1" flavor2="0">
       </item>

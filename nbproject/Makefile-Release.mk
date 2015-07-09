@@ -45,7 +45,6 @@ OBJECTFILES= \
 	${OBJECTDIR}/Source/HashMap.o \
 	${OBJECTDIR}/Source/PhysCollide.o \
 	${OBJECTDIR}/Source/PhysMove.o \
-	${OBJECTDIR}/Source/RenderOld.o \
 	${OBJECTDIR}/Source/Render_Background.o \
 	${OBJECTDIR}/Source/Render_BiTcubes.o \
 	${OBJECTDIR}/Source/Render_Console.o \
@@ -138,11 +137,6 @@ ${OBJECTDIR}/Source/PhysMove.o: Source/PhysMove.cpp
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/PhysMove.o Source/PhysMove.cpp
-
-${OBJECTDIR}/Source/RenderOld.o: Source/RenderOld.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Source
-	${RM} "$@.d"
-	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/RenderOld.o Source/RenderOld.cpp
 
 ${OBJECTDIR}/Source/Render_Background.o: Source/Render_Background.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source

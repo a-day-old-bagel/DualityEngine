@@ -1,12 +1,12 @@
 #include "../Headers/Control_SS.h"
+#include "Maths.h"
 
 using namespace DualityEngine;
 
 System_Control_SS::System_Control_SS(ComponentBank* bank)
-                         : System(bank, "Physics Collision System", 2)
+                         : System(bank, "Space Ship Control System", 0)
 {
-    requiredComponents.at(0) = CONTROLSS | LINVELOC ;
-    requiredComponents.at(1) = CONTROLSS | ORIENTATION;
+    
 }
 
 System_Control_SS::~System_Control_SS()
@@ -22,14 +22,25 @@ bool System_Control_SS::init(std::stringstream& output)
 void System_Control_SS::tick()
 {
     
-    for (auto ID : registeredIDs[1]){
-        if (bank->getState(ID) & (ACTIVE | RECALCVIEWMAT) == (ACTIVE | RECALCVIEWMAT)){
-            bank->getSpaceControlPtr(ID)->transform(bank->getRotMat(ID));
-        }
-    }
-    
-    for (auto ID : registeredIDs[0]){
+    if (bank->activeSpaceControlID != DUA_NULL_ID){
+        DUA_stateFlag tempFlag = bank->getState(bank->activeSpaceControlID);
         
+        if (tempFlag & ACTIVE){  
+            
+            if (tempFlag & RECALCVIEWMAT){
+                bank->pSpaceControlCurrent->transform(bank->getRotMat(bank->activeSpaceControlID));
+            }
+
+            reusableVectorSum = {0, 0, 0};            
+            for (uint i = 0; i < 6; ++i){
+                reusableVectorSum += bank->pSpaceControlCurrent->currentAxes[i / 2] * (bank->pSpaceControlCurrent->inputs[i] * bank->pSpaceControlCurrent->thrust[i] * -(i % 2));
+            }
+            bank->getLinearVelocPtr(bank->activeSpaceControlID)->applyImpulse(reusableVectorSum);
+            if (reusableVectorSum != glm::vec3(0)){
+                bank->dlgt->outputStr(std::to_string(reusableVectorSum.x) + " " + std::to_string(reusableVectorSum.y) + " " + std::to_string(reusableVectorSum.z));
+            }
+            bank->pSpaceControlCurrent->zeroInputs();
+        }
     }
     
 }

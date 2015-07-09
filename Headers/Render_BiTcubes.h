@@ -30,14 +30,12 @@ namespace DualityEngine {
         CameraFree* pCamCurrent;
 
         bool setUpResources(std::stringstream& engineOut);
-        bool aquireView();
 
     public:
         System_Render_BiTcubes(ComponentBank* bank);
         ~System_Render_BiTcubes();
         void tick() override;    
         bool init(std::stringstream& output) override;
-        void clean() override;
     };
 
 }
