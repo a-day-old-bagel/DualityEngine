@@ -48,7 +48,7 @@ void System_Control_SS::tick()
             
             // add all the vectors being applied currently by the user's input into the impulse vector
             for (uint i = 0; i < 6; ++i){
-                reusableVectorSum += bank->pSpaceControlCurrent->currentAxes[i / 2] * (bank->pSpaceControlCurrent->inputs[i] * bank->pSpaceControlCurrent->thrust[i] * ((i % 2) ? -1 : 1));
+                reusableVectorSum += bank->pSpaceControlCurrent->currentAxes[i / 2] * (bank->pSpaceControlCurrent->inputs[i] * bank->pSpaceControlCurrent->thrust[i]);// * ((i % 2) ? -1 : 1));
             }
             
             /* APPLY BRAKING */

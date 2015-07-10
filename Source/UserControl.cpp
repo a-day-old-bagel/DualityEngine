@@ -135,13 +135,13 @@ void System_UserControl::handleControlKeys(const Uint8* keyStates){
         switch(bank->currentControlType){
             case ControlTypes::SPACE:
                 if (keyStates[SDL_SCANCODE_W]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::FORWARD, 1.0);
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::FORWARD, 1);
                 }
                 if (keyStates[SDL_SCANCODE_S]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::BACKWARD, 1);
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::BACKWARD, -1);
                 }
                 if (keyStates[SDL_SCANCODE_A]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::LEFT, 1);
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::LEFT, -1);
                 }
                 if (keyStates[SDL_SCANCODE_D]) {
                     bank->pSpaceControlCurrent->applyInput(ControlSS::RIGHT, 1);
@@ -150,19 +150,25 @@ void System_UserControl::handleControlKeys(const Uint8* keyStates){
                     bank->pSpaceControlCurrent->applyInput(ControlSS::UP, 1);
                 }
                 if (keyStates[SDL_SCANCODE_LCTRL]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::DOWN, 1);
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::DOWN, -1);
                 }
                 if (keyStates[SDL_SCANCODE_UP]) {
-
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, -1);
                 }
                 if (keyStates[SDL_SCANCODE_DOWN]) {
-
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, 1);
                 }
                 if (keyStates[SDL_SCANCODE_LEFT]) {
-
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, -1);
                 }
                 if (keyStates[SDL_SCANCODE_RIGHT]) {
-
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, 1);
+                }
+                if (keyStates[SDL_SCANCODE_Q]) {
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, -1);
+                }
+                if (keyStates[SDL_SCANCODE_E]) {
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, 1);
                 }
                 break;
             case ControlTypes::NONE:
