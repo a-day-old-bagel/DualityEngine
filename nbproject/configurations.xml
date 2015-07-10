@@ -86,6 +86,7 @@
         <itemPath>Headers/CameraFree.h</itemPath>
         <itemPath>Headers/Collision.h</itemPath>
         <itemPath>Headers/Component.h</itemPath>
+        <itemPath>Headers/ControlBase.h</itemPath>
         <itemPath>Headers/DirectionalLight.h</itemPath>
         <itemPath>Headers/LinearVelocity.h</itemPath>
         <itemPath>Headers/Model.h</itemPath>
@@ -318,6 +319,8 @@
       <item path="Headers/ComponentCollection.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Console.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ControlBase.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Control_SS.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -583,6 +586,8 @@
       <item path="Headers/ComponentCollection.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Console.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Headers/ControlBase.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Control_SS.h" ex="false" tool="3" flavor2="0">
       </item>

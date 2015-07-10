@@ -28,18 +28,12 @@ void System_PhysMove::tick()
             bank->stateOn(ID, RECALCVIEWMAT);
         }
     }
-    bool hasDoneOne = true;
-    if (registeredIDs[1].size())
-        bool hasDoneOne = false;
     for (auto ID : registeredIDs[1]){
         if (bank->getState(ID) & ACTIVE){
-            hasDoneOne = true;
             bank->getOrientationPtr(ID)->rotate(bank->getAngularVelocPtr(ID)->velAngular);
-            bank->stateOn(ID, RECALCVIEWMAT); 
-            
+            bank->stateOn(ID, RECALCVIEWMAT);            
         }
     }
-    if (!hasDoneOne) std::cout << "rotateFail\n";
     
-    SDL_Delay(2);
+    SDL_Delay(5);
 }

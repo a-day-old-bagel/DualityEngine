@@ -22,6 +22,7 @@ namespace DualityEngine {
         bool MenuIsActive = false;
         const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*     new, load, save, exit, help      *\n****************************************\n";
         void handleMenuCommand(const std::string& command);
+        void handleKeyDown(SDL_Event& event);
         void handleControlKeys(const Uint8* keyStates);
     public:
         System_UserControl(ComponentBank* bank);

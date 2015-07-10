@@ -8,24 +8,25 @@
 # many entities you think will be created over the course of the scene.  This number does
 # not need to be exact as it is only for pre-allocating space in the component hash maps,
 # which should yield a performance gain by reducing the frequency of hash map expansions.
+# Okay, I said MUST, but actually you can omit the second line if you want (as I have done here by commenting it out.)
 
 DualityEngineScript v0.01.02
 # numberOfEntities 3
 
-box0 = newent fooBox
-add position box0 0 0 0
-add orientation box0 0 0 0
-add angveloc box0 0 0.002 0
-add linveloc box0 0 0 0
-add model box0 modelNameDoesNothingYet
-add spacecontrol box0 all 0.0000000001
-add freecam box0 1 0.5 1000 0 0 0 0 0 -1 0 1 0
+boxOne = newent fooBox
+add position boxOne 0 0 0
+add orientation boxOne 0 0 0
+add angveloc boxOne 0 0.002 0
+add linveloc boxOne 0 0 0
+add model boxOne modelNameDoesNothingYet
+add spacecontrol boxOne all 0.00005
+add freecam boxOne 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
-box1 = newent barBox
-add position box1 3 0 0
-add orientation box1 0 0 0
-add angveloc box1 0 -0.002 0
-add model box1 modelNameDoesNothingYet
+boxTwo = newent barBox
+add position boxTwo 3 0 0
+add orientation boxTwo 0 0 0
+add angveloc boxTwo 0 -0.002 0
+add model boxTwo modelNameDoesNothingYet
 
 player = newent player
 add freecam player 1 0.5 1000 0 0 0 0 0 -1 0 1 0
@@ -33,8 +34,8 @@ add position player 1.5 4 0
 add orientation player -1.57 0 0
 add linveloc player 0 0 0
 add angveloc player 0 0 0
-add spacecontrol player all 0.0000000001
+add spacecontrol player all 0.00005
 add model player modelNameDoesNothingYet
 
-control player
+control player spaceship
 cam player

@@ -30,6 +30,7 @@
 
 #include "Soul.h"
 #include "Model.h"
+#include "ControlBase.h"
 #include "SpaceControl.h"
 #include "Position.h"
 #include "PositionChild.h"
@@ -176,7 +177,8 @@ namespace DualityEngine {
         /* CONVENIENCE GETTERS */
         bool getIDs(std::string& name, std::vector<DUA_id>& IDs);
         std::string getName(const DUA_id &ID);
-        std::string listComponents(const DUA_id &ID);
+        std::string listComponentsVerbose(const DUA_id &ID);
+        std::string listComponents(const DUA_compFlag& flag);
         
         
         
@@ -220,16 +222,26 @@ namespace DualityEngine {
         }};
         
         
-        DUA_id activeSpaceControlID = DUA_NULL_ID;
-        SpaceControl* pSpaceControlCurrent;
-        LinearVelocity* pSpcCtrlLinVelocCurrent;
-        Orientation* pSpcCtrlOrientCurrent;
+        /* CONTROL STUFF */
+        
+        bool switchToControl(const DUA_id &id, ControlTypes::type);
+        void scrutinizeControl(const DUA_id &id, ControlTypes::type);
+        DUA_id activeControlID = DUA_NULL_ID;     
+        LinearVelocity* pCtrlLinVelocCurrent;
+        LinearVelocity* pCtrlLinVelocDummy;
+        Orientation* pCtrlOrientCurrent;       
+        Orientation* pCtrlOrientDummy;        
+        Delegate<void()> defocusControl;
+        DUA_compFlag requiredControlComponents = 0;
+        ControlTypes::type currentControlType = ControlTypes::NONE;
+        
+        void assignSpaceControl(const DUA_id& ID);        
+        void defocusSpaceControl();        
+        SpaceControl* pSpaceControlCurrent;   
         SpaceControl* pSpaceControlDummy;
-        LinearVelocity* pSpcCtrlLinVelocDummy;
-        Orientation* pSpcCtrlOrientDummy;
-        bool switchToControl(const DUA_id &id);
-        void scrutinizeControl(const DUA_id &id);
-        void defaultControl();
+        
+        
+        /* CAM STUFF */
         
         DUA_id activeFreeCameraID = DUA_NULL_ID;
         CameraFree* pFreeCameraCurrent;
@@ -239,7 +251,9 @@ namespace DualityEngine {
         void scrutinizeCam(const DUA_id &id);
         void defaultCam();
         
+        
         /* TRANSFORM MATRIX GETTERS */
+        
         glm::mat4 getPosMat(const DUA_id&);     // translation matrix
         glm::mat4 getRotMat(const DUA_id&);     // rotation matrix
         glm::mat4 getModMat(const DUA_id&);     // full model matrix (combines above two)

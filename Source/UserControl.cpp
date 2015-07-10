@@ -7,6 +7,7 @@
  ******************************************************************************/
 
 #include "../Headers/UserControl.h"
+#include "ControlBase.h"
 
 using namespace DualityEngine;
 
@@ -51,15 +52,13 @@ void System_UserControl::tick(){
                     bank->dlgt->resume();
                 }
                 bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);
-            }
-            if(sdlEvent.key.keysym.sym == SDLK_BACKQUOTE){
+            }else if(sdlEvent.key.keysym.sym == SDLK_BACKQUOTE){
                 if (!MenuIsActive){
                     consoleIsActive = !consoleIsActive;
                     consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
                     bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);
                 }
-            }
-            if (consoleIsActive){
+            }else if (consoleIsActive){
                 if(sdlEvent.key.keysym.sym == SDLK_BACKSPACE){
                     bank->dlgt->backspaceCommand();
                 } else if(sdlEvent.key.keysym.sym == SDLK_DELETE){
@@ -88,9 +87,12 @@ void System_UserControl::tick(){
                 } else if(sdlEvent.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL){
                     bank->dlgt->appendToCommand(SDL_GetClipboardText());                    
                 }
+            }else{
+                handleKeyDown(sdlEvent);
             }
-        }
-        else if(sdlEvent.type == SDL_TEXTINPUT){
+//        }else if (sdlEvent.type == SDL_KEYUP){
+//            handleKeyUp(sdlEvent);
+        }else if(sdlEvent.type == SDL_TEXTINPUT){
             if (consoleIsActive){
                 if(!((keyStates[SDL_SCANCODE_C] || keyStates[SDL_SCANCODE_V])
                                                 && SDL_GetModState() & KMOD_CTRL)){
@@ -122,41 +124,51 @@ void System_UserControl::handleMenuCommand(const std::string& command){
     }
 }
 
-void System_UserControl::handleControlKeys(const Uint8* keyStates){
+void System_UserControl::handleKeyDown(SDL_Event& event){
     
-    if (bank->activeSpaceControlID != DUA_NULL_ID){
-        if(keyStates[SDL_SCANCODE_W]){
-            bank->pSpaceControlCurrent->applyInput(ControlSS::FORWARD, 1.0);
-            bank->stateOn(bank->activeSpaceControlID, RECALCVIEWMAT);
-        }
-        if(keyStates[SDL_SCANCODE_S]){
-            bank->pSpaceControlCurrent->applyInput(ControlSS::BACKWARD, 1);
-        }
-        if(keyStates[SDL_SCANCODE_A]){
-            bank->pSpaceControlCurrent->applyInput(ControlSS::LEFT, 1);
-        }
-        if(keyStates[SDL_SCANCODE_D]){
-            bank->pSpaceControlCurrent->applyInput(ControlSS::RIGHT, 1);
-        }
-        if(keyStates[SDL_SCANCODE_LSHIFT]){
-            bank->pSpaceControlCurrent->applyInput(ControlSS::UP, 1);
-        }
-        if(keyStates[SDL_SCANCODE_LCTRL]){
-            bank->pSpaceControlCurrent->applyInput(ControlSS::DOWN, 1);
-        }
-        if(keyStates[SDL_SCANCODE_UP]){
-            
-        }
-        if(keyStates[SDL_SCANCODE_DOWN]){
-            
-        }
-        if(keyStates[SDL_SCANCODE_LEFT]){
-            
-        }
-        if(keyStates[SDL_SCANCODE_RIGHT]){
-            
-        }
-    }
 }
 
-//</editor-fold>
+void System_UserControl::handleControlKeys(const Uint8* keyStates){
+    
+    if (bank->activeControlID != DUA_NULL_ID){
+        
+        switch(bank->currentControlType){
+            case ControlTypes::SPACE:
+                if (keyStates[SDL_SCANCODE_W]) {
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::FORWARD, 1.0);
+                }
+                if (keyStates[SDL_SCANCODE_S]) {
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::BACKWARD, 1);
+                }
+                if (keyStates[SDL_SCANCODE_A]) {
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::LEFT, 1);
+                }
+                if (keyStates[SDL_SCANCODE_D]) {
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::RIGHT, 1);
+                }
+                if (keyStates[SDL_SCANCODE_LSHIFT]) {
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::UP, 1);
+                }
+                if (keyStates[SDL_SCANCODE_LCTRL]) {
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::DOWN, 1);
+                }
+                if (keyStates[SDL_SCANCODE_UP]) {
+
+                }
+                if (keyStates[SDL_SCANCODE_DOWN]) {
+
+                }
+                if (keyStates[SDL_SCANCODE_LEFT]) {
+
+                }
+                if (keyStates[SDL_SCANCODE_RIGHT]) {
+
+                }
+                break;
+            case ControlTypes::NONE:
+                break;
+            default:
+                break;
+        }       
+    }
+}

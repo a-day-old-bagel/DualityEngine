@@ -9,6 +9,7 @@
 #include <SDL.h>
 #include <fstream>
 #include "Scripting.h"
+#include "ControlBase.h"
 
 using namespace DualityEngine;
 
@@ -183,7 +184,7 @@ void System_Scripting::parseCommand(const std::string& command){
             }
         } else if (args[0] == "comps"){
             if (numArgs == 2){
-                std::string outStr = bank->listComponents(prsID(args[1]));
+                std::string outStr = bank->listComponentsVerbose(prsID(args[1]));
                 if (!outStr.empty()){
                     bank->dlgt->outputStr(outStr);
                 }
@@ -206,8 +207,17 @@ void System_Scripting::parseCommand(const std::string& command){
                 handleBadUsage(args[0]);
             }
         } else if (args[0] == "control"){
-            if (numArgs == 2){
-                bank->switchToControl(prsID(args[1]));
+            if (numArgs == 3){
+                if (args[2] == "spaceship"){
+                    bank->switchToControl(prsID(args[1]), ControlTypes::SPACE);
+                } else if (args[2] == "walking"){
+                    bank->dlgt->output("walking control interface not yet implemented");
+                } else if (args[2] == "none"){
+                    bank->switchToControl(DUA_NULL_ID, ControlTypes::NONE);
+                } else {
+                    handleBadUsage(args[0]);
+                }
+                
             } else {
                 handleBadUsage(args[0]);
             }
@@ -409,6 +419,18 @@ DUA_id System_Scripting::prsID(const std::string& IDstring){
         throw std::string("ID out of range: " + IDstring + "\n").c_str();
     }
     return entID;
+}
+
+int System_Scripting::prsInt(const std::string& intString){
+    int val = 0;
+    try {
+        val = DUA_STR_TO_INT(intString, 10);
+    } catch (std::invalid_argument& invalidException) {
+        throw std::string("Not a valid value: " + intString + "\n").c_str();
+    } catch (std::out_of_range& oorException) {
+        throw std::string("Value out of range: " + intString + "\n").c_str();
+    }
+    return val;
 }
 
 DUA_dbl System_Scripting::prsDbl(const std::string& dblString){

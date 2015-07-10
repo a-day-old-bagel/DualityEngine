@@ -30,7 +30,7 @@ namespace DualityEngine {
             {"help" , "help  OR  help [command]  OR  help [component]  OR  help components"},
             {"comps" , "comps [entity ID]"},
             {"cam" , "cam [entity ID]"},
-            {"control" , "control [entity ID]"},
+            {"control" , "control [entity ID] [control type]"},
             {"exit" , "exit"},
             {"new" , "new OR new [script]"},
             {"save" , "save [save name]    (no spaces in names)"},
@@ -48,7 +48,7 @@ namespace DualityEngine {
             {"help" , "\"help add\" helps the user to know how to use the \"add\" command."},
             {"comps" , "\"comps 343\" lists all components of entity 343. If 343 has a model, \"MODEL\" will be displayed."},
             {"cam" , "\"cam 33\" switches the view to that of the camera of entity 33, if it has one."},
-            {"control" , "\"control 4045\" switches the users control to entity 4045."},
+            {"control" , "\"control 4045 spaceship\" switches the users control to entity 4045's spaceship-like control interface."},
             {"exit" , "\"exit\" exits the game, no prompts offered."},
             {"new" , "\"new\" creates an empty world (game state). \"new testScene\" creates an empty game state, then runs the script \"testScene\"."},
             {"save" , "\"save myGame\" creates a new saved state called \"myGame\" that you can load later."},
@@ -66,7 +66,7 @@ namespace DualityEngine {
             {"help" , "helps those who help themselves."},
             {"comps" , "displays a list of all components associated with a given ID, in Duality enumerator format."},
             {"cam" , "switches the users view to the perspective of the entity at a given ID."},
-            {"control" , "binds the user's controls to the control component of a given entity."},
+            {"control" , "binds the user's controls to a given type of control component possessed by a given entity. Available types are: \"spaceship\""},
             {"exit" , "exits the game."},
             {"new" , "discards any currently running game and presents an empty world."},
             {"save" , "stores the current game state to the hard drive under a given name to be loaded later. Overwrites saves with the same name."},
@@ -112,6 +112,7 @@ namespace DualityEngine {
         };
         
         DUA_id prsID(const std::string& IDstring);
+        int prsInt(const std::string& intString);
         DUA_dbl prsDbl(const std::string& dblString);
         DUA_float prsFlt(const std::string& floatString);
         DUA_colorByte prsClr(const std::string& colorValue);

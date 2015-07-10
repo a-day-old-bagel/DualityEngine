@@ -16,6 +16,7 @@ namespace DualityEngine {
     class System_Control_SS : public System
     {
         glm::vec3 reusableVectorSum = {0, 0, 0};
+        void zeroSum();
     public:
         System_Control_SS(ComponentBank* bank);
         ~System_Control_SS();

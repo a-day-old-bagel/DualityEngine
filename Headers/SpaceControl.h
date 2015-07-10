@@ -10,7 +10,7 @@
 
 #include <cstring>
 #include <glm/glm.hpp>
-#include "Component.h"
+#include "ControlBase.h"
 
 namespace DualityEngine {
 
@@ -29,9 +29,11 @@ namespace DualityEngine {
         };
     }
     
-    struct SpaceControl : public Component
+    struct SpaceControl : public ControlBase
     {
-        SpaceControl(const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& roll, const DUA_dbl& pitch, const DUA_dbl& yaw){
+        SpaceControl(const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& roll, const DUA_dbl& pitch, const DUA_dbl& yaw)
+                    : ControlBase(ControlTypes::SPACE)
+        {
             thrust[ControlSS::FORWARD]  = fw;
             thrust[ControlSS::BACKWARD] = bk;
             thrust[ControlSS::LEFT]     = lf;
@@ -47,9 +49,9 @@ namespace DualityEngine {
             transform(glm::mat3(transMat));
         }
         inline void transform(const glm::mat3& transMat){
-            currentAxes[0] = transMat * forwardOrig;
-            currentAxes[1] = transMat * rightOrig;
-            currentAxes[2] = transMat * upOrig;
+            currentAxes[0] = transMat * origiinalAxes[0];
+            currentAxes[1] = transMat * origiinalAxes[1];
+            currentAxes[2] = transMat * origiinalAxes[2];
 
         }
         inline void zeroInputs(){
@@ -60,11 +62,9 @@ namespace DualityEngine {
         inline void applyInput(const int whichInput, const DUA_float& value){
             inputs[whichInput] += value;
         }
-        glm::vec3 forwardOrig = {0, 0, -1};
-        glm::vec3 rightOrig = {1, 0, 0};
-        glm::vec3 upOrig = {0, 1, 0};
         
-        glm::vec3 currentAxes[3];
+        glm::vec3 origiinalAxes[3] = {{0, 0, -1}, {1, 0, 0}, {0, 1, 0}};
+        glm::vec3 currentAxes[3] = {{0, 0, -1}, {1, 0, 0}, {0, 1, 0}};
         
         // forward, backward, right, left, up, down roll, pitch, yaw, break
         // all input values range from 0 - 1.

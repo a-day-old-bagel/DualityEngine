@@ -4,6 +4,7 @@
 
 #include "../Headers/ComponentBank.h"
 #include "../Headers/HashMap.h"
+#include "ControlBase.h"
 
 using namespace DualityEngine;
 
@@ -13,9 +14,9 @@ ComponentBank::ComponentBank(BankDelegates* dlgt){
     this->dlgt = dlgt;
     
     pSpaceControlDummy = new SpaceControl(0, 0, 0, 0, 0, 0, 0, 0, 0);
-    pSpcCtrlLinVelocDummy = new LinearVelocity(0, 0, 0);
-    pSpcCtrlOrientDummy = new Orientation(0, 0, 0);
-    defaultControl();
+    pCtrlLinVelocDummy = new LinearVelocity(0, 0, 0);
+    pCtrlOrientDummy = new Orientation(0, 0, 0);
+    defocusSpaceControl();
     
     pFreeCameraDummy = new CameraFree(1, 0.5, 1000, 0, 0, 0, 0, 0, -1, 0, 1, 0);
     defaultCam();
@@ -25,11 +26,11 @@ ComponentBank::~ComponentBank(){
     dlgt = NULL;
     
     delete pSpaceControlDummy;
-    delete pSpcCtrlLinVelocDummy;
-    delete pSpcCtrlOrientDummy;
+    delete pCtrlLinVelocDummy;
+    delete pCtrlOrientDummy;
     pSpaceControlDummy = NULL;
-    pSpcCtrlLinVelocDummy = NULL;
-    pSpcCtrlOrientDummy = NULL;
+    pCtrlLinVelocDummy = NULL;
+    pCtrlOrientDummy = NULL;
     
     delete pFreeCameraDummy;
     pFreeCameraDummy = NULL;
@@ -41,7 +42,7 @@ ComponentBank::~ComponentBank(){
 void ComponentBank::clean(){
     
     activeFreeCameraID = DUA_NULL_ID;
-    activeSpaceControlID = DUA_NULL_ID;
+    activeControlID = DUA_NULL_ID;
     
     components_soul.clear();
     components_model.clear();
@@ -327,7 +328,7 @@ void ComponentBank::deleteModel(const DUA_id &ID){
         tryRemoveFlagFromSoul(MODEL, ID);
 }
 void ComponentBank::deleteLinearVeloc(const DUA_id &ID){
-    scrutinizeControl(ID);
+    scrutinizeControl(ID, ControlTypes::SPACE);
     if (tryRemoveComponent(ID, "linear velocity", LINVELOC, components_linearVeloc))
         tryRemoveFlagFromSoul(LINVELOC, ID);
 }
@@ -346,7 +347,7 @@ void ComponentBank::deleteSpatialParent(const DUA_id& ID){
 }
 void ComponentBank::deleteOrientation(const DUA_id &ID){
     scrutinizeCam(ID);
-    scrutinizeControl(ID);
+    scrutinizeControl(ID, ControlTypes::SPACE);
     if (tryRemoveComponent(ID, "rotation", ORIENTATION, components_orientation))
         tryRemoveFlagFromSoul(ORIENTATION, ID);
 }
@@ -355,7 +356,7 @@ void ComponentBank::deleteAngularVeloc(const DUA_id& ID){
         tryRemoveFlagFromSoul(ANGVELOC, ID);
 }
 void ComponentBank::deleteSpaceControl(const DUA_id &ID){
-    scrutinizeControl(ID);
+    scrutinizeControl(ID, ControlTypes::SPACE);
     if (tryRemoveComponent(ID, "control", CONTROLSS, components_spacecontrol))
         tryRemoveFlagFromSoul(CONTROLSS, ID);
 }
@@ -538,7 +539,7 @@ std::string ComponentBank::getName(const DUA_id &ID){
  * returns a statement string containing a list of components currently
  * possessed by the entity at ID.
  ******************************************************************************/
-std::string ComponentBank::listComponents(const DUA_id &ID){
+std::string ComponentBank::listComponentsVerbose(const DUA_id &ID){
     std::ostringstream output;    
     try {        
         DUA_compFlag components = components_soul.at(ID).components;
@@ -547,17 +548,21 @@ std::string ComponentBank::listComponents(const DUA_id &ID){
             output << "Entity " << ID << " is a disembodied soul.";      
         } else {
                         
-            output << "Entity " << ID << " has: ";
-            for (auto compType : componentCollections){
-                if (components & std::get<2>(compType)){
-                    output << std::get<0>(compType) << ", ";
-                }
-            }
+            output << "Entity " << ID << " has: " << listComponents(components);
             
         }
     } catch(const std::out_of_range& oorException) {
         output << "Could not list components: No entity exists with ID " << ID;
     }    
+    return output.str();
+}
+std::string ComponentBank::listComponents(const DUA_compFlag& flag){
+    std::ostringstream output;
+    for (auto compType : componentCollections){
+        if (flag & std::get<2>(compType)){
+            output << std::get<0>(compType) << ", ";
+        }
+    }
     return output.str();
 }
 
@@ -618,20 +623,47 @@ void ComponentBank::defaultCam(){
     pFreeCameraCurrent = pFreeCameraDummy;
 }
 
-bool ComponentBank::switchToControl(const DUA_id& ID){
+bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type controlType){
+    DUA_compFlag desiredControlComponent = 0;
+    DUA_compFlag requiredOtherComponents = 0;
+    Delegate<void()> defocusControlCandidate;
+    Delegate<void(const DUA_id&)> focusControl;
+    ControlTypes::type currentControlTypeCandidate = ControlTypes::NONE;
+    switch(controlType){
+        case ControlTypes::SPACE:
+            desiredControlComponent = CONTROLSS;
+            requiredOtherComponents = ORIENTATION | LINVELOC;
+            focusControl = DELEGATE(&ComponentBank::assignSpaceControl, this);
+            defocusControlCandidate = DELEGATE(&ComponentBank::defocusSpaceControl, this);
+            currentControlTypeCandidate = ControlTypes::SPACE;
+            break;
+        case ControlTypes::NONE:
+            activeControlID = DUA_NULL_ID;
+            defocusSpaceControl();
+            //defualt other controls()...
+            currentControlType = ControlTypes::NONE;
+            dlgt->output("Control focus discarded.");
+            return true;
+        default:
+            dlgt->outputStr("Not a control type: " + std::to_string(controlType));
+            return false;
+    }
+    
     try{
-        if ((components_soul.at(ID).components) & CONTROLSS){
-            if((components_soul.at(ID).components) & (POSITION | ORIENTATION | LINVELOC) == (POSITION | ORIENTATION | LINVELOC)){
-                activeSpaceControlID = ID;
-                pSpaceControlCurrent = getSpaceControlPtr(ID);
-                pSpcCtrlLinVelocCurrent = getLinearVelocPtr(ID);
-                pSpcCtrlOrientCurrent = getOrientationPtr(ID);
+        if (getComponents(ID) & desiredControlComponent){
+            if(getComponents(ID) & requiredOtherComponents == requiredOtherComponents){
+                activeControlID = ID;
+                requiredControlComponents = desiredControlComponent | requiredOtherComponents;
+                defocusControl = defocusControlCandidate;
+                currentControlType = currentControlTypeCandidate;
+                focusControl(ID);
+                
             } else {
-                dlgt->outputStr("entity " + std::to_string(ID) + " requires position, orientation, and linear velocity.");
+                dlgt->outputStr("entity " + std::to_string(ID) + " does not possess one or more of these required components: " + listComponents(requiredOtherComponents));
                 return false;
             }
         } else {
-            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a control interface.");
+            dlgt->outputStr("entity " + std::to_string(ID) + " does not possess the required control interface.");
             return false;
         }
     }catch(const std::out_of_range& oorException){
@@ -640,17 +672,25 @@ bool ComponentBank::switchToControl(const DUA_id& ID){
     }
     return true;
 }
-void ComponentBank::scrutinizeControl(const DUA_id& ID){
-    if (activeSpaceControlID == ID){
-        defaultControl();
-        dlgt->outputStr("Control of entity" + std::to_string(ID) + " has been lost.");
+void ComponentBank::assignSpaceControl(const DUA_id& ID){
+    //default other controls()...
+    pSpaceControlCurrent = getSpaceControlPtr(ID);
+    pCtrlLinVelocCurrent = getLinearVelocPtr(ID);
+    pCtrlOrientCurrent = getOrientationPtr(ID);    
+}
+void ComponentBank::scrutinizeControl(const DUA_id& ID, ControlTypes::type dependentControlType){
+    if (currentControlType == dependentControlType){
+        if (activeControlID == ID && getComponents(activeControlID) & requiredControlComponents != requiredControlComponents){
+            dlgt->outputStr("Control of entity" + std::to_string(ID) + " has been lost.");
+            activeControlID = DUA_NULL_ID;
+            defocusControl();            
+        }
     }
 }
-void ComponentBank::defaultControl(){
-    activeSpaceControlID = DUA_NULL_ID;
+void ComponentBank::defocusSpaceControl(){
     pSpaceControlCurrent = pSpaceControlDummy;
-    pSpcCtrlLinVelocCurrent = pSpcCtrlLinVelocDummy;
-    pSpcCtrlOrientCurrent = pSpcCtrlOrientDummy;
+    pCtrlLinVelocCurrent = pCtrlLinVelocDummy;
+    pCtrlOrientCurrent = pCtrlOrientDummy;
 }
 
 glm::mat4 ComponentBank::getPosMat(const DUA_id& ID){

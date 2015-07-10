@@ -46,6 +46,8 @@ namespace DualityEngine {
     #define DUA_STR_TO_FLOAT(str) std::stof(str)
     // This is the function used to convert strings to DUA_colorByte
     #define DUA_STR_TO_COLOR(str, base) std::stoul(str, nullptr, base)
+    // This is the function used to convert strings to ints
+    #define DUA_STR_TO_INT(str, base) std::stoi(str, nullptr, base)
     // This is used when passing buffer offsets to the GPU via openGL
     #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
 
