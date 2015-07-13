@@ -193,7 +193,7 @@ void System_Scripting::parseCommand(const std::string& command){
             }
         } else if (args[0] == "name"){
             if (numArgs == 2){
-                std::string outStr = bank->getName(prsID(args[1]));
+                std::string outStr = bank->getNameVerbose(prsID(args[1]));
                 if (!outStr.empty()){
                     bank->dlgt->outputStr(outStr);
                 }

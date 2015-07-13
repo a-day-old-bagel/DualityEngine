@@ -16,10 +16,11 @@ ComponentBank::ComponentBank(BankDelegates* dlgt){
     pSpaceControlDummy = new SpaceControl(0, 0, 0, 0, 0, 0, 0, 0, 0);
     pCtrlLinVelocDummy = new LinearVelocity(0, 0, 0);
     pCtrlOrientDummy = new Orientation(0, 0, 0);
+    pCtrlAngVelocDummy = new AngularVelocity(0, 0, 0);
     defocusSpaceControl();
     
     pFreeCameraDummy = new CameraFree(1, 0.5, 1000, 0, 0, 0, 0, 0, -1, 0, 1, 0);
-    defaultCam();
+    defocusCam();
 }
 
 ComponentBank::~ComponentBank(){
@@ -352,6 +353,7 @@ void ComponentBank::deleteOrientation(const DUA_id &ID){
         tryRemoveFlagFromSoul(ORIENTATION, ID);
 }
 void ComponentBank::deleteAngularVeloc(const DUA_id& ID){
+    scrutinizeControl(ID, ControlTypes::SPACE);
     if (tryRemoveComponent(ID, "angular velocity", ANGVELOC, components_angularVeloc))
         tryRemoveFlagFromSoul(ANGVELOC, ID);
 }
@@ -525,7 +527,7 @@ bool ComponentBank::getIDs(std::string& name, std::vector<DUA_id>& IDs){
  * GET NAME
  * returns a statement string containing the name of the entity (if any) at ID.
  ******************************************************************************/
-std::string ComponentBank::getName(const DUA_id &ID){
+std::string ComponentBank::getNameVerbose(const DUA_id &ID){
     std::ostringstream output;
     try {
         output << "Entity " << ID << " is named '" << components_soul.at(ID).name << "'.";
@@ -533,6 +535,13 @@ std::string ComponentBank::getName(const DUA_id &ID){
         output << "Could not get name: No entity exists with ID " << ID;
     }
     return output.str();
+}
+std::string ComponentBank::getName(const DUA_id& ID){
+    try{
+        return components_soul.at(ID).name;
+    }catch(const std::out_of_range& oorException) {
+        return "Could not get name: No entity exists with ID " + std::to_string(ID);
+    }
 }
 /*******************************************************************************
  * LIST COMPONENTS
@@ -545,10 +554,10 @@ std::string ComponentBank::listComponentsVerbose(const DUA_id &ID){
         DUA_compFlag components = components_soul.at(ID).components;
         
         if (components == DUA_DEFAULT_COMPONENTS){
-            output << "Entity " << ID << " is a disembodied soul.";      
+            output << "Entity " << getEntityInfo(ID) << " is a disembodied soul.";      
         } else {
                         
-            output << "Entity " << ID << " has: " << listComponents(components);
+            output << "Entity " << getEntityInfo(ID) << " has: " << listComponents(components);
             
         }
     } catch(const std::out_of_range& oorException) {
@@ -564,6 +573,14 @@ std::string ComponentBank::listComponents(const DUA_compFlag& flag){
         }
     }
     return output.str();
+}
+
+std::string ComponentBank::getEntityInfo(const DUA_id& ID){
+    try{
+        return (std::to_string(ID) + " (" + components_soul.at(ID).name + ")");
+    }catch(const std::out_of_range& oorException){
+        return (std::to_string(ID) + " (DOES NOT EXIST)");
+    }
 }
 
 
@@ -599,11 +616,11 @@ bool ComponentBank::switchToCam(const DUA_id& ID){
                 activeFreeCameraID = ID;
                 pFreeCameraCurrent = getCameraFreePtr(ID);
             } else {
-                dlgt->outputStr("entity " + std::to_string(ID) + " requires position and orientation.");
+                dlgt->outputStr("entity " + getEntityInfo(ID) + " requires position and orientation.");
                 return false;
             }
         } else {
-            dlgt->outputStr("entity " + std::to_string(ID) + " doesn't have a camera.");
+            dlgt->outputStr("entity " + getEntityInfo(ID) + " doesn't have a camera.");
             return false;
         }
     }catch(const std::out_of_range& oorException){
@@ -614,11 +631,11 @@ bool ComponentBank::switchToCam(const DUA_id& ID){
 }
 void ComponentBank::scrutinizeCam(const DUA_id& ID){
     if (activeFreeCameraID == ID){
-        defaultCam();
-        dlgt->outputStr("View from camera " + std::to_string(ID) + " has been rendered impossible.");
+        defocusCam();
+        dlgt->outputStr("View from entity " + getEntityInfo(ID) + " has been lost.");
     }
 }
-void ComponentBank::defaultCam(){
+void ComponentBank::defocusCam(){
     activeFreeCameraID = DUA_NULL_ID;
     pFreeCameraCurrent = pFreeCameraDummy;
 }
@@ -632,7 +649,7 @@ bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type control
     switch(controlType){
         case ControlTypes::SPACE:
             desiredControlComponent = CONTROLSS;
-            requiredOtherComponents = ORIENTATION | LINVELOC;
+            requiredOtherComponents = ORIENTATION | LINVELOC | ANGVELOC;
             focusControl = DELEGATE(&ComponentBank::assignSpaceControl, this);
             defocusControlCandidate = DELEGATE(&ComponentBank::defocusSpaceControl, this);
             currentControlTypeCandidate = ControlTypes::SPACE;
@@ -659,11 +676,11 @@ bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type control
                 focusControl(ID);
                 
             } else {
-                dlgt->outputStr("entity " + std::to_string(ID) + " does not possess one or more of these required components: " + listComponents(requiredOtherComponents));
+                dlgt->outputStr("entity " + getEntityInfo(ID) + " does not possess one or more of these required components: " + listComponents(requiredOtherComponents));
                 return false;
             }
         } else {
-            dlgt->outputStr("entity " + std::to_string(ID) + " does not possess the required control interface.");
+            dlgt->outputStr("entity " + getEntityInfo(ID) + " does not possess the required control interface.");
             return false;
         }
     }catch(const std::out_of_range& oorException){
@@ -680,10 +697,10 @@ void ComponentBank::assignSpaceControl(const DUA_id& ID){
 }
 void ComponentBank::scrutinizeControl(const DUA_id& ID, ControlTypes::type dependentControlType){
     if (currentControlType == dependentControlType){
-        if (activeControlID == ID && getComponents(activeControlID) & requiredControlComponents != requiredControlComponents){
-            dlgt->outputStr("Control of entity" + std::to_string(ID) + " has been lost.");
+        if (activeControlID == ID);{// && getComponents(activeControlID) & requiredControlComponents != requiredControlComponents){
+            dlgt->outputStr("Control of entity" + getEntityInfo(ID) + " has been lost.");
             activeControlID = DUA_NULL_ID;
-            defocusControl();            
+            defocusControl(); 
         }
     }
 }

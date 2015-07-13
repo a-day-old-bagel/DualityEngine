@@ -57,7 +57,6 @@ void System_Control_SS::tick()
                 if (fabs(reusableDotProductsForBraking[0]) >= fabs(reusableDotProductsForBraking[1])){
                     if (fabs(reusableDotProductsForBraking[0]) >= fabs(reusableDotProductsForBraking[2])){
                         breakingVectorComponentMultiplier = fabs(1.f / reusableDotProductsForBraking[0]);
-                        bank->dlgt->outputStr("mult: " + std::to_string(breakingVectorComponentMultiplier));
                     }else{
                         breakingVectorComponentMultiplier = fabs(1.f / reusableDotProductsForBraking[2]);
                     }                    
@@ -69,41 +68,34 @@ void System_Control_SS::tick()
                 // add the appropriate values to the control component's throttle array (allowing no value to pass 1)
                 for (uint i = 0; i < 3; ++i){
                     bank->pSpaceControlCurrent->throttle[i * 2 + int(reusableDotProductsForBraking[i] > 0)] += fabs(reusableDotProductsForBraking[i]) * breakingVectorComponentMultiplier * bank->pSpaceControlCurrent->throttle[9];
-                    bank->dlgt->outputStr(std::to_string(fabs(reusableDotProductsForBraking[i]) * breakingVectorComponentMultiplier * bank->pSpaceControlCurrent->throttle[9]) + " ");
-                    bank->dlgt->outputStr("thing " + std::to_string(i * 2 + int(reusableDotProductsForBraking[i] < 0)));
                 }
-                bank->dlgt->outputStr(std::to_string(bank->pSpaceControlCurrent->throttle[0]) + " "
-                                    + std::to_string(bank->pSpaceControlCurrent->throttle[1]) + " "
-                                    + std::to_string(bank->pSpaceControlCurrent->throttle[2]) + " "
-                                    + std::to_string(bank->pSpaceControlCurrent->throttle[3]) + " "
-                                    + std::to_string(bank->pSpaceControlCurrent->throttle[4]) + " "
-                                    + std::to_string(bank->pSpaceControlCurrent->throttle[5]));
             }
             
             
             // zero the vector that will hold the total physics impulse for the control object
             zeroSum();
             
-//            // add all the vectors being applied currently by the user's input into the impulse vector
-//            for (uint i = 0; i < 6; ++i){
-//                reusableVectorSum += bank->pSpaceControlCurrent->currentAxes[i / 2] * (std::min(bank->pSpaceControlCurrent->throttle[i], 1.0) * bank->pSpaceControlCurrent->thrust[i] * ((i % 2) ? -1 : 1));
-//            }
-            
             for (uint i = 0; i < 3; ++i){
                 reusableVectorSum += bank->pSpaceControlCurrent->currentAxes[i] * (std::min(bank->pSpaceControlCurrent->throttle[i * 2], 1.0f) * bank->pSpaceControlCurrent->thrust[i * 2]) -
                                      bank->pSpaceControlCurrent->currentAxes[i] * (std::min(bank->pSpaceControlCurrent->throttle[i * 2 + 1], 1.0f) * bank->pSpaceControlCurrent->thrust[i * 2 + 1]);
-            }
+            }   
             
             // apply the total impusle vector to the entity's linear velocity component (possesion of a linear velocity component is a requirement for an entity to become the control focus)
             bank->getLinearVelocPtr(bank->activeControlID)->applyImpulse(reusableVectorSum);
             
-            // zero the vector sum again to reuse it as angular velocity impulse
-            zeroSum();
-            for (uint i = 0; i < 3; ++i){
-                /* SUM ANG VELOC IMPULSES */
-            }
-            /* APPLY ANGULAR BRAKING */
-            /* APPLY SUM TO ANG VELOC */
+            
+            
+//            // zero the vector sum again to reuse it as angular velocity impulse
+//            zeroSum();
+//            for (uint i = 0; i < 3; ++i){
+//                /* SUM ANG VELOC IMPULSES */
+//            }
+//            /* APPLY ANGULAR BRAKING */
+//            /* APPLY SUM TO ANG VELOC */
+            
+            
+            bank->getAngularVelocPtr(bank->activeControlID)->applyImpulse(std::min(bank->pSpaceControlCurrent->throttle[6], 1.0f) * bank->pSpaceControlCurrent->thrust[6], std::min(bank->pSpaceControlCurrent->throttle[7], 1.0f) * bank->pSpaceControlCurrent->thrust[7], std::min(bank->pSpaceControlCurrent->throttle[8], 1.0f) * bank->pSpaceControlCurrent->thrust[8]);
+            
             
             // zero the control component's input information after use.
             bank->pSpaceControlCurrent->zeroInputs();

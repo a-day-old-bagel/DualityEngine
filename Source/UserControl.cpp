@@ -21,6 +21,10 @@ System_UserControl::~System_UserControl(){
 }
 
 bool System_UserControl::init(std::stringstream& output){
+//    if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
+//        output << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
+//        return false;
+//    }
     return true;
 }
 
@@ -31,11 +35,15 @@ void System_UserControl::tick(){
     
     // Handle events on SDL event queue
     while(SDL_PollEvent(&sdlEvent) != 0){
-        if(sdlEvent.type == SDL_QUIT){
-            bank->dlgt->quit();
-            bank->dlgt->output("\nFORCED EXIT\n\n");
-        }
-        else if(sdlEvent.type == SDL_KEYDOWN){
+//        
+//        if(sdlEvent.type == SDL_MOUSEMOTION){
+//            if(!consoleIsActive){
+//                if (bank->activeControlID != DUA_NULL_ID){
+//                    recordMouseMotion(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
+//                }
+//            }
+//        }else if(sdlEvent.type == SDL_KEYDOWN){
+        if(sdlEvent.type == SDL_KEYDOWN){
             if(sdlEvent.key.keysym.sym == SDLK_ESCAPE){
                 MenuIsActive = !MenuIsActive;
                 if (MenuIsActive){
@@ -90,8 +98,6 @@ void System_UserControl::tick(){
             }else{
                 handleKeyDown(sdlEvent);
             }
-//        }else if (sdlEvent.type == SDL_KEYUP){
-//            handleKeyUp(sdlEvent);
         }else if(sdlEvent.type == SDL_TEXTINPUT){
             if (consoleIsActive){
                 if(!((keyStates[SDL_SCANCODE_C] || keyStates[SDL_SCANCODE_V])
@@ -99,6 +105,9 @@ void System_UserControl::tick(){
                     bank->dlgt->appendToCommand(sdlEvent.text.text);
                 }
             }
+        }else if(sdlEvent.type == SDL_QUIT){
+            bank->dlgt->quit();
+            bank->dlgt->output("\nFORCED EXIT\n\n");
         }
     }
     
@@ -156,19 +165,19 @@ void System_UserControl::handleControlKeys(const Uint8* keyStates){
                     bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, 1);
                 }
                 if (keyStates[SDL_SCANCODE_DOWN]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, 1);
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, -1);
                 }
                 if (keyStates[SDL_SCANCODE_LEFT]) {
                     bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, 1);
                 }
                 if (keyStates[SDL_SCANCODE_RIGHT]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, 1);
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, -1);
                 }
                 if (keyStates[SDL_SCANCODE_Q]) {
                     bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, 1);
                 }
                 if (keyStates[SDL_SCANCODE_E]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, 1);
+                    bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, -1);
                 }
                 if (keyStates[SDL_SCANCODE_SPACE]) {
                     bank->pSpaceControlCurrent->applyInput(ControlSS::LINBRAKE, 1);
@@ -182,5 +191,26 @@ void System_UserControl::handleControlKeys(const Uint8* keyStates){
             default:
                 break;
         }       
+    }
+}
+
+void System_UserControl::recordMouseMotion(int x, int y){
+    mouseXSum += x;
+    mouseYSum += y;
+}
+
+void System_UserControl::handleMouseMotion(){    
+        
+    switch(bank->currentControlType){
+        case ControlTypes::SPACE:
+            bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, mouseYSum);
+            bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, mouseXSum);
+            mouseXSum = 0;
+            mouseYSum = 0;
+            break;
+        case ControlTypes::NONE:
+            break;
+        default:
+            break;
     }
 }

@@ -19,6 +19,17 @@ namespace DualityEngine {
         AngularVelocity(const DUA_dbl &rotX, const DUA_dbl &rotY, const DUA_dbl &rotZ){
             velAngular = {rotX, rotY, rotZ};
         }
+        inline void applyImpulse(const DUA_dbl &rotX, const DUA_dbl &rotY, const DUA_dbl &rotZ){
+            velAngular.x += rotX;
+            velAngular.y += rotY;
+            velAngular.z += rotZ;
+        }
+        inline void applyImpulse(glm::vec4 impulse){
+            applyImpulse(impulse.x, impulse.y, impulse.z);
+        }
+        inline void applyImpulse(glm::vec3 impulse){
+            applyImpulse(impulse.x, impulse.y, impulse.z);
+        }
         glm::vec3 velAngular;
     };
 

@@ -176,9 +176,11 @@ namespace DualityEngine {
 
         /* CONVENIENCE GETTERS */
         bool getIDs(std::string& name, std::vector<DUA_id>& IDs);
-        std::string getName(const DUA_id &ID);
+        std::string getNameVerbose(const DUA_id &ID);
+        std::string getName(const DUA_id& ID);
         std::string listComponentsVerbose(const DUA_id &ID);
         std::string listComponents(const DUA_compFlag& flag);
+        std::string getEntityInfo(const DUA_id& ID);
         
         
         
@@ -230,7 +232,9 @@ namespace DualityEngine {
         LinearVelocity* pCtrlLinVelocCurrent;
         LinearVelocity* pCtrlLinVelocDummy;
         Orientation* pCtrlOrientCurrent;       
-        Orientation* pCtrlOrientDummy;        
+        Orientation* pCtrlOrientDummy; 
+        AngularVelocity* pCtrlAngVelocCurrent;
+        AngularVelocity* pCtrlAngVelocDummy;
         Delegate<void()> defocusControl;
         DUA_compFlag requiredControlComponents = 0;
         ControlTypes::type currentControlType = ControlTypes::NONE;
@@ -249,7 +253,7 @@ namespace DualityEngine {
         bool updateActiveCamera();
         bool switchToCam(const DUA_id &id);
         void scrutinizeCam(const DUA_id &id);
-        void defaultCam();
+        void defocusCam();
         
         
         /* TRANSFORM MATRIX GETTERS */
