@@ -125,7 +125,7 @@ bool Game::engageEngines(){
     physicsEngine.addSystem(&physicsMoveSystem);        // apply velocity * time to each position
     physicsEngine.addSystem(&physicsCollisionSystem);   // check collisions between objects
     physicsEngine.addSystem(&userControlSystem);        // accept user input
-    physicsEngine.addSystem(&spaceShipControlSystem);
+    physicsEngine.addSystem(&spaceShipControlSystem);   // apply user input to any currently active space control component
     physicsEngine.engage();                             // spawn thread to repeatedly do the above.
     
     scriptingEngine.addSystem(&scriptingSystem);        // check for new commands in the queue

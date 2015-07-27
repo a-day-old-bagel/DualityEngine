@@ -134,3 +134,7 @@ void System_Render_Master::tick()
     bank->updateActiveCamera();
 }
 //</editor-fold>
+
+void System_Render_Master::setMousePosition(int x, int y){
+    SDL_WarpMouseInWindow(pWindow, x, y);
+}

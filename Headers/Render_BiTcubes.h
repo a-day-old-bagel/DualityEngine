@@ -25,11 +25,6 @@ namespace DualityEngine {
     class System_Render_BiTcubes : public System
     {
     private:
-                
-        DUA_id localActiveCamera = DUA_NULL_ID;
-        CameraFree* pCamCurrent;
-
-        bool setUpResources(std::stringstream& engineOut);
 
     public:
         System_Render_BiTcubes(ComponentBank* bank);

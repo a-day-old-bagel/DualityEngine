@@ -46,28 +46,30 @@ void System_Control_SS::tick()
             
             
             // if linear breaking input is non-zero
-            if (bank->pSpaceControlCurrent->throttle[9]){ // apply braking vector to throttle values...                
+            if (bank->pSpaceControlCurrent->throttle[9]){ // apply braking vector to throttle values...
                 // store the entity's current velocity
                 reusableVectorVel = bank->getLinearVelocPtr(bank->activeControlID)->velLinear;
-                // calculate dot products between velocity vector and thrust vectors
-                for (uint i = 0; i < 3; ++i){
-                    reusableDotProductsForBraking[i] = glm::dot(reusableVectorVel, bank->pSpaceControlCurrent->currentAxes[i]);
-                }                
-                // find which dot product largest in magnitude in order to scale that thruster's throttle to full (scaling others by same factor, resulting in less-than-full throttles)
-                if (fabs(reusableDotProductsForBraking[0]) >= fabs(reusableDotProductsForBraking[1])){
-                    if (fabs(reusableDotProductsForBraking[0]) >= fabs(reusableDotProductsForBraking[2])){
-                        breakingVectorComponentMultiplier = fabs(1.f / reusableDotProductsForBraking[0]);
+                if (reusableVectorVel.x || reusableVectorVel.y || reusableVectorVel.z){
+                    // calculate dot products between velocity vector and thrust vectors
+                    for (uint i = 0; i < 3; ++i){
+                        reusableDotProductsForBraking[i] = glm::dot(reusableVectorVel, bank->pSpaceControlCurrent->currentAxes[i]);
+                    }                
+                    // find which dot product largest in magnitude in order to scale that thruster's throttle to full (scaling others by same factor, resulting in less-than-full throttles)
+                    if (fabs(reusableDotProductsForBraking[0]) >= fabs(reusableDotProductsForBraking[1])){
+                        if (fabs(reusableDotProductsForBraking[0]) >= fabs(reusableDotProductsForBraking[2])){
+                            breakingVectorComponentMultiplier = fabs(1.f / reusableDotProductsForBraking[0]);
+                        }else{
+                            breakingVectorComponentMultiplier = fabs(1.f / reusableDotProductsForBraking[2]);
+                        }                    
+                    }else if (fabs(reusableDotProductsForBraking[1]) >= fabs(reusableDotProductsForBraking[2])){
+                        breakingVectorComponentMultiplier = fabs(1.f / reusableDotProductsForBraking[1]);
                     }else{
                         breakingVectorComponentMultiplier = fabs(1.f / reusableDotProductsForBraking[2]);
-                    }                    
-                }else if (fabs(reusableDotProductsForBraking[1]) >= fabs(reusableDotProductsForBraking[2])){
-                    breakingVectorComponentMultiplier = fabs(1.f / reusableDotProductsForBraking[1]);
-                }else{
-                    breakingVectorComponentMultiplier = fabs(1.f / reusableDotProductsForBraking[2]);
-                }
-                // add the appropriate values to the control component's throttle array (allowing no value to pass 1)
-                for (uint i = 0; i < 3; ++i){
-                    bank->pSpaceControlCurrent->throttle[i * 2 + int(reusableDotProductsForBraking[i] > 0)] += fabs(reusableDotProductsForBraking[i]) * breakingVectorComponentMultiplier * bank->pSpaceControlCurrent->throttle[9];
+                    }
+                    // add the appropriate values to the control component's throttle array (allowing no value to pass 1)
+                    for (uint i = 0; i < 3; ++i){
+                        bank->pSpaceControlCurrent->throttle[i * 2 + int(reusableDotProductsForBraking[i] > 0)] += fabs(reusableDotProductsForBraking[i]) * breakingVectorComponentMultiplier * bank->pSpaceControlCurrent->throttle[9];
+                    }
                 }
             }
             

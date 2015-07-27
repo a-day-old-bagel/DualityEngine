@@ -214,7 +214,7 @@ namespace DualityEngine {
             DUA_COMP_TUPLE{"collision", "collision", COLLISION},
             DUA_COMP_TUPLE{"orientation", "orientation", ORIENTATION},
             DUA_COMP_TUPLE{"angular velocity", "angveloc", ANGVELOC},
-            DUA_COMP_TUPLE{"space-y control", "spacecontrol", CONTROLSS},
+            DUA_COMP_TUPLE{"spaceship control", "spacecontrol", CONTROLSS},
             DUA_COMP_TUPLE{"point light", "lpoint", LPOINT},
             DUA_COMP_TUPLE{"directional light", "ldirect", LDIRECT},
             DUA_COMP_TUPLE{"ambient light", "lambient", LAMBIENT},
@@ -239,7 +239,7 @@ namespace DualityEngine {
         DUA_compFlag requiredControlComponents = 0;
         ControlTypes::type currentControlType = ControlTypes::NONE;
         
-        void assignSpaceControl(const DUA_id& ID);        
+        void focusSpaceControl(const DUA_id& ID);        
         void defocusSpaceControl();        
         SpaceControl* pSpaceControlCurrent;   
         SpaceControl* pSpaceControlDummy;

@@ -103,14 +103,14 @@ bool System_Render_Background::useCubeMap(std::string& fileName, std::string& fi
 void System_Render_Background::tick()
 {    
     glDepthMask (GL_FALSE);
-    if (aquireView()){       
+    if (bank->activeFreeCameraID != DUA_NULL_ID){
         
         glActiveTexture (GL_TEXTURE2);
         glBindTexture (GL_TEXTURE_CUBE_MAP, texture);
 
         glUseProgram (shdrLoc);
-        glUniformMatrix4fv (unifLoc_projM, 1, GL_FALSE, &(pCamCurrent->projection)[0][0]);
-        glUniformMatrix4fv (unifLoc_viewM, 1, GL_FALSE, &(pCamCurrent->view)[0][0]);
+        glUniformMatrix4fv (unifLoc_projM, 1, GL_FALSE, &(bank->pFreeCameraCurrent->projection)[0][0]);
+        glUniformMatrix4fv (unifLoc_viewM, 1, GL_FALSE, &(bank->pFreeCameraCurrent->view)[0][0]);
         glUniform1i (unifLoc_txtur, 2);
         glBindVertexArray (VAOloc);
 
@@ -129,34 +129,34 @@ void System_Render_Background::tick()
         }
     }
 }
-
-bool System_Render_Background::aquireView(){
-    if (bank->activeFreeCameraID != localActiveCamera){
-        localActiveCamera = bank->activeFreeCameraID;
-        if (localActiveCamera != DUA_NULL_ID){
-            pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
-        }
-    }
-    if (localActiveCamera != DUA_NULL_ID){
-        if (bank->getState(localActiveCamera) & RECALCVIEWMAT){            
-            pCamCurrent->updateView(bank->getRotMat(localActiveCamera), bank->getPosMat(localActiveCamera));            
-        }
-        if (bank->getState(localActiveCamera) & RECALCPROJMAT){
-            pCamCurrent->updateProjection();
-        }
-        if (bank->getState(localActiveCamera) & (RECALCVIEWMAT | RECALCPROJMAT)){
-            pCamCurrent->updateViewProjection();
-            bank->stateOff(localActiveCamera, RECALCVIEWMAT | RECALCPROJMAT);
-        }
-        return true;
-    } else {
-        return false;
-    }
-    
-}
-
-void System_Render_Background::clean(){
-    System::clean();
-    localActiveCamera = DUA_NULL_ID;
-    pCamCurrent = NULL;
-}
+//
+//bool System_Render_Background::aquireView(){
+//    if (bank->activeFreeCameraID != localActiveCamera){
+//        localActiveCamera = bank->activeFreeCameraID;
+//        if (localActiveCamera != DUA_NULL_ID){
+//            pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
+//        }
+//    }
+//    if (localActiveCamera != DUA_NULL_ID){
+//        if (bank->getState(localActiveCamera) & RECALCVIEWMAT){            
+//            pCamCurrent->updateView(bank->getRotMat(localActiveCamera), bank->getPosMat(localActiveCamera));            
+//        }
+//        if (bank->getState(localActiveCamera) & RECALCPROJMAT){
+//            pCamCurrent->updateProjection();
+//        }
+//        if (bank->getState(localActiveCamera) & (RECALCVIEWMAT | RECALCPROJMAT)){
+//            pCamCurrent->updateViewProjection();
+//            bank->stateOff(localActiveCamera, RECALCVIEWMAT | RECALCPROJMAT);
+//        }
+//        return true;
+//    } else {
+//        return false;
+//    }
+//    
+//}
+//
+//void System_Render_Background::clean(){
+//    System::clean();
+//    localActiveCamera = DUA_NULL_ID;
+//    pCamCurrent = NULL;
+//}

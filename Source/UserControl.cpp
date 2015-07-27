@@ -110,10 +110,17 @@ void System_UserControl::tick(){
             bank->dlgt->output("\nFORCED EXIT\n\n");
         }
     }
-    
 
     if(!consoleIsActive){
-        handleControlKeys(keyStates);
+        if (bank->activeControlID != DUA_NULL_ID){
+            handleMouseMotion();
+        }
+    }
+
+    if(!consoleIsActive){
+        if (bank->activeControlID != DUA_NULL_ID){
+            handleControlKeys(keyStates);
+        }
     }
 }
 
@@ -137,76 +144,71 @@ void System_UserControl::handleKeyDown(SDL_Event& event){
     
 }
 
-void System_UserControl::handleControlKeys(const Uint8* keyStates){
-    
-    if (bank->activeControlID != DUA_NULL_ID){
-        
-        switch(bank->currentControlType){
-            case ControlTypes::SPACE:
-                if (keyStates[SDL_SCANCODE_W]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::FORWARD, 1);
-                }
-                if (keyStates[SDL_SCANCODE_S]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::BACKWARD, 1);
-                }
-                if (keyStates[SDL_SCANCODE_A]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::LEFT, 1);
-                }
-                if (keyStates[SDL_SCANCODE_D]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::RIGHT, 1);
-                }
-                if (keyStates[SDL_SCANCODE_LSHIFT]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::UP, 1);
-                }
-                if (keyStates[SDL_SCANCODE_LCTRL]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::DOWN, 1);
-                }
-                if (keyStates[SDL_SCANCODE_UP]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, 1);
-                }
-                if (keyStates[SDL_SCANCODE_DOWN]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, -1);
-                }
-                if (keyStates[SDL_SCANCODE_LEFT]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, 1);
-                }
-                if (keyStates[SDL_SCANCODE_RIGHT]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, -1);
-                }
-                if (keyStates[SDL_SCANCODE_Q]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, 1);
-                }
-                if (keyStates[SDL_SCANCODE_E]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, -1);
-                }
-                if (keyStates[SDL_SCANCODE_SPACE]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::LINBRAKE, 1);
-                }
-                if (keyStates[SDL_SCANCODE_LALT]) {
-                    bank->pSpaceControlCurrent->applyInput(ControlSS::ANGBRAKE, 1);
-                }
-                break;
-            case ControlTypes::NONE:
-                break;
-            default:
-                break;
-        }       
-    }
-}
-
-void System_UserControl::recordMouseMotion(int x, int y){
-    mouseXSum += x;
-    mouseYSum += y;
-}
-
-void System_UserControl::handleMouseMotion(){    
+void System_UserControl::handleControlKeys(const Uint8* keyStates){    
         
     switch(bank->currentControlType){
         case ControlTypes::SPACE:
-            bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, mouseYSum);
-            bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, mouseXSum);
-            mouseXSum = 0;
-            mouseYSum = 0;
+            if (keyStates[SDL_SCANCODE_W]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::FORWARD, 1);
+            }
+            if (keyStates[SDL_SCANCODE_S]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::BACKWARD, 1);
+            }
+            if (keyStates[SDL_SCANCODE_A]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::LEFT, 1);
+            }
+            if (keyStates[SDL_SCANCODE_D]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::RIGHT, 1);
+            }
+            if (keyStates[SDL_SCANCODE_LSHIFT]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::UP, 1);
+            }
+            if (keyStates[SDL_SCANCODE_LCTRL]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::DOWN, 1);
+            }
+            if (keyStates[SDL_SCANCODE_UP]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, 1);
+            }
+            if (keyStates[SDL_SCANCODE_DOWN]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, -1);
+            }
+            if (keyStates[SDL_SCANCODE_LEFT]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, 1);
+            }
+            if (keyStates[SDL_SCANCODE_RIGHT]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, -1);
+            }
+            if (keyStates[SDL_SCANCODE_Q]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, 1);
+            }
+            if (keyStates[SDL_SCANCODE_E]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, -1);
+            }
+            if (keyStates[SDL_SCANCODE_SPACE]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::LINBRAKE, 1);
+            }
+            if (keyStates[SDL_SCANCODE_LALT]) {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::ANGBRAKE, 1);
+            }
+            break;
+        case ControlTypes::NONE:
+            break;
+        default:
+            break;
+    }       
+}
+
+void System_UserControl::handleMouseMotion(){    
+    
+    SDL_GetMouseState(&mouseX, &mouseY);
+    bank->dlgt->setMousePos(0, 0);
+    
+    switch(bank->currentControlType){
+        case ControlTypes::SPACE:
+            bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, mouseY);
+            bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, mouseX);
+//            mouseX = 0;
+//            mouseY = 0;
             break;
         case ControlTypes::NONE:
             break;

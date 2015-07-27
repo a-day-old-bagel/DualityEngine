@@ -641,18 +641,16 @@ void ComponentBank::defocusCam(){
 }
 
 bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type controlType){
-    DUA_compFlag desiredControlComponent = 0;
-    DUA_compFlag requiredOtherComponents = 0;
+    DUA_compFlag requiredControlComponent;
+    DUA_compFlag requiredOtherComponents;
     Delegate<void()> defocusControlCandidate;
     Delegate<void(const DUA_id&)> focusControl;
-    ControlTypes::type currentControlTypeCandidate = ControlTypes::NONE;
     switch(controlType){
         case ControlTypes::SPACE:
-            desiredControlComponent = CONTROLSS;
+            requiredControlComponent = CONTROLSS;
             requiredOtherComponents = ORIENTATION | LINVELOC | ANGVELOC;
-            focusControl = DELEGATE(&ComponentBank::assignSpaceControl, this);
+            focusControl = DELEGATE(&ComponentBank::focusSpaceControl, this);
             defocusControlCandidate = DELEGATE(&ComponentBank::defocusSpaceControl, this);
-            currentControlTypeCandidate = ControlTypes::SPACE;
             break;
         case ControlTypes::NONE:
             activeControlID = DUA_NULL_ID;
@@ -667,12 +665,12 @@ bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type control
     }
     
     try{
-        if (getComponents(ID) & desiredControlComponent){
-            if(getComponents(ID) & requiredOtherComponents == requiredOtherComponents){
+        if (getComponents(ID) & requiredControlComponent){
+            if((getComponents(ID) & requiredOtherComponents) == requiredOtherComponents){
                 activeControlID = ID;
-                requiredControlComponents = desiredControlComponent | requiredOtherComponents;
+                requiredControlComponents = requiredControlComponent | requiredOtherComponents;
                 defocusControl = defocusControlCandidate;
-                currentControlType = currentControlTypeCandidate;
+                currentControlType = controlType;
                 focusControl(ID);
                 
             } else {
@@ -689,7 +687,7 @@ bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type control
     }
     return true;
 }
-void ComponentBank::assignSpaceControl(const DUA_id& ID){
+void ComponentBank::focusSpaceControl(const DUA_id& ID){
     //default other controls()...
     pSpaceControlCurrent = getSpaceControlPtr(ID);
     pCtrlLinVelocCurrent = getLinearVelocPtr(ID);
@@ -697,7 +695,7 @@ void ComponentBank::assignSpaceControl(const DUA_id& ID){
 }
 void ComponentBank::scrutinizeControl(const DUA_id& ID, ControlTypes::type dependentControlType){
     if (currentControlType == dependentControlType){
-        if (activeControlID == ID);{// && getComponents(activeControlID) & requiredControlComponents != requiredControlComponents){
+        if (activeControlID == ID){// && getComponents(activeControlID) & requiredControlComponents != requiredControlComponents){
             dlgt->outputStr("Control of entity" + getEntityInfo(ID) + " has been lost.");
             activeControlID = DUA_NULL_ID;
             defocusControl(); 
