@@ -35,79 +35,31 @@ void System_UserControl::tick(){
     
     // Handle events on SDL event queue
     while(SDL_PollEvent(&sdlEvent) != 0){
-//        
-//        if(sdlEvent.type == SDL_MOUSEMOTION){
-//            if(!consoleIsActive){
-//                if (bank->activeControlID != DUA_NULL_ID){
-//                    recordMouseMotion(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
+        switch(sdlEvent.type){
+//            case(SDL_MOUSEMOTION):
+//                if (!consoleIsActive) {
+//                    if (bank->activeControlID != DUA_NULL_ID){
+//                        handleMouseMotion(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
+//                    }
 //                }
-//            }
-//        }else if(sdlEvent.type == SDL_KEYDOWN){
-        if(sdlEvent.type == SDL_KEYDOWN){
-            if(sdlEvent.key.keysym.sym == SDLK_ESCAPE){
-                MenuIsActive = !MenuIsActive;
-                if (MenuIsActive){
-                    if (!consoleIsActive){
-                        consoleIsActive = true;
-                        SDL_StartTextInput();
-                    }
-                    bank->dlgt->clearCommand();
-                    bank->dlgt->output(menuText.c_str());
-                    bank->dlgt->pause();
-                } else {
-                    consoleIsActive = false;
-                    SDL_StopTextInput();
-                    bank->dlgt->resume();
-                }
-                bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);
-            }else if(sdlEvent.key.keysym.sym == SDLK_BACKQUOTE){
-                if (!MenuIsActive){
-                    consoleIsActive = !consoleIsActive;
-                    consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
-                    bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);
-                }
-            }else if (consoleIsActive){
-                if(sdlEvent.key.keysym.sym == SDLK_BACKSPACE){
-                    bank->dlgt->backspaceCommand();
-                } else if(sdlEvent.key.keysym.sym == SDLK_DELETE){
-                    bank->dlgt->deleteCommand();
-                } else if(sdlEvent.key.keysym.sym == SDLK_RETURN){
-                    std::string command = bank->dlgt->consoleEnter();
-                    if (MenuIsActive){
-                        handleMenuCommand(command);
-                    } else {
-                        bank->dlgt->submitScriptCommand(command);
-                    }
-                } else if(sdlEvent.key.keysym.sym == SDLK_UP){
-                    bank->dlgt->upOneCommand();
-                } else if(sdlEvent.key.keysym.sym == SDLK_DOWN){
-                    bank->dlgt->downOneCommand();
-                } else if(sdlEvent.key.keysym.sym == SDLK_LEFT){
-                    bank->dlgt->leftCursor();
-                } else if(sdlEvent.key.keysym.sym == SDLK_RIGHT){
-                    bank->dlgt->rightCursor();
-                } else if(sdlEvent.key.keysym.sym == SDLK_PAGEUP){
-                    bank->dlgt->logTraverse(1);
-                } else if(sdlEvent.key.keysym.sym == SDLK_PAGEDOWN){
-                    bank->dlgt->logTraverse(-1);
-                } else if(sdlEvent.key.keysym.sym == SDLK_c && SDL_GetModState() & KMOD_CTRL){
-                    SDL_SetClipboardText(bank->dlgt->getCurrentLogLine().c_str());
-                } else if(sdlEvent.key.keysym.sym == SDLK_v && SDL_GetModState() & KMOD_CTRL){
-                    bank->dlgt->appendToCommand(SDL_GetClipboardText());                    
-                }
-            }else{
+//                break;
+            case(SDL_KEYDOWN):
                 handleKeyDown(sdlEvent);
-            }
-        }else if(sdlEvent.type == SDL_TEXTINPUT){
-            if (consoleIsActive){
-                if(!((keyStates[SDL_SCANCODE_C] || keyStates[SDL_SCANCODE_V])
-                                                && SDL_GetModState() & KMOD_CTRL)){
-                    bank->dlgt->appendToCommand(sdlEvent.text.text);
+                break;
+            case(SDL_TEXTINPUT):
+                if (consoleIsActive){
+                    if(!((keyStates[SDL_SCANCODE_C] || keyStates[SDL_SCANCODE_V])
+                                                    && SDL_GetModState() & KMOD_CTRL)){
+                        bank->dlgt->appendToCommand(sdlEvent.text.text);
+                    }
                 }
-            }
-        }else if(sdlEvent.type == SDL_QUIT){
-            bank->dlgt->quit();
-            bank->dlgt->output("\nFORCED EXIT\n\n");
+                break;
+            case(SDL_QUIT):
+                bank->dlgt->quit();
+                bank->dlgt->output("\nFORCED EXIT\n\n");
+                break;
+            default:
+                break;
         }
     }
 
@@ -141,7 +93,71 @@ void System_UserControl::handleMenuCommand(const std::string& command){
 }
 
 void System_UserControl::handleKeyDown(SDL_Event& event){
-    
+    if (consoleIsActive){
+        switch(event.key.keysym.sym){
+            case(SDLK_BACKQUOTE):
+                backQuotePressed();
+                break;
+            case(SDLK_ESCAPE):
+                escPressed();
+                break;
+            case(SDLK_BACKSPACE):
+                bank->dlgt->backspaceCommand();
+                break;
+            case(SDLK_DELETE):
+                bank->dlgt->deleteCommand();
+                break;
+            case(SDLK_RETURN):
+            {
+                std::string command = bank->dlgt->consoleEnter();
+                if (MenuIsActive){
+                    handleMenuCommand(command);
+                } else {
+                    bank->dlgt->submitScriptCommand(command);
+                }
+                break;
+            }
+            case(SDLK_UP):
+                bank->dlgt->upOneCommand();
+                break;
+            case(SDLK_DOWN):
+                bank->dlgt->downOneCommand();
+                break;
+            case(SDLK_LEFT):
+                bank->dlgt->leftCursor();
+                break;
+            case(SDLK_RIGHT):
+                bank->dlgt->rightCursor();
+                break;
+            case(SDLK_PAGEUP):
+                bank->dlgt->logTraverse(1);
+                break;
+            case(SDLK_PAGEDOWN):
+                bank->dlgt->logTraverse(-1);
+                break;
+            case(SDLK_c):
+                if (SDL_GetModState() & KMOD_CTRL){
+                    SDL_SetClipboardText(bank->dlgt->getCurrentLogLine().c_str());
+                }
+                break;
+            case(SDLK_v):
+                if (SDL_GetModState() & KMOD_CTRL){
+                    bank->dlgt->appendToCommand(SDL_GetClipboardText());
+                }
+                break;
+            default:
+                break;
+        }
+    }else{
+        switch(event.key.keysym.sym){
+            case(SDLK_BACKQUOTE):
+                backQuotePressed();
+                break;
+            case(SDLK_ESCAPE):
+                escPressed();
+                break;
+        }
+    }
 }
 
 void System_UserControl::handleControlKeys(const Uint8* keyStates){    
@@ -201,18 +217,55 @@ void System_UserControl::handleControlKeys(const Uint8* keyStates){
 void System_UserControl::handleMouseMotion(){    
     
     SDL_GetMouseState(&mouseX, &mouseY);
-    bank->dlgt->setMousePos(0, 0);
+    //bank->dlgt->setMousePos(0, 0);
     
     switch(bank->currentControlType){
         case ControlTypes::SPACE:
             bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, mouseY);
             bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, mouseX);
-//            mouseX = 0;
-//            mouseY = 0;
             break;
         case ControlTypes::NONE:
             break;
         default:
             break;
     }
+}
+
+void System_UserControl::handleMouseMotion(int x, int y){
+    switch(bank->currentControlType){
+        case ControlTypes::SPACE:
+            bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, x);
+            bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, y);
+            break;
+        case ControlTypes::NONE:
+            break;
+        default:
+            break;
+    }
+}
+
+void System_UserControl::backQuotePressed(){
+    if (!MenuIsActive) {
+        consoleIsActive = !consoleIsActive;
+        consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
+        bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);
+    }
+}
+
+void System_UserControl::escPressed(){
+    MenuIsActive = !MenuIsActive;
+    if (MenuIsActive) {
+        if (!consoleIsActive) {
+            consoleIsActive = true;
+            SDL_StartTextInput();
+        }
+        bank->dlgt->clearCommand();
+        bank->dlgt->output(menuText.c_str());
+        bank->dlgt->pause();
+    } else {
+        consoleIsActive = false;
+        SDL_StopTextInput();
+        bank->dlgt->resume();
+    }
+    bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);
 }

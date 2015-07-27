@@ -27,6 +27,9 @@ namespace DualityEngine {
         void handleKeyDown(SDL_Event& event);
         void handleControlKeys(const Uint8* keyStates);
         void handleMouseMotion();
+        void handleMouseMotion(int x, int y);
+        void backQuotePressed();
+        void escPressed();
     public:
         System_UserControl(ComponentBank* bank);
         ~System_UserControl();

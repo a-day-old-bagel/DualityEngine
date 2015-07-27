@@ -114,6 +114,9 @@
         <itemPath>Headers/UserControl.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f1" displayName="Utilities" projectFiles="true">
+        <logicalFolder name="f1" displayName="Math" projectFiles="true">
+          <itemPath>Headers/Matrix.h</itemPath>
+        </logicalFolder>
         <itemPath>Headers/BankDelegates.h</itemPath>
         <itemPath>Assets/GUI/NoCamBackground/DebugBackground.h</itemPath>
         <itemPath>Assets/Models/DebugCube/DebugCube.h</itemPath>
@@ -175,6 +178,9 @@
         <itemPath>Source/UserControl.cpp</itemPath>
       </logicalFolder>
       <logicalFolder name="f5" displayName="Utilities" projectFiles="true">
+        <logicalFolder name="f1" displayName="Math" projectFiles="true">
+          <itemPath>Source/Matrix.cpp</itemPath>
+        </logicalFolder>
         <itemPath>Source/HashMap.cpp</itemPath>
         <itemPath>Source/Settings.cpp</itemPath>
       </logicalFolder>
@@ -340,6 +346,8 @@
       </item>
       <item path="Headers/Maths.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Matrix.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/MeshRepository.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Model.h" ex="false" tool="3" flavor2="0">
@@ -421,6 +429,8 @@
       <item path="Source/Game.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/HashMap.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Matrix.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/PhysCollide.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -607,6 +617,8 @@
       </item>
       <item path="Headers/Maths.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Matrix.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/MeshRepository.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Model.h" ex="false" tool="3" flavor2="0">
@@ -688,6 +700,8 @@
       <item path="Source/Game.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/HashMap.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Matrix.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/PhysCollide.cpp" ex="false" tool="1" flavor2="0">
       </item>
