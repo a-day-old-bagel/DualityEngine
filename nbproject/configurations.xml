@@ -182,6 +182,7 @@
           <itemPath>Source/Matrix.cpp</itemPath>
         </logicalFolder>
         <itemPath>Source/HashMap.cpp</itemPath>
+        <itemPath>Source/Maths.cpp</itemPath>
         <itemPath>Source/Settings.cpp</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -429,6 +430,8 @@
       <item path="Source/Game.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/HashMap.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Maths.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Matrix.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -700,6 +703,8 @@
       <item path="Source/Game.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/HashMap.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="Source/Maths.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/Matrix.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -18,6 +18,7 @@ namespace DualityEngine{
     public:
         Matrix();
         Matrix(_T scalar);
+        Matrix(std::initializer_list<class _T> list);
         ~Matrix();
         
 //        template<int rhs_rows, int rhs_cols, class rhs_T>

@@ -3,8 +3,8 @@
 using namespace DualityEngine;
 
 template<int _rows, int _cols, class _T>
-Matrix<_rows, _cols, _T>::Matrix(){
-    *this = Matrix(0);
+Matrix<_rows, _cols, _T>::Matrix() : Matrix(0){
+    
 }
 
 template<int _rows, int _cols, class _T>
@@ -30,7 +30,8 @@ Matrix<_rows, _cols, _T>::~Matrix(){
 template<int _rows, int _cols, class _T>
 template<int rhs_rows, int rhs_cols, class rhs_T>
 Matrix<_rows, rhs_cols, _T> Matrix<_rows, _cols, _T>::operator *(Matrix<rhs_rows,rhs_cols,rhs_T> rhs){
-    Matrix<_rows, rhs_cols, _T> result(0);
+    // ASSERT HERE
+    Matrix<_rows, rhs_cols, _T> result();
     for (int i = 0; i < _rows; ++i){
         for (int j = 0; j < rhs_cols; ++j){
             for (int k = 0; k < _cols; ++k){
