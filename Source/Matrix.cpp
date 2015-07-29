@@ -21,6 +21,11 @@ Matrix<_rows, _cols, _T>::~Matrix(){
     
 }
 
+template<int _rows, int _cols, class _T>
+Matrix<_rows, _cols, _T>::Matrix(std::initializer_list<_T> list){
+    
+}
+
 //template<int _rows, int _cols, class _T>
 //template<int rhs_rows, int rhs_cols, class rhs_T>
 //void Matrix<_rows, _cols, _T>::operator =(Matrix<rhs_rows,rhs_cols,rhs_T> rhs){
