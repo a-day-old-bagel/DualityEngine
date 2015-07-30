@@ -41,10 +41,9 @@ OBJECTFILES= \
 	${OBJECTDIR}/Source/Control_SS.o \
 	${OBJECTDIR}/Source/Engine.o \
 	${OBJECTDIR}/Source/FileIO.o \
+	${OBJECTDIR}/Source/Functions.o \
 	${OBJECTDIR}/Source/Game.o \
 	${OBJECTDIR}/Source/HashMap.o \
-	${OBJECTDIR}/Source/Maths.o \
-	${OBJECTDIR}/Source/Matrix.o \
 	${OBJECTDIR}/Source/PhysCollide.o \
 	${OBJECTDIR}/Source/PhysMove.o \
 	${OBJECTDIR}/Source/Render_Background.o \
@@ -120,6 +119,11 @@ ${OBJECTDIR}/Source/FileIO.o: Source/FileIO.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/FileIO.o Source/FileIO.cpp
 
+${OBJECTDIR}/Source/Functions.o: Source/Functions.cpp 
+	${MKDIR} -p ${OBJECTDIR}/Source
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Functions.o Source/Functions.cpp
+
 ${OBJECTDIR}/Source/Game.o: Source/Game.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
@@ -129,16 +133,6 @@ ${OBJECTDIR}/Source/HashMap.o: Source/HashMap.cpp
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/HashMap.o Source/HashMap.cpp
-
-${OBJECTDIR}/Source/Maths.o: Source/Maths.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Source
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Maths.o Source/Maths.cpp
-
-${OBJECTDIR}/Source/Matrix.o: Source/Matrix.cpp 
-	${MKDIR} -p ${OBJECTDIR}/Source
-	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Matrix.o Source/Matrix.cpp
 
 ${OBJECTDIR}/Source/PhysCollide.o: Source/PhysCollide.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source

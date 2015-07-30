@@ -1,6 +1,6 @@
 #include "../Headers/Control_SS.h"
 #include <algorithm>
-#include "Maths.h"
+#include "Functions.h"
 #include "ControlBase.h"
 
 using namespace DualityEngine;

@@ -115,6 +115,7 @@
       </logicalFolder>
       <logicalFolder name="f1" displayName="Utilities" projectFiles="true">
         <logicalFolder name="f1" displayName="Math" projectFiles="true">
+          <itemPath>Headers/Functions.h</itemPath>
           <itemPath>Headers/Matrix.h</itemPath>
         </logicalFolder>
         <itemPath>Headers/BankDelegates.h</itemPath>
@@ -123,7 +124,6 @@
         <itemPath>Headers/Delegate.h</itemPath>
         <itemPath>Assets/GUI/GUI_Console.h</itemPath>
         <itemPath>Headers/HashMap.h</itemPath>
-        <itemPath>Headers/Maths.h</itemPath>
         <itemPath>Headers/Settings.h</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -179,10 +179,9 @@
       </logicalFolder>
       <logicalFolder name="f5" displayName="Utilities" projectFiles="true">
         <logicalFolder name="f1" displayName="Math" projectFiles="true">
-          <itemPath>Source/Matrix.cpp</itemPath>
+          <itemPath>Source/Functions.cpp</itemPath>
         </logicalFolder>
         <itemPath>Source/HashMap.cpp</itemPath>
-        <itemPath>Source/Maths.cpp</itemPath>
         <itemPath>Source/Settings.cpp</itemPath>
       </logicalFolder>
     </logicalFolder>
@@ -339,13 +338,13 @@
       </item>
       <item path="Headers/FileIO.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Functions.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Game.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/HashMap.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/LinearVelocity.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Headers/Maths.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Matrix.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -427,13 +426,11 @@
       </item>
       <item path="Source/FileIO.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Source/Functions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="Source/Game.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/HashMap.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Source/Maths.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Source/Matrix.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/PhysCollide.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -612,13 +609,13 @@
       </item>
       <item path="Headers/FileIO.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="Headers/Functions.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="Headers/Game.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/HashMap.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/LinearVelocity.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="Headers/Maths.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Matrix.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -700,13 +697,11 @@
       </item>
       <item path="Source/FileIO.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="Source/Functions.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="Source/Game.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/HashMap.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Source/Maths.cpp" ex="false" tool="1" flavor2="0">
-      </item>
-      <item path="Source/Matrix.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="Source/PhysCollide.cpp" ex="false" tool="1" flavor2="0">
       </item>
