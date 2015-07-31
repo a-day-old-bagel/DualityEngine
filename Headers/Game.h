@@ -17,7 +17,7 @@
 #include "Render_Background.h"
 #include "PhysMove.h"
 #include "PhysCollide.h"
-#include "UserControl.h"
+#include "UserInput.h"
 #include "Control_SS.h"
 #include "Scripting.h"
 #include "Engine.h"
@@ -57,7 +57,7 @@ namespace DualityEngine {
         System_Control_SS spaceShipControlSystem = System_Control_SS(&bank);
         
         // handle user input
-        System_UserControl userControlSystem = System_UserControl(&bank);
+        System_UserInput userInputSystem = System_UserInput(&bank);
         // handle scripting commands
         System_Scripting scriptingSystem = System_Scripting(&bank);
         // More systems to come...

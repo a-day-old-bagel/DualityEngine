@@ -668,9 +668,9 @@ bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type control
         if (getComponents(ID) & requiredControlComponent){
             if((getComponents(ID) & requiredOtherComponents) == requiredOtherComponents){
                 activeControlID = ID;
-                requiredControlComponents = requiredControlComponent | requiredOtherComponents;
-                defocusControl = defocusControlCandidate;
                 currentControlType = controlType;
+                requiredControlComponents = requiredControlComponent | requiredOtherComponents;
+                defocusControl = defocusControlCandidate;                
                 focusControl(ID);
                 
             } else {
@@ -697,7 +697,8 @@ void ComponentBank::scrutinizeControl(const DUA_id& ID, ControlTypes::type depen
     if (currentControlType == dependentControlType){
         if (activeControlID == ID){// && getComponents(activeControlID) & requiredControlComponents != requiredControlComponents){
             dlgt->outputStr("Control of entity" + getEntityInfo(ID) + " has been lost.");
-            activeControlID = DUA_NULL_ID;
+            currentControlType = ControlTypes::NONE;
+            activeControlID = DUA_NULL_ID;            
             defocusControl(); 
         }
     }

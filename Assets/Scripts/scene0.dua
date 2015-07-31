@@ -1,0 +1,31 @@
+# Duality Engine Script file created by Galen Cochrane during July 2015
+
+DualityEngineScript v0.01.02
+# numberOfEntities 3
+
+boxOne = newent fooBox
+add position boxOne 0 0 0
+add orientation boxOne 0 0 0
+add angveloc boxOne 0 0.002 0
+add linveloc boxOne 0 0 0
+add model boxOne modelNameDoesNothingYet
+add spacecontrol boxOne all 0.00005
+add freecam boxOne 1 0.5 1000 0 0 0 0 0 -1 0 1 0
+
+boxTwo = newent barBox
+add position boxTwo 3 0 0
+add orientation boxTwo 0 0 0
+add angveloc boxTwo 0 -0.002 0
+add model boxTwo modelNameDoesNothingYet
+
+player = newent player
+add freecam player 1 0.5 1000 0 0 0 0 0 -1 0 1 0
+add position player 1.5 0 4
+add orientation player 0 0 0
+add linveloc player 0 0 0
+add angveloc player 0 0 0
+add spacecontrol player all 0.00005
+add model player modelNameDoesNothingYet
+
+control player spaceship
+cam player

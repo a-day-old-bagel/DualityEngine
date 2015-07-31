@@ -1,0 +1,15 @@
+# Duality Engine Script file created by Galen Cochrane during July 2015
+
+DualityEngineScript v0.01.02
+
+player = newent player
+add freecam player 1 0.5 1000 0 0 0 0 0 -1 0 1 0
+add position player 1.5 0 4
+add orientation player 0 0 0
+add linveloc player 0 0 0
+add angveloc player 0 0 0
+add spacecontrol player all 0.00005
+add model player modelNameDoesNothingYet
+
+control player spaceship
+cam player

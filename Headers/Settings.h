@@ -35,6 +35,7 @@ namespace DualityEngine {
     typedef uint32_t        DUA_uint32;
     typedef float           DUA_float;       // wrapper for the 64 bitfloating point values used by the game
     typedef double          DUA_dbl;         // wrapper for the 32 bit floating point values used by the game
+    typedef double          DUA_matrixVal;   // type used for matrix/vector values
     
     /* FUNCTIONAL MACROS */
     
@@ -106,6 +107,7 @@ namespace DualityEngine {
     /* SWITCHES */
     
 //    #define DUA_DEBUG_CONSOLE_TO_COUT
+    
     #define DUA_DEBUG_MATRIX_PRINT
     
     #define DUA_OLD_VIDEO_DRIVERS // This needs to be commented out in order to use OpenGL 3.3 instead of just 3.0.

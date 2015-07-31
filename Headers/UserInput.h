@@ -1,20 +1,20 @@
 /*******************************************************************************
- * File:   UserControl.h
+ * File:   UserInput.h
  * Author: Galen Cochrane *
  * Created on February 24, 2015, 1:38 AM
  * 
  * 
  ******************************************************************************/
 
-#ifndef USERCONTROL_H
-#define	USERCONTROL_H
+#ifndef USERINPUT_H
+#define	USERINPUT_H
 
 #include <SDL.h>
 #include "System.h"
 
 namespace DualityEngine {
 
-    class System_UserControl : public System
+    class System_UserInput : public System
     {
     private:
         SDL_Event sdlEvent;
@@ -26,13 +26,13 @@ namespace DualityEngine {
         void handleMenuCommand(const std::string& command);
         void handleKeyDown(SDL_Event& event);
         void handleControlKeys(const Uint8* keyStates);
-        void handleMouseMotion();
-        void handleMouseMotion(int x, int y);
+        void checkMouseMotionManual();
+        void applyMouseMotion(int x, int y);
         void backQuotePressed();
         void escPressed();
     public:
-        System_UserControl(ComponentBank* bank);
-        ~System_UserControl();
+        System_UserInput(ComponentBank* bank);
+        ~System_UserInput();
         void tick() override;
         bool init(std::stringstream& output) override;
     };

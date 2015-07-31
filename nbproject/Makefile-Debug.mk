@@ -55,7 +55,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/Source/Settings.o \
 	${OBJECTDIR}/Source/ShaderRepository.o \
 	${OBJECTDIR}/Source/System.o \
-	${OBJECTDIR}/Source/UserControl.o \
+	${OBJECTDIR}/Source/UserInput.o \
 	${OBJECTDIR}/Source/lighting_technique.o \
 	${OBJECTDIR}/Source/loadCubeMap.o \
 	${OBJECTDIR}/Source/loadShaders.o \
@@ -189,10 +189,10 @@ ${OBJECTDIR}/Source/System.o: Source/System.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/System.o Source/System.cpp
 
-${OBJECTDIR}/Source/UserControl.o: Source/UserControl.cpp 
+${OBJECTDIR}/Source/UserInput.o: Source/UserInput.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/UserControl.o Source/UserControl.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/UserInput.o Source/UserInput.cpp
 
 ${OBJECTDIR}/Source/lighting_technique.o: Source/lighting_technique.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source

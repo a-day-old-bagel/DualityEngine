@@ -124,7 +124,7 @@ bool Game::engageEngines(){
     
     physicsEngine.addSystem(&physicsMoveSystem);        // apply velocity * time to each position
     physicsEngine.addSystem(&physicsCollisionSystem);   // check collisions between objects
-    physicsEngine.addSystem(&userControlSystem);        // accept user input
+    physicsEngine.addSystem(&userInputSystem);          // accept user input
     physicsEngine.addSystem(&spaceShipControlSystem);   // apply user input to any currently active space control component
     physicsEngine.engage();                             // spawn thread to repeatedly do the above.
     
@@ -149,7 +149,7 @@ bool Game::waitForBankDependentSystemsToPause(){
         done &= renderMasterSystem.isPauseConfirmed();
         done &= renderConsoleSystem.isPauseConfirmed();
         done &= physicsCollisionSystem.isPauseConfirmed();  //PROBLEMS WITH THIS BEING EXECUTED FROM CONTROL SYS... THREAD LOCKS
-        done &= userControlSystem.isPauseConfirmed();
+        done &= userInputSystem.isPauseConfirmed();         
         done &= spaceShipControlSystem.isPauseConfirmed();
         
         if (SDL_GetTicks() - startTime > Settings::Systems::systemsPauseTimeout){
@@ -166,7 +166,7 @@ bool Game::pauseBankDependentSystems(){
     physicsMoveSystem.pause();
     physicsCollisionSystem.pause();
     renderModelsSystem.pause();
-    userControlSystem.pause();
+    userInputSystem.pause();
     renderBackgroundSystem.pause();
     renderMasterSystem.pause();
     renderConsoleSystem.pause();
@@ -188,13 +188,13 @@ bool Game::resumeBankDependentSystems(){
     if (!console.menuIsActive){ // to not accidentally resume game before menu is exited
         physicsMoveSystem.resume();
         physicsCollisionSystem.resume();
+        spaceShipControlSystem.resume();
     }
     renderMasterSystem.resume();
     renderConsoleSystem.resume();
     renderModelsSystem.resume();
     renderBackgroundSystem.resume();
-    userControlSystem.resume();
-    spaceShipControlSystem.resume();
+    userInputSystem.resume();    
     
     return true;
 }
@@ -212,7 +212,7 @@ bool Game::killSystems(){
     renderBackgroundSystem.quit();
     physicsMoveSystem.quit();
     physicsCollisionSystem.quit();
-    userControlSystem.quit();
+    userInputSystem.quit();
     scriptingSystem.quit();
     spaceShipControlSystem.quit();
     return true;
@@ -230,7 +230,7 @@ bool Game::cleanGameData(){
     renderBackgroundSystem.clean();
     physicsMoveSystem.clean();
     physicsCollisionSystem.clean();
-    userControlSystem.clean();
+    userInputSystem.clean();
     
     bank.clean();
     return true;

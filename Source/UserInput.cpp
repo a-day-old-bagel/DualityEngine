@@ -1,34 +1,39 @@
 /*******************************************************************************
- * File:   UserControl.cpp
+ * File:   UserInput.cpp
  * Author: Galen Cochrane *
  * Created on February 24, 2015, 1:39 AM
  * 
  * 
  ******************************************************************************/
 
-#include "../Headers/UserControl.h"
+#include "../Headers/UserInput.h"
 #include "ControlBase.h"
 
 using namespace DualityEngine;
 
 
-System_UserControl::System_UserControl(ComponentBank* bank)
-                  : System(bank, "Control System", 0){
+System_UserInput::System_UserInput(ComponentBank* bank)
+                  : System(bank, "User Input System", 0){
     
 }
 
-System_UserControl::~System_UserControl(){
+System_UserInput::~System_UserInput(){
 }
 
-bool System_UserControl::init(std::stringstream& output){
-//    if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
-//        output << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
+bool System_UserInput::init(std::stringstream& output){
+    if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
+        output << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
+        return false;
+    }
+//    SDL_EventState(SDL_MOUSEMOTION, SDL_DISABLE);
+//    if (SDL_EventState(SDL_MOUSEMOTION, SDL_QUERY)){
+//        output << "Failed to set SDL mouse motion events to disabled state: " << SDL_GetError() << std::endl;
 //        return false;
 //    }
     return true;
 }
 
-void System_UserControl::tick(){
+void System_UserInput::tick(){
     
     // Get current keyboard state
     const Uint8* keyStates = SDL_GetKeyboardState(NULL);
@@ -36,13 +41,11 @@ void System_UserControl::tick(){
     // Handle events on SDL event queue
     while(SDL_PollEvent(&sdlEvent) != 0){
         switch(sdlEvent.type){
-//            case(SDL_MOUSEMOTION):
-//                if (!consoleIsActive) {
-//                    if (bank->activeControlID != DUA_NULL_ID){
-//                        handleMouseMotion(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
-//                    }
-//                }
-//                break;
+            case(SDL_MOUSEMOTION):
+                if (!consoleIsActive) {
+                    applyMouseMotion(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
+                }
+                break;
             case(SDL_KEYDOWN):
                 handleKeyDown(sdlEvent);
                 break;
@@ -63,11 +66,11 @@ void System_UserControl::tick(){
         }
     }
 
-    if(!consoleIsActive){
-        if (bank->activeControlID != DUA_NULL_ID){
-            handleMouseMotion();
-        }
-    }
+//    if(!consoleIsActive){
+//        if (bank->activeControlID != DUA_NULL_ID){
+//            checkMouseMotionManual();
+//        }
+//    }
 
     if(!consoleIsActive){
         if (bank->activeControlID != DUA_NULL_ID){
@@ -76,7 +79,7 @@ void System_UserControl::tick(){
     }
 }
 
-void System_UserControl::handleMenuCommand(const std::string& command){
+void System_UserInput::handleMenuCommand(const std::string& command){
     
     if(command.empty()) return;
     std::stringstream commandLine(command);
@@ -92,7 +95,7 @@ void System_UserControl::handleMenuCommand(const std::string& command){
     }
 }
 
-void System_UserControl::handleKeyDown(SDL_Event& event){
+void System_UserInput::handleKeyDown(SDL_Event& event){
     if (consoleIsActive){
         switch(event.key.keysym.sym){
             case(SDLK_BACKQUOTE):
@@ -160,7 +163,7 @@ void System_UserControl::handleKeyDown(SDL_Event& event){
     }
 }
 
-void System_UserControl::handleControlKeys(const Uint8* keyStates){    
+void System_UserInput::handleControlKeys(const Uint8* keyStates){    
         
     switch(bank->currentControlType){
         case ControlTypes::SPACE:
@@ -214,10 +217,10 @@ void System_UserControl::handleControlKeys(const Uint8* keyStates){
     }       
 }
 
-void System_UserControl::handleMouseMotion(){    
+void System_UserInput::checkMouseMotionManual(){    
     
     SDL_GetMouseState(&mouseX, &mouseY);
-    //bank->dlgt->setMousePos(0, 0);
+    bank->dlgt->setMousePos(0, 0);
     
     switch(bank->currentControlType){
         case ControlTypes::SPACE:
@@ -231,7 +234,7 @@ void System_UserControl::handleMouseMotion(){
     }
 }
 
-void System_UserControl::handleMouseMotion(int x, int y){
+void System_UserInput::applyMouseMotion(int x, int y){
     switch(bank->currentControlType){
         case ControlTypes::SPACE:
             bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, x);
@@ -244,7 +247,7 @@ void System_UserControl::handleMouseMotion(int x, int y){
     }
 }
 
-void System_UserControl::backQuotePressed(){
+void System_UserInput::backQuotePressed(){
     if (!MenuIsActive) {
         consoleIsActive = !consoleIsActive;
         consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
@@ -252,7 +255,7 @@ void System_UserControl::backQuotePressed(){
     }
 }
 
-void System_UserControl::escPressed(){
+void System_UserInput::escPressed(){
     MenuIsActive = !MenuIsActive;
     if (MenuIsActive) {
         if (!consoleIsActive) {

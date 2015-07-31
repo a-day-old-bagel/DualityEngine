@@ -12,46 +12,31 @@
 #include <glm/glm.hpp>
 #include "Matrix.h"
 
-glm::vec3 operator * (glm::vec3 vec, float scalar);
-
-double dotVec4D(DualityEngine::Vec4d& mat1, DualityEngine::Vec4d& mat2);
-float dotVec4F(DualityEngine::Vec4f& mat1, DualityEngine::Vec4f& mat2);
-double dotVec3D(DualityEngine::Vec3d& mat1, DualityEngine::Vec3d& mat2);
-float dotVec3F(DualityEngine::Vec3f& mat1, DualityEngine::Vec3f& mat2);
-
-void convertToZeroMatrixD(DualityEngine::Mat4x4d& mat);
-void convertToZeroMatrixF(DualityEngine::Mat4x4f& mat);
-
-void convertToIdentityMatrixD(DualityEngine::Mat4x4d& mat);
-void convertToIdentityMatrixF(DualityEngine::Mat4x4f& mat);
-
-void convertToScaleMatrixD(DualityEngine::Mat4x4d& mat, double X, double Y, double Z);
-void convertToScaleMatrixF(DualityEngine::Mat4x4f& mat, float X, float Y, float Z);
-
-void convertToUniformScaleMatrixD(DualityEngine::Mat4x4d& mat, double U);
-void convertToUniformScaleMatrixF(DualityEngine::Mat4x4f& mat, float U);
-
-void convertToTranslationMatrixD(DualityEngine::Mat4x4d& mat, double X, double Y, double Z);
-void convertToTranslationMatrixF(DualityEngine::Mat4x4f& mat, float X, float Y, float Z);
-
-void convertToRotationMatrixWorldAxisZyxD(DualityEngine::Mat4x4d& mat, double X, double Y, double Z);
-void convertToRotationMatrixWorldAxisZyxF(DualityEngine::Mat4x4f& mat, float X, float Y, float Z);
-void convertToRotationMatrixWorldAxisZyxD(DualityEngine::Mat4x4d& mat, DualityEngine::Vec3d& rotation);
-void convertToRotationMatrixWorldAxisZyxF(DualityEngine::Mat4x4f& mat, DualityEngine::Vec3f& rotation);
-
-void convertToRotationMatrixArbitraryAxisD(DualityEngine::Mat4x4d& mat, DualityEngine::Vec4d& unitAxis, double angle);
-void convertToRotationMatrixArbitraryAxisF(DualityEngine::Mat4x4f& mat, DualityEngine::Vec4f& unitAxis, float angle);
-
-void convertToViewMatrixFreeD(DualityEngine::Mat4x4d& mat, DualityEngine::Vec4d& center, DualityEngine::Vec4d* axes);
-void convertToViewMatrixFreeF(DualityEngine::Mat4x4f& mat, DualityEngine::Vec4f& center, DualityEngine::Vec4f* axes);
-void convertToViewMatrixFpsD(DualityEngine::Mat4x4d& mat, DualityEngine::Vec4d& center, double pitch, double yaw);
-void convertToViewMatrixFpsF(DualityEngine::Mat4x4f& mat, DualityEngine::Vec4f& center, float pitch, float yaw);
-
-void convertToProjectionMatrixD(DualityEngine::Mat4x4d& mat, double FOV, double aspRat, double zNear, double zFar);
-void convertToProjectionMatrixF(DualityEngine::Mat4x4f& mat, float FOV, float aspRat, float zNear, float zFar);
+namespace DualityEngine{
 
 
+    glm::vec3 operator * (glm::vec3 vec, float scalar);
 
+
+    DUA_matrixVal dotVec4(DualityEngine::Vec4& mat1, DualityEngine::Vec4& mat2);
+    DUA_matrixVal dotVec3(DualityEngine::Vec3& mat1, DualityEngine::Vec3& mat2);
+
+    void rewriteAsZeroMatrix(DualityEngine::Mat4x4& mat);
+    void rewriteAsIdentityMatrix(DualityEngine::Mat4x4& mat);
+    void rewriteAsScaleMatrix(DualityEngine::Mat4x4& mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z);
+    void rewriteAsUniformScaleMatrix(DualityEngine::Mat4x4& mat, DUA_matrixVal U);
+    void rewriteAsTranslationMatrix(DualityEngine::Mat4x4& mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z);
+    void rewriteAsRotationMatrixWorldAxisZyx(DualityEngine::Mat4x4& mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z);
+    void rewriteAsRotationMatrixWorldAxisZyx(DualityEngine::Mat4x4& mat, DualityEngine::Vec3& rotation);
+    void rewriteAsRotationMatrixArbitraryAxis(DualityEngine::Mat4x4& mat, DualityEngine::Vec4& unitAxis, DUA_matrixVal angle);
+    void rewriteAsViewMatrixFree(DualityEngine::Mat4x4& mat, DualityEngine::Vec4& center, DualityEngine::Vec4* axes);
+    void rewriteAsViewMatrixFps(DualityEngine::Mat4x4& mat, DualityEngine::Vec4& center, DUA_matrixVal pitch, DUA_matrixVal yaw);
+    void rewriteAsProjectionMatrix(DualityEngine::Mat4x4& mat, DUA_matrixVal FOV, DUA_matrixVal aspRat, DUA_matrixVal zNear, DUA_matrixVal zFar);
+
+    void transformMatrixTranslate(DualityEngine::Mat4x4& mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z);
+    void transformMatrixScale(DualityEngine::Mat4x4& mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z);
+
+}
 
 
 #endif	/* DUA_MATHFUNCTIONS_H */
