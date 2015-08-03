@@ -69,8 +69,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-O0 -std=c++11 `pkg-config --cflags glew assimp freetype2` -g 
-CXXFLAGS=-O0 -std=c++11 `pkg-config --cflags glew assimp freetype2` -g 
+CCFLAGS=-O3 -std=c++11 `pkg-config --cflags glew assimp freetype2` 
+CXXFLAGS=-O3 -std=c++11 `pkg-config --cflags glew assimp freetype2` 
 
 # Fortran Compiler Flags
 FFLAGS=

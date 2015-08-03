@@ -79,11 +79,8 @@ void System_Scripting::submitScript(const std::string& fileName){
 
                 lines.erase(lines.begin(), lines.begin() + numHeaderLinesToErase);
 
-                if (bank->dlgt->pauseDependentSystems()){
-                    for (auto line : lines){
-                        submitCommand(line);
-                    }
-                    bank->dlgt->resumeDependentSystems();
+                for (auto line : lines){
+                    submitCommand(line);
                 }
             }
         }
@@ -218,6 +215,12 @@ void System_Scripting::parseCommand(const std::string& command){
                     handleBadUsage(args[0]);
                 }
                 
+            } else if (numArgs == 2){
+                if (args[1] == "none"){
+                    bank->switchToControl(DUA_NULL_ID, ControlTypes::NONE);
+                } else {
+                    handleBadUsage(args[0]);
+                }
             } else {
                 handleBadUsage(args[0]);
             }

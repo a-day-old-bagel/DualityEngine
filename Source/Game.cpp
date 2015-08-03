@@ -19,9 +19,6 @@ using namespace DualityEngine;
 void Game::Main(){
     
     engageEngines();
-    scriptingSystem.submitScript("scene0");
-    SDL_Delay(50000);
-    Quit();
         
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);
@@ -55,6 +52,10 @@ void Game::NewGame(){
         resumeBankDependentSystems();
         outputDelegate("World cleared.\n");
     }
+    
+//    cleanGameData();    
+//    resumeBankDependentSystems();
+//    outputDelegate("World cleared.\n");
 }
 
 /**************************************
@@ -90,6 +91,7 @@ void Game::Pause(){
 
 /**************************************
  * RESUME
+ * resumes the systems paused by Pause().
  *************************************/
 void Game::Resume(){
     physicsMoveSystem.resume();
@@ -119,26 +121,32 @@ void Game::Quit(){
  * engines. See below for examples.
  *************************************/
 bool Game::engageEngines(){
+    
+    physicsEngine.addSystem(&userInputSystem);          // accept user input
+    physicsEngine.addSystem(&spaceShipControlSystem);   // apply user input to any currently active space control component
+    physicsEngine.addSystem(&physicsMoveSystem);        // apply velocity * time to each position
+    physicsEngine.addSystem(&physicsCollisionSystem);   // check collisions between objects        
+    
+    scriptingEngine.addSystem(&scriptingSystem);        // check for new commands in the queue
+    
     graphicsEngine.addSystem(&renderMasterSystem);      // display last frame buffer then clear the buffer
     graphicsEngine.addSystem(&renderBackgroundSystem);  // render the background (sky) first
     graphicsEngine.addSystem(&renderModelsSystem);      // render the models next
     graphicsEngine.addSystem(&renderConsoleSystem);     // render the console (GUI) last (on top).
-    graphicsEngine.engage();                            // spawn thread to repeatedly do the above.
-    
-    physicsEngine.addSystem(&physicsMoveSystem);        // apply velocity * time to each position
-    physicsEngine.addSystem(&physicsCollisionSystem);   // check collisions between objects
-    physicsEngine.addSystem(&userInputSystem);          // accept user input
-    physicsEngine.addSystem(&spaceShipControlSystem);   // apply user input to any currently active space control component
-    physicsEngine.engage();                             // spawn thread to repeatedly do the above.
-    
-    scriptingEngine.addSystem(&scriptingSystem);        // check for new commands in the queue
-    scriptingEngine.engage();                           // spawn thread to repeatedly do the above.
+
+    physicsEngine.engage();
+    scriptingEngine.engage();
+    graphicsEngine.engage();
     
     return true;
 }
 
 /**************************************
  * WAIT FOR SYSTEMS TO PAUSE
+ * this is called by the pause engines
+ * method and waits until it is certain
+ * that all bank-dependent systems are
+ * paused before returning.
  *************************************/
 bool Game::waitForBankDependentSystemsToPause(){
     
@@ -164,6 +172,14 @@ bool Game::waitForBankDependentSystemsToPause(){
 
 /**************************************
  * PAUSE ENGINES
+ * this is used whenever some major
+ * operation needs to be done on the
+ * bank (I don't really know
+ * everything that might happen to the
+ * running systems if I just start
+ * changing things in the bank, but
+ * invalidating pointers kept in systems
+ * will probably happen).
  *************************************/
 bool Game::pauseBankDependentSystems(){
     physicsMoveSystem.pause();
@@ -186,6 +202,8 @@ bool Game::pauseBankDependentSystems(){
 
 /**************************************
  * RESUME ENGINES
+ * resumes the engines paused by the
+ * pause-bank-dependent systems method.
  *************************************/
 bool Game::resumeBankDependentSystems(){
     if (!console.menuIsActive){ // to not accidentally resume game before menu is exited

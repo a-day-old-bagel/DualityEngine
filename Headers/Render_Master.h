@@ -26,8 +26,6 @@ namespace DualityEngine {
         SDL_Window* pWindow = NULL;
         SDL_GLContext context;
 
-        bool setUpEnvironment(std::stringstream& engineOut);
-
     public:
         System_Render_Master(ComponentBank* bank);
         ~System_Render_Master();

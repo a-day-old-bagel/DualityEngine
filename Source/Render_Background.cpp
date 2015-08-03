@@ -124,9 +124,12 @@ void System_Render_Background::tick()
     if (queuedFileName){
         if (queuedFileType){
             useCubeMap(*queuedFileName, *queuedFileType);
-            delete queuedFileName, queuedFileType;
-            queuedFileName, queuedFileType = NULL;
+            
+            delete queuedFileType;            
+            queuedFileType = NULL;
         }
+        delete queuedFileName;
+        queuedFileName = NULL;
     }
 }
 //

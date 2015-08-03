@@ -26,27 +26,20 @@ System_Render_Master::~System_Render_Master()
 //<editor-fold defaultstate="collapsed" desc="Init">
 bool System_Render_Master::init(std::stringstream& engineOut)
 {    
-    // Set up window and context
-    if (!setUpEnvironment(engineOut)) return false;
-    
-    return true;
-}
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Set Up Environment">
-
-bool System_Render_Master::setUpEnvironment(std::stringstream& engineOut)
-{   
-    //SDL_SetHint(SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS, "0");
+    // make sure SDL's video components are running...
+    while(!SDL_WasInit(SDL_INIT_VIDEO)){
+        // This loops until it is detected that SDL's video component has initialized.
+        // This initialization is performed in the thread containing the userInput system
+        // for the sake of the handling of SDL's events occurring in that thread.
+        // SDL used to initialize in this thread but that caused slowdowns in the other thread,
+        // while initializing in the other thread appears to have no ill effects on this thread.
+    }
     
     // struct for getting current display mode.
     SDL_DisplayMode display;
     
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        engineOut << "SDL did not initialize! SDL Error: " << SDL_GetError() << std::endl;
-        return false;
-    }
-    
+    // This block of stuff figures out which monitor to put the window on (or use as fullscreen display).
+    // rendering across multiple monitors in fullscreen is something I have not yet investigated.
     int monitorUsed;
     for (monitorUsed = 0; monitorUsed <= Settings::Display::whichMonitor; ++monitorUsed){
         if (SDL_GetCurrentDisplayMode(monitorUsed, &display)){
@@ -120,7 +113,6 @@ bool System_Render_Master::setUpEnvironment(std::stringstream& engineOut)
 
     return true;
 }
-
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Tick">
 void System_Render_Master::tick()

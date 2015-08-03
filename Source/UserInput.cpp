@@ -30,10 +30,21 @@ int filterFunction(SDL_Event* e){
 }
 
 bool System_UserInput::init(std::stringstream& output){
-    if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
-        output << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
+    
+    // Initialize SDL overall.
+    // This needs to be done in this thread instead of in the graphics thread to prevent
+    // massive event handing slowdowns.
+    if (SDL_Init(SDL_INIT_VIDEO) < 0) {
+        output << "SDL did not initialize! SDL Error: " << SDL_GetError() << std::endl;
         return false;
     }
+    
+//    if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
+//        output << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
+//        return false;
+//    }
+    
+    
 //    SDL_EventState(SDL_MOUSEMOTION, SDL_DISABLE);
 //    if (SDL_EventState(SDL_MOUSEMOTION, SDL_QUERY)){
 //        output << "Failed to set SDL mouse motion events to disabled state: " << SDL_GetError() << std::endl;
@@ -73,7 +84,7 @@ void System_UserInput::tick(){
                 bank->dlgt->output("\nFORCED EXIT\n\n");
                 break;
             default:
-                bank->dlgt->outputStr(std::to_string(sdlEvent.type));
+//                bank->dlgt->outputStr(std::to_string(sdlEvent.type));
                 break;
         }
     }

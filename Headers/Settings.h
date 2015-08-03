@@ -112,7 +112,7 @@ namespace DualityEngine {
     
     #define DUA_OLD_VIDEO_DRIVERS // This needs to be commented out in order to use OpenGL 3.3 instead of just 3.0.
 
-//    #define DUA_FULLSCREEN
+    #define DUA_FULLSCREEN
 
     /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */   
 
@@ -133,8 +133,8 @@ namespace DualityEngine {
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL
     #endif
 
-    #define DUA_DEFAULT_SCREENRES_X 1024//1366
-    #define DUA_DEFAULT_SCREENRES_Y 600//768
+    #define DUA_DEFAULT_SCREENRES_X 1366
+    #define DUA_DEFAULT_SCREENRES_Y 768
     #define DUA_DEFAULT_FOV 45.0f
     #define DUA_DEFAULT_ZPLANENEAR 0.1f
     #define DUA_DEFAULT_ZPLANEFAR 100.f

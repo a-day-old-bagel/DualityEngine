@@ -30,6 +30,7 @@
       <logicalFolder name="f4" displayName="Scripts" projectFiles="true">
         <itemPath>Assets/Scripts/newPlayer.dua</itemPath>
         <itemPath>Assets/Scripts/scene0.dua</itemPath>
+        <itemPath>Assets/Scripts/scene0_noPhysWait.dua</itemPath>
         <itemPath>Assets/Scripts/testScene0.dua</itemPath>
         <itemPath>Assets/Scripts/testScene1.dua</itemPath>
       </logicalFolder>
@@ -216,7 +217,7 @@
             <pElem>/usr/include/SDL2</pElem>
             <pElem>/usr/local/include/SDL2</pElem>
           </incDir>
-          <commandLine>-O0 -std=c++11 `pkg-config --cflags glew assimp freetype2` -g</commandLine>
+          <commandLine>-O3 -std=c++11 `pkg-config --cflags glew assimp freetype2`</commandLine>
         </ccTool>
         <linkerTool>
           <commandLine>`pkg-config --libs sdl2 gl glew assimp freetype2 fontconfig `</commandLine>
@@ -288,6 +289,11 @@
       <item path="Assets/Scripts/newPlayer.dua" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Scripts/scene0.dua" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Scripts/scene0_noPhysWait.dua"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Assets/Scripts/testScene0.dua" ex="false" tool="3" flavor2="0">
       </item>
@@ -563,6 +569,11 @@
       <item path="Assets/Scripts/newPlayer.dua" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Assets/Scripts/scene0.dua" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="Assets/Scripts/scene0_noPhysWait.dua"
+            ex="false"
+            tool="3"
+            flavor2="0">
       </item>
       <item path="Assets/Scripts/testScene0.dua" ex="false" tool="3" flavor2="0">
       </item>
