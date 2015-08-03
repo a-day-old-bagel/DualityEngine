@@ -29,9 +29,11 @@ ComponentBank::~ComponentBank(){
     delete pSpaceControlDummy;
     delete pCtrlLinVelocDummy;
     delete pCtrlOrientDummy;
+    delete pCtrlAngVelocDummy;
     pSpaceControlDummy = NULL;
     pCtrlLinVelocDummy = NULL;
     pCtrlOrientDummy = NULL;
+    pCtrlAngVelocDummy = NULL;
     
     delete pFreeCameraDummy;
     pFreeCameraDummy = NULL;

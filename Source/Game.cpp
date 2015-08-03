@@ -19,6 +19,9 @@ using namespace DualityEngine;
 void Game::Main(){
     
     engageEngines();
+    scriptingSystem.submitScript("scene0");
+    SDL_Delay(50000);
+    Quit();
         
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);

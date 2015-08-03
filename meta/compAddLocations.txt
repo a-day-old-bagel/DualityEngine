@@ -1,0 +1,20 @@
+[component].h
+Settings.h
+	compFlags
+ComponentBank.h
+	includes
+	table declaration
+	getPtr func. dec.
+	add func. dec.
+	delete func. dec.
+ComponentBank.cpp
+	clean func. body
+	getPtr func. body
+	add func. body
+	delete func. body
+Scripting.h
+	documentation unordered_maps
+		componentHelps
+		componentArgs
+	add functions
+	remove functions

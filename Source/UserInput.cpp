@@ -20,6 +20,15 @@ System_UserInput::System_UserInput(ComponentBank* bank)
 System_UserInput::~System_UserInput(){
 }
 
+int filterFunction(SDL_Event* e){
+    if (e != NULL){
+        if (e->type == SDL_KEYDOWN || e->type == SDL_TEXTINPUT || e->type == SDL_QUIT){
+            return 1;
+        }
+    }
+    return 0;
+}
+
 bool System_UserInput::init(std::stringstream& output){
     if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
         output << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
@@ -57,11 +66,14 @@ void System_UserInput::tick(){
                     }
                 }
                 break;
+//            case(SDL_KEYUP):
+//                break;
             case(SDL_QUIT):
                 bank->dlgt->quit();
                 bank->dlgt->output("\nFORCED EXIT\n\n");
                 break;
             default:
+                bank->dlgt->outputStr(std::to_string(sdlEvent.type));
                 break;
         }
     }
