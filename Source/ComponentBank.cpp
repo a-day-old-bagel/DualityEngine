@@ -13,7 +13,7 @@ ComponentBank::ComponentBank(BankDelegates* dlgt){
     nextID = DUA_START_ID;
     this->dlgt = dlgt;
     
-    pSpaceControlDummy = new SpaceControl(0, 0, 0, 0, 0, 0, 0, 0, 0);
+    pSpaceControlDummy = new SpaceControl(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
     pCtrlLinVelocDummy = new LinearVelocity(0, 0, 0);
     pCtrlOrientDummy = new Orientation(0, 0, 0);
     pCtrlAngVelocDummy = new AngularVelocity(0, 0, 0);
@@ -234,9 +234,9 @@ void ComponentBank::addAngularVeloc(const DUA_id& ID, const DUA_dbl& angX, const
     if (tryAddFlagToSoul(ANGVELOC, ID))
         tryAddComponent(ID, "angular velocity", components_angularVeloc, angX, angY, angZ);
 }
-void ComponentBank::addSpaceControl(const DUA_id &ID, const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& roll, const DUA_dbl& pitch, const DUA_dbl& yaw){
+void ComponentBank::addSpaceControl(const DUA_id &ID, const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& rollp, const DUA_dbl& rolln, const DUA_dbl& pitchp, const DUA_dbl& pitchn, const DUA_dbl& yawp, const DUA_dbl& yawn){
     if (tryAddFlagToSoul(CONTROLSS, ID))
-        tryAddComponent(ID, "control", components_spacecontrol, fw, bk, lf, rt, up, dn, roll, pitch, yaw);
+        tryAddComponent(ID, "control", components_spacecontrol, fw, bk, lf, rt, up, dn, rollp, rolln, pitchp, pitchn, yawp, yawn);
 }
 void ComponentBank::addPointLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue,
                                   const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ){

@@ -22,17 +22,20 @@ namespace DualityEngine {
             LEFT     =  3,
             UP       =  4,
             DOWN     =  5,
-            ROLL     =  6,
-            PITCH    =  7,
-            YAW      =  8,
-            LINBRAKE =  9,
-            ANGBRAKE = 10,
+            ROLLPOS  =  6,
+            ROLLNEG  =  7,
+            PITCHPOS =  8,
+            PITCHNEG =  9,
+            YAWPOS   =  10,
+            YAWNEG   =  11,
+            LINBRAKE =  12,
+            ANGBRAKE =  13
         };
     }
     
     struct SpaceControl : public ControlBase
     {
-        SpaceControl(const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& roll, const DUA_dbl& pitch, const DUA_dbl& yaw)
+        SpaceControl(const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& rollp, const DUA_dbl& rolln, const DUA_dbl& pitchp, const DUA_dbl& pitchn, const DUA_dbl& yawp, const DUA_dbl& yawn)
                     : ControlBase(ControlTypes::SPACE)
         {
             thrust[ControlSS::FORWARD]  = fw;
@@ -41,9 +44,12 @@ namespace DualityEngine {
             thrust[ControlSS::RIGHT]    = rt;
             thrust[ControlSS::UP]       = up;
             thrust[ControlSS::DOWN]     = dn;
-            thrust[ControlSS::ROLL]     = roll;
-            thrust[ControlSS::PITCH]    = pitch;
-            thrust[ControlSS::YAW]      = yaw;
+            thrust[ControlSS::ROLLPOS]  = rollp;
+            thrust[ControlSS::ROLLNEG]  = rolln;
+            thrust[ControlSS::PITCHPOS] = pitchp;
+            thrust[ControlSS::PITCHNEG] = pitchn;
+            thrust[ControlSS::YAWPOS]   = yawp;
+            thrust[ControlSS::YAWNEG]   = yawn;
             
         }
         inline void transform(const glm::mat4& transMat){
@@ -59,7 +65,7 @@ namespace DualityEngine {
 
         }
         inline void zeroInputs(){
-            for (uint i = 0; i < 11; ++i){
+            for (uint i = 0; i < 14; ++i){
                 throttle[i] = 0;
             }
         }
@@ -72,8 +78,8 @@ namespace DualityEngine {
         
         // forward, backward, right, left, up, down roll, pitch, yaw, linear break, angular break
         // all input values range from 0 - 1.
-        DUA_float throttle[11] = {0};
-        DUA_float thrust[9] = {1.0};  // lacks breaks, which use the 6 directional thrusts and 3 angular thrusts respectively.        
+        DUA_float throttle[14] = {0};
+        DUA_float thrust[12] = {1.0};  // lacks breaks, which use the 6 directional thrusts and 3 angular torques respectively.        
         
     };
 

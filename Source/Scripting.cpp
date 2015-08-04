@@ -324,7 +324,7 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
         }else if (args[1] == DUA_COMPCOLL(8,1)){
             bank->addAngularVeloc(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(9,1)){
-            bank->addSpaceControl(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]), prsDbl(args[6]), prsDbl(args[7]), prsDbl(args[8]), prsDbl(args[9]), prsDbl(args[10]), prsDbl(args[11]));
+            bank->addSpaceControl(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]), prsDbl(args[6]), prsDbl(args[7]), prsDbl(args[8]), prsDbl(args[9]), prsDbl(args[10]), prsDbl(args[11]), prsDbl(args[12]), prsDbl(args[13]), prsDbl(args[14]));
         }else if (args[1] == DUA_COMPCOLL(12,1)){
             bank->addAmbientLight(entID, prsClr(args[3]), prsClr(args[4]), prsClr(args[5]));
         }else if (args[1] == DUA_COMPCOLL(11,1)){
@@ -352,7 +352,7 @@ void System_Scripting::parseKeyword_all(const std::vector<std::string>& args){
         DUA_id entID = prsID(args[2]);
         if      (args[1] == DUA_COMPCOLL(9,1)){
             DUA_dbl pwr = prsDbl(args[4]);
-            bank->addSpaceControl(entID, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr);
+            bank->addSpaceControl(entID, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr);
         }else{
             bank->dlgt->outputStr("\"all\" keyword not supported for component: " + args[1] + "\n");
         }

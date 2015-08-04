@@ -128,7 +128,7 @@ namespace DualityEngine {
         void addAngularVeloc(const DUA_id &ID, const DUA_dbl &angX, const DUA_dbl &angY, const DUA_dbl &angZ);
         void addSpatialChild(const DUA_id &ID, const DUA_id &refID);
         void addSpatialParent(const DUA_id &ID, const DUA_id &refID);
-        void addSpaceControl(const DUA_id &ID, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&);
+        void addSpaceControl(const DUA_id &ID, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&, const DUA_dbl&);
         void addPointLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue,
                                   const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ);
         void addDirectionalLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue,

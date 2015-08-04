@@ -39,10 +39,10 @@ bool System_UserInput::init(std::stringstream& output){
         return false;
     }
     
-//    if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
-//        output << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
-//        return false;
-//    }
+    if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
+        output << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
+        return false;
+    }
     
     
 //    SDL_EventState(SDL_MOUSEMOTION, SDL_DISABLE);
@@ -209,22 +209,22 @@ void System_UserInput::handleControlKeys(const Uint8* keyStates){
                 bank->pSpaceControlCurrent->applyInput(ControlSS::DOWN, 1);
             }
             if (keyStates[SDL_SCANCODE_UP]) {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, 1);
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHPOS, 1);
             }
             if (keyStates[SDL_SCANCODE_DOWN]) {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, -1);
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHNEG, 1);
             }
             if (keyStates[SDL_SCANCODE_LEFT]) {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, 1);
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWPOS, 1);
             }
             if (keyStates[SDL_SCANCODE_RIGHT]) {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, -1);
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWNEG, 1);
             }
             if (keyStates[SDL_SCANCODE_Q]) {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, 1);
+                bank->pSpaceControlCurrent->applyInput(ControlSS::ROLLPOS, 1);
             }
             if (keyStates[SDL_SCANCODE_E]) {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::ROLL, -1);
+                bank->pSpaceControlCurrent->applyInput(ControlSS::ROLLNEG, 1);
             }
             if (keyStates[SDL_SCANCODE_SPACE]) {
                 bank->pSpaceControlCurrent->applyInput(ControlSS::LINBRAKE, 1);
@@ -247,8 +247,16 @@ void System_UserInput::checkMouseMotionManual(){
     
     switch(bank->currentControlType){
         case ControlTypes::SPACE:
-            bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, mouseY);
-            bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, mouseX);
+            if (mouseX > 0){
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWPOS, mouseX);
+            } else {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWNEG, mouseX);
+            }
+            if (mouseY > 0){
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHPOS, mouseY);
+            } else {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHNEG, mouseY);
+            }
             break;
         case ControlTypes::NONE:
             break;
@@ -260,8 +268,16 @@ void System_UserInput::checkMouseMotionManual(){
 void System_UserInput::applyMouseMotion(int x, int y){
     switch(bank->currentControlType){
         case ControlTypes::SPACE:
-            bank->pSpaceControlCurrent->applyInput(ControlSS::PITCH, x);
-            bank->pSpaceControlCurrent->applyInput(ControlSS::YAW, y);
+            if (x >= 0){
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWNEG, x);
+            } else {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWPOS, fabs(x));
+            }
+            if (y >= 0){
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHNEG, y);
+            } else {
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHPOS, fabs(y));
+            }
             break;
         case ControlTypes::NONE:
             break;

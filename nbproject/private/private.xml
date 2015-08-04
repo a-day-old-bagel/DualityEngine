@@ -7,15 +7,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/adayoldbagel/DualityEngine/Headers/BankDelegates.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/Render_Master.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Headers/Game.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Headers/Render_Master.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/Scripting.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/UserInput.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/PhysMove.cpp</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Headers/Settings.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/Game.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Scripting.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/UserInput.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/Control_SS.cpp</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/ComponentBank.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/Scripting.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Headers/SpaceControl.h</file>
+            <file>file:/home/adayoldbagel/Code/DualityEngine/Source/ComponentBank.cpp</file>
         </group>
     </open-files>
 </project-private>
