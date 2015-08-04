@@ -1,4 +1,4 @@
-# Duality, a WIP 3D Game Engine
+# Duality, yet another WIP 3D Game Engine
 ####An amature venture with the goals of learning and having fun
 
 > Duality Engine is written in **C++**
@@ -57,10 +57,10 @@ This is ideal for online games that draw game data froma server.
 It also makes saving and loading game states naturally very simple.
 
 ----------
-###Duality Engine also aims to investigate the worlds of **Physically Based Rendering** and procedurally generated destructible terrains and objects, possibly via **non-cubic voxels.** 
+###Duality Engine also aims to investigate the worlds of **Physically Based Rendering** and procedurally generated destructible terrains and objects, possibly via **non-cubic voxels.** And what would an amature WIP game engine be without taking a swing at **machine learning** and **neural net AI** for good measure?
 
 _____________________
 ###**Controls**
 ####use  ~  (tilde) to access the in-game console, into which you may type "help" to see a listing of available commands.
-####Given an entity possessing camera, position, orientation, and control components, movement controls are set up in the standard WASD-mouse configuration (or arrow keys to rotate view also work for now). 
+####Given an entity possessing camera, position, orientation, linear velocity, angular velocity, and control components (currently limited to spaceship-style controls), movement inputs are set up in the standard WASD-mouse configuration (or arrow keys to rotate view also work for now). TL;DR : run engine, hit ~, type "run scene0", fiddle.
 
