@@ -21,8 +21,30 @@
 
 namespace DualityEngine {
         
-    /* TYPES */
+    /* SWITCHES AND QUICK SETTINGS  --MAY MODIFY--  ========================= */
     
+//    #define DUA_DEBUG_CONSOLE_TO_COUT // If defined, all console output will be duplicated and sent to stdout
+    
+    #define DUA_DEBUG_MATRIX_PRINT  // If defined, Matrix class will include a debug 'print' method to output to stdout
+    
+    #define DUA_OLD_VIDEO_DRIVERS // If defined, openGL 3.0 will be used instead of 3.3
+
+//    #define DUA_FULLSCREEN    // If defined, engine will run in fullscreen mode
+    
+    /* DO NOT UNDEFINE THE FOLLOWING - ONLY MODIFY */
+    
+    #define DUA_DEFAULT_SCREENRES_X 800    // Defualt screen resolution X
+    #define DUA_DEFAULT_SCREENRES_Y 600     // Defualt screen resolution Y
+    #define DUA_DEFAULT_CONSOLEWIDTH 800        // Defualt in-game console width
+    #define DUA_DEFAULT_CONSOLEHEIGHT 600       // Defualt in-game console height
+    #define DUA_DEFAULT_SKYMAP "interstellar"   // Default skymap file name
+    #define DUA_DEFAULT_SKYFILETYPE "tga"       // Default skymap file format
+    #define DUA_VERSION "v0.01.02"  // This is checked against scripts when they are run.
+    
+    /* ====================================================================== */
+    
+    
+    /* TYPES */    
     typedef uint_fast32_t   DUA_id;          // used for entity UIDs
     typedef uint_fast16_t   DUA_assetKey;    // used for accessing assets from hash tables
     typedef uint_fast16_t   DUA_compFlag;    // flags used to store which components an entity has
@@ -36,24 +58,8 @@ namespace DualityEngine {
     typedef float           DUA_float;       // wrapper for the 64 bitfloating point values used by the game
     typedef double          DUA_dbl;         // wrapper for the 32 bit floating point values used by the game
     typedef double          DUA_matrixVal;   // type used for matrix/vector values
-    
-    /* FUNCTIONAL MACROS */
-    
-    // This is the function used to convert strings to ID numbers (currently unsigned ints)
-    #define DUA_STR_TO_ID(str, base) std::stoul(str, nullptr, base)
-    // This is the function used to convert strings to DUA_dbl (currently just c++ doubles)
-    #define DUA_STR_TO_DBL(str) std::stod(str)
-    // This is the function used to convert strings to DUA_float (currently just c++ floats)
-    #define DUA_STR_TO_FLOAT(str) std::stof(str)
-    // This is the function used to convert strings to DUA_colorByte
-    #define DUA_STR_TO_COLOR(str, base) std::stoul(str, nullptr, base)
-    // This is the function used to convert strings to ints
-    #define DUA_STR_TO_INT(str, base) std::stoi(str, nullptr, base)
-    // This is used when passing buffer offsets to the GPU via openGL
-    #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
 
-    /* ENUMERATORS */
-    
+    /* ENUMERATORS */    
     /*****************************************
      * The soul component will include a uint
      * whose bits are flags that store whether
@@ -78,7 +84,6 @@ namespace DualityEngine {
         SCORE           = 0x4000,        
         FREECAM         = 0x8000    // Bit 16
     };
-
     /*****************************************
      * The soul component will include a uint
      * whose bits are flags that store boolean
@@ -95,28 +100,33 @@ namespace DualityEngine {
         RECALCVIEWMAT   = 0x20
     };
     
-    /* INTERNALLY-USEFUL DEFINES *DO NOT MODIFY* */
-    
+    /* INTERNALLY-USEFUL DEFINES    **DO NOT MODIFY**   */    
     #define DUA_NULL_ID 0                           // used for entity error states
     #define DUA_START_ID 1                          // ID assignment begins with 1
     #define DUA_DEFAULT_STATE VALID_STATE | ACTIVE  // State entities start with
     #define DUA_INVALID_STATE 0x0                   // For returning errors
     #define DUA_DEFAULT_COMPONENTS VALID_COMPS      // Components entities start with (none)
-    #define DUA_INVALID_COMPONENTS  0x0             // For returning errors
+    #define DUA_INVALID_COMPONENTS  0x0             // For returning error state
     
-    /* SWITCHES */
     
-//    #define DUA_DEBUG_CONSOLE_TO_COUT
     
-    #define DUA_DEBUG_MATRIX_PRINT
+    /* FUNCTIONAL MACROS */    
+    // This is the function used to convert strings to ID numbers (currently unsigned ints)
+    #define DUA_STR_TO_ID(str, base) std::stoul(str, nullptr, base)
+    // This is the function used to convert strings to DUA_dbl (currently just c++ doubles)
+    #define DUA_STR_TO_DBL(str) std::stod(str)
+    // This is the function used to convert strings to DUA_float (currently just c++ floats)
+    #define DUA_STR_TO_FLOAT(str) std::stof(str)
+    // This is the function used to convert strings to DUA_colorByte
+    #define DUA_STR_TO_COLOR(str, base) std::stoul(str, nullptr, base)
+    // This is the function used to convert strings to ints
+    #define DUA_STR_TO_INT(str, base) std::stoi(str, nullptr, base)
+    // This is used when passing buffer offsets to the GPU via openGL
+    #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
     
-    #define DUA_OLD_VIDEO_DRIVERS // This needs to be commented out in order to use OpenGL 3.3 instead of just 3.0.
+    
 
-    #define DUA_FULLSCREEN
-
-    /* EXTERNALLY USEFUL DEFINES *AKA COMPILE-TIME SETTINGS* */   
-
-    #define DUA_VERSION "v0.01.02"
+    /* SETTING DEPENDENT META PROGRAMMING **DO NOT MODIFY**      */      
     
     #define DUA_GLVERSION_MAJOR 3
     #ifndef DUA_OLD_VIDEO_DRIVERS
@@ -125,23 +135,13 @@ namespace DualityEngine {
         #define DUA_GLVERSION_MINOR 0
     #endif
 
-    #define DUA_WHICH_MONITOR 2
+    #define DUA_WHICH_MONITOR 0
 
     #ifdef DUA_FULLSCREEN
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP
     #else
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL
     #endif
-
-    #define DUA_DEFAULT_SCREENRES_X 1366
-    #define DUA_DEFAULT_SCREENRES_Y 768
-    #define DUA_DEFAULT_FOV 45.0f
-    #define DUA_DEFAULT_ZPLANENEAR 0.1f
-    #define DUA_DEFAULT_ZPLANEFAR 100.f
-    #define DUA_DEFAULT_CONSOLEWIDTH 800
-    #define DUA_DEFAULT_CONSOLEHEIGHT 600
-    #define DUA_DEFAULT_SKYMAP "Sea"
-    #define DUA_DEFAULT_SKYFILETYPE "png"
 
     /* RUN-TIME MUTABLE SETTINGS *AKA GLOBAL VARIABLES* */
     

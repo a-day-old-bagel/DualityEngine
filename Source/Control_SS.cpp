@@ -21,12 +21,6 @@ bool System_Control_SS::init(std::stringstream& output)
     return true;
 }
 
-void System_Control_SS::zeroSum(){
-    for (uint i = 0; i < 3; ++i) {
-        reusableVectorSum[i] = 0;
-    }
-}
-
 void System_Control_SS::tick()
 {
     // if control focus has been assigned to an existing entity...
@@ -47,9 +41,9 @@ void System_Control_SS::tick()
             
             // if linear breaking input is non-zero
             if (bank->pSpaceControlCurrent->throttle[ControlSS::LINBRAKE]){ // apply braking vector to throttle values...
-                // store the entity's current velocity
+                // store the entity's current velocity                
                 reusableVectorVel = bank->getLinearVelocPtr(bank->activeControlID)->velLinear;
-                if (reusableVectorVel.x || reusableVectorVel.y || reusableVectorVel.z){
+                if(reusableVectorVel.x || reusableVectorVel.y || reusableVectorVel.z){
                     // calculate dot products between velocity vector and thrust vectors
                     for (uint i = 0; i < 3; ++i){
                         reusableDotProductsForBraking[i] = glm::dot(reusableVectorVel, bank->pSpaceControlCurrent->currentAxes[i]);
@@ -68,42 +62,64 @@ void System_Control_SS::tick()
                     }
                     // add the appropriate values to the control component's throttle array (allowing no value to pass 1)
                     for (uint i = 0; i < 3; ++i){
-                        bank->pSpaceControlCurrent->throttle[i * 2 + int(reusableDotProductsForBraking[i] > 0)] += fabs(reusableDotProductsForBraking[i]) * breakingVectorComponentMultiplier * bank->pSpaceControlCurrent->throttle[ControlSS::LINBRAKE];
+                        // only break in a direction if the user isn't trying to thrust that direction!
+                        if (! bank->pSpaceControlCurrent->throttle[i * 2 + int(reusableDotProductsForBraking[i] <= 0)]){
+                            // apply braking thrust to the appropriate directions
+                            thrustMostOppositeVelocity = i * 2 + int(reusableDotProductsForBraking[i] > 0);
+                            bank->pSpaceControlCurrent->throttle[thrustMostOppositeVelocity] += fabs(reusableDotProductsForBraking[i]) * breakingVectorComponentMultiplier
+                                    * (std::min(1.f / (bank->pSpaceControlCurrent->thrust[thrustMostOppositeVelocity] / reusableDotProductsForBraking[i]), 1.f)) //???
+                                    * bank->pSpaceControlCurrent->throttle[ControlSS::LINBRAKE];
+                        }
                     }
                 }
             }
+
+            // if angular breaking input is non-zero
+            if (bank->pSpaceControlCurrent->throttle[ControlSS::ANGBRAKE]) { // apply braking vector to throttle values...
+                // store the entity's current angular velocity
+                reusableVectorVel = bank->getAngularVelocPtr(bank->activeControlID)->velAngular;
+                if(reusableVectorVel.x || reusableVectorVel.y || reusableVectorVel.z){
+                    // find which angveloc component is largest in order to scale that torques's throttle to full (scaling others by same factor, resulting in less-than-full throttles)
+                    if (fabs(reusableVectorVel[0]) >= fabs(reusableVectorVel[1])){
+                        if (fabs(reusableVectorVel[0]) >= fabs(reusableVectorVel[2])){
+                            breakingVectorComponentMultiplier = fabs(1.f / reusableVectorVel[0]);
+                        }else{
+                            breakingVectorComponentMultiplier = fabs(1.f / reusableVectorVel[2]);
+                        }                    
+                    }else if (fabs(reusableVectorVel[1]) >= fabs(reusableVectorVel[2])){
+                        breakingVectorComponentMultiplier = fabs(1.f / reusableVectorVel[1]);
+                    }else{
+                        breakingVectorComponentMultiplier = fabs(1.f / reusableVectorVel[2]);
+                    }
+                    // add the appropriate values to the control component's throttle array (allowing no value to pass 1)
+                    for (uint i = 0; i < 3; ++i){
+                        // only break in a direction if the user isn't trying to thrust that direction!
+                        if (! bank->pSpaceControlCurrent->throttle[i * 2 + 6 + int(reusableVectorVel[i] <= 0)]){
+                            // apply braking thrust to the appropriate directions
+                            bank->pSpaceControlCurrent->throttle[i * 2 + 6 + int(reusableVectorVel[i] > 0)] += fabs(reusableVectorVel[i]) * breakingVectorComponentMultiplier
+                                    * bank->pSpaceControlCurrent->throttle[ControlSS::ANGBRAKE];
+                        }
+                    }
+                }
+            }         
             
-            
-            // zero the vector that will hold the total physics impulse for the control object
-            zeroSum();
-            
-            for (uint i = 0; i < 3; ++i){
-                reusableVectorSum += bank->pSpaceControlCurrent->currentAxes[i] * (std::min(bank->pSpaceControlCurrent->throttle[i * 2], 1.0f) * bank->pSpaceControlCurrent->thrust[i * 2]) -
-                                    bank->pSpaceControlCurrent->currentAxes[i] * (std::min(bank->pSpaceControlCurrent->throttle[i * 2 + 1], 1.0f) * bank->pSpaceControlCurrent->thrust[i * 2 + 1]);
-            }   
-            
-            // apply the total impusle vector to the entity's linear velocity component (possesion of a linear velocity component is a requirement for an entity to become the control focus)
-            bank->getLinearVelocPtr(bank->activeControlID)->applyImpulse(reusableVectorSum);
-            
-            
-            
-//            // zero the vector sum again to reuse it as angular velocity impulse
-//            zeroSum();
-//            for (uint i = 0; i < 3; ++i){
-//                /* SUM ANG VELOC IMPULSES */
-//            }
-//            /* APPLY ANGULAR BRAKING */
-//            /* APPLY SUM TO ANG VELOC */
-            
+            bank->getLinearVelocPtr(bank->activeControlID)->applyImpulse(
+                bank->pSpaceControlCurrent->currentAxes[0] * (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::FORWARD ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::FORWARD ])
+              - bank->pSpaceControlCurrent->currentAxes[0] * (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::BACKWARD], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::BACKWARD])
+              + bank->pSpaceControlCurrent->currentAxes[1] * (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::RIGHT   ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::RIGHT   ])
+              - bank->pSpaceControlCurrent->currentAxes[1] * (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::LEFT    ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::LEFT    ])
+              + bank->pSpaceControlCurrent->currentAxes[2] * (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::UP      ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::UP      ])
+              - bank->pSpaceControlCurrent->currentAxes[2] * (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::DOWN    ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::DOWN    ])
+            );
             
             bank->getAngularVelocPtr(bank->activeControlID)->applyImpulse(
-                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::PITCHPOS], 1.0f) * bank->pSpaceControlCurrent->thrust[ControlSS::PITCHPOS])
-              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::PITCHNEG], 1.0f) * bank->pSpaceControlCurrent->thrust[ControlSS::PITCHNEG]),
-                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::YAWPOS], 1.0f) * bank->pSpaceControlCurrent->thrust[ControlSS::YAWPOS])
-              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::YAWNEG], 1.0f) * bank->pSpaceControlCurrent->thrust[ControlSS::YAWNEG]),
-                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::ROLLPOS], 1.0f) * bank->pSpaceControlCurrent->thrust[ControlSS::ROLLPOS])
-              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::ROLLNEG], 1.0f) * bank->pSpaceControlCurrent->thrust[ControlSS::ROLLNEG]));
-            
+                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::PITCHPOS], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::PITCHPOS])
+              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::PITCHNEG], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::PITCHNEG]),
+                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::YAWPOS  ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::YAWPOS  ])
+              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::YAWNEG  ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::YAWNEG  ]),
+                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::ROLLPOS ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::ROLLPOS ])
+              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::ROLLNEG ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::ROLLNEG ])
+            );            
             
             // zero the control component's input information after use.
             bank->pSpaceControlCurrent->zeroInputs();

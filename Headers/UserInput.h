@@ -17,19 +17,16 @@ namespace DualityEngine {
     class System_UserInput : public System
     {
     private:
-        SDL_Event sdlEvent;
-        int mouseX = 0;
-        int mouseY = 0;        
+        SDL_Event sdlEvent;   
         bool consoleIsActive = false;
         bool MenuIsActive = false;
         const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*     new, load, save, exit, help      *\n****************************************\n";
-        void handleMenuCommand(const std::string& command);
+        void parseMenuCommand(const std::string& command);
         void handleKeyDown(SDL_Event& event);
         void handleControlKeys(const Uint8* keyStates);
-        void checkMouseMotionManual();
-        void applyMouseMotion(int x, int y);
-        void backQuotePressed();
-        void escPressed();
+        void handleMouseMotion(int x, int y);
+        void keyPressed_backQuote();
+        void keyPressed_esc();
     public:
         System_UserInput(ComponentBank* bank);
         ~System_UserInput();

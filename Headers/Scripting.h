@@ -100,7 +100,7 @@ namespace DualityEngine {
             {DUA_COMPCOLL(8, 1) , {"[X angular velocity] [Y angular velocity] [Z angular velocity]" , 3}},
             {DUA_COMPCOLL(6, 1) , {"none" , 0}},
             {DUA_COMPCOLL(1, 1) , {"[filepath to model]" , 1}},
-            {DUA_COMPCOLL(9, 1) , {"\"all\" [global thrust power] OR thrust powers [forward] [back] [left] [right] [up] [down] [roll positive] [roll negative] [pitchp positive] [pitchp negative] [yaw positive] [yaw negative]" , 12}},
+            {DUA_COMPCOLL(9, 1) , {"\"all\" [global thrust power] OR thrust powers [forward] [back] [left] [right] [up] [down] [pitchp positive] [pitchp negative] [yaw positive] [yaw negative] [roll positive] [roll negative]" , 12}},
             {DUA_COMPCOLL(12, 1), {"[R] [G] [B]" , 3}},
             {DUA_COMPCOLL(11, 1), {"[R] [G] [B] [X vector component] [Y vector component] [Z vector component]" , 6}},
             {DUA_COMPCOLL(10, 1), {"[R] [G] [B] [X-coordinate] [Y-coordinate] [Z-coordinate]" , 6}},

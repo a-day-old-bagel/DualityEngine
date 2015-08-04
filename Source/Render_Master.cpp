@@ -100,6 +100,7 @@ bool System_Render_Master::init(std::stringstream& engineOut)
     //Use Vsync
     if(SDL_GL_SetSwapInterval(1) < 0) {
         engineOut << "Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
+        // Do not return
     }
     
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);

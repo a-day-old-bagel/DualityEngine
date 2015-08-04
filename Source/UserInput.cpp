@@ -33,7 +33,7 @@ bool System_UserInput::init(std::stringstream& output){
     
     // Initialize SDL overall.
     // This needs to be done in this thread instead of in the graphics thread to prevent
-    // massive event handing slowdowns.
+    // massive event handing slowdowns. Will see if works in Windows.
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
         output << "SDL did not initialize! SDL Error: " << SDL_GetError() << std::endl;
         return false;
@@ -44,12 +44,6 @@ bool System_UserInput::init(std::stringstream& output){
         return false;
     }
     
-    
-//    SDL_EventState(SDL_MOUSEMOTION, SDL_DISABLE);
-//    if (SDL_EventState(SDL_MOUSEMOTION, SDL_QUERY)){
-//        output << "Failed to set SDL mouse motion events to disabled state: " << SDL_GetError() << std::endl;
-//        return false;
-//    }
     return true;
 }
 
@@ -63,7 +57,7 @@ void System_UserInput::tick(){
         switch(sdlEvent.type){
             case(SDL_MOUSEMOTION):
                 if (!consoleIsActive) {
-                    applyMouseMotion(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
+                    handleMouseMotion(sdlEvent.motion.xrel, sdlEvent.motion.yrel);
                 }
                 break;
             case(SDL_KEYDOWN):
@@ -89,12 +83,6 @@ void System_UserInput::tick(){
         }
     }
 
-//    if(!consoleIsActive){
-//        if (bank->activeControlID != DUA_NULL_ID){
-//            checkMouseMotionManual();
-//        }
-//    }
-
     if(!consoleIsActive){
         if (bank->activeControlID != DUA_NULL_ID){
             handleControlKeys(keyStates);
@@ -102,7 +90,7 @@ void System_UserInput::tick(){
     }
 }
 
-void System_UserInput::handleMenuCommand(const std::string& command){
+void System_UserInput::parseMenuCommand(const std::string& command){
     
     if(command.empty()) return;
     std::stringstream commandLine(command);
@@ -122,66 +110,82 @@ void System_UserInput::handleKeyDown(SDL_Event& event){
     if (consoleIsActive){
         switch(event.key.keysym.sym){
             case(SDLK_BACKQUOTE):
-                backQuotePressed();
-                break;
+                keyPressed_backQuote();
+                return;
             case(SDLK_ESCAPE):
-                escPressed();
-                break;
+                keyPressed_esc();
+                return;
             case(SDLK_BACKSPACE):
                 bank->dlgt->backspaceCommand();
-                break;
+                return;
             case(SDLK_DELETE):
                 bank->dlgt->deleteCommand();
-                break;
+                return;
             case(SDLK_RETURN):
             {
                 std::string command = bank->dlgt->consoleEnter();
                 if (MenuIsActive){
-                    handleMenuCommand(command);
+                    parseMenuCommand(command);
                 } else {
                     bank->dlgt->submitScriptCommand(command);
                 }
-                break;
+                return;
             }
             case(SDLK_UP):
                 bank->dlgt->upOneCommand();
-                break;
+                return;
             case(SDLK_DOWN):
                 bank->dlgt->downOneCommand();
-                break;
+                return;
             case(SDLK_LEFT):
                 bank->dlgt->leftCursor();
-                break;
+                return;
             case(SDLK_RIGHT):
                 bank->dlgt->rightCursor();
-                break;
+                return;
             case(SDLK_PAGEUP):
                 bank->dlgt->logTraverse(1);
-                break;
+                return;
             case(SDLK_PAGEDOWN):
                 bank->dlgt->logTraverse(-1);
-                break;
+                return;
             case(SDLK_c):
                 if (SDL_GetModState() & KMOD_CTRL){
                     SDL_SetClipboardText(bank->dlgt->getCurrentLogLine().c_str());
                 }
-                break;
+                return;
             case(SDLK_v):
                 if (SDL_GetModState() & KMOD_CTRL){
                     bank->dlgt->appendToCommand(SDL_GetClipboardText());
                 }
+                return;
+            default:
+                return;
+        }
+    }else{
+        switch(bank->currentControlType){
+            case ControlTypes::SPACE:
+                switch(event.key.keysym.sym){
+                    case(SDLK_l):
+                        bank->pSpaceControlCurrent->autoBrakeLinear = !bank->pSpaceControlCurrent->autoBrakeLinear;
+                        return;
+                    case(SDLK_k):
+                        bank->pSpaceControlCurrent->autoBrakeAngular = !bank->pSpaceControlCurrent->autoBrakeAngular;
+                        return;
+                }
+                break;
+            case ControlTypes::NONE:
                 break;
             default:
                 break;
         }
-    }else{
-        switch(event.key.keysym.sym){
+        switch(event.key.keysym.sym){            
             case(SDLK_BACKQUOTE):
-                backQuotePressed();
-                break;
+                keyPressed_backQuote();
+                return;
             case(SDLK_ESCAPE):
-                escPressed();
-                break;
+                keyPressed_esc();
+                return;
         }
     }
 }
@@ -229,7 +233,7 @@ void System_UserInput::handleControlKeys(const Uint8* keyStates){
             if (keyStates[SDL_SCANCODE_SPACE]) {
                 bank->pSpaceControlCurrent->applyInput(ControlSS::LINBRAKE, 1);
             }
-            if (keyStates[SDL_SCANCODE_LALT]) {
+            if (keyStates[SDL_SCANCODE_C]) {
                 bank->pSpaceControlCurrent->applyInput(ControlSS::ANGBRAKE, 1);
             }
             break;
@@ -240,32 +244,7 @@ void System_UserInput::handleControlKeys(const Uint8* keyStates){
     }       
 }
 
-void System_UserInput::checkMouseMotionManual(){    
-    
-    SDL_GetMouseState(&mouseX, &mouseY);
-    bank->dlgt->setMousePos(0, 0);
-    
-    switch(bank->currentControlType){
-        case ControlTypes::SPACE:
-            if (mouseX > 0){
-                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWPOS, mouseX);
-            } else {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWNEG, mouseX);
-            }
-            if (mouseY > 0){
-                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHPOS, mouseY);
-            } else {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHNEG, mouseY);
-            }
-            break;
-        case ControlTypes::NONE:
-            break;
-        default:
-            break;
-    }
-}
-
-void System_UserInput::applyMouseMotion(int x, int y){
+void System_UserInput::handleMouseMotion(int x, int y){
     switch(bank->currentControlType){
         case ControlTypes::SPACE:
             if (x >= 0){
@@ -286,20 +265,22 @@ void System_UserInput::applyMouseMotion(int x, int y){
     }
 }
 
-void System_UserInput::backQuotePressed(){
+void System_UserInput::keyPressed_backQuote(){
     if (!MenuIsActive) {
         consoleIsActive = !consoleIsActive;
         consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
+        SDL_SetRelativeMouseMode(consoleIsActive ? SDL_FALSE : SDL_TRUE);
         bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);
     }
 }
 
-void System_UserInput::escPressed(){
+void System_UserInput::keyPressed_esc(){
     MenuIsActive = !MenuIsActive;
     if (MenuIsActive) {
         if (!consoleIsActive) {
             consoleIsActive = true;
             SDL_StartTextInput();
+            SDL_SetRelativeMouseMode(SDL_FALSE);
         }
         bank->dlgt->clearCommand();
         bank->dlgt->output(menuText.c_str());
@@ -307,6 +288,7 @@ void System_UserInput::escPressed(){
     } else {
         consoleIsActive = false;
         SDL_StopTextInput();
+        SDL_SetRelativeMouseMode(SDL_TRUE);
         bank->dlgt->resume();
     }
     bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);

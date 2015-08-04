@@ -22,12 +22,12 @@ namespace DualityEngine {
             LEFT     =  3,
             UP       =  4,
             DOWN     =  5,
-            ROLLPOS  =  6,
-            ROLLNEG  =  7,
-            PITCHPOS =  8,
-            PITCHNEG =  9,
-            YAWPOS   =  10,
-            YAWNEG   =  11,
+            PITCHPOS =  6,
+            PITCHNEG =  7,
+            YAWPOS   =  8,
+            YAWNEG   =  9,
+            ROLLPOS  =  10,
+            ROLLNEG  =  11,
             LINBRAKE =  12,
             ANGBRAKE =  13
         };
@@ -35,7 +35,7 @@ namespace DualityEngine {
     
     struct SpaceControl : public ControlBase
     {
-        SpaceControl(const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& rollp, const DUA_dbl& rolln, const DUA_dbl& pitchp, const DUA_dbl& pitchn, const DUA_dbl& yawp, const DUA_dbl& yawn)
+        SpaceControl(const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& pitchp, const DUA_dbl& pitchn, const DUA_dbl& yawp, const DUA_dbl& yawn, const DUA_dbl& rollp, const DUA_dbl& rolln)
                     : ControlBase(ControlTypes::SPACE)
         {
             thrust[ControlSS::FORWARD]  = fw;
@@ -44,30 +44,29 @@ namespace DualityEngine {
             thrust[ControlSS::RIGHT]    = rt;
             thrust[ControlSS::UP]       = up;
             thrust[ControlSS::DOWN]     = dn;
-            thrust[ControlSS::ROLLPOS]  = rollp;
-            thrust[ControlSS::ROLLNEG]  = rolln;
             thrust[ControlSS::PITCHPOS] = pitchp;
             thrust[ControlSS::PITCHNEG] = pitchn;
             thrust[ControlSS::YAWPOS]   = yawp;
             thrust[ControlSS::YAWNEG]   = yawn;
+            thrust[ControlSS::ROLLPOS]  = rollp;
+            thrust[ControlSS::ROLLNEG]  = rolln;      
             
         }
         inline void transform(const glm::mat4& transMat){
             transform(glm::mat3(transMat));
         }
         inline void transform(const glm::mat3& transMat){
-//            currentAxes[0] = transMat * originalAxes[0];
-//            currentAxes[1] = transMat * originalAxes[1];
-//            currentAxes[2] = transMat * originalAxes[2];
             for (uint i = 0; i < 3; ++i){
                 currentAxes[i] = transMat * originalAxes[i];
             }
 
         }
         inline void zeroInputs(){
-            for (uint i = 0; i < 14; ++i){
+            for (uint i = 0; i < 12; ++i){
                 throttle[i] = 0;
             }
+            throttle[ControlSS::LINBRAKE] = autoBrakeLinear;
+            throttle[ControlSS::ANGBRAKE] = autoBrakeAngular;
         }
         inline void applyInput(const int whichInput, const DUA_float& value){
             throttle[whichInput] += value;
@@ -79,7 +78,9 @@ namespace DualityEngine {
         // forward, backward, right, left, up, down roll, pitch, yaw, linear break, angular break
         // all input values range from 0 - 1.
         DUA_float throttle[14] = {0};
-        DUA_float thrust[12] = {1.0};  // lacks breaks, which use the 6 directional thrusts and 3 angular torques respectively.        
+        DUA_float thrust[12] = {1.0};  // lacks breaks, which use the 6 directional thrusts and 6 angular torques respectively.
+        bool autoBrakeLinear = true;
+        bool autoBrakeAngular = true;
         
     };
 
