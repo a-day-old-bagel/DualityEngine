@@ -39,10 +39,12 @@ bool System_UserInput::init(std::stringstream& output){
         return false;
     }
     
+#ifndef DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE
     if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
         output << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
         return false;
     }
+#endif
     
     return true;
 }
@@ -248,14 +250,14 @@ void System_UserInput::handleMouseMotion(int x, int y){
     switch(bank->currentControlType){
         case ControlTypes::SPACE:
             if (x >= 0){
-                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWNEG, x);
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWNEG, x * 0.06f);
             } else {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWPOS, fabs(x));
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWPOS, fabs(x) * 0.06f);
             }
             if (y >= 0){
-                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHNEG, y);
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHNEG, y * 0.06f);
             } else {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHPOS, fabs(y));
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHPOS, fabs(y) * 0.06f);
             }
             break;
         case ControlTypes::NONE:
@@ -269,7 +271,9 @@ void System_UserInput::keyPressed_backQuote(){
     if (!MenuIsActive) {
         consoleIsActive = !consoleIsActive;
         consoleIsActive ? SDL_StartTextInput() : SDL_StopTextInput();
+#ifndef DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE
         SDL_SetRelativeMouseMode(consoleIsActive ? SDL_FALSE : SDL_TRUE);
+#endif
         bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);
     }
 }
@@ -280,7 +284,9 @@ void System_UserInput::keyPressed_esc(){
         if (!consoleIsActive) {
             consoleIsActive = true;
             SDL_StartTextInput();
+#ifndef DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE
             SDL_SetRelativeMouseMode(SDL_FALSE);
+#endif
         }
         bank->dlgt->clearCommand();
         bank->dlgt->output(menuText.c_str());
@@ -288,7 +294,9 @@ void System_UserInput::keyPressed_esc(){
     } else {
         consoleIsActive = false;
         SDL_StopTextInput();
+#ifndef DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE
         SDL_SetRelativeMouseMode(SDL_TRUE);
+#endif
         bank->dlgt->resume();
     }
     bank->dlgt->setConsoleState(consoleIsActive, MenuIsActive);

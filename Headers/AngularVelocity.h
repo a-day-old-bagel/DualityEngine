@@ -30,6 +30,11 @@ namespace DualityEngine {
         inline void applyImpulse(glm::vec3 impulse){
             applyImpulse(impulse.x, impulse.y, impulse.z);
         }
+        inline void zero(){
+            velAngular.x = 0;
+            velAngular.y = 0;
+            velAngular.z = 0;
+        }
         glm::vec3 velAngular;
     };
 

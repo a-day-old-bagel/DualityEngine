@@ -25,13 +25,20 @@ namespace DualityEngine {
     
 //    #define DUA_DEBUG_CONSOLE_TO_COUT // If defined, all console output will be duplicated and sent to stdout
     
-    #define DUA_DEBUG_MATRIX_PRINT  // If defined, Matrix class will include a debug 'print' method to output to stdout
+//    #define DUA_DEBUG_MATRIX_PRINT  // If defined, Matrix class will include a debug 'print' method to output to stdout
+
+//    #define DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE // prevents use of SDL's relative mouse mode which grabs mouse control.
     
     #define DUA_OLD_VIDEO_DRIVERS // If defined, openGL 3.0 will be used instead of 3.3
+
+    #define DUA_WHICH_MONITOR 2
 
 //    #define DUA_FULLSCREEN    // If defined, engine will run in fullscreen mode
     
     /* DO NOT UNDEFINE THE FOLLOWING - ONLY MODIFY */
+    
+    #define DUA_CONTROLSS_LINEAR_BRAKING_DEADZONE 1e-20
+    #define DUA_CONTROLSS_ANGULAR_BRAKING_DEADZONE 1e-20
     
     #define DUA_DEFAULT_SCREENRES_X 800    // Defualt screen resolution X
     #define DUA_DEFAULT_SCREENRES_Y 600     // Defualt screen resolution Y
@@ -134,8 +141,6 @@ namespace DualityEngine {
     #else
         #define DUA_GLVERSION_MINOR 0
     #endif
-
-    #define DUA_WHICH_MONITOR 0
 
     #ifdef DUA_FULLSCREEN
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN_DESKTOP

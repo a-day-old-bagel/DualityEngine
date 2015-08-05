@@ -14,12 +14,7 @@
 namespace DualityEngine {
 
     class System_Control_SS : public System
-    {
-        glm::vec3 reusableVectorVel;
-        float reusableDotProductsForBraking[3];
-        float breakingVectorComponentMultiplier = 0;
-        int opposingThrustDecider = 0;
-        int thrustMostOppositeVelocity = 0;
+    {  
     public:
         System_Control_SS(ComponentBank* bank);
         ~System_Control_SS();

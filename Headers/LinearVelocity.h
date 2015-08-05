@@ -29,6 +29,11 @@ namespace DualityEngine {
         inline void applyImpulse(const glm::vec4 &impulse){
             applyImpulse(impulse.x, impulse.y, impulse.z);
         }
+        inline void zero(){
+            velLinear.x = 0;
+            velLinear.y = 0;
+            velLinear.z = 0;
+        }
         glm::vec3 velLinear;
     };
 

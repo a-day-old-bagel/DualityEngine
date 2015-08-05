@@ -139,7 +139,7 @@ int DualityEngine::EngineThreadFunction(void* data)
                     } catch (const char* err) {
                         tempOut << "@@@    ERROR in " << system->getName() << ": " << err << std::endl;
                         (*quitGame)();
-                        escape = true;
+//                        escape = true;
                     } catch (...) {
                         tempOut << "@@@    EXCEPTION thrown in " << system->getName() << ": ";
                         std::exception_ptr eptr = std::current_exception();
