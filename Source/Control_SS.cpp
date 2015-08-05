@@ -47,7 +47,11 @@ void System_Control_SS::tick()
                     // calculate dot products between velocity vector and thrust vectors
                     for (uint i = 0; i < 3; ++i){
                         reusableDotProductsForBraking[i] = glm::dot(reusableVectorVel, bank->pSpaceControlCurrent->currentAxes[i]);
-                    }                
+//                        if (reusableDotProductsForBraking[i] == 0){
+//                            reusableDotProductsForBraking[i] = 0.00000000000000001;
+//                            std::cout << "CRISIS AVERTED\n";
+//                        }
+                    }
                     // find which dot product largest in magnitude in order to scale that thruster's throttle to full (scaling others by same factor, resulting in less-than-full throttles)
                     if (fabs(reusableDotProductsForBraking[0]) >= fabs(reusableDotProductsForBraking[1])){
                         if (fabs(reusableDotProductsForBraking[0]) >= fabs(reusableDotProductsForBraking[2])){
@@ -60,14 +64,28 @@ void System_Control_SS::tick()
                     }else{
                         breakingVectorComponentMultiplier = fabs(1.f / reusableDotProductsForBraking[2]);
                     }
+                    
+                    
+                    if (std::isnan(breakingVectorComponentMultiplier))
+                    {
+                        breakingVectorComponentMultiplier = 0;
+                        reusableDotProductsForBraking[0] = 0;
+                        reusableDotProductsForBraking[1] = 0;
+                        reusableDotProductsForBraking[2] = 0;
+                        std::cout << "NAN NAN NAN NAN LINEAR\n";
+                        return;
+                    }
+                    
+                    
                     // add the appropriate values to the control component's throttle array (allowing no value to pass 1)
                     for (uint i = 0; i < 3; ++i){
                         // only break in a direction if the user isn't trying to thrust that direction!
                         if (! bank->pSpaceControlCurrent->throttle[i * 2 + int(reusableDotProductsForBraking[i] <= 0)]){
                             // apply braking thrust to the appropriate directions
-                            thrustMostOppositeVelocity = i * 2 + int(reusableDotProductsForBraking[i] > 0);
+                            opposingThrustDecider = int(reusableDotProductsForBraking[i] > 0);
+                            thrustMostOppositeVelocity = i * 2 + opposingThrustDecider;
                             bank->pSpaceControlCurrent->throttle[thrustMostOppositeVelocity] += fabs(reusableDotProductsForBraking[i]) * breakingVectorComponentMultiplier
-                                    * (std::min(1.f / (bank->pSpaceControlCurrent->thrust[thrustMostOppositeVelocity] / reusableDotProductsForBraking[i]), 1.f)) //???
+                                    * (std::min( (reusableDotProductsForBraking[i] * (-1 + 2 * opposingThrustDecider) ) / bank->pSpaceControlCurrent->thrust[thrustMostOppositeVelocity], 1.f)) //???
                                     * bank->pSpaceControlCurrent->throttle[ControlSS::LINBRAKE];
                         }
                     }
@@ -95,9 +113,20 @@ void System_Control_SS::tick()
                     for (uint i = 0; i < 3; ++i){
                         // only break in a direction if the user isn't trying to thrust that direction!
                         if (! bank->pSpaceControlCurrent->throttle[i * 2 + 6 + int(reusableVectorVel[i] <= 0)]){
-                            // apply braking thrust to the appropriate directions
-                            bank->pSpaceControlCurrent->throttle[i * 2 + 6 + int(reusableVectorVel[i] > 0)] += fabs(reusableVectorVel[i]) * breakingVectorComponentMultiplier
+                            
+                            
+                            
+                            opposingThrustDecider = int(reusableVectorVel[i] > 0);
+                            thrustMostOppositeVelocity = i * 2 + 6 + opposingThrustDecider;
+                            bank->pSpaceControlCurrent->throttle[thrustMostOppositeVelocity] += fabs(reusableVectorVel[i]) * breakingVectorComponentMultiplier
+                                    * (std::min( (reusableVectorVel[i] * (-1 + 2 * opposingThrustDecider) ) / bank->pSpaceControlCurrent->thrust[thrustMostOppositeVelocity], 1.f)) //???
                                     * bank->pSpaceControlCurrent->throttle[ControlSS::ANGBRAKE];
+                            
+                            
+                            
+//                            // apply braking thrust to the appropriate directions
+//                            bank->pSpaceControlCurrent->throttle[i * 2 + 6 + int(reusableVectorVel[i] > 0)] += fabs(reusableVectorVel[i]) * breakingVectorComponentMultiplier
+//                                    * bank->pSpaceControlCurrent->throttle[ControlSS::ANGBRAKE];
                         }
                     }
                 }
