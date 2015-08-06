@@ -7,7 +7,6 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/Engine.cpp</file>
             <file>file:/home/adayoldbagel/DualityEngine/Headers/Control_SS.h</file>
             <file>file:/home/adayoldbagel/DualityEngine/Assets/Scripts/scene0.dua</file>
             <file>file:/home/adayoldbagel/DualityEngine/Headers/LinearVelocity.h</file>
@@ -15,7 +14,6 @@
             <file>file:/home/adayoldbagel/DualityEngine/Headers/Settings.h</file>
             <file>file:/home/adayoldbagel/DualityEngine/Source/Control_SS.cpp</file>
             <file>file:/home/adayoldbagel/DualityEngine/Headers/AngularVelocity.h</file>
-            <file>file:/home/adayoldbagel/DualityEngine/Source/main.cpp</file>
         </group>
     </open-files>
 </project-private>
