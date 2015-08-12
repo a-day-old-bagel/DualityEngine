@@ -30,7 +30,6 @@
 
 #include "Soul.h"
 #include "Model.h"
-#include "ControlBase.h"
 #include "SpaceControl.h"
 #include "Position.h"
 #include "PositionChild.h"

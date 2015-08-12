@@ -7,7 +7,7 @@
  ******************************************************************************/
 
 #include "../Headers/UserInput.h"
-#include "ControlBase.h"
+#include "ControlTypes.h"
 
 using namespace DualityEngine;
 

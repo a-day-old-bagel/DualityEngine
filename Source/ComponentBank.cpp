@@ -3,8 +3,6 @@
  ****************************************************************/
 
 #include "../Headers/ComponentBank.h"
-#include "../Headers/HashMap.h"
-#include "ControlBase.h"
 
 using namespace DualityEngine;
 
@@ -643,13 +641,13 @@ void ComponentBank::defocusCam(){
 }
 
 bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type controlType){
-    DUA_compFlag requiredControlComponent;
+    DUA_compFlag requiredInterfaceComponent;
     DUA_compFlag requiredOtherComponents;
     Delegate<void()> defocusControlCandidate;
     Delegate<void(const DUA_id&)> focusControl;
     switch(controlType){
         case ControlTypes::SPACE:
-            requiredControlComponent = CONTROLSS;
+            requiredInterfaceComponent = CONTROLSS;
             requiredOtherComponents = ORIENTATION | LINVELOC | ANGVELOC;
             focusControl = DELEGATE(&ComponentBank::focusSpaceControl, this);
             defocusControlCandidate = DELEGATE(&ComponentBank::defocusSpaceControl, this);
@@ -657,7 +655,7 @@ bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type control
         case ControlTypes::NONE:
             activeControlID = DUA_NULL_ID;
             defocusSpaceControl();
-            //defualt other controls()...
+            //default other controls()...
             currentControlType = ControlTypes::NONE;
             dlgt->output("Control focus discarded.");
             return true;
@@ -667,11 +665,11 @@ bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type control
     }
     
     try{
-        if (getComponents(ID) & requiredControlComponent){
+        if (getComponents(ID) & requiredInterfaceComponent){
             if((getComponents(ID) & requiredOtherComponents) == requiredOtherComponents){
                 activeControlID = ID;
                 currentControlType = controlType;
-                requiredControlComponents = requiredControlComponent | requiredOtherComponents;
+                requiredControlComponents = requiredInterfaceComponent | requiredOtherComponents;
                 defocusControl = defocusControlCandidate;                
                 focusControl(ID);
                 

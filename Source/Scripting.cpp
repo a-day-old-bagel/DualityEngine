@@ -9,7 +9,7 @@
 #include <SDL.h>
 #include <fstream>
 #include "Scripting.h"
-#include "ControlBase.h"
+#include "ControlTypes.h"
 
 using namespace DualityEngine;
 

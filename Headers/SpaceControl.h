@@ -10,7 +10,7 @@
 
 #include <cstring>
 #include <glm/glm.hpp>
-#include "ControlBase.h"
+#include "ControlTypes.h"
 
 namespace DualityEngine {
 
@@ -33,23 +33,10 @@ namespace DualityEngine {
         };
     }
     
-    struct SpaceControl : public ControlBase
+    struct SpaceControl
     {
         SpaceControl(const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& pitchp, const DUA_dbl& pitchn, const DUA_dbl& yawp, const DUA_dbl& yawn, const DUA_dbl& rollp, const DUA_dbl& rolln)
-                    : ControlBase(ControlTypes::SPACE)
-        {
-            thrust[ControlSS::FORWARD]  = fw;
-            thrust[ControlSS::BACKWARD] = bk;
-            thrust[ControlSS::LEFT]     = lf;
-            thrust[ControlSS::RIGHT]    = rt;
-            thrust[ControlSS::UP]       = up;
-            thrust[ControlSS::DOWN]     = dn;
-            thrust[ControlSS::PITCHPOS] = pitchp;
-            thrust[ControlSS::PITCHNEG] = pitchn;
-            thrust[ControlSS::YAWPOS]   = yawp;
-            thrust[ControlSS::YAWNEG]   = yawn;
-            thrust[ControlSS::ROLLPOS]  = rollp;
-            thrust[ControlSS::ROLLNEG]  = rolln;      
+                    : thrust{fw,bk,rt,lf,up,dn,pitchp,pitchn,yawp,yawn,rollp,rolln} {    
             
         }
         inline void transform(const glm::mat4& transMat){
@@ -78,7 +65,7 @@ namespace DualityEngine {
         // forward, backward, right, left, up, down roll, pitch, yaw, linear break, angular break
         // all input values range from 0 - 1.
         DUA_float throttle[14] = {0};
-        DUA_float thrust[12] = {1.0};  // lacks breaks, which use the 6 directional thrusts and 6 angular torques respectively.
+        DUA_float thrust[12];  // lacks breaks, which use the 6 directional thrusts and 6 angular torques respectively.
         bool autoBrakeLinear = true;
         bool autoBrakeAngular = true;
         
