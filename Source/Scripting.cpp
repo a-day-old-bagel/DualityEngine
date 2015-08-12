@@ -8,8 +8,9 @@
 
 #include <SDL.h>
 #include <fstream>
-#include "Scripting.h"
-#include "ControlTypes.h"
+#include "../Headers/Scripting.h"
+
+#include "../Headers/ControlTypes.h"
 
 using namespace DualityEngine;
 

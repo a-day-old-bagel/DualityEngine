@@ -9,8 +9,6 @@
 
 > - Uses **Open Asset Importer** (assimp) for 3D model loading
 
-> - For the moment, Duality is being developed using **NetBeans**
-
 ----------
 ###Duality is based on an **Entity-Component-System** structure, designed for easy modability and expansion:
 
@@ -58,9 +56,14 @@ It also makes saving and loading game states naturally very simple.
 
 ----------
 ###Duality Engine also aims to investigate the worlds of **Physically Based Rendering** and procedurally generated destructible terrains and objects, possibly via **non-cubic voxels.** And what would an amature WIP game engine be without taking a swing at **machine learning** and **neural net AI** for good measure?
+----------
+###If I think of any other schmoozy buzzwords to stick in, this section may be expanded...
+####[shmooze] LOCK FREE
+####[shmooze] um... ORGANIC?
 
 _____________________
 ###**Controls**
 ####use  ~  (tilde) to access the in-game console, into which you may type "help" to see a listing of available commands.
-####Given an entity possessing camera, position, orientation, linear velocity, angular velocity, and control components (currently limited to spaceship-style controls), movement inputs are set up in the standard WASD-mouse configuration (or arrow keys to rotate view also work for now). TL;DR : run engine, hit ~, type "run scene0", fiddle.
+####Given an entity possessing camera, position, orientation, linear velocity, angular velocity, and control components (currently limited to spaceship-style controls), movement inputs are set up in the standard WASD-mouse configuration (or arrow keys to rotate view also work for now).
+####TL;DR : once running ("no cam" should be visible in black window), hit ~, type "run scene0", fiddle.
 
