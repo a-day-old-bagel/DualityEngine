@@ -3,8 +3,6 @@
  ****************************************************************/
 
 #include "../Headers/ComponentBank.h"
-#include "../Headers/HashMap.h"
-#include "ControlBase.h"
 
 using namespace DualityEngine;
 
@@ -234,7 +232,10 @@ void ComponentBank::addAngularVeloc(const DUA_id& ID, const DUA_dbl& angX, const
     if (tryAddFlagToSoul(ANGVELOC, ID))
         tryAddComponent(ID, "angular velocity", components_angularVeloc, angX, angY, angZ);
 }
-void ComponentBank::addSpaceControl(const DUA_id &ID, const DUA_dbl& fw, const DUA_dbl& bk, const DUA_dbl& lf, const DUA_dbl& rt, const DUA_dbl& up, const DUA_dbl& dn, const DUA_dbl& pitchp, const DUA_dbl& pitchn, const DUA_dbl& yawp, const DUA_dbl& yawn, const DUA_dbl& rollp, const DUA_dbl& rolln){
+void ComponentBank::addSpaceControl(const DUA_id &ID, const DUA_float& fw, const DUA_float& bk,
+                                    const DUA_float& lf, const DUA_float& rt, const DUA_float& up,
+                                    const DUA_float& dn, const DUA_float& pitchp, const DUA_float& pitchn,
+                                    const DUA_float& yawp, const DUA_float& yawn, const DUA_float& rollp, const DUA_float& rolln){
     if (tryAddFlagToSoul(CONTROLSS, ID))
         tryAddComponent(ID, "control", components_spacecontrol, fw, bk, lf, rt, up, dn, pitchp, pitchn, yawp, yawn, rollp, rolln);
 }
@@ -643,13 +644,13 @@ void ComponentBank::defocusCam(){
 }
 
 bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type controlType){
-    DUA_compFlag requiredControlComponent;
+    DUA_compFlag requiredInterfaceComponent;
     DUA_compFlag requiredOtherComponents;
     Delegate<void()> defocusControlCandidate;
     Delegate<void(const DUA_id&)> focusControl;
     switch(controlType){
         case ControlTypes::SPACE:
-            requiredControlComponent = CONTROLSS;
+            requiredInterfaceComponent = CONTROLSS;
             requiredOtherComponents = ORIENTATION | LINVELOC | ANGVELOC;
             focusControl = DELEGATE(&ComponentBank::focusSpaceControl, this);
             defocusControlCandidate = DELEGATE(&ComponentBank::defocusSpaceControl, this);
@@ -657,7 +658,7 @@ bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type control
         case ControlTypes::NONE:
             activeControlID = DUA_NULL_ID;
             defocusSpaceControl();
-            //defualt other controls()...
+            //default other controls()...
             currentControlType = ControlTypes::NONE;
             dlgt->output("Control focus discarded.");
             return true;
@@ -667,11 +668,11 @@ bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type control
     }
     
     try{
-        if (getComponents(ID) & requiredControlComponent){
+        if (getComponents(ID) & requiredInterfaceComponent){
             if((getComponents(ID) & requiredOtherComponents) == requiredOtherComponents){
                 activeControlID = ID;
                 currentControlType = controlType;
-                requiredControlComponents = requiredControlComponent | requiredOtherComponents;
+                requiredControlComponents = requiredInterfaceComponent | requiredOtherComponents;
                 defocusControl = defocusControlCandidate;                
                 focusControl(ID);
                 

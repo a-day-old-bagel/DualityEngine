@@ -9,7 +9,7 @@
 #include <SDL.h>
 #include <fstream>
 #include "Scripting.h"
-#include "ControlBase.h"
+#include "ControlTypes.h"
 
 using namespace DualityEngine;
 
@@ -324,7 +324,7 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
         }else if (args[1] == DUA_COMPCOLL(8,1)){
             bank->addAngularVeloc(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]));
         }else if (args[1] == DUA_COMPCOLL(9,1)){
-            bank->addSpaceControl(entID, prsDbl(args[3]), prsDbl(args[4]), prsDbl(args[5]), prsDbl(args[6]), prsDbl(args[7]), prsDbl(args[8]), prsDbl(args[9]), prsDbl(args[10]), prsDbl(args[11]), prsDbl(args[12]), prsDbl(args[13]), prsDbl(args[14]));
+            bank->addSpaceControl(entID, prsFlt(args[3]), prsFlt(args[4]), prsFlt(args[5]), prsFlt(args[6]), prsFlt(args[7]), prsFlt(args[8]), prsFlt(args[9]), prsFlt(args[10]), prsFlt(args[11]), prsFlt(args[12]), prsFlt(args[13]), prsFlt(args[14]));
         }else if (args[1] == DUA_COMPCOLL(12,1)){
             bank->addAmbientLight(entID, prsClr(args[3]), prsClr(args[4]), prsClr(args[5]));
         }else if (args[1] == DUA_COMPCOLL(11,1)){

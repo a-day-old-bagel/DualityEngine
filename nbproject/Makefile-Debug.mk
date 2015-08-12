@@ -69,8 +69,8 @@ OBJECTFILES= \
 CFLAGS=
 
 # CC Compiler Flags
-CCFLAGS=-O3 -std=c++11 `pkg-config --cflags glew assimp freetype2` 
-CXXFLAGS=-O3 -std=c++11 `pkg-config --cflags glew assimp freetype2` 
+CCFLAGS=-O3 -std=c++11 `pkg-config --cflags sdl2 glew assimp freetype2` 
+CXXFLAGS=-O3 -std=c++11 `pkg-config --cflags sdl2 glew assimp freetype2` 
 
 # Fortran Compiler Flags
 FFLAGS=
@@ -92,142 +92,142 @@ ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/dualityengine: ${OBJECTFILES}
 ${OBJECTDIR}/Source/Box.o: Source/Box.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Box.o Source/Box.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Box.o Source/Box.cpp
 
 ${OBJECTDIR}/Source/ComponentBank.o: Source/ComponentBank.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/ComponentBank.o Source/ComponentBank.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/ComponentBank.o Source/ComponentBank.cpp
 
 ${OBJECTDIR}/Source/Console.o: Source/Console.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Console.o Source/Console.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Console.o Source/Console.cpp
 
 ${OBJECTDIR}/Source/Control_SS.o: Source/Control_SS.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Control_SS.o Source/Control_SS.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Control_SS.o Source/Control_SS.cpp
 
 ${OBJECTDIR}/Source/Engine.o: Source/Engine.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Engine.o Source/Engine.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Engine.o Source/Engine.cpp
 
 ${OBJECTDIR}/Source/FileIO.o: Source/FileIO.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/FileIO.o Source/FileIO.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/FileIO.o Source/FileIO.cpp
 
 ${OBJECTDIR}/Source/Functions.o: Source/Functions.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Functions.o Source/Functions.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Functions.o Source/Functions.cpp
 
 ${OBJECTDIR}/Source/Game.o: Source/Game.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Game.o Source/Game.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Game.o Source/Game.cpp
 
 ${OBJECTDIR}/Source/HashMap.o: Source/HashMap.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/HashMap.o Source/HashMap.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/HashMap.o Source/HashMap.cpp
 
 ${OBJECTDIR}/Source/PhysCollide.o: Source/PhysCollide.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/PhysCollide.o Source/PhysCollide.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/PhysCollide.o Source/PhysCollide.cpp
 
 ${OBJECTDIR}/Source/PhysMove.o: Source/PhysMove.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/PhysMove.o Source/PhysMove.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/PhysMove.o Source/PhysMove.cpp
 
 ${OBJECTDIR}/Source/Render_Background.o: Source/Render_Background.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Background.o Source/Render_Background.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Background.o Source/Render_Background.cpp
 
 ${OBJECTDIR}/Source/Render_BiTcubes.o: Source/Render_BiTcubes.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_BiTcubes.o Source/Render_BiTcubes.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_BiTcubes.o Source/Render_BiTcubes.cpp
 
 ${OBJECTDIR}/Source/Render_Console.o: Source/Render_Console.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Console.o Source/Render_Console.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Console.o Source/Render_Console.cpp
 
 ${OBJECTDIR}/Source/Render_Master.o: Source/Render_Master.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Master.o Source/Render_Master.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Master.o Source/Render_Master.cpp
 
 ${OBJECTDIR}/Source/Render_Models.o: Source/Render_Models.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Models.o Source/Render_Models.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Render_Models.o Source/Render_Models.cpp
 
 ${OBJECTDIR}/Source/Scripting.o: Source/Scripting.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Scripting.o Source/Scripting.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Scripting.o Source/Scripting.cpp
 
 ${OBJECTDIR}/Source/Settings.o: Source/Settings.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Settings.o Source/Settings.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/Settings.o Source/Settings.cpp
 
 ${OBJECTDIR}/Source/ShaderRepository.o: Source/ShaderRepository.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/ShaderRepository.o Source/ShaderRepository.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/ShaderRepository.o Source/ShaderRepository.cpp
 
 ${OBJECTDIR}/Source/System.o: Source/System.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/System.o Source/System.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/System.o Source/System.cpp
 
 ${OBJECTDIR}/Source/UserInput.o: Source/UserInput.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/UserInput.o Source/UserInput.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/UserInput.o Source/UserInput.cpp
 
 ${OBJECTDIR}/Source/lighting_technique.o: Source/lighting_technique.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/lighting_technique.o Source/lighting_technique.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/lighting_technique.o Source/lighting_technique.cpp
 
 ${OBJECTDIR}/Source/loadCubeMap.o: Source/loadCubeMap.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/loadCubeMap.o Source/loadCubeMap.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/loadCubeMap.o Source/loadCubeMap.cpp
 
 ${OBJECTDIR}/Source/loadShaders.o: Source/loadShaders.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/loadShaders.o Source/loadShaders.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/loadShaders.o Source/loadShaders.cpp
 
 ${OBJECTDIR}/Source/main.o: Source/main.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/main.o Source/main.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/main.o Source/main.cpp
 
 ${OBJECTDIR}/Source/mesh.o: Source/mesh.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/mesh.o Source/mesh.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/mesh.o Source/mesh.cpp
 
 ${OBJECTDIR}/Source/technique.o: Source/technique.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/technique.o Source/technique.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/technique.o Source/technique.cpp
 
 ${OBJECTDIR}/Source/texture.o: Source/texture.cpp 
 	${MKDIR} -p ${OBJECTDIR}/Source
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -I/usr/include/SDL2 -I/usr/local/include/SDL2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/texture.o Source/texture.cpp
+	$(COMPILE.cc) -g -IHeaders -ISource -IAssets/Shaders -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/Source/texture.o Source/texture.cpp
 
 # Subprojects
 .build-subprojects:

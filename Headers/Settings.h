@@ -31,17 +31,17 @@ namespace DualityEngine {
     
     #define DUA_OLD_VIDEO_DRIVERS // If defined, openGL 3.0 will be used instead of 3.3
 
-    #define DUA_WHICH_MONITOR 2
+    #define DUA_WHICH_MONITOR 0
 
 //    #define DUA_FULLSCREEN    // If defined, engine will run in fullscreen mode
     
     /* DO NOT UNDEFINE THE FOLLOWING - ONLY MODIFY */
     
-    #define DUA_CONTROLSS_LINEAR_BRAKING_DEADZONE 1e-20
-    #define DUA_CONTROLSS_ANGULAR_BRAKING_DEADZONE 1e-20
+    #define DUA_CONTROLSS_LINEAR_BRAKING_DEADZONE 1e-20 // if spaceship velocity less than this, linear braking will just set vel = 0.
+    #define DUA_CONTROLSS_ANGULAR_BRAKING_DEADZONE 1e-20 // same as above but for angular velocity/braking.
     
-    #define DUA_DEFAULT_SCREENRES_X 800    // Defualt screen resolution X
-    #define DUA_DEFAULT_SCREENRES_Y 600     // Defualt screen resolution Y
+    #define DUA_DEFAULT_SCREENRES_X 1366    // Defualt screen resolution X
+    #define DUA_DEFAULT_SCREENRES_Y 768     // Defualt screen resolution Y
     #define DUA_DEFAULT_CONSOLEWIDTH 800        // Defualt in-game console width
     #define DUA_DEFAULT_CONSOLEHEIGHT 600       // Defualt in-game console height
     #define DUA_DEFAULT_SKYMAP "interstellar"   // Default skymap file name

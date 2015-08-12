@@ -89,7 +89,7 @@
         <itemPath>Headers/CameraFree.h</itemPath>
         <itemPath>Headers/Collision.h</itemPath>
         <itemPath>Headers/Component.h</itemPath>
-        <itemPath>Headers/ControlBase.h</itemPath>
+        <itemPath>Headers/ControlTypes.h</itemPath>
         <itemPath>Headers/DirectionalLight.h</itemPath>
         <itemPath>Headers/LinearVelocity.h</itemPath>
         <itemPath>Headers/Model.h</itemPath>
@@ -214,10 +214,8 @@
             <pElem>Headers</pElem>
             <pElem>Source</pElem>
             <pElem>Assets/Shaders</pElem>
-            <pElem>/usr/include/SDL2</pElem>
-            <pElem>/usr/local/include/SDL2</pElem>
           </incDir>
-          <commandLine>-O3 -std=c++11 `pkg-config --cflags glew assimp freetype2`</commandLine>
+          <commandLine>-O3 -std=c++11 `pkg-config --cflags sdl2 glew assimp freetype2`</commandLine>
         </ccTool>
         <linkerTool>
           <commandLine>`pkg-config --libs sdl2 gl glew assimp freetype2 fontconfig `</commandLine>
@@ -338,7 +336,7 @@
       </item>
       <item path="Headers/Console.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Headers/ControlBase.h" ex="false" tool="3" flavor2="0">
+      <item path="Headers/ControlTypes.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Control_SS.h" ex="false" tool="3" flavor2="0">
       </item>
@@ -618,7 +616,7 @@
       </item>
       <item path="Headers/Console.h" ex="false" tool="3" flavor2="0">
       </item>
-      <item path="Headers/ControlBase.h" ex="false" tool="3" flavor2="0">
+      <item path="Headers/ControlTypes.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="Headers/Control_SS.h" ex="false" tool="3" flavor2="0">
       </item>
