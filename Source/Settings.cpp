@@ -5,7 +5,7 @@ namespace DualityEngine {
     namespace Settings{
         
         namespace Systems{        
-            int systemsPauseTimeout = 5000; // ms
+            uint systemsPauseTimeout = 5000; // ms
         }
         
         namespace Display{

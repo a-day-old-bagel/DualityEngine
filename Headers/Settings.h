@@ -153,7 +153,7 @@ namespace DualityEngine {
     namespace Settings{
         
         namespace Systems{
-            extern int systemsPauseTimeout;
+            extern uint systemsPauseTimeout;
         }
         
         namespace Display{

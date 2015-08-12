@@ -20,18 +20,11 @@ System::~System(){
 }
 
 void System::clean(){
-//    for (auto idList : registeredIDs){
-//        std::cout << "size previous = " << idList.size() << ".  ";
-////        idList.clear();
-//        idList = std::vector<DUA_id>();
-//        std::cout << name << " register cleared. size = " << idList.size() << std::endl;
-//    }
     int numRegisters = registeredIDs.size();
     registeredIDs = std::vector<std::vector<DUA_id>>();
     for (int i = 0; i < numRegisters; i++){
         registeredIDs.push_back(std::vector<DUA_id>());
     }
-//    std::cout << name << " cleaned. " << numRegisters << " new registers created.\n";
 }
 
 std::string System::getName(){
@@ -40,20 +33,19 @@ std::string System::getName(){
 
 void System::discoverID(const DUA_id& ID){
     // for each instance of registeredIDs and corresponding instance of requiredComponents...
-    for (int i = 0; i < registeredIDs.size(); ++i){
+    for (uint i = 0; i < registeredIDs.size(); ++i){
         // If the entity (the ID) isn't already in the list of IDs
         if (std::find(registeredIDs[i].begin(), registeredIDs[i].end(), ID) == registeredIDs[i].end()){
             // If the entity (the ID) has all the required components
             if ((bank->getComponents(ID) & requiredComponents[i]) == requiredComponents[i]){
                 registeredIDs[i].push_back(ID);    // add the entity (ID) to the list
-//                std::cout << name << " discovered ID: " << ID << std::endl;
             }
         }
     }
 }
 
 void System::scrutinizeID(const DUA_id& ID){
-    for (int i = 0; i < registeredIDs.size(); ++i){
+    for (uint i = 0; i < registeredIDs.size(); ++i){
         // get location (if any) of ID in registeredIDs
         std::vector<DUA_id>::iterator it =
             std::find(registeredIDs[i].begin(), registeredIDs[i].end(), ID);
@@ -67,7 +59,7 @@ void System::scrutinizeID(const DUA_id& ID){
 }
 
 void System::forceRemoveComp(const DUA_id& ID, const DUA_compFlag& component){
-    for (int i = 0; i < registeredIDs.size(); ++i){
+    for (uint i = 0; i < registeredIDs.size(); ++i){
         if (requiredComponents[i] & component){
             std::vector<DUA_id>::iterator it =
             std::find(registeredIDs[i].begin(), registeredIDs[i].end(), ID);

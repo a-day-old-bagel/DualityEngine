@@ -255,9 +255,9 @@ bool System_Render_Console::generateAndBufferFontAtlas(std::stringstream& output
     int panelWidth = charWidth;
     int panelHeight = -charHeight;  // REMEMBER stupid openGL y flipping - texHeight is positive, charHeight is negative...
     const int baseline = panelHeight * 0.8; // 4/5th of panel height FROM THE TOP (stupid openGL)
-    int yOffset;    // this is how far each char will be drawn from the top side of its quad (based on offset from font 'baseline')
-    int xOffset;    // this is how far each char will be drawn from the left side of its quad.
-    float xPanelStart;
+    int yOffset = 0;    // this is how far each char will be drawn from the top side of its quad (based on offset from font 'baseline')
+    int xOffset = 0;    // this is how far each char will be drawn from the left side of its quad.
+    float xPanelStart = 0;
     int texBytes = numTexPanels * panelWidth * panelHeight;            
 
     FT_Error error = FT_Init_FreeType (&library);

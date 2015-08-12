@@ -722,6 +722,7 @@ glm::mat4 ComponentBank::getPosMat(const DUA_id& ID){
     }catch(const std::out_of_range& oorException){
         dlgt->outputStr("ERROR: access to nonexistent position for matrix retrieval at ID " + std::to_string(ID) + "\n");
     }
+    return Constants::duaIdentMat4;
 }
 glm::mat4 ComponentBank::getRotMat(const DUA_id& ID){
     try {
@@ -733,6 +734,7 @@ glm::mat4 ComponentBank::getRotMat(const DUA_id& ID){
     }catch(const std::out_of_range& oorException){
         dlgt->outputStr("ERROR: access to nonexistent orientation for matrix retrieval at ID " + std::to_string(ID) + "\n");
     }
+    return Constants::duaIdentMat4;
 }
 glm::mat4 ComponentBank::getModMat(const DUA_id& ID){
     return getPosMat(ID) * getRotMat(ID);

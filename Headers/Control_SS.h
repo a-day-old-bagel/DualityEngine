@@ -17,7 +17,7 @@ namespace DualityEngine {
     {  
     public:
         System_Control_SS(ComponentBank* bank);
-        ~System_Control_SS();
+        ~System_Control_SS() override;
         void tick() override;
         bool init(std::stringstream& output) override;
     };

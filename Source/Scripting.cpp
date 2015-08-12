@@ -48,7 +48,7 @@ void System_Scripting::submitScript(const std::string& fileName){
     if (lines.empty()){
         bank->dlgt->outputStr(filePath + ": file either not found, unreadable, or empty.\n");
     } else {
-        for (int i = 0; i < lines.size();){
+        for (uint i = 0; i < lines.size();){
             if (lines.at(i).empty() || lines.at(i).at(0) == '#'){
                 lines.erase(lines.begin() + i);
             } else {

@@ -9,7 +9,7 @@
 
 using namespace DualityEngine;
 
-//<editor-fold defaultstate="collapsed" desc="Constructor">
+
 SystemEngine::SystemEngine(SDL_Thread** thread, const char* name, Delegate<void(const char*)>* output, Delegate<void()>* quit)
 {
     workThread = thread;
@@ -17,22 +17,23 @@ SystemEngine::SystemEngine(SDL_Thread** thread, const char* name, Delegate<void(
     threadData.output = output;
     threadData.quit = quit;
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Destructor">
+
+
 SystemEngine::~SystemEngine()
 {
     workThread = NULL;
-    for (auto system : threadData.systemsToExecute)
+    for (auto system : threadData.systemsToExecute){
         system = NULL;
+    }
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Add System">
+
+
 void SystemEngine::addSystem(System* system)
 {
     threadData.systemsToExecute.push_back(system);
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Engage">
+
+
 void SystemEngine::engage()
 {
     *workThread = SDL_CreateThread (EngineThreadFunction, threadData.threadName.c_str(),
@@ -47,8 +48,8 @@ void SystemEngine::engage()
 //        systemsToExecute.at(0)->tick();
 //    }
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Work Thread Function">
+
+
 int DualityEngine::EngineThreadFunction(void* data)
 {
     System* system;
@@ -67,7 +68,7 @@ int DualityEngine::EngineThreadFunction(void* data)
     
     // Initialization of each system running on this thread
     tempOut << initBlockText_Begin;
-    for (int i = 0; i < systems->size(); i++)
+    for (uint i = 0; i < systems->size(); i++)
     {
         system = systems->at(i);
         tempOut << "Beginning initialization of " << system->getName() << "...\n";
@@ -107,7 +108,7 @@ int DualityEngine::EngineThreadFunction(void* data)
     if (systemsInitializedCorrectly){
         // Printout of what's running on this thread
         tempOut << threadName << " is entering main loop running the following systems:\n";
-        for (int i = 0; i < systems->size(); i++)
+        for (uint i = 0; i < systems->size(); i++)
             tempOut << "    " << i + 1 << ". " << systems->at(i)->getName() << std::endl;
         tempOut << initBlockText_End;
 
@@ -122,7 +123,7 @@ int DualityEngine::EngineThreadFunction(void* data)
         while (!escape)
         {
             escape = true;
-            for (int i = 0; i < systems->size(); i++)
+            for (uint i = 0; i < systems->size(); i++)
             {
                 system = systems->at(i);
                 if (system->isQuit()){
@@ -164,5 +165,5 @@ int DualityEngine::EngineThreadFunction(void* data)
         (*output)("Game cannot continue after failed initialization of system(s).");
         (*quitGame)();
     }
+    return 0;
 }
-//</editor-fold>
