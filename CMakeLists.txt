@@ -6,16 +6,21 @@
 # Script that allows cMake to find sources and compile Duality Engine on (hopefully) any platform...
 
 # No lesser version of cMake may be used.
-cmake_minimum_required(VERSION 3.2)
+cmake_minimum_required(VERSION 3.3)
 
 # Declare the project in question
 project(DualityEngine)
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}/build")
-set(LIBRARY_OUTPUT_PATH "${PROJECT_SOURCE_DIR}/build/lib")
+# Tell cMake where to put the generated libraries and executable...
+# Evidently cLion ignores these next three sets, but they should be useful outside of cLion.
+#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
+#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 # Make sure the project compiles with the c++11 and thread safety flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -D_REENTRANT")
+if (UNIX)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -D_REENTRANT -Wall -g -O3")
+endif()
 
 # Tell cMake where to look for the modules that search for SDL2 and Assimp (the others come with cMake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
@@ -42,12 +47,8 @@ set(LIBS ${LIBS} ${ASSIMP_LIBRARIES})
 
 # Find Freetype2
 find_package(Freetype REQUIRED)
-
-#include_directories(${FREETYPE_INCLUDE_DIRS})
-
 include_directories(${FREETYPE_INCLUDE_DIR_ft2build})
 include_directories(${FREETYPE_INCLUDE_DIR_freetype2})
-
 set(LIBS ${LIBS} ${FREETYPE_LIBRARIES})
 
 # Find all the source files
@@ -145,3 +146,9 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 # Link to external libraries that were found above
 target_link_libraries(${PROJECT_NAME} ${LIBS})
+
+# Copy asset tree into build tree
+add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${CMAKE_SOURCE_DIR}/Assets
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets)
