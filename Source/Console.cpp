@@ -9,7 +9,7 @@
 using namespace DualityEngine;
 
 Console::~Console(){
-    //std::cout << getLog();
+
 }
 
 void Console::output(const char* text){
@@ -38,7 +38,7 @@ std::string Console::getLog(){
 }
 
 std::string Console::getLogLine(int line){
-    if (logLines.empty() || line < 0 || line > logLines.size() - 1){
+    if (logLines.empty() || line < 0 || line > (int)logLines.size() - 1){
         return "";
     } else {
         return logLines.at(line);
@@ -71,8 +71,6 @@ void Console::addToCommand(const char* text){
         submittedLines.at(submitLinePending) = pendingCommand;
     }
     commHasChangedVisually = true;
-    //outputStr(std::to_string(cursorPosition));
-    ///*DEBUG*/std::cout << pendingCommand << std::endl;
 }
 
 void Console::applyBackspace(){
@@ -80,15 +78,13 @@ void Console::applyBackspace(){
         pendingCommand.erase(cursorPosition - 1, 1);
         cursorPosition--;
         commHasChangedVisually = true;
-        ///*DEBUG*/std::cout <<  pendingCommand << std::endl;
     }
 }
 
 void Console::applyDelete(){
-    if (!pendingCommand.empty() && cursorPosition < pendingCommand.length()){
+    if (!pendingCommand.empty() && cursorPosition < (int)pendingCommand.length()){
         pendingCommand.erase(cursorPosition, 1);
         commHasChangedVisually = true;
-        ///*DEBUG*/std::cout << pendingCommand << std::endl;
     }
 }
 
@@ -102,7 +98,6 @@ void Console::refreshPendingCommand(){
     pendingCommand = submittedLines.at(submitLineActive);
     cursorPosition = pendingCommand.size();
     commHasChangedVisually = true;
-    ///*DEBUG*/std::cout << pendingCommand << std::endl;
 }
 
 void Console::upOneCommand(){
@@ -127,7 +122,7 @@ void Console::leftCursor(){
 }
 
 void Console::rightCursor(){
-    if (cursorPosition < pendingCommand.length()){
+    if (cursorPosition < (int)pendingCommand.length()){
         cursorPosition++;
         commHasChangedVisually = true;
     }
@@ -136,7 +131,7 @@ void Console::rightCursor(){
 void Console::traverseLog(int numLines){
     if (logLineTraverser + numLines < 0){
         logLineTraverser = 0;
-    } else if (logLineTraverser + numLines > logLines.size() - 1){
+    } else if (logLineTraverser + numLines > (int)logLines.size() - 1){
         logLineTraverser = logLines.size() - 1;
     } else {
         logLineTraverser += numLines;

@@ -75,14 +75,12 @@ set(SOURCE_FILES
     Headers/Game.h
     Headers/Game0.h
     Headers/HashMap.h
-    Headers/lighting_technique.h
     Headers/LinearVelocity.h
     Headers/loadCubeMap.h
     Headers/loadMesh.h
     Headers/loadShaders.h
     Headers/loadTexture.h
     Headers/Matrix.h
-    Headers/mesh.h
     Headers/MeshRepository.h
     Headers/Model.h
     Headers/Orientation.h
@@ -125,7 +123,6 @@ set(SOURCE_FILES
     Source/loadCubeMap.cpp
     Source/loadShaders.cpp
     Source/main.cpp
-    Source/mesh.cpp
     Source/PhysCollide.cpp
     Source/PhysMove.cpp
     Source/Render_Background.cpp

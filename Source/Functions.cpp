@@ -18,42 +18,42 @@ namespace DualityEngine{
         return mat1(0,0) * mat2(0,0) + mat1(1,0) * mat2(1,0) + mat1(2,0) * mat2(2,0);
     }
 
-    void rewriteAsZeroMatrix(Mat4x4& mat){
+    void rewriteAsZero(Mat4x4 &mat){
         mat(0,0) = 0;    mat(0,1) = 0;    mat(0,2) = 0;    mat(0,3) = 0;
         mat(1,0) = 0;    mat(1,1) = 0;    mat(1,2) = 0;    mat(1,3) = 0;
         mat(2,0) = 0;    mat(2,1) = 0;    mat(2,2) = 0;    mat(2,3) = 0;
         mat(3,0) = 0;    mat(3,1) = 0;    mat(3,2) = 0;    mat(3,3) = 0;
     }
 
-    void rewriteAsIdentityMatrix(Mat4x4& mat){
+    void rewriteAsIdentity(Mat4x4 &mat){
         mat(0,0) = 1;    mat(0,1) = 0;    mat(0,2) = 0;    mat(0,3) = 0;
         mat(1,0) = 0;    mat(1,1) = 1;    mat(1,2) = 0;    mat(1,3) = 0;
         mat(2,0) = 0;    mat(2,1) = 0;    mat(2,2) = 1;    mat(2,3) = 0;
         mat(3,0) = 0;    mat(3,1) = 0;    mat(3,2) = 0;    mat(3,3) = 1;
     }
 
-    void rewriteAsScaleMatrix(Mat4x4& mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z){
+    void rewriteAsScale(Mat4x4 &mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z){
         mat(0,0) = X;    mat(0,1) = 0;    mat(0,2) = 0;    mat(0,3) = 0;
         mat(1,0) = 0;    mat(1,1) = Y;    mat(1,2) = 0;    mat(1,3) = 0;
         mat(2,0) = 0;    mat(2,1) = 0;    mat(2,2) = Z;    mat(2,3) = 0;
         mat(3,0) = 0;    mat(3,1) = 0;    mat(3,2) = 0;    mat(3,3) = 1;
     }
 
-    void rewriteAsUniformScaleMatrix(Mat4x4& mat, DUA_matrixVal U){
+    void rewriteAsUniformScale(Mat4x4 &mat, DUA_matrixVal U){
         mat(0,0) = U;    mat(0,1) = 0;    mat(0,2) = 0;    mat(0,3) = 0;
         mat(1,0) = 0;    mat(1,1) = U;    mat(1,2) = 0;    mat(1,3) = 0;
         mat(2,0) = 0;    mat(2,1) = 0;    mat(2,2) = U;    mat(2,3) = 0;
         mat(3,0) = 0;    mat(3,1) = 0;    mat(3,2) = 0;    mat(3,3) = 1;
     }
 
-    void rewriteAsTranslationMatrix(Mat4x4& mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z){
+    void rewriteAsTranslation(Mat4x4 &mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z){
         mat(0,0) = 1;    mat(0,1) = 0;    mat(0,2) = 0;    mat(0,3) = X;
         mat(1,0) = 0;    mat(1,1) = 1;    mat(1,2) = 0;    mat(1,3) = Y;
         mat(2,0) = 0;    mat(2,1) = 0;    mat(2,2) = 1;    mat(2,3) = Z;
         mat(3,0) = 0;    mat(3,1) = 0;    mat(3,2) = 0;    mat(3,3) = 1;
     }
 
-    void rewriteAsRotationMatrixWorldAxisZyx(Mat4x4& mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z){
+    void rewriteAsRotationWorldAxisZyx(Mat4x4 &mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z){
         DUA_matrixVal cx = cos(X);
         DUA_matrixVal sx = sin(X);
         DUA_matrixVal cy = cos(Y);
@@ -71,11 +71,11 @@ namespace DualityEngine{
         mat(3,0) =                    0     ;    mat(3,1) =                    0    ;    mat(3,2) =                    0    ;    mat(3,3) =                    1    ;
     }
 
-    void rewriteAsRotationMatrixWorldAxisZyx(Mat4x4& mat, Vec3& rotation){
-        rewriteAsRotationMatrixWorldAxisZyx(mat, rotation(0,0), rotation(1,0), rotation(2,0));
+    void rewriteAsRotationWorldAxisZyx(Mat4x4 &mat, Vec3 &rotation){
+        rewriteAsRotationWorldAxisZyx(mat, rotation(0, 0), rotation(1, 0), rotation(2, 0));
     }
 
-    void rewriteAsRotationMatrixArbitraryAxis(Mat4x4& mat, Vec4& unitAxis, DUA_matrixVal angle){
+    void rewriteAsRotationArbitraryAxis(Mat4x4 &mat, Vec4 &unitAxis, DUA_matrixVal angle){
         DUA_matrixVal c = cos(angle);
         DUA_matrixVal s = sin(angle);
         DUA_matrixVal t = 1.0 - cos(angle);
@@ -96,7 +96,7 @@ namespace DualityEngine{
         mat(3,0) =                    0 ;    mat(3,1) =                    0 ;    mat(3,2) =                    0 ;    mat(3,3) =                    1 ;
     }
 
-    void rewriteAsViewMatrixFree(Mat4x4& mat, Vec4& center, Vec4* axes){
+    void rewriteAsViewFree(Mat4x4 &mat, Vec4 &center, Vec4 *axes){
         //row 0
         mat(0,0) =    axes[0](0,0)      ;    mat(0,1) =    axes[0](1,0)     ;    mat(0,2) =    axes[0](2,0)     ;    mat(0,3) =  -dotVec4(axes[0], center) ;
         //row 1
@@ -107,7 +107,7 @@ namespace DualityEngine{
         mat(3,0) =                    0 ;    mat(3,1) =                   0 ;    mat(3,2) =                   0 ;    mat(3,3) =                           1 ;
     }
 
-    void rewriteAsViewMatrixFps(Mat4x4& mat, Vec4& center, DUA_matrixVal pitch, DUA_matrixVal yaw){
+    void rewriteAsViewFps(Mat4x4 &mat, Vec4 &center, DUA_matrixVal pitch, DUA_matrixVal yaw){
         DUA_matrixVal cosPitch = cos(pitch);
         DUA_matrixVal sinPitch = sin(pitch);
         DUA_matrixVal cosYaw = cos(yaw);
@@ -119,10 +119,11 @@ namespace DualityEngine{
             {{sinYaw*cosPitch},{-sinPitch},{cosPitch * cosYaw},{1}}
         };
 
-        rewriteAsViewMatrixFree(mat, center, axes);
+        rewriteAsViewFree(mat, center, axes);
     }
 
-    void rewriteAsProjectionMatrix(Mat4x4& mat, DUA_matrixVal FOV, DUA_matrixVal aspRat, DUA_matrixVal zNear, DUA_matrixVal zFar){
+    void rewriteAsProjection(Mat4x4 &mat, DUA_matrixVal FOV, DUA_matrixVal aspRat, DUA_matrixVal zNear,
+                             DUA_matrixVal zFar){
         DUA_matrixVal tanFOV = tan(FOV);
         DUA_matrixVal zDiff = zFar - zNear;
 

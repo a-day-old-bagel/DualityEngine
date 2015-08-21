@@ -29,7 +29,7 @@ namespace DualityEngine {
             int spacingX = 2;
             int spacingY = 5;
             std::string fontName = "Assets/Fonts/Inconsolata-LGC.otf";
-            glm::vec3 bkgndColor = {0.05, 0.05, 0.05};
+            glm::vec3 backColor = {0.05, 0.05, 0.05};
             glm::vec3 textcolor = {0.5, 1.0, 0.3};
         }
         

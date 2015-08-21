@@ -15,9 +15,9 @@
 namespace DualityEngine {
 
     struct BankDelegates {
-        Delegate<void(const DUA_id&)> systemsDiscover;
-        Delegate<void(const DUA_id&)> systemsScrutinize;
-        Delegate<void(const DUA_id&, const DUA_compFlag&)> systemsForceRemove;
+        Delegate<void(const DUA_id)> systemsDiscover;
+        Delegate<void(const DUA_id)> systemsScrutinize;
+        Delegate<void(const DUA_id, const DUA_compFlag)> systemsForceRemove;
         Delegate<void()> quit;
         Delegate<void()> newGame;
         Delegate<void()> pause;

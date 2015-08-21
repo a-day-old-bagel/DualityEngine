@@ -21,10 +21,7 @@ SystemEngine::SystemEngine(SDL_Thread** thread, const char* name, Delegate<void(
 
 SystemEngine::~SystemEngine()
 {
-    workThread = NULL;
-    for (auto system : threadData.systemsToExecute){
-        system = NULL;
-    }
+
 }
 
 
@@ -36,17 +33,7 @@ void SystemEngine::addSystem(System* system)
 
 void SystemEngine::engage()
 {
-    *workThread = SDL_CreateThread (EngineThreadFunction, threadData.threadName.c_str(),
-                                    (void*) &threadData);
-    
-//    threadData.systemsToExecute[0]->init();
-//    threadData.systemsToExecute[0]->tick();
-    
-//    systemsToExecute.at(0)->init();
-//    while (!systemsToExecute.at(0)->isQuit())
-//    {
-//        systemsToExecute.at(0)->tick();
-//    }
+    *workThread = SDL_CreateThread (EngineThreadFunction, threadData.threadName.c_str(), (void*) &threadData);
 }
 
 
@@ -75,18 +62,16 @@ int DualityEngine::EngineThreadFunction(void* data)
         try {
             if (!(system->init(tempOut)))
             {
-                tempOut << system->getName() << " failed to initialize! Terminating "
+                tempOut << "<!>    " << system->getName() << " failed to initialize! Terminating "
                         << threadName << "!\n" << initBlockText_End;
-                (*output)(tempOut.str().c_str());
-//                (*quitGame)();
-//                return -1;
+
                 systemsInitializedCorrectly = false;
                 break;
             }
             else
                 tempOut << system->getName() << " has initialized.\n\n";
         } catch (...) {
-            tempOut << "EXCEPTION thrown: ";
+            tempOut << "<!>    EXCEPTION thrown: ";
             std::exception_ptr eptr = std::current_exception();
             try {
                 std::rethrow_exception(eptr);
@@ -97,9 +82,6 @@ int DualityEngine::EngineThreadFunction(void* data)
             }
             tempOut << "Terminating " << threadName << "!\n" << initBlockText_End;
 
-            (*output)(tempOut.str().c_str());
-//            (*quitGame)();
-//            return -1;
             systemsInitializedCorrectly = false;
             break;
         }
@@ -138,11 +120,10 @@ int DualityEngine::EngineThreadFunction(void* data)
                     try{
                         system->tick();             // THIS IS THE IMPORTANT LINE
                     } catch (const char* err) {
-                        tempOut << "@@@    ERROR in " << system->getName() << ": " << err << std::endl;
+                        tempOut << "<!>    ERROR in " << system->getName() << ".tick : " << err << std::endl;
                         (*quitGame)();
-//                        escape = true;
                     } catch (...) {
-                        tempOut << "@@@    EXCEPTION thrown in " << system->getName() << ": ";
+                        tempOut << "<!>    EXCEPTION thrown in " << system->getName() << ".tick : ";
                         std::exception_ptr eptr = std::current_exception();
                         try {
                             std::rethrow_exception(eptr);
@@ -151,7 +132,6 @@ int DualityEngine::EngineThreadFunction(void* data)
                         } catch (...) {
                             tempOut << "Unknown exception.\n";
                         }
-
                         (*quitGame)();
                     }
                 }
@@ -162,7 +142,8 @@ int DualityEngine::EngineThreadFunction(void* data)
         // Output the thread's reports to standard out.
         (*output)(tempOut.str().c_str());
     } else {
-        (*output)("Game cannot continue after failed initialization of system(s).");
+        tempOut << "\n<!>    Execution cannot continue after failed initialization of one or more systems!\n";
+        (*output)(tempOut.str().c_str());
         (*quitGame)();
     }
     return 0;

@@ -23,29 +23,30 @@ namespace DualityEngine {
         
     /* SWITCHES AND QUICK SETTINGS  --MAY MODIFY--  ========================= */
     
-//    #define DUA_DEBUG_CONSOLE_TO_COUT // If defined, all console output will be duplicated and sent to stdout
+//    #define DUA_DEBUG_CONSOLE_TO_COUT // all console output will be duplicated and sent to stdout
     
-//    #define DUA_DEBUG_MATRIX_PRINT  // If defined, Matrix class will include a debug 'print' method to output to stdout
+//    #define DUA_DEBUG_MATRIX_PRINT // Matrix class will include a debug 'print' method to output to stdout
 
 //    #define DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE // prevents use of SDL's relative mouse mode which grabs mouse control.
     
-    #define DUA_OLD_VIDEO_DRIVERS // If defined, openGL 3.0 will be used instead of 3.3
+    #define DUA_OLD_VIDEO_DRIVERS true // openGL 3.0 will be used instead of 3.3
+
+//    #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
     #define DUA_WHICH_MONITOR 2
-
-//    #define DUA_FULLSCREEN    // If defined, engine will run in fullscreen mode
-    
-    /* DO NOT UNDEFINE THE FOLLOWING - ONLY MODIFY */
     
     #define DUA_CONTROLSS_LINEAR_BRAKING_DEADZONE 1e-20
     #define DUA_CONTROLSS_ANGULAR_BRAKING_DEADZONE 1e-20
     
-    #define DUA_DEFAULT_SCREENRES_X 800    // Defualt screen resolution X
-    #define DUA_DEFAULT_SCREENRES_Y 600     // Defualt screen resolution Y
-    #define DUA_DEFAULT_CONSOLEWIDTH 800        // Defualt in-game console width
-    #define DUA_DEFAULT_CONSOLEHEIGHT 600       // Defualt in-game console height
+    #define DUA_DEFAULT_SCREENRES_X 1024    // Defualt screen resolution X
+    #define DUA_DEFAULT_SCREENRES_Y 768     // Defualt screen resolution Y
+
+    #define DUA_DEFAULT_CONSOLEWIDTH 800        // Defualt in-game console width (should be resized to fit screen anyway)
+    #define DUA_DEFAULT_CONSOLEHEIGHT 600       // Defualt in-game console height (should be resized to fit screen anyway)
+
     #define DUA_DEFAULT_SKYMAP "interstellar"   // Default skymap file name
     #define DUA_DEFAULT_SKYFILETYPE "tga"       // Default skymap file format
+
     #define DUA_VERSION "v0.01.02"  // This is checked against scripts when they are run.
     
     /* ====================================================================== */
@@ -165,7 +166,7 @@ namespace DualityEngine {
         namespace Console{
             extern int locX, locY, width, height, charW, charH, marginX, marginY, spacingX, spacingY;
             extern std::string fontName;
-            extern glm::vec3 bkgndColor;
+            extern glm::vec3 backColor;
             extern glm::vec3 textColor;
         }
         

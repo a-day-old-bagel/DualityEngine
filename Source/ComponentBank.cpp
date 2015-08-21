@@ -86,49 +86,49 @@ componentType* ComponentBank::getComponentPtr(const DUA_id &ID, const char* comp
     }
 }
 
-Model* ComponentBank::getModelPtr(const DUA_id &ID){
+Model* ComponentBank::getModelPtr(const DUA_id ID){
     return getComponentPtr(ID, "model", components_model);
 }
-LinearVelocity* ComponentBank::getLinearVelocPtr(const DUA_id &ID){
+LinearVelocity* ComponentBank::getLinearVelocPtr(const DUA_id ID){
     return getComponentPtr(ID, "linear velocity", components_linearVeloc);
 }
-Position* ComponentBank::getPositionPtr(const DUA_id &ID){
+Position* ComponentBank::getPositionPtr(const DUA_id ID){
     return getComponentPtr(ID, "position", components_position);
 }
-SpatialChild* ComponentBank::getSpatialChildPtr(const DUA_id& ID){
+SpatialChild* ComponentBank::getSpatialChildPtr(const DUA_id ID){
     return getComponentPtr(ID, "position child", components_spatialChild);
 }
-SpatialParent* ComponentBank::getSpatialParentPtr(const DUA_id& ID){
+SpatialParent* ComponentBank::getSpatialParentPtr(const DUA_id ID){
     return getComponentPtr(ID, "position parent", components_spatialParent);
 }
-Orientation* ComponentBank::getOrientationPtr(const DUA_id& ID){
+Orientation* ComponentBank::getOrientationPtr(const DUA_id ID){
     return getComponentPtr(ID, "rotation", components_orientation);
 }
-AngularVelocity* ComponentBank::getAngularVelocPtr(const DUA_id& ID){
+AngularVelocity* ComponentBank::getAngularVelocPtr(const DUA_id ID){
     return getComponentPtr(ID, "angular velocity", components_angularVeloc);
 }
-SpaceControl* ComponentBank::getSpaceControlPtr(const DUA_id &ID){
+SpaceControl* ComponentBank::getSpaceControlPtr(const DUA_id ID){
     return getComponentPtr(ID, "control", components_spacecontrol);
 }
-PointLight* ComponentBank::getPointLightPtr(const DUA_id &ID){
+PointLight* ComponentBank::getPointLightPtr(const DUA_id ID){
     return getComponentPtr(ID, "point light", components_pointLight);
 }
-DirectionalLight* ComponentBank::getDirectionalLightPtr(const DUA_id &ID){
+DirectionalLight* ComponentBank::getDirectionalLightPtr(const DUA_id ID){
     return getComponentPtr(ID, "directional light", components_directionalLight);
 }
-AmbientLight* ComponentBank::getAmbientLightPtr(const DUA_id &ID){
+AmbientLight* ComponentBank::getAmbientLightPtr(const DUA_id ID){
     return getComponentPtr(ID, "ambient light", components_ambientLight);
 }
-Owner* ComponentBank::getOwnerPtr(const DUA_id& ID){
+Owner* ComponentBank::getOwnerPtr(const DUA_id ID){
     return getComponentPtr(ID, "owner", components_owner);
 }
-Score* ComponentBank::getScorePtr(const DUA_id& ID){
+Score* ComponentBank::getScorePtr(const DUA_id ID){
     return getComponentPtr(ID, "score", components_score);
 }
-Collision* ComponentBank::getCollisionPtr(const DUA_id& ID){
+Collision* ComponentBank::getCollisionPtr(const DUA_id ID){
     return getComponentPtr(ID, "collision", components_collision);
 }
-CameraFree* ComponentBank::getCameraFreePtr(const DUA_id& ID){
+CameraFree* ComponentBank::getCameraFreePtr(const DUA_id ID){
     return getComponentPtr(ID, "free camera", components_freeCam);
 }
     
@@ -204,68 +204,76 @@ bool ComponentBank::addSoul(const DUA_id &ID, const char* name){
  * 
  * And that's it - two steps. Just follow the format of the below if you're confused.
  ******************************************************************************/
-void ComponentBank::addModel(const DUA_id &ID, const char* fileName){
+void ComponentBank::addModel(const DUA_id ID, const char *fileName){
     if (tryAddFlagToSoul(MODEL, ID))
         tryAddComponent(ID, "model", components_model, fileName);
 }
-void ComponentBank::addLinearVeloc(const DUA_id &ID, const DUA_dbl &velX, const DUA_dbl &velY, const DUA_dbl &velZ){
+void ComponentBank::addLinearVeloc(const DUA_id ID, const DUA_dbl velX, const DUA_dbl velY, const DUA_dbl velZ){
     if (tryAddFlagToSoul(LINVELOC, ID))
         tryAddComponent(ID, "linear velocity", components_linearVeloc, velX, velY, velZ);
 }
-void ComponentBank::addPosition(const DUA_id &ID, const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ){
+void ComponentBank::addPosition(const DUA_id ID, const DUA_dbl posX, const DUA_dbl posY, const DUA_dbl posZ){
     if (tryAddFlagToSoul(POSITION, ID))
         tryAddComponent(ID, "position", components_position, posX, posY, posZ);
 }
-void ComponentBank::addSpatialChild(const DUA_id& ID, const DUA_id& refID){
+void ComponentBank::addSpatialChild(const DUA_id ID, const DUA_id refID){
     if (tryAddFlagToSoul(SPATCHILD, ID))
         tryAddComponent(ID, "position child", components_spatialChild, refID);
 }
-void ComponentBank::addSpatialParent(const DUA_id& ID, const DUA_id& refID){
+void ComponentBank::addSpatialParent(const DUA_id ID, const DUA_id refID){
     if (tryAddFlagToSoul(SPATPARENT, ID))
         tryAddComponent(ID, "position parent", components_spatialParent, refID);
 }
-void ComponentBank::addOrientation(const DUA_id& ID, const DUA_dbl& rotX, const DUA_dbl& rotY, const DUA_dbl& rotZ){
+void ComponentBank::addOrientation(const DUA_id ID, const DUA_dbl rotX, const DUA_dbl rotY, const DUA_dbl rotZ){
     if (tryAddFlagToSoul(ORIENTATION, ID))
         tryAddComponent(ID, "rotation", components_orientation, rotX, rotY, rotZ);
 }
-void ComponentBank::addAngularVeloc(const DUA_id& ID, const DUA_dbl& angX, const DUA_dbl& angY, const DUA_dbl& angZ){
+void ComponentBank::addAngularVeloc(const DUA_id ID, const DUA_dbl angX, const DUA_dbl angY, const DUA_dbl angZ){
     if (tryAddFlagToSoul(ANGVELOC, ID))
         tryAddComponent(ID, "angular velocity", components_angularVeloc, angX, angY, angZ);
 }
-void ComponentBank::addSpaceControl(const DUA_id &ID, const DUA_float& fw, const DUA_float& bk,
-        const DUA_float& lf, const DUA_float& rt, const DUA_float& up,
-        const DUA_float& dn, const DUA_float& pitchp, const DUA_float& pitchn,
-        const DUA_float& yawp, const DUA_float& yawn, const DUA_float& rollp, const DUA_float& rolln){
+void ComponentBank::addSpaceControl(const DUA_id ID, const DUA_float fw, const DUA_float bk,
+                                    const DUA_float lf, const DUA_float rt, const DUA_float up,
+                                    const DUA_float dn, const DUA_float pitchp, const DUA_float pitchn,
+                                    const DUA_float yawp, const DUA_float yawn, const DUA_float rollp,
+                                    const DUA_float rolln){
     if (tryAddFlagToSoul(CONTROLSS, ID))
         tryAddComponent(ID, "control", components_spacecontrol, fw, bk, lf, rt, up, dn, pitchp, pitchn, yawp, yawn, rollp, rolln);
 }
-void ComponentBank::addPointLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue,
-                                  const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ){
+void ComponentBank::addPointLight(const DUA_id ID, const DUA_colorByte red, const DUA_colorByte green,
+                                  const DUA_colorByte blue,
+                                  const DUA_dbl posX, const DUA_dbl posY, const DUA_dbl posZ){
     if (tryAddFlagToSoul(LPOINT, ID))
         tryAddComponent(ID, "point light", components_pointLight, red, green, blue, posX, posY, posZ);
 }
-void ComponentBank::addDirectionalLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue,
-                                        const DUA_dbl &rotX, const DUA_dbl &rotY, const DUA_dbl &rotZ){
+void ComponentBank::addDirectionalLight(const DUA_id ID, const DUA_colorByte red, const DUA_colorByte green,
+                                        const DUA_colorByte blue,
+                                        const DUA_dbl rotX, const DUA_dbl rotY, const DUA_dbl rotZ){
     if (tryAddFlagToSoul(LDIRECT, ID))
         tryAddComponent(ID, "directional light", components_directionalLight, red, green, blue, rotX, rotY, rotZ);
 }
-void ComponentBank::addAmbientLight(const DUA_id &ID, const DUA_colorByte &red, const DUA_colorByte &green, const DUA_colorByte &blue){    
+void ComponentBank::addAmbientLight(const DUA_id ID, const DUA_colorByte red, const DUA_colorByte green,
+                                    const DUA_colorByte blue){
     if (tryAddFlagToSoul(LAMBIENT, ID))
         tryAddComponent(ID, "ambient light", components_ambientLight, red, green, blue);
 }
-void ComponentBank::addOwner(const DUA_id& ID, const DUA_id& refID){
+void ComponentBank::addOwner(const DUA_id ID, const DUA_id refID){
     if (tryAddFlagToSoul(OWNER, ID))
         tryAddComponent(ID, "owner", components_owner, refID);
 }
-void ComponentBank::addScore(const DUA_id& ID){
+void ComponentBank::addScore(const DUA_id ID){
     if (tryAddFlagToSoul(SCORE, ID))
         tryAddComponent(ID, "score", components_score);
 }
-void ComponentBank::addCollision(const DUA_id& ID){
+void ComponentBank::addCollision(const DUA_id ID){
     if (tryAddFlagToSoul(COLLISION, ID))
         tryAddComponent(ID, "collision", components_collision);
 }
-void ComponentBank::addCameraFree(const DUA_id& ID, DUA_float fov, DUA_float zNear, DUA_float zFar, DUA_dbl eyeX, DUA_dbl eyeY, DUA_dbl eyeZ, DUA_dbl focusX, DUA_dbl focusY, DUA_dbl focusZ, DUA_dbl upX, DUA_dbl upY, DUA_dbl upZ){
+void ComponentBank::addCameraFree(const DUA_id ID, const DUA_float fov, const DUA_float zNear, const DUA_float zFar,
+                                  const DUA_dbl eyeX,
+                                  const DUA_dbl eyeY, const DUA_dbl eyeZ, const DUA_dbl focusX, const DUA_dbl focusY,
+                                  const DUA_dbl focusZ,
+                                  const DUA_dbl upX, const DUA_dbl upY, const DUA_dbl upZ){
     if (tryAddFlagToSoul(FREECAM, ID)){
         if (tryAddComponent(ID, "free camera", components_freeCam, fov, zNear, zFar, eyeX, eyeY, eyeZ, focusX, focusY, focusZ, upX, upY, upZ)){
             components_soul.at(ID).state |= RECALCVIEWMAT | RECALCPROJMAT;
@@ -327,69 +335,69 @@ bool ComponentBank::deleteSoul(const DUA_id &ID){
  * just call both methods without any of the "if" nonsense.  However, this will
  * cause double error messages to be output in most of the failure cases.
  ******************************************************************************/
-void ComponentBank::deleteModel(const DUA_id &ID){
+void ComponentBank::deleteModel(const DUA_id ID){
     if (tryRemoveComponent(ID, "model", MODEL, components_model))
         tryRemoveFlagFromSoul(MODEL, ID);
 }
-void ComponentBank::deleteLinearVeloc(const DUA_id &ID){
+void ComponentBank::deleteLinearVeloc(const DUA_id ID){
     scrutinizeControl(ID, ControlTypes::SPACE);
     if (tryRemoveComponent(ID, "linear velocity", LINVELOC, components_linearVeloc))
         tryRemoveFlagFromSoul(LINVELOC, ID);
 }
-void ComponentBank::deletePosition(const DUA_id &ID){
+void ComponentBank::deletePosition(const DUA_id ID){
     scrutinizeCam(ID);
     if (tryRemoveComponent(ID, "position", POSITION, components_position))
         tryRemoveFlagFromSoul(POSITION, ID);
 }
-void ComponentBank::deleteSpatialChild(const DUA_id& ID){
+void ComponentBank::deleteSpatialChild(const DUA_id ID){
     if (tryRemoveComponent(ID, "position child", SPATCHILD, components_spatialChild))
         tryRemoveFlagFromSoul(SPATCHILD, ID);
 }
-void ComponentBank::deleteSpatialParent(const DUA_id& ID){
+void ComponentBank::deleteSpatialParent(const DUA_id ID){
     if (tryRemoveComponent(ID, "position parent", SPATPARENT, components_spatialParent))
         tryRemoveFlagFromSoul(SPATPARENT, ID);
 }
-void ComponentBank::deleteOrientation(const DUA_id &ID){
+void ComponentBank::deleteOrientation(const DUA_id ID){
     scrutinizeCam(ID);
     scrutinizeControl(ID, ControlTypes::SPACE);
     if (tryRemoveComponent(ID, "rotation", ORIENTATION, components_orientation))
         tryRemoveFlagFromSoul(ORIENTATION, ID);
 }
-void ComponentBank::deleteAngularVeloc(const DUA_id& ID){
+void ComponentBank::deleteAngularVeloc(const DUA_id ID){
     scrutinizeControl(ID, ControlTypes::SPACE);
     if (tryRemoveComponent(ID, "angular velocity", ANGVELOC, components_angularVeloc))
         tryRemoveFlagFromSoul(ANGVELOC, ID);
 }
-void ComponentBank::deleteSpaceControl(const DUA_id &ID){
+void ComponentBank::deleteSpaceControl(const DUA_id ID){
     scrutinizeControl(ID, ControlTypes::SPACE);
     if (tryRemoveComponent(ID, "control", CONTROLSS, components_spacecontrol))
         tryRemoveFlagFromSoul(CONTROLSS, ID);
 }
-void ComponentBank::deletePointLight(const DUA_id &ID){
+void ComponentBank::deletePointLight(const DUA_id ID){
     if (tryRemoveComponent(ID, "point light", LPOINT, components_pointLight))
         tryRemoveFlagFromSoul(LPOINT, ID);
 }
-void ComponentBank::deleteDirectionalLight(const DUA_id &ID){
+void ComponentBank::deleteDirectionalLight(const DUA_id ID){
     if (tryRemoveComponent(ID, "directional light", LDIRECT, components_directionalLight))
         tryRemoveFlagFromSoul(LDIRECT, ID);
 }
-void ComponentBank::deleteAmbientLight(const DUA_id &ID){
+void ComponentBank::deleteAmbientLight(const DUA_id ID){
     if (tryRemoveComponent(ID, "ambient light", LAMBIENT, components_ambientLight))
         tryRemoveFlagFromSoul(LAMBIENT, ID);
 }
-void ComponentBank::deleteOwner(const DUA_id& ID){
+void ComponentBank::deleteOwner(const DUA_id ID){
     if (tryRemoveComponent(ID, "owner", OWNER, components_owner))
         tryRemoveFlagFromSoul(OWNER, ID);
 }
-void ComponentBank::deleteScore(const DUA_id& ID){
+void ComponentBank::deleteScore(const DUA_id ID){
     if (tryRemoveComponent(ID, "score", SCORE, components_score))
         tryRemoveFlagFromSoul(SCORE, ID);
 }
-void ComponentBank::deleteCollision(const DUA_id& ID){
+void ComponentBank::deleteCollision(const DUA_id ID){
     if (tryRemoveComponent(ID, "collision", COLLISION, components_collision))
         tryRemoveFlagFromSoul(COLLISION, ID);
 }
-void ComponentBank::deleteCameraFree(const DUA_id& ID){
+void ComponentBank::deleteCameraFree(const DUA_id ID){
     scrutinizeCam(ID);
     if (tryRemoveComponent(ID, "free camera", FREECAM, components_freeCam))
         tryRemoveFlagFromSoul(FREECAM, ID);
@@ -398,30 +406,28 @@ void ComponentBank::deleteCameraFree(const DUA_id& ID){
 /*******************************************************************************
  * ENTITY STATE GETTERS / SETTERS SECTION
  ******************************************************************************/
-DUA_compFlag ComponentBank::getComponents(const DUA_id& ID){
-    DUA_compFlag flags;
+DUA_compFlag ComponentBank::getComponents(const DUA_id ID){
     try {
         return components_soul.at(ID).components;
     } catch(const std::out_of_range& oorException) {
         return DUA_INVALID_COMPONENTS;
     }
 }
-DUA_stateFlag ComponentBank::getState(const DUA_id& ID){
-    DUA_stateFlag flags;
+DUA_stateFlag ComponentBank::getState(const DUA_id ID){
     try {
         return components_soul.at(ID).state;
     } catch(const std::out_of_range& oorException) {
         return DUA_INVALID_STATE;
     }
 }
-void ComponentBank::stateOn(const DUA_id& ID, const DUA_stateFlag& flag){
+void ComponentBank::stateOn(const DUA_id ID, const DUA_stateFlag flag){
     try{
         components_soul.at(ID).state |= flag;
     }catch (const std::out_of_range& oorException) {
         dlgt->output("WARNING: Bad stateOn attempt: No such ID.");
     }
 }
-void ComponentBank::stateOff(const DUA_id& ID, const DUA_stateFlag& flag){
+void ComponentBank::stateOff(const DUA_id ID, const DUA_stateFlag flag){
     try{
         components_soul.at(ID).state &= ~flag;
     }catch (const std::out_of_range& oorException) {
@@ -460,7 +466,7 @@ DUA_id ComponentBank::createEntity(const char* name){
  * first attempts to remove all non-soul components with ID 'ID', then
  * REMOVES THE ENTITY'S SOUL!!!! <- this is the main reason I named it "soul."
  ******************************************************************************/
-bool ComponentBank::deleteEntity(const DUA_id& ID){
+bool ComponentBank::deleteEntity(const DUA_id ID){
     DUA_compFlag flags;
     std::string name;
     try {
@@ -507,8 +513,8 @@ bool ComponentBank::deleteEntity(const DUA_id& ID){
  * this should not only delete the entity, but also delete any entities that are
  * spatial children of it.
  ******************************************************************************/
-bool ComponentBank::purgeEntity(const DUA_id& ID){
-    deleteEntity(ID);
+bool ComponentBank::purgeEntity(const DUA_id ID){
+    return deleteEntity(ID);
 }
 
 /*******************************************************************************
@@ -530,7 +536,7 @@ bool ComponentBank::getIDs(std::string& name, std::vector<DUA_id>& IDs){
  * GET NAME
  * returns a statement string containing the name of the entity (if any) at ID.
  ******************************************************************************/
-std::string ComponentBank::getNameVerbose(const DUA_id &ID){
+std::string ComponentBank::getNameVerbose(const DUA_id ID){
     std::ostringstream output;
     try {
         output << "Entity " << ID << " is named '" << components_soul.at(ID).name << "'.";
@@ -539,7 +545,7 @@ std::string ComponentBank::getNameVerbose(const DUA_id &ID){
     }
     return output.str();
 }
-std::string ComponentBank::getName(const DUA_id& ID){
+std::string ComponentBank::getName(const DUA_id ID){
     try{
         return components_soul.at(ID).name;
     }catch(const std::out_of_range& oorException) {
@@ -551,7 +557,7 @@ std::string ComponentBank::getName(const DUA_id& ID){
  * returns a statement string containing a list of components currently
  * possessed by the entity at ID.
  ******************************************************************************/
-std::string ComponentBank::listComponentsVerbose(const DUA_id &ID){
+std::string ComponentBank::listComponentsVerbose(const DUA_id ID){
     std::ostringstream output;    
     try {        
         DUA_compFlag components = components_soul.at(ID).components;
@@ -568,7 +574,7 @@ std::string ComponentBank::listComponentsVerbose(const DUA_id &ID){
     }    
     return output.str();
 }
-std::string ComponentBank::listComponents(const DUA_compFlag& flag){
+std::string ComponentBank::listComponents(const DUA_compFlag flag){
     std::ostringstream output;
     for (auto compType : componentCollections){
         if (flag & std::get<2>(compType)){
@@ -578,7 +584,7 @@ std::string ComponentBank::listComponents(const DUA_compFlag& flag){
     return output.str();
 }
 
-std::string ComponentBank::getEntityInfo(const DUA_id& ID){
+std::string ComponentBank::getEntityInfo(const DUA_id ID){
     try{
         return (std::to_string(ID) + " (" + components_soul.at(ID).name + ")");
     }catch(const std::out_of_range& oorException){
@@ -612,10 +618,10 @@ bool ComponentBank::updateActiveCamera(){
     }
 }
 
-bool ComponentBank::switchToCam(const DUA_id& ID){
+bool ComponentBank::switchToCam(const DUA_id ID){
     try{
         if ((components_soul.at(ID).components) & FREECAM){
-            if((components_soul.at(ID).components) & (POSITION | ORIENTATION) == (POSITION | ORIENTATION)){
+            if(((components_soul.at(ID).components) & (POSITION | ORIENTATION)) == (POSITION | ORIENTATION)){
                 activeFreeCameraID = ID;
                 pFreeCameraCurrent = getCameraFreePtr(ID);
             } else {
@@ -632,7 +638,7 @@ bool ComponentBank::switchToCam(const DUA_id& ID){
     }
     return true;
 }
-void ComponentBank::scrutinizeCam(const DUA_id& ID){
+void ComponentBank::scrutinizeCam(const DUA_id ID){
     if (activeFreeCameraID == ID){
         defocusCam();
         dlgt->outputStr("View from entity " + getEntityInfo(ID) + " has been lost.");
@@ -643,11 +649,11 @@ void ComponentBank::defocusCam(){
     pFreeCameraCurrent = pFreeCameraDummy;
 }
 
-bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type controlType){
+bool ComponentBank::switchToControl(const DUA_id ID, ControlTypes::type controlType){
     DUA_compFlag requiredInterfaceComponent;
     DUA_compFlag requiredOtherComponents;
     Delegate<void()> defocusControlCandidate;
-    Delegate<void(const DUA_id&)> focusControl;
+    Delegate<void(const DUA_id)> focusControl;
     switch(controlType){
         case ControlTypes::SPACE:
             requiredInterfaceComponent = CONTROLSS;
@@ -690,13 +696,13 @@ bool ComponentBank::switchToControl(const DUA_id& ID, ControlTypes::type control
     }
     return true;
 }
-void ComponentBank::focusSpaceControl(const DUA_id& ID){
+void ComponentBank::focusSpaceControl(const DUA_id ID){
     //default other controls()...
     pSpaceControlCurrent = getSpaceControlPtr(ID);
     pCtrlLinVelocCurrent = getLinearVelocPtr(ID);
     pCtrlOrientCurrent = getOrientationPtr(ID);    
 }
-void ComponentBank::scrutinizeControl(const DUA_id& ID, ControlTypes::type dependentControlType){
+void ComponentBank::scrutinizeControl(const DUA_id ID, ControlTypes::type dependentControlType){
     if (currentControlType == dependentControlType){
         if (activeControlID == ID){// && getComponents(activeControlID) & requiredControlComponents != requiredControlComponents){
             dlgt->outputStr("Control of entity" + getEntityInfo(ID) + " has been lost.");
@@ -712,7 +718,7 @@ void ComponentBank::defocusSpaceControl(){
     pCtrlOrientCurrent = pCtrlOrientDummy;
 }
 
-glm::mat4 ComponentBank::getPosMat(const DUA_id& ID){
+glm::mat4 ComponentBank::getPosMat(const DUA_id ID){
     try {
         if (getComponents(ID) & POSITION){
             return components_position.at(ID).getMatrix();
@@ -724,7 +730,7 @@ glm::mat4 ComponentBank::getPosMat(const DUA_id& ID){
     }
     return Constants::duaIdentMat4;
 }
-glm::mat4 ComponentBank::getRotMat(const DUA_id& ID){
+glm::mat4 ComponentBank::getRotMat(const DUA_id ID){
     try {
         if (getComponents(ID) & ORIENTATION){
             return components_orientation.at(ID).getMatrix();
@@ -736,6 +742,6 @@ glm::mat4 ComponentBank::getRotMat(const DUA_id& ID){
     }
     return Constants::duaIdentMat4;
 }
-glm::mat4 ComponentBank::getModMat(const DUA_id& ID){
+glm::mat4 ComponentBank::getModMat(const DUA_id ID){
     return getPosMat(ID) * getRotMat(ID);
 }

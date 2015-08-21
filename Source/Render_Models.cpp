@@ -20,7 +20,7 @@ System_Render_Models::~System_Render_Models()
 //</editor-fold>
 //<editor-fold defaultstate="collapsed" desc="Init">
 bool System_Render_Models::init(std::stringstream& engineOut)
-{    
+{
     // Load graphics assets and buffer them to GPU
     if(!setUpResources(engineOut)) {
         engineOut << "Unable to initialize graphics resources!" << std::endl;

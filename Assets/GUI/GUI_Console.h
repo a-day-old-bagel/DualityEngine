@@ -508,7 +508,7 @@ namespace DualityEngine {
                 glUniform1i (txtrLoc, 1);
                 glBindVertexArray (VAOloc_text);  
 
-                glUniform3fv(unifLoc_color, 1, &Settings::Console::bkgndColor[0]);
+                glUniform3fv(unifLoc_color, 1, &Settings::Console::backColor[0]);
                 glDrawElements (GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, DUA_GL_BUFFER_OFFSET((sizeIndexArray - 6) * sizeof(DUA_uint16)));
                 glUniform3fv(unifLoc_color, 1, &Settings::Console::textColor[0]);
                 glDrawElements (GL_TRIANGLES, sizeIndexArray - 6, GL_UNSIGNED_SHORT, 0);

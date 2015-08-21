@@ -262,7 +262,7 @@ bool Game::cleanGameData(){
  * Systems that keep no registries do not
  * need to discover.
  *************************************/
-void Game::systems_discover(const DUA_id &ID){
+void Game::systems_discover(const DUA_id ID){
     renderModelsSystem.discoverID(ID);
     physicsMoveSystem.discoverID(ID);
     physicsCollisionSystem.discoverID(ID);
@@ -273,7 +273,7 @@ void Game::systems_discover(const DUA_id &ID){
  * Systems that keep no registries do not
  * need to scrutinize.
  *************************************/
-void Game::systems_scrutinize(const DUA_id &ID){
+void Game::systems_scrutinize(const DUA_id ID){
     renderModelsSystem.scrutinizeID(ID);
     physicsMoveSystem.scrutinizeID(ID);
     physicsCollisionSystem.scrutinizeID(ID);
@@ -284,7 +284,7 @@ void Game::systems_scrutinize(const DUA_id &ID){
  * Systems that keep no registries do not
  * need to do this either.
  *************************************/
-void Game::systems_forceRemove(const DUA_id& ID, const DUA_compFlag& component){
+void Game::systems_forceRemove(const DUA_id ID, const DUA_compFlag component){
     renderModelsSystem.forceRemoveComp(ID, component);
     physicsMoveSystem.forceRemoveComp(ID, component);
     physicsCollisionSystem.forceRemoveComp(ID, component);
