@@ -18,6 +18,7 @@ System_Render_Background::~System_Render_Background()
 
 bool System_Render_Background::init(std::stringstream& engineOut)
 {
+    engineOut << "Background initialializing! TEST" << std::endl;
     // Load graphics assets and buffer them to GPU
     if(!setUpResources(engineOut)) {
         engineOut << "Unable to initialize sky resources!" << std::endl;
@@ -114,7 +115,7 @@ void System_Render_Background::tick()
         glUniform1i (unifLoc_txtur, 2);
         glBindVertexArray (VAOloc);
 
-        glDrawArrays(GL_QUADS, 0, 4);    
+        glDrawArrays(GL_QUADS, 0, 4);
     
     } else {
         noCamBackground.render();
@@ -132,34 +133,3 @@ void System_Render_Background::tick()
         queuedFileName = NULL;
     }
 }
-//
-//bool System_Render_Background::aquireView(){
-//    if (bank->activeFreeCameraID != localActiveCamera){
-//        localActiveCamera = bank->activeFreeCameraID;
-//        if (localActiveCamera != DUA_NULL_ID){
-//            pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
-//        }
-//    }
-//    if (localActiveCamera != DUA_NULL_ID){
-//        if (bank->getState(localActiveCamera) & RECALCVIEWMAT){            
-//            pCamCurrent->updateView(bank->getRotMat(localActiveCamera), bank->getPosMat(localActiveCamera));            
-//        }
-//        if (bank->getState(localActiveCamera) & RECALCPROJMAT){
-//            pCamCurrent->updateProjection();
-//        }
-//        if (bank->getState(localActiveCamera) & (RECALCVIEWMAT | RECALCPROJMAT)){
-//            pCamCurrent->updateViewProjection();
-//            bank->stateOff(localActiveCamera, RECALCVIEWMAT | RECALCPROJMAT);
-//        }
-//        return true;
-//    } else {
-//        return false;
-//    }
-//    
-//}
-//
-//void System_Render_Background::clean(){
-//    System::clean();
-//    localActiveCamera = DUA_NULL_ID;
-//    pCamCurrent = NULL;
-//}
