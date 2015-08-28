@@ -34,10 +34,12 @@ bool System_Render_Background::setUpResources(std::stringstream& engineOut)
 {
     bool success = true;
     
-    DUA_float corners[16] = {-1.0, -1.0, 0.5, 1.0,
+    DUA_float corners[24] = {-1.0, -1.0, 0.5, 1.0,
                               1.0, -1.0, 0.5, 1.0,
                               1.0,  1.0, 0.5, 1.0,
-                             -1.0,  1.0, 0.5, 1.0};
+                              1.0,  1.0, 0.5, 1.0,
+                             -1.0,  1.0, 0.5, 1.0,
+                             -1.0, -1.0, 0.5, 1.0};
     
     shdrLoc = loadShaders("Assets/Shaders/skyQuad.vert", "Assets/Shaders/skyQuad.frag", engineOut);
 
@@ -53,7 +55,7 @@ bool System_Render_Background::setUpResources(std::stringstream& engineOut)
     glGenBuffers(1, &vertices);
 
     glBindBuffer(GL_ARRAY_BUFFER, vertices);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(DUA_float) * 16, corners, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(DUA_float) * 24, corners, GL_STATIC_DRAW);
     glEnableVertexAttribArray(attrLoc_verts);
     glVertexAttribPointer(attrLoc_verts, 4, GL_FLOAT, GL_FALSE, 0, 0);    
     
@@ -114,7 +116,7 @@ void System_Render_Background::tick()
         glUniform1i (unifLoc_txtur, 2);
         glBindVertexArray (VAOloc);
 
-        glDrawArrays(GL_QUADS, 0, 4);    
+        glDrawArrays(GL_TRIANGLES, 0, 6);
     
     } else {
         noCamBackground.render();
@@ -141,8 +143,8 @@ void System_Render_Background::tick()
 //        }
 //    }
 //    if (localActiveCamera != DUA_NULL_ID){
-//        if (bank->getState(localActiveCamera) & RECALCVIEWMAT){            
-//            pCamCurrent->updateView(bank->getRotMat(localActiveCamera), bank->getPosMat(localActiveCamera));            
+//        if (bank->getState(localActiveCamera) & RECALCVIEWMAT){
+//            pCamCurrent->updateView(bank->getRotMat(localActiveCamera), bank->getPosMat(localActiveCamera));
 //        }
 //        if (bank->getState(localActiveCamera) & RECALCPROJMAT){
 //            pCamCurrent->updateProjection();
@@ -155,7 +157,7 @@ void System_Render_Background::tick()
 //    } else {
 //        return false;
 //    }
-//    
+//
 //}
 //
 //void System_Render_Background::clean(){

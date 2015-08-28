@@ -29,7 +29,7 @@ namespace DualityEngine {
 
 //    #define DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE // prevents use of SDL's relative mouse mode which grabs mouse control.
     
-    #define DUA_OLD_VIDEO_DRIVERS true // openGL 3.0 will be used instead of 3.3
+//    #define DUA_OLD_VIDEO_DRIVERS // openGL 3.0 will be used instead of 3.3
 
 //    #define DUA_FULLSCREEN // engine will run in fullscreen mode
 

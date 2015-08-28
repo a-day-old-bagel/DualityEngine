@@ -5,20 +5,17 @@
 
 using namespace DualityEngine;
 
-//<editor-fold defaultstate="collapsed" desc="Constructor">
 System_Render_Models::System_Render_Models(ComponentBank* bank)
                   : System(bank, "Model Rendering System", 1) 
 {
     requiredComponents.at(0) = MODEL | POSITION | ORIENTATION;
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Destructor">
+
 System_Render_Models::~System_Render_Models()
 {
     
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Init">
+
 bool System_Render_Models::init(std::stringstream& engineOut)
 {
     // Load graphics assets and buffer them to GPU
@@ -28,8 +25,6 @@ bool System_Render_Models::init(std::stringstream& engineOut)
     }
     return true;
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Set Up Resources">
 
 bool System_Render_Models::setUpResources(std::stringstream& engineOut)
 {
@@ -40,8 +35,6 @@ bool System_Render_Models::setUpResources(std::stringstream& engineOut)
     return success;
 }
 
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Tick">
 void System_Render_Models::tick()
 {    
     if (bank->activeFreeCameraID != DUA_NULL_ID){

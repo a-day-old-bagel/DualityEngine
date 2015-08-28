@@ -108,7 +108,7 @@ void System_Scripting::parseCommand(const std::string& command){
     try{
         if (args[0] == "newent"){
             if (numArgs == 2){
-                DUA_id newID = bank->createEntity(args[1].c_str());
+                DUA_id newID = bank->spawnEntity(args[1].c_str());
                 if (newID != DUA_NULL_ID){
                     bank->dlgt->outputStr(std::to_string(newID));
                 } else {
@@ -278,7 +278,7 @@ void System_Scripting::parseAssignment(const std::vector<std::string>& args){
     int numRhsArgs = args.size() - 2;
     if (args[2] == "newent") {
         if (numRhsArgs == 2) {
-            DUA_id newID = bank->createEntity(args[0].c_str());
+            DUA_id newID = bank->spawnEntity(args[0].c_str());
             if (newID != DUA_NULL_ID) {
                 entityVariables[args[0]] = newID;
                 bank->dlgt->outputStr("Entity " + std::to_string(newID) + " has been assigned variable: (CTRL-C to copy)\n" + args[0]);

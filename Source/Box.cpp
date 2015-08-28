@@ -12,14 +12,14 @@ DUA_id ComponentBank::createBox(const char *name,
                                 const DUA_dbl velX, const DUA_dbl velY, const DUA_dbl velZ,
                                 const DUA_dbl angX, const DUA_dbl angY, const DUA_dbl angZ)
 {
-    DUA_id newEntityID = createEntity(name);
+    DUA_id newEntityID = spawnEntity(name);
     if (newEntityID != DUA_NULL_ID){
     
-        addModel            (newEntityID, "placeHolderFileName");
-        addPosition         (newEntityID, posX, posY, posZ);
-        addLinearVeloc    (newEntityID, velX, velY, velZ);
-        addOrientation         (newEntityID, rotX, rotY, rotZ);
-        addAngularVeloc    (newEntityID, angX, angY, angZ);
+        addModel         (newEntityID, "placeHolderFileName");
+        addPosition      (newEntityID, posX, posY, posZ);
+        addLinearVeloc   (newEntityID, velX, velY, velZ);
+        addOrientation   (newEntityID, rotX, rotY, rotZ);
+        addAngularVeloc  (newEntityID, angX, angY, angZ);
         
     }
     

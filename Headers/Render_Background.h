@@ -40,10 +40,10 @@ namespace DualityEngine {
         GLuint texture;
         GLuint VAOloc;
         GLuint shdrLoc;
-        GLuint unifLoc_txtur;
-        GLuint attrLoc_verts;
-        GLuint unifLoc_projM;
-        GLuint unifLoc_viewM;
+        GLint unifLoc_txtur;
+        GLint attrLoc_verts;
+        GLint unifLoc_projM;
+        GLint unifLoc_viewM;
 
         bool setUpResources(std::stringstream& engineOut);
 //        bool aquireView();

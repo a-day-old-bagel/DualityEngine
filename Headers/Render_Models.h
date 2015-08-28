@@ -26,8 +26,7 @@ namespace DualityEngine {
     class System_Render_Models : public System
     {
     private:
-       
-        DUA_id dbgCube;
+
         DebugCube debugCube;
 
         bool setUpResources(std::stringstream& engineOut);

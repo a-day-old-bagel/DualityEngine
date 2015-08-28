@@ -104,7 +104,6 @@ bool System_Render_Master::init(std::stringstream& engineOut)
     }
     
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL); 
     glEnable(GL_CULL_FACE);
@@ -120,7 +119,7 @@ void System_Render_Master::tick()
 {
     //...rendering to framebuffer is finished already in other systems...
     SDL_GL_SwapWindow( pWindow );    
-    glClear(GL_DEPTH_BUFFER_BIT);
+    glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     //...rendering to framebuffer starts again in other systems after this...
     
     // update view just once for all rendering systems this frame.

@@ -173,7 +173,7 @@ namespace DualityEngine {
         void stateOff(const DUA_id ID, const DUA_stateFlag flag);
 
         /* ENTITY CREATION */
-        DUA_id createEntity(const char* name);
+        DUA_id spawnEntity(const char *name);
         DUA_id createBox(const char *name,
                          const DUA_dbl posX, const DUA_dbl posY, const DUA_dbl posZ,
                          const DUA_dbl rotX, const DUA_dbl rotY, const DUA_dbl rotZ,

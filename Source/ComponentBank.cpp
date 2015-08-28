@@ -177,7 +177,7 @@ bool ComponentBank::tryAddComponent(const DUA_id &ID, const char* compName, Hash
  * ADD SOUL
  * is a little different than the rest below because it doesn't need to add any
  * flags to a soul component (for obvious reasons). You won't need to call it
- * anyway - it's private and wrapped into "createEntity."
+ * anyway - it's private and wrapped into "spawnEntity."
  ******************************************************************************/
 bool ComponentBank::addSoul(const DUA_id &ID, const char* name){
     return tryAddComponent(ID, "soul", components_soul, name, DUA_DEFAULT_COMPONENTS, DUA_DEFAULT_STATE);
@@ -447,7 +447,7 @@ DUA_id ComponentBank::generateID(){
 /*******************************************************************************
  * CREATE ENTITY
  ******************************************************************************/
-DUA_id ComponentBank::createEntity(const char* name){
+DUA_id ComponentBank::spawnEntity(const char *name){
     DUA_id ID = generateID();
     if (addSoul(ID, name)){
         return ID;

@@ -19,10 +19,12 @@ namespace DualityEngine {
         bool hasInitialized = false;
         
         
-       DUA_float corners[16] = {-1.0, -1.0, 0.5, 1.0,
+       DUA_float corners[24] = {-1.0, -1.0, 0.5, 1.0,
                                  1.0, -1.0, 0.5, 1.0,
                                  1.0,  1.0, 0.5, 1.0,
-                                -1.0,  1.0, 0.5, 1.0};
+                                 1.0,  1.0, 0.5, 1.0,
+                                -1.0,  1.0, 0.5, 1.0,
+                                -1.0, -1.0, 0.5, 1.0};
 
         // these define the colored pixels that will be used in the bitmap data below.
         #define BG0 0x00, 0x00, 0x00 // black
@@ -75,7 +77,7 @@ namespace DualityEngine {
             glGenBuffers(1, &vertices);         
             
             glBindBuffer(GL_ARRAY_BUFFER, vertices);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(DUA_float) * 16, corners, GL_STATIC_DRAW);
+            glBufferData(GL_ARRAY_BUFFER, sizeof(DUA_float) * 24, corners, GL_STATIC_DRAW);
             glEnableVertexAttribArray(attrLoc_verts);
             glVertexAttribPointer(attrLoc_verts, 4, GL_FLOAT, GL_FALSE, 0, 0);
             
@@ -101,7 +103,7 @@ namespace DualityEngine {
             glUniform1i (txtrLoc, 0);
             glBindVertexArray (VAOloc);           
             
-            glDrawArrays (GL_QUADS, 0, 4);
+            glDrawArrays (GL_TRIANGLES, 0, 6);
         }
     };
 }
