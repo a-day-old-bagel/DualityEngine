@@ -62,6 +62,23 @@ It also makes saving and loading game states naturally very simple.
 ####[shmooze] um... ORGANIC?
 
 _____________________
+##**Setup Guide for CLion**
+Make sure the following are installed: SDL2, OPENGL, GLEW, Open Asset Importer, FreeType2
+### On Debian linux run:
+
+>  sudo apt-get install libsdl2-2.0-0
+
+>  sudo apt-get install libsdl2-dev
+
+> sudo apt-get install libglew-dev
+
+> sudo apt-get install libfreetype6-dev
+
+> sudo apt-get install libglm-dev
+
+####Open the project in CLion
+####Build the project, set the target to DualityEngine, and then click run.
+_____________________
 ###**Controls**
 ####use  ~  (tilde) to access the in-game console, into which you may type "help" to see a listing of available commands.
 ####Given an entity possessing camera, position, orientation, linear velocity, angular velocity, and control components (currently limited to spaceship-style controls), movement inputs are set up in the standard WASD-mouse configuration (or arrow keys to rotate view also work for now).
