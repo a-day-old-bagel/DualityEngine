@@ -18,6 +18,7 @@ System_Render_Background::~System_Render_Background()
 
 bool System_Render_Background::init(std::stringstream& engineOut)
 {
+    engineOut << "Background initialializing! TEST" << std::endl;
     // Load graphics assets and buffer them to GPU
     if(!setUpResources(engineOut)) {
         engineOut << "Unable to initialize sky resources!" << std::endl;
@@ -133,6 +134,7 @@ void System_Render_Background::tick()
         delete queuedFileName;
         queuedFileName = NULL;
     }
+<<<<<<< HEAD
 }
 //
 //bool System_Render_Background::aquireView(){
@@ -165,3 +167,6 @@ void System_Render_Background::tick()
 //    localActiveCamera = DUA_NULL_ID;
 //    pCamCurrent = NULL;
 //}
+=======
+}
+>>>>>>> 37024125b1287ceeb9328f620f18143b62005339
