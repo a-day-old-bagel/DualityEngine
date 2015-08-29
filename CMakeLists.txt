@@ -51,6 +51,29 @@ include_directories(${FREETYPE_INCLUDE_DIR_ft2build})
 include_directories(${FREETYPE_INCLUDE_DIR_freetype2})
 set(LIBS ${LIBS} ${FREETYPE_LIBRARIES})
 
+set(DUA_INCLUDE_DIR
+    Assets/GUI/NoCamBackground
+    Assets/GUI
+    Assets/Models/DebugCube
+
+    Headers/Components
+    Headers/Bank
+    Headers/Admin
+    Headers/Systems
+    Headers/Utilities
+    Headers/Math
+    Headers/AssetManagement
+
+    #Source/Admin
+    #Source/AssetManagement
+    #Source/Bank
+    #Source/Entities
+    #Source/Math
+    #Source/Systems
+    #Source/Utilities
+    )
+include_directories(${DUA_INCLUDE_DIR})
+
 # Find all the source files
 set(SOURCE_FILES
     Assets/GUI/NoCamBackground/DebugBackground.h

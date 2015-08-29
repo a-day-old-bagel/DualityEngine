@@ -1,4 +1,4 @@
-#include "../Headers/ShaderRepository.h"
+#include "ShaderRepository.h"
 
 using namespace DualityEngine;
 

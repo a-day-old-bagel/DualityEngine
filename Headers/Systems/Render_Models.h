@@ -18,7 +18,7 @@
 #include <glm/gtx/euler_angles.hpp>
 
 #include "System.h"
-#include "../Assets/Models/DebugCube/DebugCube.h"
+#include "DebugCube.h"
 //</editor-fold>
 
 namespace DualityEngine {

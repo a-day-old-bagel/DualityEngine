@@ -1,4 +1,4 @@
-#include "../Headers/HashMap.h"
+#include "HashMap.h"
 
 using namespace DualityEngine;
 

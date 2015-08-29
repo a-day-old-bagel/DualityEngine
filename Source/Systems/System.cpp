@@ -2,7 +2,7 @@
  * Galen Cochrane, 1 FEB 2015
  ****************************************************************/
 
-#include "../Headers/System.h"
+#include "System.h"
 
 using namespace DualityEngine;
 

@@ -25,14 +25,14 @@ namespace DualityEngine {
     class System_Render_Console : public System
     {
     private:
-        const glm::vec3 textColor = /*{0.5, 0.8, 1.0};//{1.0, 0.8, 0.0};*/{0.5, 1.0, 0.3};
-        const glm::vec3 bkgdColor = /*{0.1, 0.05, 0.0};//{0.0, 0.0, 0.1};*/{0.05, 0.05, 0.05};
+        const glm::vec3 localTextColor = {0.5, 1.0, 0.3};
+        const glm::vec3 localBackColor = {0.05, 0.05, 0.05};
         const char firstAsciiChar = ' ';    // this is the first ascii char representable
         const char lastAsciiChar = '~';     // and this is the last (look at ascii table)
         const std::string commPromptNorm = ">: "; // this appears as the prompt for the console when not in the menu
         const std::string commPromptMenu = "MENU>: "; // this appears as the prompt when in the menu
         const int numTexPanels = lastAsciiChar - firstAsciiChar + 2; //+2 is for the 'unknown char/background' quad plus the off-by-one.
-        const float texPanelAdvance = 1.0 / (float)numTexPanels;    // this is how far the GPU texture sampler will have to move to get to the next character in the texture atlas.
+        const float texPanelAdvance = 1.f / (float)numTexPanels;    // this is how far the GPU texture sampler will have to move to get to the next character in the texture atlas.
         bool hasInitialized = false;
         
         // All of these are openGL-specific fields required to render the console

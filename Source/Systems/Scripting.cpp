@@ -8,9 +8,9 @@
 
 #include <SDL.h>
 #include <fstream>
-#include "../Headers/Scripting.h"
+#include "Scripting.h"
 
-#include "../Headers/ControlTypes.h"
+#include "ControlTypes.h"
 
 using namespace DualityEngine;
 
@@ -46,7 +46,7 @@ void System_Scripting::submitScript(const std::string& fileName){
     }
     
     if (lines.empty()){
-        bank->dlgt->outputStr(filePath + ": file either not found, unreadable, or empty.\n");
+        bank->dlgt->outputStr("<!>    " + filePath + ": file either not found, unreadable, or empty.\n");
     } else {
         for (uint i = 0; i < lines.size();){
             if (lines.at(i).empty() || lines.at(i).at(0) == '#'){
@@ -59,7 +59,7 @@ void System_Scripting::submitScript(const std::string& fileName){
         int numHeaderLinesToErase = 1;
         
         if (lines.size() < 2){
-            bank->dlgt->outputStr(filePath + ": not a valid Duality script.\n");
+            bank->dlgt->outputStr("<!>    " + filePath + ": not a valid Duality script.\n");
         } else {
             std::stringstream firstTwoLines(lines.at(0) + " " + lines.at(1));
             std::string headerTypeDeclaration, headerVersion, headerNumEntities;
@@ -75,7 +75,7 @@ void System_Scripting::submitScript(const std::string& fileName){
                 // DO SOMETHING WITH NUMENTITIES - RESERVE SPACE IN HASH TABLES, ETC.
             }
             if (headerTypeDeclaration != "DualityEngineScript" || headerVersion != DUA_VERSION){
-                bank->dlgt->outputStr(filePath + ": invalid Duality script or wrong version.");
+                bank->dlgt->outputStr("<!>    " + filePath + ": invalid Duality script or wrong version.");
             } else {               
 
                 lines.erase(lines.begin(), lines.begin() + numHeaderLinesToErase);
@@ -112,7 +112,7 @@ void System_Scripting::parseCommand(const std::string& command){
                 if (newID != DUA_NULL_ID){
                     bank->dlgt->outputStr(std::to_string(newID));
                 } else {
-                    bank->dlgt->outputStr("Failed to create " + args[1] + "!\n");
+                    bank->dlgt->outputStr("<!>    Failed to create " + args[1] + "!\n");
                 }
             } else {
                 handleBadUsage(args[0]);
@@ -145,10 +145,10 @@ void System_Scripting::parseCommand(const std::string& command){
                             bank->dlgt->outputStr(std::to_string(id) + "\n");
                         }
                     } else {
-                        bank->dlgt->outputStr("No entities exist named \"" + args[1] + "\".\n");
+                        bank->dlgt->outputStr("<!>    No entities exist named \"" + args[1] + "\".\n");
                     }
                 } else {
-                    bank->dlgt->output("ERROR: ComponentBank::getID threw an exception!\n");
+                    bank->dlgt->output("<!>    ERROR: ComponentBank::getID threw an exception!\n");
                 }
             } else {
                 handleBadUsage(args[0]);
@@ -175,7 +175,7 @@ void System_Scripting::parseCommand(const std::string& command){
                     }
                     bank->dlgt->outputStr("Available components are:\n" + compList + "\nUse \"help [component]\" for more info on a specific component.\n");
                 } else {
-                    bank->dlgt->outputStr("No documentation for: " + args[1] + "\n");
+                    bank->dlgt->outputStr("<!>    No documentation for: " + args[1] + "\n");
                 }
             } else {
                 handleBadUsage(args[0]);
@@ -209,7 +209,7 @@ void System_Scripting::parseCommand(const std::string& command){
                 if (args[2] == "spaceship"){
                     bank->switchToControl(prsID(args[1]), ControlTypes::SPACE);
                 } else if (args[2] == "walking"){
-                    bank->dlgt->output("walking control interface not yet implemented");
+                    bank->dlgt->output("<!>    walking control interface not yet implemented");
                 } else if (args[2] == "none"){
                     bank->switchToControl(DUA_NULL_ID, ControlTypes::NONE);
                 } else {
@@ -248,13 +248,13 @@ void System_Scripting::parseCommand(const std::string& command){
             }
         } else if (args[0] == "load") {
             if (numArgs == 2){
-                bank->dlgt->output("load game command not yet implemented\n");
+                bank->dlgt->output("<!>    load game command not yet implemented\n");
             } else {
                 handleBadUsage(args[0]);
             }
         } else if (args[0] == "save") {
             if (numArgs == 2){
-                bank->dlgt->output("save game command not yet implemented\n");
+                bank->dlgt->output("<!>    save game command not yet implemented\n");
             } else {
                 handleBadUsage(args[0]);
             }
@@ -267,7 +267,7 @@ void System_Scripting::parseCommand(const std::string& command){
                 handleBadUsage(args[0]);
             }
         } else {
-            bank->dlgt->outputStr("Bad command: " + args[0] + ". Type \"help\" for a list of commands.\n");
+            bank->dlgt->outputStr("<!>    Bad command: " + args[0] + ". Type \"help\" for a list of commands.\n");
         }
     }catch(const char* error){
         bank->dlgt->output(error);
@@ -283,13 +283,13 @@ void System_Scripting::parseAssignment(const std::vector<std::string>& args){
                 entityVariables[args[0]] = newID;
                 bank->dlgt->outputStr("Entity " + std::to_string(newID) + " has been assigned variable: (CTRL-C to copy)\n" + args[0]);
             } else {
-                bank->dlgt->outputStr("Failed to create " + args[1] + "!\n");
+                bank->dlgt->outputStr("<!>    Failed to create " + args[1] + "!\n");
             }
         } else {
             handleBadUsage(args[2]);
         }
     } else {
-        bank->dlgt->output("Bad assignment. Use \"[variable] = newent [name]\".");
+        bank->dlgt->output("<!>    Bad assignment. Use \"[variable] = newent [name]\".");
     }
 }
 
@@ -303,7 +303,7 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
                     parseKeyword_all(args);
                     return;
                 }
-                bank->dlgt->outputStr("Wrong number of arguments for a " + args[1] + " component.\n");
+                bank->dlgt->outputStr("<!>    Wrong number of arguments for a " + args[1] + " component.\n");
                 bank->dlgt->outputStr(componentArgs[args[1]].first);
                 return;
             }
@@ -341,7 +341,7 @@ void System_Scripting::parseAddCommand(const std::vector<std::string>& args){
         }else if (args[1] == DUA_COMPCOLL(15,1)){
             bank->addCameraFree(entID, prsFlt(args[3]), prsFlt(args[4]), prsFlt(args[5]), prsDbl(args[6]), prsDbl(args[7]), prsDbl(args[8]), prsDbl(args[9]), prsDbl(args[10]), prsDbl(args[11]), prsDbl(args[12]), prsDbl(args[13]), prsDbl(args[14]));
         }else{
-            bank->dlgt->outputStr("Unknown component: " + args[1] + "\n");
+            bank->dlgt->outputStr("<!>    Unknown component: " + args[1] + "\n");
         }
     } catch(const char* error) {
         bank->dlgt->output(error);
@@ -355,7 +355,7 @@ void System_Scripting::parseKeyword_all(const std::vector<std::string>& args){
             DUA_dbl pwr = prsDbl(args[4]);
             bank->addSpaceControl(entID, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr);
         }else{
-            bank->dlgt->outputStr("\"all\" keyword not supported for component: " + args[1] + "\n");
+            bank->dlgt->outputStr("<!>    \"all\" keyword not supported for component: " + args[1] + "\n");
         }
     } catch(const char* error) {
         bank->dlgt->output(error);
@@ -399,7 +399,7 @@ void System_Scripting::parseRemoveCommand(const std::vector<std::string>& args){
         }else if (args[1] == DUA_COMPCOLL(15,1)){
             bank->deleteCameraFree(entID);
         }else{
-            bank->dlgt->outputStr("Unknown component: " + args[1] + "\n");
+            bank->dlgt->outputStr("<!>    Unknown component: " + args[1] + "\n");
         }
     } catch(const char* error) {
         bank->dlgt->output(error);
@@ -417,10 +417,10 @@ DUA_id System_Scripting::prsID(const std::string& IDstring){
         try{
             entID = entityVariables.at(IDstring);
         } catch (std::out_of_range& oorException){
-            throw std::string("Not a valid ID or variable name: " + IDstring + "\n").c_str();
+            throw std::string("<!>    Not a valid ID or variable name: " + IDstring + "\n").c_str();
         }
     } catch (std::out_of_range& oorException) {
-        throw std::string("ID out of range: " + IDstring + "\n").c_str();
+        throw std::string("<!>    ID out of range: " + IDstring + "\n").c_str();
     }
     return entID;
 }
@@ -430,9 +430,9 @@ int System_Scripting::prsInt(const std::string& intString){
     try {
         val = DUA_STR_TO_INT(intString, 10);
     } catch (std::invalid_argument& invalidException) {
-        throw std::string("Not a valid value: " + intString + "\n").c_str();
+        throw std::string("<!>    Not a valid value: " + intString + "\n").c_str();
     } catch (std::out_of_range& oorException) {
-        throw std::string("Value out of range: " + intString + "\n").c_str();
+        throw std::string("<!>    Value out of range: " + intString + "\n").c_str();
     }
     return val;
 }
@@ -445,9 +445,9 @@ DUA_dbl System_Scripting::prsDbl(const std::string& dblString){
 //            throw std::out_of_range("DUA_dbl");
 //        }
     } catch (std::invalid_argument& invalidException) {
-        throw std::string("Not a valid value: " + dblString + "\n").c_str();
+        throw std::string("<!>    Not a valid value: " + dblString + "\n").c_str();
     } catch (std::out_of_range& oorException) {
-        throw std::string("Value out of range: " + dblString + "\n").c_str();
+        throw std::string("<!>    Value out of range: " + dblString + "\n").c_str();
     }
     return dbl;
 }
@@ -457,9 +457,9 @@ DUA_float System_Scripting::prsFlt(const std::string& floatString){
     try {
         flt = DUA_STR_TO_FLOAT(floatString);
     } catch (std::invalid_argument& invalidException) {
-        throw std::string("Not a valid value: " + floatString + "\n").c_str();
+        throw std::string("<!>    Not a valid value: " + floatString + "\n").c_str();
     } catch (std::out_of_range& oorException) {
-        throw std::string("Value out of range: " + floatString + "\n").c_str();
+        throw std::string("<!>    Value out of range: " + floatString + "\n").c_str();
     }
     return flt;
 }
@@ -472,15 +472,15 @@ DUA_colorByte System_Scripting::prsClr(const std::string& colorValue){
             throw std::out_of_range("DUA_colorByte");
         }
     } catch (std::invalid_argument& invalidException) {
-        throw std::string("Not a valid value: " + colorValue + "\n").c_str();
+        throw std::string("<!>    Not a valid value: " + colorValue + "\n").c_str();
     } catch (std::out_of_range& oorException) {
-        throw std::string("RGB value out of range: " + colorValue + "\n").c_str();
+        throw std::string("<!>    RGB value out of range: " + colorValue + "\n").c_str();
     }
     return colorVal;
 }
 
 void System_Scripting::handleBadUsage(const std::string& command){
-    bank->dlgt->outputStr("Incorrect usage of " + command + ". Use \"help " + command + "\" for more info. Correct usage is:");
+    bank->dlgt->outputStr("<!>    Incorrect usage of " + command + ". Use \"help " + command + "\" for more info. Correct usage is:");
     bank->dlgt->outputStr("    " + commandUsages[command]);
 }
 

@@ -1,6 +1,6 @@
-#include "../Headers/loadCubeMap.h"
+#include "loadCubeMap.h"
 #define  STB_IMAGE_IMPLEMENTATION
-#include "../Headers/stb_image.h"
+#include "stb_image.h"
 
 using namespace DualityEngine;
 

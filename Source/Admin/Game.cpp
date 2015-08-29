@@ -6,7 +6,7 @@
  ************************************************/
 
 #include <fstream>
-#include "../Headers/Game.h"
+#include "Game.h"
 
 using namespace DualityEngine;
 

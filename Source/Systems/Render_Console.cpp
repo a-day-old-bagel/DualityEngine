@@ -6,7 +6,8 @@
  * It needs more abstraction.  I want to make a text box base class,
  * for example.
  ****************************************************************/
-#include "../Headers/Render_Console.h"
+#include "Render_Console.h"
+#include "Settings.h"
 
 using namespace DualityEngine;
 
@@ -88,6 +89,12 @@ bool System_Render_Console::init(std::stringstream& output)
     if (!generateAndBufferGeometry(output)) return false;
 
     hasInitialized = true;
+
+    GLenum glErr = glGetError();
+    if (glErr != GL_NO_ERROR) {
+        output << "<!>    glError detected after system init: " << gluErrorString(glErr) << std::endl;
+    }
+
     return true;
 }
 //</editor-fold>
@@ -106,9 +113,9 @@ void System_Render_Console::tick()
         glUniform1i(txtrLoc, 1);
         glBindVertexArray(VAOloc_text);
 
-        glUniform3fv(unifLoc_color, 1, &bkgdColor[0]);
+        glUniform3fv(unifLoc_color, 1, &localBackColor[0]);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, DUA_GL_BUFFER_OFFSET((sizeIndexArray - 6) * sizeof (DUA_uint16)));
-        glUniform3fv(unifLoc_color, 1, &textColor[0]);
+        glUniform3fv(unifLoc_color, 1, &localTextColor[0]);
         glDrawElements(GL_TRIANGLES, sizeIndexArray - 6, GL_UNSIGNED_SHORT, 0);
     }
 }
@@ -128,7 +135,7 @@ bool System_Render_Console::generateAndBufferGeometry(std::stringstream& output)
     DUA_uint16 indices[sizeIndexArray];
 
     // fill the UV buffer with zeros for now.
-    memset(UVs, 0, sizeVertArray);
+    memset(UVs, 0, (size_t)sizeVertArray);
 
     // Generate the backgroud quad
         verts[sizeVertArray - 8] =                screenOffsetX  / ((float)Settings::Display::screenResX * 0.5f) - 1;
@@ -142,11 +149,11 @@ bool System_Render_Console::generateAndBufferGeometry(std::stringstream& output)
 
         const float offSetToCenterX = ((float)charWidth - 2) / (float)charWidth;
         const float offSetToCenterY = ((float)charHeight + 2) / (float)charHeight;
-        UVs[sizeVertArray - 8] = (1.0 - offSetToCenterX) / numTexPanels;
-        UVs[sizeVertArray - 7] =  1.0 - offSetToCenterY;            
+        UVs[sizeVertArray - 8] = (1.f - offSetToCenterX) / numTexPanels;
+        UVs[sizeVertArray - 7] =  1.f - offSetToCenterY;
         UVs[sizeVertArray - 6] =        offSetToCenterX  / numTexPanels;
-        UVs[sizeVertArray - 5] =  1.0 - offSetToCenterY;            
-        UVs[sizeVertArray - 4] = (1.0 - offSetToCenterX) / numTexPanels;
+        UVs[sizeVertArray - 5] =  1.f - offSetToCenterY;
+        UVs[sizeVertArray - 4] = (1.f - offSetToCenterX) / numTexPanels;
         UVs[sizeVertArray - 3] =        offSetToCenterY;            
         UVs[sizeVertArray - 2] =        offSetToCenterX  / numTexPanels;
         UVs[sizeVertArray - 1] =        offSetToCenterY;

@@ -2,7 +2,7 @@
  * This takes file paths for the two shaders, and loads the shaders.
  *************************************************************************/
 
-#include "../Headers/loadShaders.h"
+#include "loadShaders.h"
 
 using namespace DualityEngine;
 

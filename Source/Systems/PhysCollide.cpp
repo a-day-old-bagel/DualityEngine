@@ -1,4 +1,4 @@
-#include "../Headers/PhysCollide.h"
+#include "PhysCollide.h"
 
 using namespace DualityEngine;
 

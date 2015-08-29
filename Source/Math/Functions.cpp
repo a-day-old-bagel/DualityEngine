@@ -1,4 +1,4 @@
-#include "../Headers/Functions.h"
+#include "Functions.h"
 #include <cmath>
 
 namespace DualityEngine{

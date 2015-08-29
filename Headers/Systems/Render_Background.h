@@ -20,7 +20,7 @@
 #include "System.h"
 #include "loadShaders.h"
 #include "loadCubeMap.h"
-#include "../Assets/GUI/NoCamBackground/DebugBackground.h"
+#include "DebugBackground.h"
 
 //</editor-fold>
 

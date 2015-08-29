@@ -31,12 +31,9 @@ namespace DualityEngine {
     
 //    #define DUA_OLD_VIDEO_DRIVERS // openGL 3.0 will be used instead of 3.3
 
-//    #define DUA_FULLSCREEN // engine will run in fullscreen mode
+    #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
-    #define DUA_WHICH_MONITOR 2
-    
-    #define DUA_CONTROLSS_LINEAR_BRAKING_DEADZONE 1e-20
-    #define DUA_CONTROLSS_ANGULAR_BRAKING_DEADZONE 1e-20
+    #define DUA_DEFUALT_WHICH_MONITOR 0
     
     #define DUA_DEFAULT_SCREENRES_X 1024    // Defualt screen resolution X
     #define DUA_DEFAULT_SCREENRES_Y 768     // Defualt screen resolution Y
@@ -48,6 +45,9 @@ namespace DualityEngine {
     #define DUA_DEFAULT_SKYFILETYPE "tga"       // Default skymap file format
 
     #define DUA_VERSION "v0.01.02"  // This is checked against scripts when they are run.
+
+    #define DUA_CONTROLSS_LINEAR_BRAKING_DEADZONE 1e-20
+    #define DUA_CONTROLSS_ANGULAR_BRAKING_DEADZONE 1e-20
     
     /* ====================================================================== */
     

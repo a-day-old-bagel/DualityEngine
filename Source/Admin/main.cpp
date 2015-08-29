@@ -5,7 +5,7 @@
  * Created on January 27, 2015, 2:26 PM
  ***************************************/
 
-#include "../Headers/Game.h"
+#include "Game.h"
 
 /*************************************************
  * This looks simple enough, right?

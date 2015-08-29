@@ -5,7 +5,7 @@
  * Created on January 27, 2015, 4:07 PM
  */
 
-#include "../Headers/Engine.h"
+#include "Engine.h"
 
 using namespace DualityEngine;
 

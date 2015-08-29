@@ -6,9 +6,9 @@
  * 
  ******************************************************************************/
 
-#include "../Headers/UserInput.h"
+#include "UserInput.h"
 
-#include "../Headers/ControlTypes.h"
+#include "ControlTypes.h"
 
 using namespace DualityEngine;
 
@@ -36,13 +36,13 @@ bool System_UserInput::init(std::stringstream& output){
     // This needs to be done in this thread instead of in the graphics thread to prevent
     // massive event handing slowdowns. Will see if works in Windows.
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        output << "SDL did not initialize! SDL Error: " << SDL_GetError() << std::endl;
+        output << "<!>    SDL did not initialize! SDL Error: " << SDL_GetError() << std::endl;
         return false;
     }
     
 #ifndef DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE
     if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
-        output << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
+        output << "<!>    SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
         return false;
     }
 #endif
@@ -78,7 +78,7 @@ void System_UserInput::tick(){
 //                break;
             case(SDL_QUIT):
                 bank->dlgt->quit();
-                bank->dlgt->output("\nFORCED EXIT\n\n");
+                bank->dlgt->output("\n<!>    FORCED EXIT\n\n");
                 break;
             default:
 //                bank->dlgt->outputStr(std::to_string(sdlEvent.type));
@@ -105,7 +105,7 @@ void System_UserInput::parseMenuCommand(const std::string& command){
     } else if (arg0 == "help"){        
         bank->dlgt->submitScriptCommand(command);
     } else {
-        bank->dlgt->outputStr("Not a menu option: " + arg0 + ". Only commands 'new', 'load', 'save', 'exit', and 'help' may be accessed from the menu. Press ESC to leave the menu. ~ key accesses console during play.");
+        bank->dlgt->outputStr("<!>    Not a menu option: " + arg0 + ". Only commands 'new', 'load', 'save', 'exit', and 'help' may be accessed from the menu. Press ESC to leave the menu. ~ key accesses console during play.");
     }
 }
 

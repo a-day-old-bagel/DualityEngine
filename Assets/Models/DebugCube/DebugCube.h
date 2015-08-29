@@ -2,8 +2,8 @@
 #define DEBUGCUBE_H
 
 #include <sstream>
-#include "../../../Headers/Settings.h"
-#include "../../../Headers/loadShaders.h"
+#include "Settings.h"
+#include "loadShaders.h"
 
 namespace DualityEngine {
 

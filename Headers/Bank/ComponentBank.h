@@ -45,6 +45,8 @@
 #include "../Components/Collision.h"
 #include "../Components/CameraFree.h"
 
+#include "ControlTypes.h"
+
 namespace DualityEngine {
 
     class ComponentBank
@@ -236,12 +238,12 @@ namespace DualityEngine {
         
         /* CONTROL STUFF */
 
-        namespace ControlTypes{
-            enum type{
-                NONE = 0,
-                SPACE = 1
-            };
-        }
+//        namespace ControlTypes{
+//            enum type{
+//                NONE = 0,
+//                SPACE = 1
+//            };
+//        }
         
         bool switchToControl(const DUA_id id, ControlTypes::type controlType);
         void scrutinizeControl(const DUA_id id, ControlTypes::type controlType);

@@ -1,7 +1,7 @@
 /****************************************************************
  * Galen Cochrane, 1 FEB 2015
  ****************************************************************/
-#include "../Headers/Render_Background.h"
+#include "Render_Background.h"
 
 using namespace DualityEngine;
 
@@ -18,7 +18,6 @@ System_Render_Background::~System_Render_Background()
 
 bool System_Render_Background::init(std::stringstream& engineOut)
 {
-    engineOut << "Background initialializing! TEST" << std::endl;
     // Load graphics assets and buffer them to GPU
     if(!setUpResources(engineOut)) {
         engineOut << "Unable to initialize sky resources!" << std::endl;
@@ -27,6 +26,10 @@ bool System_Render_Background::init(std::stringstream& engineOut)
     if(!noCamBackground.Init(engineOut)){
         engineOut << "Unable to initialize noCam background!" << std::endl;
         return false;
+    }
+    GLenum glErr = glGetError();
+    if (glErr != GL_NO_ERROR) {
+        engineOut << "<!>    glError detected after system init: " << gluErrorString(glErr) << std::endl;
     }
     return true;
 }

@@ -5,7 +5,7 @@
  * 
  * 
  ******************************************************************************/
-#include "../Headers/Console.h"
+#include "Console.h"
 using namespace DualityEngine;
 
 Console::~Console(){

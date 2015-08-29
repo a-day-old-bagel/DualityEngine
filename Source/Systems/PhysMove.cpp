@@ -1,4 +1,4 @@
-#include "../Headers/PhysMove.h"
+#include "PhysMove.h"
 
 using namespace DualityEngine;
 

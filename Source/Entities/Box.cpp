@@ -2,7 +2,7 @@
  * Galen Cochrane, 1 FEB 2015
  ****************************************************************/
 
-#include "../Headers/ComponentBank.h"
+#include "ComponentBank.h"
 
 using namespace DualityEngine;
 
