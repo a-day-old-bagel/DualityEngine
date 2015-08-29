@@ -23,27 +23,27 @@
 // It's pointless to do separate compilation on HashMap at this point, but I do it
 // anyway for style consistency
 #include "HashMap.h"
-#include "../Source/HashMap.cpp"
+#include "../../Source/Bank/HashMap.cpp"
 
 #include "BankDelegates.h"
-#include "Settings.h"
+#include "../Utilities/Settings.h"
 
-#include "Soul.h"
-#include "Model.h"
-#include "SpaceControl.h"
-#include "Position.h"
-#include "PositionChild.h"
-#include "PositionParent.h"
-#include "LinearVelocity.h"
-#include "Orientation.h"
-#include "AngularVelocity.h"
-#include "PointLight.h"
-#include "DirectionalLight.h"
-#include "AmbientLight.h"
-#include "Owner.h"
-#include "Score.h"
-#include "Collision.h"
-#include "CameraFree.h"
+#include "../Components/Soul.h"
+#include "../Components/Model.h"
+#include "../Components/SpaceControl.h"
+#include "../Components/Position.h"
+#include "../Components/PositionChild.h"
+#include "../Components/PositionParent.h"
+#include "../Components/LinearVelocity.h"
+#include "../Components/Orientation.h"
+#include "../Components/AngularVelocity.h"
+#include "../Components/PointLight.h"
+#include "../Components/DirectionalLight.h"
+#include "../Components/AmbientLight.h"
+#include "../Components/Owner.h"
+#include "../Components/Score.h"
+#include "../Components/Collision.h"
+#include "../Components/CameraFree.h"
 
 namespace DualityEngine {
 
@@ -235,6 +235,13 @@ namespace DualityEngine {
         
         
         /* CONTROL STUFF */
+
+        namespace ControlTypes{
+            enum type{
+                NONE = 0,
+                SPACE = 1
+            };
+        }
         
         bool switchToControl(const DUA_id id, ControlTypes::type controlType);
         void scrutinizeControl(const DUA_id id, ControlTypes::type controlType);

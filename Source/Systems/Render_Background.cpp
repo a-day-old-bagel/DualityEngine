@@ -134,39 +134,4 @@ void System_Render_Background::tick()
         delete queuedFileName;
         queuedFileName = NULL;
     }
-<<<<<<< HEAD
 }
-//
-//bool System_Render_Background::aquireView(){
-//    if (bank->activeFreeCameraID != localActiveCamera){
-//        localActiveCamera = bank->activeFreeCameraID;
-//        if (localActiveCamera != DUA_NULL_ID){
-//            pCamCurrent = bank->getCameraFreePtr(localActiveCamera);
-//        }
-//    }
-//    if (localActiveCamera != DUA_NULL_ID){
-//        if (bank->getState(localActiveCamera) & RECALCVIEWMAT){
-//            pCamCurrent->updateView(bank->getRotMat(localActiveCamera), bank->getPosMat(localActiveCamera));
-//        }
-//        if (bank->getState(localActiveCamera) & RECALCPROJMAT){
-//            pCamCurrent->updateProjection();
-//        }
-//        if (bank->getState(localActiveCamera) & (RECALCVIEWMAT | RECALCPROJMAT)){
-//            pCamCurrent->updateViewProjection();
-//            bank->stateOff(localActiveCamera, RECALCVIEWMAT | RECALCPROJMAT);
-//        }
-//        return true;
-//    } else {
-//        return false;
-//    }
-//
-//}
-//
-//void System_Render_Background::clean(){
-//    System::clean();
-//    localActiveCamera = DUA_NULL_ID;
-//    pCamCurrent = NULL;
-//}
-=======
-}
->>>>>>> 37024125b1287ceeb9328f620f18143b62005339

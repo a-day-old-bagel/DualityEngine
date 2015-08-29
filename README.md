@@ -45,7 +45,7 @@ An engine is essentially just a managed thread that can loop the "tick" of one o
 
 > Examples of engines include
 
-> - Graphics engine - calls tick() on a a rendering system and maybe an animation system in a loop
+> - Graphics engine - calls tick() on various rendering systems and maybe an animation system in a loop
 
 > - Physics engine - calls tick() in a loop on a Ballistics system, a Collision system, a user input system, and more.
 
@@ -57,7 +57,7 @@ It also makes saving and loading game states naturally very simple.
 ----------
 ###Duality Engine also aims to investigate the worlds of **Physically Based Rendering** and procedurally generated destructible terrains and objects, possibly via **non-cubic voxels.** And what would an amature WIP game engine be without taking a swing at **machine learning** and **neural net AI** for good measure?
 ----------
-###If I think of any other schmoozy buzzwords to stick in, this section may be expanded...
+###If we think of any other schmoozy buzzwords to stick in, this section may be expanded...
 ####[shmooze] LOCK FREE
 ####[shmooze] um... ORGANIC?
 

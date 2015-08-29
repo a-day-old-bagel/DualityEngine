@@ -9,8 +9,8 @@
 #ifndef BANKDELEGATES_H
 #define	BANKDELEGATES_H
 
-#include "Delegate.h"
-#include "Settings.h"
+#include "../Utilities/Delegate.h"
+#include "../Utilities/Settings.h"
 
 namespace DualityEngine {
 
