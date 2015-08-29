@@ -63,14 +63,6 @@ set(DUA_INCLUDE_DIR
     Headers/Utilities
     Headers/Math
     Headers/AssetManagement
-
-    #Source/Admin
-    #Source/AssetManagement
-    #Source/Bank
-    #Source/Entities
-    #Source/Math
-    #Source/Systems
-    #Source/Utilities
     )
 include_directories(${DUA_INCLUDE_DIR})
 

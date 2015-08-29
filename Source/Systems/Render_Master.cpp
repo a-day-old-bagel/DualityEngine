@@ -92,7 +92,8 @@ bool System_Render_Master::init(std::stringstream& engineOut){
 
     //Initialize GLEW (openGL Extensions Wrangler)
     glewExperimental = GL_TRUE;
-    GLenum glewError = glewInit(); // GL enumerator error is thrown here when using openGL versions 3.2+ It's fine.
+    GLenum glewError = glewInit();  // GL enumerator error is thrown here when using openGL versions 3.2+ It's fine.
+                                    // see https://www.opengl.org/wiki/OpenGL_Loading_Library
     if(glewError != GLEW_OK) {
         engineOut << "<!>    Could not initialize GLEW! " << glewGetErrorString(glewError) << std::endl;
         return false;
@@ -128,8 +129,4 @@ void System_Render_Master::tick()
     
     // update view just once for all rendering systems this frame.
     bank->updateActiveCamera();
-}
-
-void System_Render_Master::setMousePosition(int x, int y){
-    SDL_WarpMouseInWindow(pWindow, x, y);
 }

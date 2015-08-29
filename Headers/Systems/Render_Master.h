@@ -31,7 +31,6 @@ namespace DualityEngine {
         ~System_Render_Master();
         void tick() override;    
         bool init(std::stringstream& output) override;
-        void setMousePosition(int x, int y);
     };
 
 }
