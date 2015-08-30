@@ -62,8 +62,15 @@ It also makes saving and loading game states naturally very simple.
 ####[shmooze] um... ORGANIC?
 
 _____________________
+##**Setup Guide using CMake**
+Make sure the following are installed: SDL2, OPENGL version 3.3+, GLEW, Open Asset Importer, FreeType2, CMake version 3.3+
+
+> run cmake on the DualityEngine root directory
+
+> run make
+_____________________
 ##**Setup Guide for CLion**
-Make sure the following are installed: SDL2, OPENGL, GLEW, Open Asset Importer, FreeType2
+Make sure the following are installed: SDL2, OPENGL version 3.3+, GLEW, Open Asset Importer, FreeType2
 ### On Debian linux run:
 
 >  sudo apt-get install libsdl2-2.0-0
