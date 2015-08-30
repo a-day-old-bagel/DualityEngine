@@ -21,15 +21,6 @@ System_UserInput::System_UserInput(ComponentBank* bank)
 System_UserInput::~System_UserInput(){
 }
 
-int filterFunction(SDL_Event* e){
-    if (e != NULL){
-        if (e->type == SDL_KEYDOWN || e->type == SDL_TEXTINPUT || e->type == SDL_QUIT){
-            return 1;
-        }
-    }
-    return 0;
-}
-
 bool System_UserInput::init(std::stringstream& output){
     
     // Initialize SDL overall.
@@ -68,20 +59,18 @@ void System_UserInput::tick(){
                 break;
             case(SDL_TEXTINPUT):
                 if (consoleIsActive){
+                    // Add whatever text the user input to the console unless it was CTRL-C or CTRL-V
                     if(!((keyStates[SDL_SCANCODE_C] || keyStates[SDL_SCANCODE_V])
                                                     && SDL_GetModState() & KMOD_CTRL)){
                         bank->dlgt->appendToCommand(sdlEvent.text.text);
                     }
                 }
                 break;
-//            case(SDL_KEYUP):
-//                break;
             case(SDL_QUIT):
                 bank->dlgt->quit();
                 bank->dlgt->output("\n<!>    FORCED EXIT\n\n");
                 break;
             default:
-//                bank->dlgt->outputStr(std::to_string(sdlEvent.type));
                 break;
         }
     }
@@ -135,10 +124,18 @@ void System_UserInput::handleKeyDown(SDL_Event& event){
                 return;
             }
             case(SDLK_UP):
-                bank->dlgt->upOneCommand();
+                if (SDL_GetModState() & KMOD_SHIFT){
+                    bank->dlgt->logTraverse(1);
+                } else {
+                    bank->dlgt->upOneCommand();
+                }
                 return;
             case(SDLK_DOWN):
-                bank->dlgt->downOneCommand();
+                if (SDL_GetModState() & KMOD_SHIFT){
+                    bank->dlgt->logTraverse(-1);
+                } else {
+                    bank->dlgt->downOneCommand();
+                }
                 return;
             case(SDLK_LEFT):
                 bank->dlgt->leftCursor();
@@ -253,12 +250,12 @@ void System_UserInput::handleMouseMotion(int x, int y){
             if (x >= 0){
                 bank->pSpaceControlCurrent->applyInput(ControlSS::YAWNEG, x * 0.06f);
             } else {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWPOS, fabs(x) * 0.06f);
+                bank->pSpaceControlCurrent->applyInput(ControlSS::YAWPOS, x * -0.06f);
             }
             if (y >= 0){
                 bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHNEG, y * 0.06f);
             } else {
-                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHPOS, fabs(y) * 0.06f);
+                bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHPOS, y * -0.06f);
             }
             break;
         case ControlTypes::NONE:

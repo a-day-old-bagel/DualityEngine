@@ -159,7 +159,7 @@ void System_Scripting::parseCommand(const std::string& command){
                 for (auto command : commandUsages){
                     bank->dlgt->outputStr("    " + command.second);
                 }
-                bank->dlgt->output("Type \"help components\" to see a list of available components, \"help [command]\" for command-specific help. ~ key accesses console during play. Use PageUp/PageDown to scroll.");
+                bank->dlgt->output("Type \"help components\" to see a list of available components, \"help [command]\" for command-specific help. ~ key accesses console during play. Use PageUp/PageDown or SHIFT + up/down arrow to scroll.");
             } else if (numArgs == 2){
                 if (commandHelps.count(args[1])){
                     bank->dlgt->outputStr("The " + args[1] + " command " + commandHelps[args[1]] + "\n" +
