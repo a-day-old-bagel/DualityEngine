@@ -65,9 +65,10 @@ _____________________
 ##**Setup Guide using CMake**
 Make sure the following are installed: SDL2, OPENGL version 3.3+, GLEW, Open Asset Importer, FreeType2, CMake version 3.3+
 
-> run cmake on the DualityEngine root directory
+> run cmake on the DualityEngine root directory from the directory in which you'd like Duality to be built.
 
-> run make
+> run make from that same build directory
+
 _____________________
 ##**Setup Guide for CLion**
 Make sure the following are installed: SDL2, OPENGL version 3.3+, GLEW, Open Asset Importer, FreeType2
