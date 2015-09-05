@@ -52,10 +52,6 @@ void Game::NewGame(){
         resumeBankDependentSystems();
         outputDelegate("World cleared.\n");
     }
-    
-//    cleanGameData();    
-//    resumeBankDependentSystems();
-//    outputDelegate("World cleared.\n");
 }
 
 /**************************************
@@ -113,26 +109,8 @@ void Game::Quit(){
 
 /**************************************
  * ENGAGE ENGINES
- * assigns the appropriate systems to
- * each engine then starts the engines.
- * Systems' tick functions will receive
- * looping calls in the order in which
- * they are added to their respective
- * engines. See below for examples.
  *************************************/
 bool Game::engageEngines(){
-    
-    physicsEngine.addSystem(&userInputSystem);          // accept user input
-    physicsEngine.addSystem(&spaceShipControlSystem);   // apply user input to any currently active space control component
-    physicsEngine.addSystem(&physicsMoveSystem);        // apply velocity * time to each position
-    physicsEngine.addSystem(&physicsCollisionSystem);   // check collisions between objects        
-    
-    scriptingEngine.addSystem(&scriptingSystem);        // check for new commands in the queue
-    
-    graphicsEngine.addSystem(&renderMasterSystem);      // display last frame buffer then clear the buffer
-    graphicsEngine.addSystem(&renderBackgroundSystem);  // render the background (sky) first
-    graphicsEngine.addSystem(&renderModelsSystem);      // render the models next
-    graphicsEngine.addSystem(&renderConsoleSystem);     // render the console (GUI) last (on top).
 
     physicsEngine.engage();
     scriptingEngine.engage();

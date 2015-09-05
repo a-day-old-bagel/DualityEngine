@@ -14,7 +14,7 @@
 
 namespace DualityEngine {
 
-    class System_UserInput : public System
+    class System_UserInput : public System<System_UserInput>
     {
     private:
         SDL_Event sdlEvent;   
@@ -30,8 +30,8 @@ namespace DualityEngine {
     public:
         System_UserInput(ComponentBank* bank);
         ~System_UserInput();
-        void tick() override;
-        bool init(std::stringstream& output) override;
+        void tick();
+        bool init(std::stringstream& output);
     };
 
 }

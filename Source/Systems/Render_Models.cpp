@@ -6,7 +6,7 @@
 using namespace DualityEngine;
 
 System_Render_Models::System_Render_Models(ComponentBank* bank)
-                  : System(bank, "Model Rendering System", 1) 
+                  : System<System_Render_Models>(bank, "Model Rendering System", 1)
 {
     requiredComponents.at(0) = MODEL | POSITION | ORIENTATION;
 }

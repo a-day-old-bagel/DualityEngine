@@ -50,7 +50,7 @@ using namespace DualityEngine;
 
 //<editor-fold defaultstate="collapsed" desc="Constructor">
 System_Render_BiTcubes::System_Render_BiTcubes(ComponentBank* bank)
-                  : System(bank, "BiTCube Rendering System", 0) 
+                  : System<System_Render_BiTcubes>(bank, "BiTCube Rendering System", 0)
 {
     
 }

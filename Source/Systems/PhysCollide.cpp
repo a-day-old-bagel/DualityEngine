@@ -3,7 +3,7 @@
 using namespace DualityEngine;
 
 System_PhysCollide::System_PhysCollide(ComponentBank* bank)
-                         : System(bank, "Physics Collision System", 1)
+                         : System<System_PhysCollide>(bank, "Physics Collision System", 1)
 {
     requiredComponents.at(0) = COLLISION | POSITION ;
 }

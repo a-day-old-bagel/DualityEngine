@@ -3,7 +3,7 @@
 using namespace DualityEngine;
 
 System_PhysMove::System_PhysMove(ComponentBank* bank)
-                         : System(bank, "Physics Movement System", 2)
+                         : System<System_PhysMove>(bank, "Physics Movement System", 2)
 {
     requiredComponents.at(0) = POSITION | LINVELOC ;
     requiredComponents.at(1) = ORIENTATION | ANGVELOC ;

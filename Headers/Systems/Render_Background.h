@@ -26,7 +26,7 @@
 
 namespace DualityEngine {
 
-    class System_Render_Background : public System
+    class System_Render_Background : public System<System_Render_Background>
     {
     private:
                 
@@ -53,8 +53,8 @@ namespace DualityEngine {
     public:
         System_Render_Background(ComponentBank* bank);
         ~System_Render_Background();
-        void tick() override;    
-        bool init(std::stringstream& output) override;
+        void tick();
+        bool init(std::stringstream& output);
 //        void clean() override;        
         void queueSkyChange(std::string& fileName, std::string& fileType);
     };

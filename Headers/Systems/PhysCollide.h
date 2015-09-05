@@ -13,13 +13,13 @@
 
 namespace DualityEngine {
 
-    class System_PhysCollide : public System
+    class System_PhysCollide : public System<System_PhysCollide>
     {
     public:
         System_PhysCollide(ComponentBank* bank);
         ~System_PhysCollide();
-        void tick() override;
-        bool init(std::stringstream& output) override;
+        void tick();
+        bool init(std::stringstream& output);
     };
 
 }

@@ -16,7 +16,7 @@ using namespace DualityEngine;
 
 
 System_Scripting::System_Scripting(ComponentBank* bank)
-                  : System(bank, "Scripting System", 0){
+                  : System<System_Scripting>(bank, "Scripting System", 0){
     
 }
 
