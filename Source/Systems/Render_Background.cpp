@@ -6,7 +6,7 @@
 using namespace DualityEngine;
 
 System_Render_Background::System_Render_Background(ComponentBank* bank)
-                  : System(bank, "Sky Rendering System", 0) 
+                  : System<System_Render_Background>(bank, "Sky Rendering System", 0)
 {
     
 }

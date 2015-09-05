@@ -12,15 +12,13 @@ cmake_minimum_required(VERSION 3.3)
 project(DualityEngine)
 
 # Tell cMake where to put the generated libraries and executable...
-# Evidently cLion ignores these next three sets, but they should be useful outside of cLion.
+# Evidently cLion confuses these next three calls, but they should be useful outside of cLion.
 #set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
 #set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 #set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 # Make sure the project compiles with the c++11 and thread safety flags
-if (UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -D_REENTRANT -Wall -g -O3")
-endif()
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -D_REENTRANT -Wall -g -O3")
 
 # Tell cMake where to look for the modules that search for SDL2 and Assimp (the others come with cMake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
@@ -121,7 +119,7 @@ set(SOURCE_FILES
         Headers/AssetManagement/SoundRepository.h
         Headers/Components/SpaceControl.h
         Headers/AssetManagement/stb_image.h
-        Headers/Systems/System.h
+        Headers/Admin/System.h
         Headers/AssetManagement/TextureRepository.h
         Headers/Systems/UserInput.h
 
@@ -129,7 +127,6 @@ set(SOURCE_FILES
         Source/Bank/ComponentBank.cpp
         Source/Utilities/Console.cpp
         Source/Systems/Control_SS.cpp
-        Source/Admin/Engine.cpp
         Source/AssetManagement/FileIO.cpp
         Source/Math/Functions.cpp
         Source/Admin/Game.cpp
@@ -147,8 +144,8 @@ set(SOURCE_FILES
         Source/Systems/Scripting.cpp
         Source/Utilities/Settings.cpp
         Source/AssetManagement/ShaderRepository.cpp
-        Source/Systems/System.cpp
-        Source/Systems/UserInput.cpp)
+        Source/Systems/UserInput.cpp
+)
 
 # Make an executable called DualityEngine out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

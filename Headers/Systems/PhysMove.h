@@ -14,7 +14,7 @@
 
 namespace DualityEngine {
 
-    class System_PhysMove : public System
+    class System_PhysMove : public System<System_PhysMove>
     {
 //        uint ticker = 0;
         
@@ -26,8 +26,8 @@ namespace DualityEngine {
     public:
         System_PhysMove(ComponentBank* bank);
         ~System_PhysMove();
-        void tick() override;
-        bool init(std::stringstream& output) override;
+        void tick();
+        bool init(std::stringstream& output);
     };
 
 }

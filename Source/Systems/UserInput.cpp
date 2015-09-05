@@ -8,13 +8,11 @@
 
 #include "UserInput.h"
 
-#include "ControlTypes.h"
-
 using namespace DualityEngine;
 
 
 System_UserInput::System_UserInput(ComponentBank* bank)
-                  : System(bank, "User Input System", 0){
+                  : System<System_UserInput>(bank, "User Input System", 0){
     
 }
 
@@ -172,6 +170,8 @@ void System_UserInput::handleKeyDown(SDL_Event& event){
                     case(SDLK_k):
                         bank->pSpaceControlCurrent->autoBrakeAngular = !bank->pSpaceControlCurrent->autoBrakeAngular;
                         return;
+                    default:
+                        break;
                 }
                 break;
             case ControlTypes::NONE:
@@ -186,6 +186,8 @@ void System_UserInput::handleKeyDown(SDL_Event& event){
             case(SDLK_ESCAPE):
                 keyPressed_esc();
                 return;
+            default:
+                break;
         }
     }
 }

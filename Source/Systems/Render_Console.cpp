@@ -13,7 +13,7 @@ using namespace DualityEngine;
 
 //<editor-fold defaultstate="collapsed" desc="Constructor">
 System_Render_Console::System_Render_Console(ComponentBank* bank, Console* console)
-                  : System(bank, "Console Rendering System", 0) 
+                  : System<System_Render_Console>(bank, "Console Rendering System", 0)
 {
     this->console = console;
 }

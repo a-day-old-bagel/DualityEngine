@@ -14,7 +14,7 @@
 
 namespace DualityEngine {
 
-    class System_Scripting : public System
+    class System_Scripting : public System<System_Scripting>
     {
     private:
         
@@ -125,8 +125,8 @@ namespace DualityEngine {
     public:
         System_Scripting(ComponentBank*);
         ~System_Scripting();
-        void tick() override;
-        bool init(std::stringstream&) override;
+        void tick();
+        bool init(std::stringstream&);
         void submitCommand(const std::string&);
         void submitScript(const std::string&);
     };

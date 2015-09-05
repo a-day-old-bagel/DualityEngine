@@ -19,7 +19,7 @@
 
 namespace DualityEngine {
 
-    class System_Render_Master : public System
+    class System_Render_Master : public System<System_Render_Master>
     {
     private:
 
@@ -29,8 +29,8 @@ namespace DualityEngine {
     public:
         System_Render_Master(ComponentBank* bank);
         ~System_Render_Master();
-        void tick() override;    
-        bool init(std::stringstream& output) override;
+        void tick();
+        bool init(std::stringstream& output);
     };
 
 }

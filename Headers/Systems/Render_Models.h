@@ -23,7 +23,7 @@
 
 namespace DualityEngine {
 
-    class System_Render_Models : public System
+    class System_Render_Models : public System<System_Render_Models>
     {
     private:
 
@@ -34,8 +34,8 @@ namespace DualityEngine {
     public:
         System_Render_Models(ComponentBank* bank);
         ~System_Render_Models();
-        void tick() override;    
-        bool init(std::stringstream& output) override;
+        void tick();
+        bool init(std::stringstream& output);
     };
 
 }

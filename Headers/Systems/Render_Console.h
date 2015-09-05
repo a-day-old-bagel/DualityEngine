@@ -22,7 +22,7 @@
 
 namespace DualityEngine {
 
-    class System_Render_Console : public System
+    class System_Render_Console : public System<System_Render_Console>
     {
     private:
         const glm::vec3 localTextColor = {0.5, 1.0, 0.3};
@@ -101,8 +101,8 @@ namespace DualityEngine {
     public:
         System_Render_Console(ComponentBank* bank, Console* console);
         ~System_Render_Console();
-        void tick() override;    
-        bool init(std::stringstream& output) override;
+        void tick();
+        bool init(std::stringstream& output);
     };
 
 }
