@@ -19,6 +19,10 @@
 #include <glm/glm.hpp>
 #include <string>
 
+#ifdef _WIN32
+typedef unsigned int uint;
+#endif
+
 namespace DualityEngine {
         
     /* SWITCHES AND QUICK SETTINGS  --MAY MODIFY--  ========================= */
