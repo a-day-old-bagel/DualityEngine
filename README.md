@@ -64,6 +64,7 @@ It also makes saving and loading game states naturally very simple.
 _____________________
 ##**Setup Guide using CMake**
 Make sure the following are installed: SDL2, OPENGL version 3.3+, GLEW, Open Asset Importer, FreeType2, CMake version 3.3+
+On windows, you'll need to add the above as environment variables. eg: name:SDL2 value: "C:\Program Files (x86)\SDL2-2.0.3"
 
 > run cmake on the DualityEngine root directory from the directory in which you'd like Duality to be built.
 
