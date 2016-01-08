@@ -66,7 +66,7 @@ include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
 set(SOURCE_FILES
-        Headers/AssetManagement/ProgrammaticAssets/GUI/NoCamBackground/DebugBackground.h
+        Headers/AssetManagement/ProgrammaticAssets/GUI/DebugBackground.h
         Headers/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.h
         Headers/AssetManagement/ProgrammaticAssets/DebugCube/DebugCube.h
 
@@ -145,7 +145,7 @@ set(SOURCE_FILES
         Source/Utilities/Settings.cpp
         Source/AssetManagement/ShaderRepository.cpp
         Source/Systems/UserInput.cpp
-)
+        Source/AssetManagement/ProgrammaticAssets/GUI/DebugBackground.cpp Source/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.cpp)
 
 # Make an executable called DualityEngine out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
