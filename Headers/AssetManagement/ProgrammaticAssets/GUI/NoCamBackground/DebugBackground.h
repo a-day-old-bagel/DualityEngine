@@ -1,3 +1,10 @@
+/*
+ * File:   DebugBackground.h
+ * Author: adayoldbagel
+ *
+ * Header only file that contains everything necessary to display a black screen with the words "NO CAM" in the center.
+ */
+
 #ifndef DEBUGBACKGROUND_H
 #define DEBUGBACKGROUND_H
 
@@ -16,21 +23,23 @@ namespace DualityEngine {
         GLuint shdrLoc;
         GLuint attrLoc_verts;
         GLuint txtrLoc;
-        bool hasInitialized = false;
-        
-		const DUA_float corners[24];
-       const DUA_float corners[24] = {-1.0, -1.0, 0.5, 1.0,
-                                 1.0, -1.0, 0.5, 1.0,
-                                 1.0,  1.0, 0.5, 1.0,
-                                 1.0,  1.0, 0.5, 1.0,
-                                -1.0,  1.0, 0.5, 1.0,
-                                -1.0, -1.0, 0.5, 1.0};
+        bool hasInitialized;
+//        static const DUA_float corners[];
+//        static const DUA_colorByte rawTexture[];
+
+        const DUA_float corners[24] = { // 24 elements
+                -1.0, -1.0, 0.5, 1.0,
+                 1.0, -1.0, 0.5, 1.0,
+                 1.0,  1.0, 0.5, 1.0,
+                 1.0,  1.0, 0.5, 1.0,
+                -1.0,  1.0, 0.5, 1.0,
+                -1.0, -1.0, 0.5, 1.0};
 
         // these define the colored pixels that will be used in the bitmap data below.
         #define BG0 0x00, 0x00, 0x00 // black
         #define CL7 0x40, 0x40, 0x40 // grey
         // raw bitmap data for the texture:
-        const DUA_colorByte rawTexture[768] = { // 16 x 16 x 3 (width x height x [RGB])
+        const DUA_colorByte rawTexture[768] = { // 16 x 16 x 3 (width x height x [RGB]) = 768 elements
             BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,
             BG0,BG0,BG0,CL7,BG0,BG0,BG0,CL7,BG0,CL7,CL7,CL7,CL7,BG0,BG0,BG0,
             BG0,BG0,BG0,CL7,CL7,BG0,BG0,CL7,BG0,CL7,BG0,BG0,CL7,BG0,BG0,BG0,
@@ -51,7 +60,9 @@ namespace DualityEngine {
         
     public:
         
-        DebugBackground() {}
+        DebugBackground() {
+            hasInitialized = false;
+        }
         ~DebugBackground() {
             if (hasInitialized){
                 glDeleteBuffers (1, &vertices);
@@ -106,6 +117,37 @@ namespace DualityEngine {
             glDrawArrays (GL_TRIANGLES, 0, 6);
         }
     };
+
+//    const DUA_float DebugBackground::corners[24] = { // 24 elements
+//            -1.0, -1.0, 0.5, 1.0,
+//            1.0, -1.0, 0.5, 1.0,
+//            1.0,  1.0, 0.5, 1.0,
+//            1.0,  1.0, 0.5, 1.0,
+//            -1.0,  1.0, 0.5, 1.0,
+//            -1.0, -1.0, 0.5, 1.0};
+//
+//    // these define the colored pixels that will be used in the bitmap data below.
+//    #define BG0 0x00, 0x00, 0x00 // black
+//    #define CL7 0x40, 0x40, 0x40 // grey
+//    // raw bitmap data for the texture:
+//    const DUA_colorByte DebugBackground::rawTexture[768] = { // 16 x 16 x 3 (width x height x [RGB]) = 768 elements
+//            BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,
+//            BG0,BG0,BG0,CL7,BG0,BG0,BG0,CL7,BG0,CL7,CL7,CL7,CL7,BG0,BG0,BG0,
+//            BG0,BG0,BG0,CL7,CL7,BG0,BG0,CL7,BG0,CL7,BG0,BG0,CL7,BG0,BG0,BG0,
+//            BG0,BG0,BG0,CL7,BG0,CL7,BG0,CL7,BG0,CL7,BG0,BG0,CL7,BG0,BG0,BG0,
+//            BG0,BG0,BG0,CL7,BG0,BG0,CL7,CL7,BG0,CL7,BG0,BG0,CL7,BG0,BG0,BG0,
+//            BG0,BG0,BG0,CL7,BG0,BG0,BG0,CL7,BG0,CL7,CL7,CL7,CL7,BG0,BG0,BG0,
+//            BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,
+//            BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,
+//            BG0,CL7,CL7,CL7,BG0,BG0,CL7,CL7,BG0,BG0,CL7,BG0,BG0,BG0,CL7,BG0,
+//            BG0,CL7,BG0,BG0,BG0,CL7,BG0,BG0,CL7,BG0,CL7,CL7,BG0,CL7,CL7,BG0,
+//            BG0,CL7,BG0,BG0,BG0,CL7,BG0,BG0,CL7,BG0,CL7,BG0,CL7,BG0,CL7,BG0,
+//            BG0,CL7,BG0,BG0,BG0,CL7,CL7,CL7,CL7,BG0,CL7,BG0,CL7,BG0,CL7,BG0,
+//            BG0,CL7,BG0,BG0,BG0,CL7,BG0,BG0,CL7,BG0,CL7,BG0,BG0,BG0,CL7,BG0,
+//            BG0,CL7,BG0,BG0,BG0,CL7,BG0,BG0,CL7,BG0,CL7,BG0,BG0,BG0,CL7,BG0,
+//            BG0,CL7,CL7,CL7,BG0,CL7,BG0,BG0,CL7,BG0,CL7,BG0,BG0,BG0,CL7,BG0,
+//            BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,BG0,
+//    };
 }
 
 #endif

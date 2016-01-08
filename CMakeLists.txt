@@ -50,25 +50,25 @@ include_directories(${FREETYPE_INCLUDE_DIR_freetype2})
 set(LIBS ${LIBS} ${FREETYPE_LIBRARIES})
 
 set(DUA_INCLUDE_DIR
-    Assets/GUI/NoCamBackground
-    Assets/GUI
-    Assets/Models/DebugCube
-
-    Headers/Components
-    Headers/Bank
-    Headers/Admin
-    Headers/Systems
-    Headers/Utilities
-    Headers/Math
-    Headers/AssetManagement
+        Headers/AssetManagement/ProgrammaticAssets/GUI/NoCamBackground
+        Headers/AssetManagement/ProgrammaticAssets/GUI
+        Headers/AssetManagement/ProgrammaticAssets/DebugCube
+        Headers/Components
+        Headers/Bank
+        Headers/Admin
+        Headers/Systems
+        Headers/Utilities
+        Headers/Math
+        Headers/AssetManagement
+        Headers/
     )
 include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
 set(SOURCE_FILES
-    Assets/GUI/NoCamBackground/DebugBackground.h
-    Assets/GUI/GUI_Console.h
-    Assets/Models/DebugCube/DebugCube.h
+        Headers/AssetManagement/ProgrammaticAssets/GUI/NoCamBackground/DebugBackground.h
+        Headers/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.h
+        Headers/AssetManagement/ProgrammaticAssets/DebugCube/DebugCube.h
 
         Headers/Components/AmbientLight.h
         Headers/Components/AngularVelocity.h
@@ -83,10 +83,10 @@ set(SOURCE_FILES
         Headers/Bank/ControlTypes.h
         Headers/Utilities/Delegate.h
         Headers/Components/DirectionalLight.h
-        Headers/Admin/Engine.h
+        Headers/Utilities/Engine.h
         Headers/AssetManagement/FileIO.h
         Headers/Math/Functions.h
-        Headers/Admin/Game.h
+        Headers/Game.h
         Headers/Bank/HashMap.h
         Headers/Components/LinearVelocity.h
         Headers/AssetManagement/loadCubeMap.h
@@ -119,7 +119,7 @@ set(SOURCE_FILES
         Headers/AssetManagement/SoundRepository.h
         Headers/Components/SpaceControl.h
         Headers/AssetManagement/stb_image.h
-        Headers/Admin/System.h
+        Headers/Systems/System.h
         Headers/AssetManagement/TextureRepository.h
         Headers/Systems/UserInput.h
 
@@ -129,11 +129,11 @@ set(SOURCE_FILES
         Source/Systems/Control_SS.cpp
         Source/AssetManagement/FileIO.cpp
         Source/Math/Functions.cpp
-        Source/Admin/Game.cpp
+        Source/Game.cpp
         Source/Bank/HashMap.cpp
         Source/AssetManagement/loadCubeMap.cpp
         Source/AssetManagement/loadShaders.cpp
-        Source/Admin/main.cpp
+        Source/main.cpp
         Source/Systems/PhysCollide.cpp
         Source/Systems/PhysMove.cpp
         Source/Systems/Render_Background.cpp

@@ -135,6 +135,20 @@ namespace DualityEngine {
     #define DUA_STR_TO_INT(str, base) std::stoi(str, nullptr, base)
     // This is used when passing buffer offsets to the GPU via openGL
     #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
+
+
+
+    /* HELPER FUNCTIONS */
+    // used to fill c-style arrays in a reasonable fashion (due to pre-c++11 restrictions)
+    template<typename T>
+    void DUA_internal_filler(T v) {
+        return v;
+    }
+
+    template<typename T, typename... Args>
+    void DUA_internal_filler(T first, Args... args) {
+        return first + adder(args...);
+    }
     
     
 

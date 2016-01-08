@@ -3,6 +3,8 @@
  * Author: adayoldbagel
  *
  * Created on February 7, 2015, 1:14 PM
+ *
+ * Game is the main top-level manager singleton class.
  */
 
 #ifndef GAME_H
@@ -62,12 +64,14 @@ namespace DualityEngine {
         System_Scripting scriptingSystem = System_Scripting(&bank);
         // More systems to come...
 
-
         /*************
-         * DELEGATES to allow for inter-system/engine communication
+         * DELEGATES to allow for inter-system/engine communication (they allow pretty much any function to be called
+         * from anywhere, as long as you have a pointer to one of these delegates. So just watch who you give them to.)
+         * Most delegates are declared inside of bankDelegates (so that anything with access to the bank has
+         * access to the delegates).
          *************/
 
-        // These four delegates are assigned outside of bankDelegates for convenience of use inside game.cpp
+        // These four delegates are declared outside of bankDelegates for convenience of use inside game.cpp
 
         // A delegate for quitting the game
         Delegate<void()> quitDelegate = DELEGATE(&Game::Quit, this);
@@ -145,8 +149,6 @@ namespace DualityEngine {
          *************/
 
         Console console;
-        
-        
 
         /*************
          * Low-level 'internal' METHODS

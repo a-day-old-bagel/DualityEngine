@@ -3,6 +3,12 @@
  * Author: adayoldbagel
  *
  * Created on February 10, 2015, 9:43 AM
+ *
+ * This is the base class for all systems.  It uses the curiously recurring template pattern and avoids any
+ * virtual functions.  The only reason to use inheritance and have a base class at all is just to allow for less
+ * typing, as nearly all systems should need the following members and methods.
+ *
+ * Due to the use of templated functions, code that would normally be split into .h and .cpp files all appears here.
  */
 
 #ifndef SYSTEM_H
@@ -17,7 +23,7 @@
 
 namespace DualityEngine {
 
-    // HEADERS
+    //  ***************************  HEADERS  ***************************
 
     template<typename Derived_System>
     class System
@@ -56,12 +62,7 @@ namespace DualityEngine {
         bool isQuit();
     };
 
-
-
-
-    // IMPLEMENTATION
-
-
+    //  ***************************  IMPLEMENTATION  ***************************
 
     template<typename Derived_System>
     System<Derived_System>::System(ComponentBank* bank, std::string name, int numRegisters){

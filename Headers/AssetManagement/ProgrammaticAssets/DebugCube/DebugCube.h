@@ -9,13 +9,8 @@ namespace DualityEngine {
 
    /****************************************************************************
     * DEBUG CUBE
-    * This is a hard-coded 1x1x1 cube model I wrote in order to debug asset
-    * loading and the rendering system in general. It was also a useful
-    * exercise in remembering the general format of 3D object data.
-    * This could have been optimized with a better UV unfolding of the cube
-    * (this is the worst case, where all vertices are unwelded),
-    * but I didn't want to try unfolding to literal values in my head. Besides,
-    * I like the flat shaded look.
+    * This is a hard-coded 1x1x1 cube model to debug asset loading and the
+    * rendering system in general.
     ***************************************************************************/
     class DebugCube{
     private:

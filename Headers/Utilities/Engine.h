@@ -3,6 +3,15 @@
  * Author: adayoldbagel
  *
  * Created on February 7, 2015, 1:13 PM
+ *
+ * The SystemEngine (or Engine) is an object that manages operations done on a single thread.
+ * It has a pointer to a thread and a collection (tuple) of systems to be run on that thread.
+ * It takes care of looping the calls to each of its systems' tick() functions until told to pause or quit.
+ * So it's basically just a big wrapper around thread.
+ *
+ * The thread itself is instantiated elsewhere and passed in as a pointer.
+ *
+ * Due to the use of templated functions, code that would normally be split into .h and .cpp files all appears here.
  */
 
 #ifndef SYSTEMENGINE_H
@@ -20,11 +29,15 @@
 namespace DualityEngine {
 
 
-    // HEADERS
+    //  ***********************  HEADERS  ***********************
 
-
-
-    // One of these is passed to the engines thread when it executes.
+    /*
+     * A ThreadData object contains all the information that will be needed for the thread to run, like a pointer to
+     * the collection of system pointers, a pointer to the name of the thread, a pointer to the logging output stream
+     * delegate, and a pointer to the quit delegate.
+     * A structure like this was necessary because all that can be passed to the thread when it initialized is a
+     * void pointer, so the address of this struct will be cast as a void pointer and then cast back inside the thread.
+     */
     template <typename... System_Types>
     struct ThreadData {
         std::tuple<System_Types...>* systems;    // Collection of systems to manage
@@ -33,13 +46,18 @@ namespace DualityEngine {
         Delegate<void()>* quit;                 // Used in case of failure of system(s))
     };
 
-    // stub for the function that is given to the engine's thread
+    /*
+     * This function stub is for the function that will be given to the thread when it starts.  As you can see, it takes
+     * only a void pointer.
+     */
     template <typename... System_Types>
     int EngineThreadFunction(void* data);
 
+    /*
+     * Here is the actual SystemEngine class declaration.
+     */
     template <typename... System_Types>
-    class SystemEngine
-    {
+    class SystemEngine {
     private:
         std::tuple<System_Types...> systems;    // Collection of systems to manage
         std::string threadName;
@@ -56,17 +74,19 @@ namespace DualityEngine {
         void engage();
     };
 
+    //  ***********************  IMPLEMENTATION  ***********************
 
-
-
-    // IMPLEMENTATION
-
-
-
+    /*
+     * Constructor takes:
+     * a pointer to the thread itself, a string for the thread name, a pointer to the output log delegate, a pointer
+     * to the quit delegate, and the variadic list of system pointers (make sure you pass pointers)
+     */
     template <typename... System_Types>
-    SystemEngine<System_Types...>::SystemEngine(SDL_Thread** thread, const char* name, Delegate<void(const char*)>* output,
-                                                Delegate<void()>* quit, System_Types... systems)
-    {
+    SystemEngine<System_Types...>::SystemEngine(SDL_Thread** thread,
+                                                const char* name,
+                                                Delegate<void(const char*)>* output,
+                                                Delegate<void()>* quit,
+                                                System_Types... systems) {
         workThread = thread;
         this->systems = std::make_tuple(systems...);
         threadName = name;
@@ -76,23 +96,29 @@ namespace DualityEngine {
         threadData.systems = &(this->systems);
     }
 
+    /*
+     * Destructor
+     */
     template <typename... System_Types>
     SystemEngine<System_Types...>::~SystemEngine()
     {
 
     }
 
+    /*
+     * Starts the engine running (begins the thread)
+     */
     template <typename... System_Types>
     void SystemEngine<System_Types...>::engage() {
         *workThread = SDL_CreateThread (EngineThreadFunction<System_Types...>, threadName.c_str(), (void*) &threadData);
     }
 
     /*
-     * UNFOLDING VARIADIC TEMPLATES FOR HANDLING TUPLES OF SYSTEMS (NEXT FOUR FUNCTIONS)...
-     */
-
-    /*
-     * Templates for calling [system].init() on a tuple of systems of varying types
+     * These next two confusing templated functions are for calling [system].init() for each system in
+     * a tuple of systems of varying types.  OOP inheritance and virtual functions have been avoided.
+     * There are two because they unroll recursively into code that calls init() on each system. The first function
+     * is only used to terminate the recursion.
+     * Just trust me. I couldn't find any way to make this pretty.
      */
     template<std::size_t I = 0, typename... Sys_Types>
     inline typename std::enable_if<I == sizeof...(Sys_Types), void>::type
@@ -102,10 +128,9 @@ namespace DualityEngine {
     template<std::size_t I = 0, typename... Sys_Types>
     inline typename std::enable_if<I < sizeof...(Sys_Types), void>::type
     do_inits(std::stringstream& tempOut, bool& systemsInitializedCorrectly, std::tuple<Sys_Types...>& systems) {
-
         tempOut << "Beginning initialization of " << std::get<I>(systems)->getName() << "...\n";
         try {
-            if (!(std::get<I>(systems)->init(tempOut))) {
+            if (!(std::get<I>(systems)->init(tempOut))) {   // Here is the actual init() call
                 systemsInitializedCorrectly = false;
                 return;
             }
@@ -125,12 +150,12 @@ namespace DualityEngine {
             systemsInitializedCorrectly = false;
             return;
         }
-
         do_inits<I + 1, Sys_Types...>(tempOut, systemsInitializedCorrectly, systems);
     }
 
     /*
-     * Templates for calling [system].tick() on a tuple of systems of varying types
+     * These next two functions are just like the last two, except they're for calling tick() on each system instead
+     * of init().
      */
     template<std::size_t I = 0, typename... Sys_Types>
     inline typename std::enable_if<I == sizeof...(Sys_Types), void>::type
@@ -140,7 +165,6 @@ namespace DualityEngine {
     template<std::size_t I = 0, typename... Sys_Types>
     inline typename std::enable_if<I < sizeof...(Sys_Types), void>::type
     do_ticks(std::stringstream& tempOut, Delegate<void()>* quitGame, bool& escape, std::tuple<Sys_Types...>& systems) {
-
         if (std::get<I>(systems)->isQuit()){
             tempOut << std::get<I>(systems)->getName() << " aknowledges the call to exit.\n";
         } else if (std::get<I>(systems)->isPaused()){
@@ -168,12 +192,13 @@ namespace DualityEngine {
                 (*quitGame)();
             }
         }
-
         do_ticks<I + 1, Sys_Types...>(tempOut, quitGame, escape, systems);
     }
 
     /*
-     * Function that runs in an engine's thread
+     * And here, finally, is the function that runs in the thread once it's initialized. It casts the void pointer data
+     * back into the correct types, calls init() once on each system in the collection, the begins looping calls to
+     * tick() until it is told to pause or quit.
      */
     template <typename... System_Types>
     int EngineThreadFunction(void* data)
@@ -191,12 +216,11 @@ namespace DualityEngine {
         // Log the beginning of systems' initialization steps
         tempOut << initBlockText_Begin;
 
-        // Call init() on each system managed by this engine (this template unrolls into an init block for each system)
+        // Call init() on each system managed by this engine (this template unrolls into a code block for each system)
         bool systemsInitializedCorrectly = true;
         do_inits(tempOut, systemsInitializedCorrectly, systems);
 
         if (systemsInitializedCorrectly){
-
             // Add initialization success message to end of log
             tempOut << threadName << " is entering main loop...\n" << initBlockText_End;
             // Output the thread's log to Game console.
@@ -209,25 +233,21 @@ namespace DualityEngine {
             bool escape = false;
             while (!escape) {
                 escape = true;
-                // Call tick() on each system managed by this engine (this template unrolls into an init block for each system)
+                // Call tick() on each system managed by this engine
+                // (this line unrolls into a code block for each system)
                 do_ticks(tempOut, quitGame, escape, systems);
             }
             tempOut << "Terminating " << threadName << "\n\n";
-
             // Output the thread's reports to Game console
             (*output)(tempOut.str().c_str());
 
-        } else {
-
-            // If initialization failed in the systems add fail message to end of log
+        } else { // Systems' initialization has failed.
             tempOut << initBlockText_End << "\n<!>    " << threadName
             << ": Execution cannot continue after failed initialization of one or more systems!\n";
             // output log to Game console
             (*output)(tempOut.str().c_str());
             (*quitGame)();
-
         }
-
         return 0;
     }
 }
