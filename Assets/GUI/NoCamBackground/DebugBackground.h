@@ -18,8 +18,8 @@ namespace DualityEngine {
         GLuint txtrLoc;
         bool hasInitialized = false;
         
-        
-       DUA_float corners[24] = {-1.0, -1.0, 0.5, 1.0,
+		const DUA_float corners[24];
+       const DUA_float corners[24] = {-1.0, -1.0, 0.5, 1.0,
                                  1.0, -1.0, 0.5, 1.0,
                                  1.0,  1.0, 0.5, 1.0,
                                  1.0,  1.0, 0.5, 1.0,

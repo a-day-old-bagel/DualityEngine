@@ -13,6 +13,11 @@
 
 #include "ControlTypes.h"
 
+#ifdef _WIN32
+typedef unsigned int uint;
+#endif
+
+
 namespace DualityEngine {
 
     namespace ControlSS{

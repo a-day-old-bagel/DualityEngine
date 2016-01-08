@@ -128,7 +128,7 @@ bool System_Render_Console::generateAndBufferGeometry(std::stringstream& output)
     int numCommTris  = numCharsX * numCharsY_comm * 2;
 
     sizeVertArray = (numBodyVerts + numCommVerts +4 +3) * 2;// +4 and +2 are for background quad.    
-    sizeIndexArray = (numBodyTris + numCommTris +2 +1) * 3;// +3 and +1 are for the cursor triangle.
+	sizeIndexArray = (numBodyTris + numCommTris + 2 + 1) * 3;// +3 and +1 are for the cursor triangle.
 
     DUA_float verts[sizeVertArray];
     DUA_float UVs[sizeVertArray];

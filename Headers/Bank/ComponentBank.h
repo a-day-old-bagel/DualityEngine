@@ -47,6 +47,10 @@
 
 #include "ControlTypes.h"
 
+#ifdef _WIN32
+#include <array>
+#endif
+
 namespace DualityEngine {
 
     class ComponentBank
