@@ -14,7 +14,7 @@ namespace DualityEngine {
     // DELEGATE(func, instRef) makes a delegate to a member method, taking the method and instance, like so:
     // Given:       int MyClass::myMethod(const char) {...}     example usage would be:
     // Delegate<int(const char)> myDelegate = DELEGATE(&MyClass::myMethod, &myClassInstance)
-    // and later to use the delegate, just call:    myDelegate()
+    // and later to invoke the delegate, just call:    myDelegate()
     #define DELEGATE(func, instRef) (NewDelegate(func).Create<func>(instRef))
     #define DELEGATE_NOCLASS(func) (NewDelegate_NoClass(func).CreateForFunction<func>()) // delegate to function
     

@@ -4,7 +4,7 @@
  *
  * Created on February 7, 2015, 1:14 PM
  *
- * Game is the main top-level manager singleton class.
+ * Game is a 'singleton' class that creates and manages everything else.
  */
 
 #ifndef GAME_H
@@ -28,131 +28,64 @@
 
 namespace DualityEngine {
 
-    class Game
-    {
+    class Game {
     private:
-   
         /*************
          * bank of COMPONENTS and other constructs to hold all game state data
          *************/
-
-        ComponentBank bank = ComponentBank(&bankDelegates);
+        ComponentBank bank;
 
         /*************
          * SYSTEMS to operate on the components, providing game mechanics
          *************/
+        System_Render_Master renderMasterSystem; // render all graphical components (manages openGL calls)
+        System_Render_Console renderConsoleSystem; // render the in-game console
+        System_Render_Models renderModelsSystem; // render any 3d models present
+        System_Render_Background renderBackgroundSystem; // render the background (usually skybox)
+        System_PhysMove physicsMoveSystem; // update all spatial components according to motion components
+        System_PhysCollide physicsCollisionSystem; // check collisions between entities via collision components
+        System_Control_SS spaceShipControlSystem; // apply user's key presses to current spaceShipControl component
+        System_UserInput userInputSystem; // handle user input
+        System_Scripting scriptingSystem; // handle scripting commands
 
-        // render all graphical components (manages openGL calls)
-        System_Render_Master renderMasterSystem = System_Render_Master(&bank);
-        // render the in-game console
-        System_Render_Console renderConsoleSystem = System_Render_Console(&bank, &console);
-        // render any 3d models present
-        System_Render_Models renderModelsSystem = System_Render_Models(&bank);
-        // render the background (usually skybox)
-        System_Render_Background renderBackgroundSystem = System_Render_Background(&bank);
-        
-        // update all spatial components according to motion components
-        System_PhysMove physicsMoveSystem = System_PhysMove(&bank);
-        // check collisions between all spatial components according to collision components
-        System_PhysCollide physicsCollisionSystem = System_PhysCollide(&bank);
-        // apply user's key presses in a spaceship-like way to currently controlled entity
-        System_Control_SS spaceShipControlSystem = System_Control_SS(&bank);
-        
-        // handle user input
-        System_UserInput userInputSystem = System_UserInput(&bank);
-        // handle scripting commands
-        System_Scripting scriptingSystem = System_Scripting(&bank);
-        // More systems to come...
+        /*************
+         * ENGINES (thread with accompanying SystemEngine) on which to run the systems
+         *************/
+        SDL_Thread* graphicsThread; // run all graphics Systems
+        typedef SystemEngine<System_Render_Master*, System_Render_Background*, System_Render_Models*,
+                System_Render_Console*> DUA_graphicsEngine;
+        DUA_graphicsEngine graphicsEngine;
+
+        SDL_Thread* physicsThread; // run all physics Systems (and physical control system)
+        typedef SystemEngine<System_UserInput*, System_Control_SS*, System_PhysMove*, System_PhysCollide*> DUA_physicsEngine;
+        DUA_physicsEngine physicsEngine;
+
+        SDL_Thread* scriptingThread; // run the scripting systems
+        typedef SystemEngine<System_Scripting*> DUA_scriptingEngine;
+        DUA_scriptingEngine scriptingEngine;
 
         /*************
          * DELEGATES to allow for inter-system/engine communication (they allow pretty much any function to be called
          * from anywhere, as long as you have a pointer to one of these delegates. So just watch who you give them to.)
-         * Most delegates are declared inside of bankDelegates (so that anything with access to the bank has
-         * access to the delegates).
+         * All delegates are contained in the bankDelegates struct, to which bank has a public pointer.
+         * This is so that anything with access to the bank has access to the delegates.
          *************/
-
-        // These four delegates are declared outside of bankDelegates for convenience of use inside game.cpp
-
-        // A delegate for quitting the game
-        Delegate<void()> quitDelegate = DELEGATE(&Game::Quit, this);
-        // A delegate for outputting text to the console
-        Delegate<void(const char*)> outputDelegate = DELEGATE(&Console::output, &console);
-        // Same thing, but for std::string
-        Delegate<void(const std::string&)> outputStrDelegate = DELEGATE(&Console::outputStr, &console);
-        // Delegate to submit a command to the scripting system
-        Delegate<void(const std::string&)> submitCommand = DELEGATE(&System_Scripting::submitCommand, &scriptingSystem);
-
-        // Delegates are now consolidated into a single large structure held by the bank itself, instead of many small
-        // system-specific collections. These delegates will be available to all systems via bank->dlgt.
-        BankDelegates bankDelegates = {
-                DELEGATE(&Game::systems_discover, this),
-                DELEGATE(&Game::systems_scrutinize, this),
-                DELEGATE(&Game::systems_forceRemove, this),
-                quitDelegate, DELEGATE(&Game::NewGame, this),
-                DELEGATE(&Game::Pause, this),
-                DELEGATE(&Game::Resume, this),
-                DELEGATE(&System_Scripting::submitScript, &scriptingSystem),
-                DELEGATE(&Game::pauseBankDependentSystems, this),
-                DELEGATE(&Game::waitForBankDependentSystemsToPause, this),
-                DELEGATE(&Game::resumeBankDependentSystems, this),
-                DELEGATE(&Console::applyBackspace, &console),
-                DELEGATE(&Console::applyDelete, &console),
-                DELEGATE(&Console::clearCommand, &console),
-                DELEGATE(&Console::upOneCommand, &console),
-                DELEGATE(&Console::downOneCommand, &console),
-                DELEGATE(&Console::leftCursor, &console),
-                DELEGATE(&Console::rightCursor, &console),
-                outputDelegate, outputStrDelegate,
-                DELEGATE(&Console::addToCommand, &console),
-                DELEGATE(&Console::submitCommand, &console),
-                submitCommand,
-                DELEGATE(&Console::getLogLineFromBack, &console),
-                DELEGATE(&Console::getCurrentLogLine, &console),
-                DELEGATE(&Console::setState, &console),
-                DELEGATE(&Console::traverseLog, &console),
-                DELEGATE(&System_Render_Background::queueSkyChange, &renderBackgroundSystem)
-
-        };
-
-
-        /*************
-         * ENGINES on which to run the systems
-         *************/
-
-        // An engine (with accompanying thread) to run all graphics Systems
-        SDL_Thread* graphicsThread = NULL;
-        typedef SystemEngine<System_Render_Master*, System_Render_Background*, System_Render_Models*,
-                System_Render_Console*> DUA_graphicsEngine;
-        DUA_graphicsEngine graphicsEngine =
-                DUA_graphicsEngine(&graphicsThread, "Duality Graphics Engine",
-                                   &outputDelegate, &quitDelegate, &renderMasterSystem, &renderBackgroundSystem,
-                                   &renderModelsSystem, &renderConsoleSystem);
-        
-        // An engine (with accompanying thread) to run all physics Systems (and physical control system)
-        SDL_Thread* physicsThread = NULL;
-        typedef SystemEngine<System_UserInput*, System_Control_SS*, System_PhysMove*, System_PhysCollide*> DUA_physicsEngine;
-        DUA_physicsEngine physicsEngine =
-                DUA_physicsEngine(&physicsThread, "Duality Physics Engine", &outputDelegate, &quitDelegate,
-                                  &userInputSystem, &spaceShipControlSystem, &physicsMoveSystem, &physicsCollisionSystem);
-        
-        // And one to run the scripting systems
-        SDL_Thread* scriptingThread = NULL;
-        typedef SystemEngine<System_Scripting*> DUA_scriptingEngine;
-        DUA_scriptingEngine scriptingEngine =
-                DUA_scriptingEngine(&scriptingThread, "Duality Scripting Engine",
-                                    &outputDelegate, &quitDelegate, &scriptingSystem);
-
-        // More engines to come...
+        BankDelegates bankDelegates;
         
         /*************
          * An in-game CONSOLE and output logging device
          *************/
-
         Console console;
 
         /*************
-         * Low-level 'internal' METHODS
+         * Methods
          *************/
+        void NewGame();
+        void LoadGame(const std::string&);
+        void SaveGame(const std::string&);
+        void Pause();
+        void Resume();
+        void Quit();
 
         bool engageEngines();
         bool killSystems();
@@ -163,24 +96,10 @@ namespace DualityEngine {
         void systems_discover(const DUA_id ID);
         void systems_scrutinize(const DUA_id ID);
         void systems_forceRemove(const DUA_id ID, const DUA_compFlag component);
-        // More internal functions to come...
-
-        /*************
-         * High-level 'interface' METHODS
-         *************/
-
-        void NewGame();
-        void LoadGame(const std::string&);
-        void SaveGame(const std::string&);
-        void Pause();
-        void Resume();
-        void Quit();
-        // More interface functions to come...
         
     public:
-        Game() {};
+        Game();
         ~Game();
-        // Called from wherever Game is instantiated
         void Main();
     };
 

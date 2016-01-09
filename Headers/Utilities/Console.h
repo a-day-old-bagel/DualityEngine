@@ -20,21 +20,22 @@ namespace DualityEngine {
     class Console {
     private:
         std::vector<std::string> logLines;
-        std::vector<std::string> submittedLines = {""};
-        std::string pendingCommand = "";
-        int submitLinePending = 0;
-        int submitLineActive = 0;
+        std::vector<std::string> submittedLines;
+        std::string pendingCommand;
+        int submitLinePending;
+        int submitLineActive;
         
         void refreshPendingCommand();
     public:
         
-        int cursorPosition = 0;
-        int logLineTraverser = 0;
-        bool consoleIsActive = false;
-        bool menuIsActive = false;
-        bool bodyHasChangedVisually = true;
-        bool commHasChangedVisually = true;
-        
+        int cursorPosition;
+        int logLineTraverser;
+        bool consoleIsActive;
+        bool menuIsActive;
+        bool bodyHasChangedVisually;
+        bool commHasChangedVisually;
+
+        Console();
         ~Console();
         void output (const char* text);
         void outputStr (const std::string& text);

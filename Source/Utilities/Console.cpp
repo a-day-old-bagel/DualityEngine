@@ -8,7 +8,19 @@
 #include "Console.h"
 using namespace DualityEngine;
 
-Console::~Console(){
+Console::Console() {
+    submittedLines = {""};
+    pendingCommand = "";
+    submitLinePending = 0;
+    submitLineActive = 0;
+    cursorPosition = 0;
+    logLineTraverser = 0;
+    consoleIsActive = false;
+    menuIsActive = false;
+    bodyHasChangedVisually = true;
+    commHasChangedVisually = true;
+}
+Console::~Console() {
 
 }
 

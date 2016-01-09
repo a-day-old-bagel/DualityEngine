@@ -7,7 +7,7 @@
  * The SystemEngine (or Engine) is an object that manages operations done on a single thread.
  * It has a pointer to a thread and a collection (tuple) of systems to be run on that thread.
  * It takes care of looping the calls to each of its systems' tick() functions until told to pause or quit.
- * So it's basically just a big wrapper around thread.
+ * So it's basically just a big wrapper around a thread.
  *
  * The thread itself is instantiated elsewhere and passed in as a pointer.
  *
@@ -28,9 +28,9 @@
 
 namespace DualityEngine {
 
-
     //  ***********************  HEADERS  ***********************
 
+    //region ThreadData Struct
     /*
      * A ThreadData object contains all the information that will be needed for the thread to run, like a pointer to
      * the collection of system pointers, a pointer to the name of the thread, a pointer to the logging output stream
@@ -45,14 +45,18 @@ namespace DualityEngine {
         Delegate<void(const char*)>* output;    // Output stream
         Delegate<void()>* quit;                 // Used in case of failure of system(s))
     };
+    //endregion
 
+    //region Engine Thread Function Prototype
     /*
      * This function stub is for the function that will be given to the thread when it starts.  As you can see, it takes
      * only a void pointer.
      */
     template <typename... System_Types>
     int EngineThreadFunction(void* data);
+    //endregion
 
+    //region SystemEngine Class
     /*
      * Here is the actual SystemEngine class declaration.
      */
@@ -73,9 +77,11 @@ namespace DualityEngine {
         // Use this to start the engine running.
         void engage();
     };
+    //endregion
 
     //  ***********************  IMPLEMENTATION  ***********************
 
+    //region Constructor
     /*
      * Constructor takes:
      * a pointer to the thread itself, a string for the thread name, a pointer to the output log delegate, a pointer
@@ -95,7 +101,9 @@ namespace DualityEngine {
         threadData.quit = quit;
         threadData.systems = &(this->systems);
     }
+    //endregion
 
+    //region Destructor
     /*
      * Destructor
      */
@@ -104,15 +112,20 @@ namespace DualityEngine {
     {
 
     }
+    //endregion
 
+    //region Engage
     /*
      * Starts the engine running (begins the thread)
+     * As you can see, threadData is cast to a void pointer to fulfill the parameter type of SDL_CreateThread
      */
     template <typename... System_Types>
     void SystemEngine<System_Types...>::engage() {
         *workThread = SDL_CreateThread (EngineThreadFunction<System_Types...>, threadName.c_str(), (void*) &threadData);
     }
+    //endregion
 
+    //region System Init Template
     /*
      * These next two confusing templated functions are for calling [system].init() for each system in
      * a tuple of systems of varying types.  OOP inheritance and virtual functions have been avoided.
@@ -152,7 +165,9 @@ namespace DualityEngine {
         }
         do_inits<I + 1, Sys_Types...>(tempOut, systemsInitializedCorrectly, systems);
     }
+    //endregion
 
+    //region System Tick Template
     /*
      * These next two functions are just like the last two, except they're for calling tick() on each system instead
      * of init().
@@ -194,7 +209,9 @@ namespace DualityEngine {
         }
         do_ticks<I + 1, Sys_Types...>(tempOut, quitGame, escape, systems);
     }
+    //endregion
 
+    //region Engine Thread Function
     /*
      * And here, finally, is the function that runs in the thread once it's initialized. It casts the void pointer data
      * back into the correct types, calls init() once on each system in the collection, the begins looping calls to
@@ -250,6 +267,7 @@ namespace DualityEngine {
         }
         return 0;
     }
+    //endregion
 }
 
 #endif	/* SYSTEMENGINE_H */

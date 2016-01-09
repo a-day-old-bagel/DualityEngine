@@ -33,8 +33,8 @@ namespace DualityEngine {
 //        DUA_id localActiveCamera = DUA_NULL_ID;
 //        CameraFree* pCamCurrent;
         DebugBackground noCamBackground;
-        std::string* queuedFileName = NULL;
-        std::string* queuedFileType = NULL;
+        std::string* queuedFileName;
+        std::string* queuedFileType;
         
         GLuint vertices;
         GLuint texture;

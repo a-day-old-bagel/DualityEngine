@@ -10,6 +10,81 @@
 
 using namespace DualityEngine;
 
+//region Constructor
+/**************************************
+ * CONSTRUCTOR
+ * Before having to accommodate
+ * Window's ridiculous lack of support
+ * for some c++11 features, this
+ * constructor was actually pretty.
+ *************************************/
+Game::Game() :  bank(&bankDelegates),
+                renderMasterSystem(&bank),
+                renderConsoleSystem(&bank, &console),
+                renderModelsSystem(&bank),
+                renderBackgroundSystem(&bank),
+                physicsMoveSystem(&bank),
+                physicsCollisionSystem(&bank),
+                spaceShipControlSystem(&bank),
+                userInputSystem(&bank),
+                scriptingSystem(&bank),
+                graphicsEngine(&graphicsThread, "Duality Graphics Engine",
+                               &bankDelegates.output, &bankDelegates.quit, &renderMasterSystem, &renderBackgroundSystem,
+                               &renderModelsSystem, &renderConsoleSystem),
+                physicsEngine(&physicsThread, "Duality Physics Engine", &bankDelegates.output, &bankDelegates.quit,
+                              &userInputSystem, &spaceShipControlSystem, &physicsMoveSystem, &physicsCollisionSystem),
+                scriptingEngine(&scriptingThread, "Duality Scripting Engine",
+                                &bankDelegates.output, &bankDelegates.quit, &scriptingSystem) {
+    graphicsThread = NULL;
+    physicsThread = NULL;
+    scriptingThread = NULL;
+
+    bankDelegates = {
+            DELEGATE(&Game::systems_discover, this),
+            DELEGATE(&Game::systems_scrutinize, this),
+            DELEGATE(&Game::systems_forceRemove, this),
+            DELEGATE(&Game::Quit, this),
+            DELEGATE(&Game::NewGame, this),
+            DELEGATE(&Game::Pause, this),
+            DELEGATE(&Game::Resume, this),
+            DELEGATE(&System_Scripting::submitScript, &scriptingSystem),
+            DELEGATE(&Game::pauseBankDependentSystems, this),
+            DELEGATE(&Game::waitForBankDependentSystemsToPause, this),
+            DELEGATE(&Game::resumeBankDependentSystems, this),
+            DELEGATE(&Console::applyBackspace, &console),
+            DELEGATE(&Console::applyDelete, &console),
+            DELEGATE(&Console::clearCommand, &console),
+            DELEGATE(&Console::upOneCommand, &console),
+            DELEGATE(&Console::downOneCommand, &console),
+            DELEGATE(&Console::leftCursor, &console),
+            DELEGATE(&Console::rightCursor, &console),
+            DELEGATE(&Console::output, &console),
+            DELEGATE(&Console::outputStr, &console),
+            DELEGATE(&Console::addToCommand, &console),
+            DELEGATE(&Console::submitCommand, &console),
+            DELEGATE(&System_Scripting::submitCommand, &scriptingSystem),
+            DELEGATE(&Console::getLogLineFromBack, &console),
+            DELEGATE(&Console::getCurrentLogLine, &console),
+            DELEGATE(&Console::setState, &console),
+            DELEGATE(&Console::traverseLog, &console),
+            DELEGATE(&System_Render_Background::queueSkyChange, &renderBackgroundSystem)};
+}
+//endregion
+
+//region Destructor
+/**************************************
+ * DESTRUCTOR
+ *************************************/
+Game::~Game() {
+    // Save game console log as text file
+    std::ofstream logFile;
+    logFile.open("log.txt", std::ios::trunc);
+    logFile << console.getLog();
+    logFile.close();
+}
+//endregion
+
+//region Main
 /**************************************
  * MAIN
  * called once from where the game is
@@ -17,31 +92,19 @@ using namespace DualityEngine;
  * main menu at some point...
  *************************************/
 void Game::Main(){
-    
+
     engageEngines();
-        
+
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);
     SDL_WaitThread(graphicsThread, NULL);
-    SDL_WaitThread(scriptingThread, NULL);   
+    SDL_WaitThread(scriptingThread, NULL);
 }
+//endregion
 
-/**************************************
- * DESTRUCTOR
- *************************************/
-Game::~Game(){
-    // Save game console log as text file
-    std::ofstream logFile;
-    logFile.open("log.txt", std::ios::trunc);
-    logFile << console.getLog();
-    logFile.close();
-}
+/****** INTERFACE METHODS ******/
 
-
-/*******************************************************************************
- *                  INTERNAL METHODS
- ******************************************************************************/
-
+//region New Game
 /**************************************
  * NEW GAME : Game Initializer
  * sets up game
@@ -50,10 +113,12 @@ void Game::NewGame(){
     if (pauseBankDependentSystems()){
         cleanGameData();    
         resumeBankDependentSystems();
-        outputDelegate("World cleared.\n");
+        bankDelegates.output("World cleared.\n");
     }
 }
+//endregion
 
+//region Load Game
 /**************************************
  * LOAD GAME
  *************************************/
@@ -63,7 +128,9 @@ void Game::LoadGame(const std::string& saveName){
     bank.load(saveName.c_str());
     resumeBankDependentSystems();
 }
+//endregion
 
+//region Save Game
 /**************************************
  * SAVE GAME
  *************************************/
@@ -72,7 +139,9 @@ void Game::SaveGame(const std::string& saveName){
     bank.save(saveName.c_str());
     resumeBankDependentSystems();
 }
+//endregion
 
+//region Pause
 /**************************************
  * PAUSE
  * only pauses the systems that make the
@@ -84,7 +153,9 @@ void Game::Pause(){
     physicsCollisionSystem.pause();
     spaceShipControlSystem.pause();
 }
+//endregion
 
+//region Resume
 /**************************************
  * RESUME
  * resumes the systems paused by Pause().
@@ -94,19 +165,20 @@ void Game::Resume(){
     physicsCollisionSystem.resume();
     spaceShipControlSystem.resume();
 }
+//endregion
 
+//region Quit
 /**************************************
  * QUIT
  *************************************/
 void Game::Quit(){
     killSystems();
 }
+//endregion
 
+/****** INTERNAL METHODS ******/
 
-/*******************************************************************************
- *                  INTERNAL METHODS
- ******************************************************************************/
-
+//region Engage Engines
 /**************************************
  * ENGAGE ENGINES
  *************************************/
@@ -118,7 +190,9 @@ bool Game::engageEngines(){
     
     return true;
 }
+//endregion
 
+//region Wait for Systems to Pause
 /**************************************
  * WAIT FOR SYSTEMS TO PAUSE
  * this is called by the pause engines
@@ -147,7 +221,9 @@ bool Game::waitForBankDependentSystemsToPause(){
     }
     return true;
 }
+//endregion
 
+//region Pause Engines
 /**************************************
  * PAUSE ENGINES
  * this is used whenever some major
@@ -172,12 +248,14 @@ bool Game::pauseBankDependentSystems(){
     if (waitForBankDependentSystemsToPause()){
         return true;
     } else {
-        outputDelegate("bank-dependent systems' pause timed out!\n");
+        bankDelegates.output("bank-dependent systems' pause timed out!\n");
         resumeBankDependentSystems();
         return false;
     }
 }
+//endregion
 
+//region Resume Engines
 /**************************************
  * RESUME ENGINES
  * resumes the engines paused by the
@@ -197,7 +275,9 @@ bool Game::resumeBankDependentSystems(){
     
     return true;
 }
+//endregion
 
+//region Kill Systems
 /**************************************
  * KILL SYSTEMS
  * Tell each system to quit, which
@@ -216,7 +296,9 @@ bool Game::killSystems(){
     spaceShipControlSystem.quit();
     return true;
 }
+//endregion
 
+//region Clean Game Data
 /**************************************
  * CLEAN GAME DATA
  * Only cleans the bank and the systems
@@ -234,7 +316,9 @@ bool Game::cleanGameData(){
     bank.clean();
     return true;
 }
+//endregion
 
+//region Systems Discover
 /**************************************
  * SYSTEMS DISCOVER
  * Systems that keep no registries do not
@@ -245,7 +329,9 @@ void Game::systems_discover(const DUA_id ID){
     physicsMoveSystem.discoverID(ID);
     physicsCollisionSystem.discoverID(ID);
 }
+//endregion
 
+//region Systems Scrutinize
 /**************************************
  * SYSTEMS SCRUTINIZE
  * Systems that keep no registries do not
@@ -256,7 +342,9 @@ void Game::systems_scrutinize(const DUA_id ID){
     physicsMoveSystem.scrutinizeID(ID);
     physicsCollisionSystem.scrutinizeID(ID);
 }
+//endregion
 
+//region Systems Force Remove
 /**************************************
  * SYSTEMS FORCE REMOVE
  * Systems that keep no registries do not
@@ -267,3 +355,4 @@ void Game::systems_forceRemove(const DUA_id ID, const DUA_compFlag component){
     physicsMoveSystem.forceRemoveComp(ID, component);
     physicsCollisionSystem.forceRemoveComp(ID, component);
 }
+//endregion

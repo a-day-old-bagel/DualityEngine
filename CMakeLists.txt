@@ -65,8 +65,8 @@ include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
 set(SOURCE_FILES
-        Headers/AssetManagement/ProgrammaticAssets/GUI/DebugBackground.h
-        Headers/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.h
+        Headers/AssetManagement/ProgrammaticAssets/DebugBackground.h
+#        Headers/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.h
         Headers/AssetManagement/ProgrammaticAssets/DebugCube.h
 
         Headers/Components/AmbientLight.h
@@ -76,7 +76,6 @@ set(SOURCE_FILES
         Headers/Components/Collision.h
         Headers/Components/Component.h
         Headers/Bank/ComponentBank.h
-        Headers/Components/ComponentCollection.h
         Headers/Utilities/Console.h
         Headers/Systems/Control_SS.h
         Headers/Bank/ControlTypes.h
@@ -121,6 +120,7 @@ set(SOURCE_FILES
         Headers/Systems/System.h
         Headers/AssetManagement/TextureRepository.h
         Headers/Systems/UserInput.h
+        Headers/Utilities/HelpDocs.h
 
         Source/Entities/Box.cpp
         Source/Bank/ComponentBank.cpp
@@ -144,7 +144,10 @@ set(SOURCE_FILES
         Source/Utilities/Settings.cpp
         Source/AssetManagement/ShaderRepository.cpp
         Source/Systems/UserInput.cpp
-        Source/AssetManagement/ProgrammaticAssets/GUI/DebugBackground.cpp Source/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.cpp Source/AssetManagement/ProgrammaticAssets/DebugCube.cpp)
+        Source/AssetManagement/ProgrammaticAssets/DebugBackground.cpp
+#        Source/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.cpp
+        Source/AssetManagement/ProgrammaticAssets/DebugCube.cpp
+        Source/Utilities/HelpDocs.cpp)
 
 # Make an executable called DualityEngine out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

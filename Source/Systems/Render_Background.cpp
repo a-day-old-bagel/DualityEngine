@@ -8,7 +8,8 @@ using namespace DualityEngine;
 System_Render_Background::System_Render_Background(ComponentBank* bank)
                   : System<System_Render_Background>(bank, "Sky Rendering System", 0)
 {
-    
+    queuedFileName = NULL;
+    queuedFileType = NULL;
 }
 
 System_Render_Background::~System_Render_Background()

@@ -8,7 +8,7 @@ using namespace DualityEngine;
 System_Render_Master::System_Render_Master(ComponentBank* bank)
                   : System<System_Render_Master>(bank, "Master Rendering System", 0)
 {
-    
+    pWindow = NULL;
 }
 
 System_Render_Master::~System_Render_Master()

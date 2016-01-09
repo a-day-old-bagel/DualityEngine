@@ -18,9 +18,10 @@ namespace DualityEngine {
     {
     private:
         SDL_Event sdlEvent;   
-        bool consoleIsActive = false;
-        bool MenuIsActive = false;
-        const std::string menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*     new, load, save, exit, help      *\n****************************************\n";
+        bool consoleIsActive;
+        bool MenuIsActive;
+        static const std::string menuText;
+
         void parseMenuCommand(const std::string& command);
         void handleKeyDown(SDL_Event& event);
         void handleControlKeys(const Uint8* keyStates);

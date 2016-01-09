@@ -20,8 +20,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-// It's pointless to do separate compilation on HashMap at this point, but I do it
-// anyway for style consistency
 #include "HashMap.h"
 #include "../../Source/Bank/HashMap.cpp"
 
@@ -46,6 +44,8 @@
 #include "../Components/CameraFree.h"
 
 #include "ControlTypes.h"
+
+#include "HelpDocs.h"
 
 #ifdef _WIN32
 #include <array>
@@ -198,8 +198,6 @@ namespace DualityEngine {
         std::string listComponents(const DUA_compFlag flag);
         std::string getEntityInfo(const DUA_id ID);
         
-        
-        
         /*****************************
          * HEREAFTER FOLLOW VARIOUS HELPFUL CONSTRUCTS NOT FUNDAMENTAL TO COMPONENT BANK.
          * MOST OF THEM ARE HERE TO BE SHARED BY ALL SYSTEMS, AND ARE THINGS UNSUITED FOR
@@ -207,41 +205,9 @@ namespace DualityEngine {
          *****************************/
         
         /* PUBLIC DELEGATES */
-        BankDelegates* dlgt;        
-        
-        /* HANDY-DANDY COMPONENT DICTIONARY */        
-        // this is a wierd multi-type dictionary thing to hold associations between
-        // (full name [index 0], abbreviated/command name [index 1], and enumerator [index 2])
-        // for any given type of component. Used predominantly in scripting system.
-        // It makes it much easier to change these values globally.
-        
-        // this is what you use to access an element from a system. x for component type, y for which attribute
-        #define DUA_COMPCOLL(x, y) std::get<y>(bank->componentCollections[x])
-        // unfortunately a typedef won't do what I want here...
-        #define DUA_COMP_TUPLE std::tuple<std::string, std::string, DUA_compFlag>
-        
-        const std::array<const DUA_COMP_TUPLE, 16> componentCollections = {{
-            DUA_COMP_TUPLE{"soul", "soul", 0},
-            DUA_COMP_TUPLE{"model", "model", MODEL},
-            DUA_COMP_TUPLE{"position", "position", POSITION},
-            DUA_COMP_TUPLE{"spatial child", "spatchild", SPATCHILD},
-            DUA_COMP_TUPLE{"spatial parent", "spatparent", SPATPARENT},
-            DUA_COMP_TUPLE{"linear velocity", "linveloc", LINVELOC},
-            DUA_COMP_TUPLE{"collision", "collision", COLLISION},
-            DUA_COMP_TUPLE{"orientation", "orientation", ORIENTATION},
-            DUA_COMP_TUPLE{"angular velocity", "angveloc", ANGVELOC},
-            DUA_COMP_TUPLE{"spaceship control", "spacecontrol", CONTROLSS},
-            DUA_COMP_TUPLE{"point light", "lpoint", LPOINT},
-            DUA_COMP_TUPLE{"directional light", "ldirect", LDIRECT},
-            DUA_COMP_TUPLE{"ambient light", "lambient", LAMBIENT},
-            DUA_COMP_TUPLE{"owner", "owner", OWNER},
-            DUA_COMP_TUPLE{"score", "score", SCORE},
-            DUA_COMP_TUPLE{"free camera", "freecam", FREECAM}
-        }};
-        
+        BankDelegates* dlgt;
         
         /* CONTROL STUFF */
-
 //        namespace ControlTypes{
 //            enum type{
 //                NONE = 0,
@@ -251,7 +217,7 @@ namespace DualityEngine {
         
         bool switchToControl(const DUA_id id, ControlTypes::type controlType);
         void scrutinizeControl(const DUA_id id, ControlTypes::type controlType);
-        DUA_id activeControlID = DUA_NULL_ID;     
+        DUA_id activeControlID;
         LinearVelocity* pCtrlLinVelocCurrent;
         LinearVelocity* pCtrlLinVelocDummy;
         Orientation* pCtrlOrientCurrent;       
@@ -259,8 +225,8 @@ namespace DualityEngine {
         AngularVelocity* pCtrlAngVelocCurrent;
         AngularVelocity* pCtrlAngVelocDummy;
         Delegate<void()> defocusControl;
-        DUA_compFlag requiredControlComponents = 0;
-        ControlTypes::type currentControlType = ControlTypes::NONE;
+        DUA_compFlag requiredControlComponents;
+        ControlTypes::type currentControlType;
         
         void focusSpaceControl(const DUA_id ID);
         void defocusSpaceControl();        
@@ -270,7 +236,7 @@ namespace DualityEngine {
         
         /* CAM STUFF */
         
-        DUA_id activeFreeCameraID = DUA_NULL_ID;
+        DUA_id activeFreeCameraID;
         CameraFree* pFreeCameraCurrent;
         CameraFree* pFreeCameraDummy;
         bool updateActiveCamera();

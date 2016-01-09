@@ -30,16 +30,16 @@ namespace DualityEngine {
     {
     private:
         std::string name;
-        bool escape = false;
-        bool paused = false;
-        bool pauseConfirmed = false;
+        bool escape;
+        bool paused;
+        bool pauseConfirmed;
         Derived_System& sys();
         
     protected:
         ComponentBank* bank;
         std::vector<std::vector<DUA_id>> registeredIDs;   // These are collections so that a system can operate
         std::vector<DUA_compFlag> requiredComponents;     // on more than one kind of entity if it needs to.
-        uint tockFreq = 1;  // every 'tockFreq' times 'tock' is called, it's code will execute. (periodic loop not linked to 'tick')
+        uint tockFreq; // every 'tockFreq' times 'tock' is called, it's code will execute. (periodic loop not linked to 'tick')
         
     public:        
         System(ComponentBank* bank, std::string name, int numRegisters);
@@ -66,12 +66,16 @@ namespace DualityEngine {
 
     template<typename Derived_System>
     System<Derived_System>::System(ComponentBank* bank, std::string name, int numRegisters){
+        escape = false;
+        paused = false;
+        pauseConfirmed = false;
         this->bank = bank;
         this->name = name;
         for (int i = 0; i < numRegisters; i++){
             registeredIDs.push_back(std::vector<DUA_id>());
             requiredComponents.push_back(DUA_DEFAULT_COMPONENTS);
         }
+        tockFreq = 1;
     }
 
     template<typename Derived_System>
