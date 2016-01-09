@@ -50,9 +50,8 @@ include_directories(${FREETYPE_INCLUDE_DIR_freetype2})
 set(LIBS ${LIBS} ${FREETYPE_LIBRARIES})
 
 set(DUA_INCLUDE_DIR
-        Headers/AssetManagement/ProgrammaticAssets/GUI/NoCamBackground
         Headers/AssetManagement/ProgrammaticAssets/GUI
-        Headers/AssetManagement/ProgrammaticAssets/DebugCube
+        Headers/AssetManagement/ProgrammaticAssets
         Headers/Components
         Headers/Bank
         Headers/Admin
@@ -68,7 +67,7 @@ include_directories(${DUA_INCLUDE_DIR})
 set(SOURCE_FILES
         Headers/AssetManagement/ProgrammaticAssets/GUI/DebugBackground.h
         Headers/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.h
-        Headers/AssetManagement/ProgrammaticAssets/DebugCube/DebugCube.h
+        Headers/AssetManagement/ProgrammaticAssets/DebugCube.h
 
         Headers/Components/AmbientLight.h
         Headers/Components/AngularVelocity.h
@@ -145,7 +144,7 @@ set(SOURCE_FILES
         Source/Utilities/Settings.cpp
         Source/AssetManagement/ShaderRepository.cpp
         Source/Systems/UserInput.cpp
-        Source/AssetManagement/ProgrammaticAssets/GUI/DebugBackground.cpp Source/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.cpp)
+        Source/AssetManagement/ProgrammaticAssets/GUI/DebugBackground.cpp Source/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.cpp Source/AssetManagement/ProgrammaticAssets/DebugCube.cpp)
 
 # Make an executable called DualityEngine out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

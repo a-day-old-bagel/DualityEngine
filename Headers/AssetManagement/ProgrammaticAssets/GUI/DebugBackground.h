@@ -2,7 +2,7 @@
  * File:   DebugBackground.h
  * Author: adayoldbagel
  *
- * Header only file that contains everything necessary to display a black screen with the words "NO CAM" in the center.
+ * Contains everything necessary to display a black screen with the words "NO CAM" in the center.
  */
 
 #ifndef DEBUGBACKGROUND_H
