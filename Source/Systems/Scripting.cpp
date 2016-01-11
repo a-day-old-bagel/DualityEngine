@@ -16,6 +16,14 @@
 
 namespace DualityEngine {
 
+    template<typename T>
+    T strTo(const char* str) {
+        std::istringstream ss(str);
+        T i;
+        ss >> i;
+        return i;
+    }
+
     System_Scripting::System_Scripting(ComponentBank *bank)
             : System<System_Scripting>(bank, "Scripting System", 0) {
         entityVariables = {};
@@ -34,11 +42,11 @@ namespace DualityEngine {
             parseCommand(commandQueue.front());
             commandQueue.pop();
         }
-        SDL_Delay(20);
+        SDL_Delay(20); // was 20
     }
 
     void System_Scripting::submitScript(const std::string &fileName) {
-        std::string filePath = "Assets/Scripts/" + fileName + ".dua";
+        std::string filePath = "C:/Users/Galen/Code/DualityEngine/vs/Debug/Assets/Scripts/" + fileName + ".dua";
         std::vector<std::string> lines;
         std::string lineReader;
         std::ifstream infile(filePath, std::ios_base::in);
@@ -111,7 +119,7 @@ namespace DualityEngine {
                 if (numArgs == 2) {
                     DUA_id newID = bank->spawnEntity(args[1].c_str());
                     if (newID != DUA_NULL_ID) {
-                        bank->dlgt->outputStr(std::to_string(newID));
+                        bank->dlgt->outputStr(idToStr(newID));
                     } else {
                         bank->dlgt->outputStr("<!>    Failed to create " + args[1] + "!\n");
                     }
@@ -143,7 +151,7 @@ namespace DualityEngine {
                         if (IDs.size() > 0) {
                             bank->dlgt->outputStr("Entity IDs associated with the name \"" + args[1] + "\": \n");
                             for (auto id : IDs) {
-                                bank->dlgt->outputStr(std::to_string(id) + "\n");
+                                bank->dlgt->outputStr(idToStr(id) + "\n");
                             }
                         } else {
                             bank->dlgt->outputStr("<!>    No entities exist named \"" + args[1] + "\".\n");
@@ -285,7 +293,7 @@ namespace DualityEngine {
                 if (newID != DUA_NULL_ID) {
                     entityVariables[args[0]] = newID;
                     bank->dlgt->outputStr(
-                            "Entity " + std::to_string(newID) + " has been assigned variable: (CTRL-C to copy)\n" +
+                            "Entity " + idToStr(newID) + " has been assigned variable: (CTRL-C to copy)\n" +
                             args[0]);
                 } else {
                     bank->dlgt->outputStr("<!>    Failed to create " + args[1] + "!\n");
@@ -420,7 +428,7 @@ namespace DualityEngine {
     DUA_id System_Scripting::prsID(const std::string &IDstring) {
         DUA_id entID = DUA_NULL_ID;
         try {
-            entID = DUA_STR_TO_ID(IDstring, 10);
+            entID = strTo<DUA_id>(IDstring.c_str());
             if (entID > std::numeric_limits<DUA_id>::max() || entID < 0) {
                 throw std::out_of_range("DUA_id");
             }
@@ -440,7 +448,7 @@ namespace DualityEngine {
     int System_Scripting::prsInt(const std::string &intString) {
         int val = 0;
         try {
-            val = DUA_STR_TO_INT(intString, 10);
+            val = strTo<int>(intString.c_str());
         } catch (std::invalid_argument &invalidException) {
             throw std::string("<!>    Not a valid value: " + intString + "\n").c_str();
         } catch (std::out_of_range &oorException) {
@@ -452,7 +460,7 @@ namespace DualityEngine {
     DUA_dbl System_Scripting::prsDbl(const std::string &dblString) {
         DUA_dbl dbl = -1;
         try {
-            dbl = DUA_STR_TO_DBL(dblString);
+            dbl = strTo<DUA_dbl>(dblString.c_str());
 //        if (dbl > std::numeric_limits<DUA_dbl>::max() || dbl > std::numeric_limits<DUA_dbl>::min()) {
 //            throw std::out_of_range("DUA_dbl");
 //        }
@@ -467,7 +475,7 @@ namespace DualityEngine {
     DUA_float System_Scripting::prsFlt(const std::string &floatString) {
         DUA_float flt = -1;
         try {
-            flt = DUA_STR_TO_FLOAT(floatString);
+            flt = strTo<DUA_float>(floatString.c_str());
         } catch (std::invalid_argument &invalidException) {
             throw std::string("<!>    Not a valid value: " + floatString + "\n").c_str();
         } catch (std::out_of_range &oorException) {
@@ -479,7 +487,7 @@ namespace DualityEngine {
     DUA_colorByte System_Scripting::prsClr(const std::string &colorValue) {
         DUA_colorByte colorVal = -1;
         try {
-            colorVal = DUA_STR_TO_COLOR(colorValue, 10);
+            colorVal = strTo<DUA_colorByte>(colorValue.c_str());
             if (colorVal > 255 || colorVal < 0) {
                 throw std::out_of_range("DUA_colorByte");
             }

@@ -2,6 +2,7 @@
  * Galen Cochrane, 1 FEB 2015
  ****************************************************************/
 #include "Render_BiTcubes.h"
+#include "Render_Master.h"
 
 using namespace DualityEngine;
 
@@ -64,10 +65,7 @@ System_Render_BiTcubes::~System_Render_BiTcubes()
 //<editor-fold defaultstate="collapsed" desc="Init">
 bool System_Render_BiTcubes::init(std::stringstream& engineOut)
 {
-    GLenum glErr = glGetError();
-    if (glErr != GL_NO_ERROR) {
-        engineOut << "glError detected after system init: " << gluErrorString(glErr) << std::endl;
-    }
+	System_Render_Master::checkError(engineOut, "after Render_BiTCubes init");
     return true;
 }
 //</editor-fold>

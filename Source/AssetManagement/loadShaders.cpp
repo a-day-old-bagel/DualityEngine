@@ -8,8 +8,6 @@ using namespace DualityEngine;
 
 GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFilePath, std::stringstream& engineOut)
 {
-    //<editor-fold defaultstate="collapsed" desc="Set up variables">
-    
     engineOut << std::endl; // Just some spacing for console output.
     
     // Create the empty shaders
@@ -21,9 +19,6 @@ GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFil
     GLint result = GL_FALSE;
     int infoLogLength;
     
-    //</editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="Read the shader source files">
-    
     std::string vertShaderCode;
     std::ifstream vertShaderStream(vertFilePath, std::ios::in);
     if(vertShaderStream.is_open()) {
@@ -32,7 +27,7 @@ GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFil
                 vertShaderCode += "\n" + Line;
         vertShaderStream.close();
     } else {
-        engineOut << "Cannot open " << vertFilePath << std::endl;
+        engineOut << "\n<!>    Cannot open " << vertFilePath << std::endl;
         return GL_FALSE;
     }
 
@@ -44,12 +39,9 @@ GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFil
                 fragShaderCode += "\n" + Line;
         fragShaderStream.close();
     } else {
-        engineOut << "Cannot open " << fragFilePath << std::endl;
+        engineOut << "\n<!>    Cannot open " << fragFilePath << std::endl;
         return GL_FALSE;
     }
-    
-    //</editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="Compile each shader">
     
     // Compile Vertex Shader
     engineOut << "Compiling vertex shader : " << vertFilePath;
@@ -63,11 +55,11 @@ GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFil
     if (infoLogLength > 0) {
         std::vector<char> vertShaderErrorMessage(infoLogLength + 1);
         glGetShaderInfoLog(vertShaderID, infoLogLength, NULL, &vertShaderErrorMessage[0]);
-        //printf("\n%s", &VertexShaderErrorMessage[0]);
         engineOut << std::endl << &vertShaderErrorMessage[0];
     }
     if (result == GL_FALSE) {
-        engineOut << vertFilePath << " SHADER DID NOT COMPILE!\n\n";
+        engineOut << vertFilePath << "\n<!>    VERTEX SHADER DID NOT COMPILE!\n\n";
+		glDeleteShader(vertShaderID);
         return GL_FALSE;
     } else {
         engineOut << vertFilePath << " compiled successfully.\n\n";
@@ -85,18 +77,16 @@ GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFil
     if (infoLogLength > 0) {
         std::vector<char> fragShaderErrorMessage(infoLogLength + 1);
         glGetShaderInfoLog(fragShaderID, infoLogLength, NULL, &fragShaderErrorMessage[0]);
-        //printf("\n%s", &FragmentShaderErrorMessage[0]);
         engineOut << std::endl << &fragShaderErrorMessage[0];
     }
     if (result == GL_FALSE) {
-        engineOut << fragFilePath << " SHADER DID NOT COMPILE!\n\n";
+        engineOut << fragFilePath << "\n<!>    FRAGMENT SHADER DID NOT COMPILE!\n\n";
+		glDeleteShader(vertShaderID);
+		glDeleteShader(fragShaderID);
         return GL_FALSE;
     } else {
         engineOut << fragFilePath << " compiled successfully.\n\n";
     }
-    
-    //</editor-fold>
-    //<editor-fold defaultstate="collapsed" desc="Attach and link shaders">
     
     engineOut << "Linking Program...\n";
     
@@ -111,13 +101,11 @@ GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFil
     if (infoLogLength > 0) {
         std::vector<char> progErrorMessage(infoLogLength + 1);
         glGetProgramInfoLog(progID, infoLogLength, NULL, &progErrorMessage[0]);
-        //printf("%s\n", &progErrorMessage[0]);
         engineOut << std::endl << &progErrorMessage[0];
     }
 
     glDeleteShader(vertShaderID);
     glDeleteShader(fragShaderID);
-    //</editor-fold>
 
     engineOut << "shader program successfully loaded and given ID " << progID << std::endl;
     return progID;

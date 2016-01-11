@@ -18,6 +18,7 @@
 #include <GL/glew.h>
 #include <glm/glm.hpp>
 #include <string>
+#include <cstdio>
 
 #ifdef _WIN32
 typedef unsigned int uint;
@@ -27,7 +28,7 @@ namespace DualityEngine {
         
     /* SWITCHES AND QUICK SETTINGS  --MAY MODIFY--  ========================= */
     
-//    #define DUA_DEBUG_CONSOLE_TO_COUT // all console output will be duplicated and sent to stdout
+    #define DUA_DEBUG_CONSOLE_TO_COUT // all console output will be duplicated and sent to stdout
     
 //    #define DUA_DEBUG_MATRIX_PRINT // Matrix class will include a debug 'print' method to output to stdout
 
@@ -35,7 +36,7 @@ namespace DualityEngine {
     
 //    #define DUA_OLD_VIDEO_DRIVERS // openGL 3.0 will be used instead of 3.3
 
-    #define DUA_FULLSCREEN // engine will run in fullscreen mode
+//    #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
     #define DUA_DEFUALT_WHICH_MONITOR 0
     
@@ -122,20 +123,20 @@ namespace DualityEngine {
     
     
     
-    /* FUNCTIONAL MACROS */    
-    // This is the function used to convert strings to ID numbers (currently unsigned ints)
-    #define DUA_STR_TO_ID(str, base) std::stoul(str, nullptr, base)
-    // This is the function used to convert strings to DUA_dbl (currently just c++ doubles)
-    #define DUA_STR_TO_DBL(str) std::stod(str)
-    // This is the function used to convert strings to DUA_float (currently just c++ floats)
-    #define DUA_STR_TO_FLOAT(str) std::stof(str)
-    // This is the function used to convert strings to DUA_colorByte
-    #define DUA_STR_TO_COLOR(str, base) std::stoul(str, nullptr, base)
-    // This is the function used to convert strings to ints
-    #define DUA_STR_TO_INT(str, base) std::stoi(str, nullptr, base)
+    /* FUNCTIONAL MACROS */
+//    // This is the function used to convert strings to ID numbers (currently unsigned ints)
+//    #define DUA_STR_TO_ID(str, base) std::stoul(str, nullptr, base)
+//    // This is the function used to convert strings to DUA_dbl (currently just c++ doubles)
+//    #define DUA_STR_TO_DBL(str) std::stod(str)
+//    // This is the function used to convert strings to DUA_float (currently just c++ floats)
+//    #define DUA_STR_TO_FLOAT(str) std::stof(str)
+//    // This is the function used to convert strings to DUA_colorByte
+//    #define DUA_STR_TO_COLOR(str, base) std::stoul(str, nullptr, base)
+//    // This is the function used to convert strings to ints
+//    #define DUA_STR_TO_INT(str, base) std::stoi(str, nullptr, base)
     // This is used when passing buffer offsets to the GPU via openGL
     #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
-    
+
     
 
     /* SETTING DEPENDENT META PROGRAMMING **DO NOT MODIFY**      */      
@@ -165,6 +166,7 @@ namespace DualityEngine {
             extern int screenResX, screenResY;
             extern float screenAspectRatio;
             extern int whichMonitor, monitorOffsetX, monitorOffsetY;
+			extern bool vSync;
         }
         
         namespace Console{

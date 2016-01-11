@@ -2,6 +2,7 @@
 // Created by adayoldbagel on 1/8/16.
 //
 
+#include <array>
 #include "HelpDocs.h"
 
 // this is what you use to access an element of componentCollections. x for component type, y for which attribute

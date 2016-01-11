@@ -81,14 +81,22 @@ bool System_Render_Master::init(std::stringstream& engineOut){
     if (pWindow == NULL) {
         engineOut << "<!>    SDL window was not created! SDL Error: " << SDL_GetError() << std::endl;
         return false;
-    }
+	}
+	else {
+		engineOut << "SDL window created.\n";
+	}
 
     //Create context
     context = SDL_GL_CreateContext(pWindow);
     if(context == NULL) {
         engineOut << "<!>    OpenGL context was not created! SDL Error: " << SDL_GetError() << std::endl;
         return false;
-    }
+	}
+	else {
+		engineOut << "GL context created.\n";
+	}
+
+	checkError(engineOut, "after creating GL context");
 
     //Initialize GLEW (openGL Extensions Wrangler)
     glewExperimental = GL_TRUE;
@@ -97,13 +105,23 @@ bool System_Render_Master::init(std::stringstream& engineOut){
     if(glewError != GLEW_OK) {
         engineOut << "<!>    Could not initialize GLEW! " << glewGetErrorString(glewError) << std::endl;
         return false;
-    }
+	}
+	else {
+		engineOut << "GLEW initialized.\n";
+	}
+
+	checkError(engineOut, "after initializing GLEW");
 
     //Use Vsync
-    if(SDL_GL_SetSwapInterval(1) < 0) {
-        engineOut << "<!>    Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
-        // Do not return
-    }
+	if (Settings::Display::vSync) {
+		if (SDL_GL_SetSwapInterval(1) < 0) {
+			engineOut << "<!>    Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
+			// Do not return
+		}
+		else {
+			engineOut << "VSync enabled.\n";
+		}
+	}
     
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glEnable(GL_DEPTH_TEST);
@@ -113,11 +131,33 @@ bool System_Render_Master::init(std::stringstream& engineOut){
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    GLenum glErr = glGetError();
-    if (glErr != GL_NO_ERROR) {
-        engineOut << "<!>    glError detected after system init: " << gluErrorString(glErr) << std::endl;
-    }
+	checkError(engineOut, "after GL configuration (at end of System_Render_Master::init()");
+
     return true;
+}
+
+/*
+ * DO NOT call this function before the gl context has initialized.  It will make an infinite loop.
+ * This is because glGetError always returns GL_INVALID_OPERATION before there exists a context.
+ */
+void DualityEngine::System_Render_Master::checkError(std::stringstream& engineOut, const char* context) {
+	GLenum glErr = glGetError();
+	if (glErr != GL_NO_ERROR) {
+		std::stringstream tempOut;
+		tempOut << "<!>    GL error(s) detected " << context << ":\n";
+		int loopGuard = 0;
+		while (glErr != GL_NO_ERROR) {
+			if (++loopGuard <= 10) {
+				tempOut << "\t\t\t" << gluErrorString(glErr) << std::endl;
+				glErr = glGetError();
+			}
+			else {
+				tempOut << "\t\t\t<!> Suppressing further errors...\n";
+				break;
+			}
+		}
+		engineOut << tempOut.str();
+	}
 }
 
 void System_Render_Master::tick()

@@ -90,7 +90,7 @@ namespace DualityEngine {
             return &(table.at(ID));
         } catch (const std::out_of_range &oorException) {
             std::string error =
-                    "No " + std::string(compName) + " component exists with ID " + std::to_string(ID) + ".\n";
+                    "No " + std::string(compName) + " component exists with ID " + idToStr(ID) + ".\n";
             dlgt->output(error.c_str());
             return NULL;
         }
@@ -169,7 +169,7 @@ namespace DualityEngine {
             components_soul.at(ID).components |= flag;
         } catch (const std::out_of_range &oorException) {
             std::string error =
-                    "Could not add component at ID " + std::to_string(ID) + ": no soul exists at that ID.\n";
+                    "Could not add component at ID " + idToStr(ID) + ": no soul exists at that ID.\n";
             dlgt->output(error.c_str());
             return false;
         }
@@ -194,7 +194,7 @@ namespace DualityEngine {
                                         const types &... args) {
         if ((table.emplace(std::piecewise_construct, std::forward_as_tuple(ID), std::forward_as_tuple(args...))) ==
             false) {
-            std::string error = std::string(compName) + " component already exists at ID " + std::to_string(ID) + "\n";
+            std::string error = std::string(compName) + " component already exists at ID " + idToStr(ID) + "\n";
             dlgt->output(error.c_str());
             return false;
         }
@@ -341,7 +341,7 @@ namespace DualityEngine {
             components_soul.at(ID).components &= ~flag;
         } catch (const std::out_of_range &oorException) {
             std::string error =
-                    "Could not remove component at ID " + std::to_string(ID) + ": no soul exists at that ID.\n";
+                    "Could not remove component at ID " + idToStr(ID) + ": no soul exists at that ID.\n";
             dlgt->output(error.c_str());
         }
     }
@@ -359,7 +359,7 @@ namespace DualityEngine {
         dlgt->systemsForceRemove(ID, compFlag);
         if (table.erase(ID) == 0) {
             std::string error =
-                    "No " + std::string(compName) + " component exists to be removed at ID " + std::to_string(ID) +
+                    "No " + std::string(compName) + " component exists to be removed at ID " + idToStr(ID) +
                     "\n";
             dlgt->output(error.c_str());
             return false;
@@ -545,7 +545,7 @@ namespace DualityEngine {
             flags = components_soul.at(ID).components;
             name = components_soul.at(ID).name;
         } catch (const std::out_of_range &oorException) {
-            std::string error = "Could not delete entity " + std::to_string(ID) + ": no soul exists at that ID.\n";
+            std::string error = "Could not delete entity " + idToStr(ID) + ": no soul exists at that ID.\n";
             dlgt->output(error.c_str());
             return false;
         }
@@ -572,13 +572,13 @@ namespace DualityEngine {
 
         } catch (...) {
             std::string error =
-                    "Something went wrong upon attempting to delete entity " + std::to_string(ID) + " ('" + name +
+                    "Something went wrong upon attempting to delete entity " + idToStr(ID) + " ('" + name +
                     "')!\n";
             dlgt->output(error.c_str());
             return false;
         }
 
-        std::string error = "Entity " + std::to_string(ID) + " ('" + name + "') has been deleted.\n";
+        std::string error = "Entity " + idToStr(ID) + " ('" + name + "') has been deleted.\n";
         dlgt->output(error.c_str());
         return true;
     }
@@ -626,7 +626,7 @@ namespace DualityEngine {
         try {
             return components_soul.at(ID).name;
         } catch (const std::out_of_range &oorException) {
-            return "Could not get name: No entity exists with ID " + std::to_string(ID);
+            return "Could not get name: No entity exists with ID " + idToStr(ID);
         }
     }
 
@@ -665,9 +665,9 @@ namespace DualityEngine {
 
     std::string ComponentBank::getEntityInfo(const DUA_id ID) {
         try {
-            return (std::to_string(ID) + " (" + components_soul.at(ID).name + ")");
+            return (idToStr(ID) + " (" + components_soul.at(ID).name + ")");
         } catch (const std::out_of_range &oorException) {
-            return (std::to_string(ID) + " (DOES NOT EXIST)");
+            return (idToStr(ID) + " (DOES NOT EXIST)");
         }
     }
 
@@ -710,7 +710,7 @@ namespace DualityEngine {
                 return false;
             }
         } catch (const std::out_of_range &oorException) {
-            dlgt->outputStr("No entity exists at ID " + std::to_string(ID) + "\n");
+            dlgt->outputStr("No entity exists at ID " + idToStr(ID) + "\n");
             return false;
         }
         return true;
@@ -748,7 +748,7 @@ namespace DualityEngine {
                 dlgt->output("Control focus discarded.");
                 return true;
             default:
-                dlgt->outputStr("Not a control type: " + std::to_string(controlType));
+                dlgt->outputStr("<!>    Invalid Control Type.");
                 return false;
         }
 
@@ -772,7 +772,7 @@ namespace DualityEngine {
                 return false;
             }
         } catch (const std::out_of_range &oorException) {
-            dlgt->outputStr("No entity exists at ID " + std::to_string(ID));
+            dlgt->outputStr("No entity exists at ID " + idToStr(ID));
             return false;
         }
         return true;
@@ -812,7 +812,7 @@ namespace DualityEngine {
             }
         } catch (const std::out_of_range &oorException) {
             dlgt->outputStr(
-                    "ERROR: access to nonexistent position for matrix retrieval at ID " + std::to_string(ID) + "\n");
+                    "ERROR: access to nonexistent position for matrix retrieval at ID " + idToStr(ID) + "\n");
         }
         return Constants::duaIdentMat4;
     }
@@ -826,7 +826,7 @@ namespace DualityEngine {
             }
         } catch (const std::out_of_range &oorException) {
             dlgt->outputStr(
-                    "ERROR: access to nonexistent orientation for matrix retrieval at ID " + std::to_string(ID) + "\n");
+                    "ERROR: access to nonexistent orientation for matrix retrieval at ID " + idToStr(ID) + "\n");
         }
         return Constants::duaIdentMat4;
     }

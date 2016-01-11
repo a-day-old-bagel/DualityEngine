@@ -7,6 +7,7 @@
 
 #include <fstream>
 #include "Game.h"
+#include <windows.h>
 
 using namespace DualityEngine;
 
@@ -94,6 +95,22 @@ Game::~Game() {
 void Game::Main(){
 
     engageEngines();
+
+	SDL_Delay(1000);
+
+	//bankDelegates.runScript("scene0");
+	bankDelegates.submitScriptCommand("newent player");
+	bankDelegates.submitScriptCommand("add position 1 0 0 0");
+	bankDelegates.submitScriptCommand("add orientation 1 0 0 0");
+	bankDelegates.submitScriptCommand("add freecam 1 1 0.5 1000 0 0 0 0 0 -1 0 1 0");
+	bankDelegates.submitScriptCommand("cam 1");
+
+	bankDelegates.submitScriptCommand("newent box");
+	bankDelegates.submitScriptCommand("add position 2 0 0 -4");
+	bankDelegates.submitScriptCommand("add orientation 2 0 0 0");
+	bankDelegates.submitScriptCommand("add model 2 foo");
+	bankDelegates.submitScriptCommand("add linveloc 2 0 0 0");
+	bankDelegates.submitScriptCommand("add angveloc 2 0 0.002 0");
 
     // Wait for all game threads to exit, then the game is over.
     SDL_WaitThread(physicsThread, NULL);

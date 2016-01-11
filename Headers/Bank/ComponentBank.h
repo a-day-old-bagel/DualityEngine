@@ -23,6 +23,8 @@
 #include "HashMap.h"
 #include "../../Source/Bank/HashMap.cpp"
 
+#include "ToString.h"
+
 #include "BankDelegates.h"
 #include "../Utilities/Settings.h"
 

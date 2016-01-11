@@ -3,6 +3,7 @@
  *
  ****************************************************************/
 #include "Render_Console.h"
+#include "Render_Master.h"
 
 namespace DualityEngine {
 
@@ -91,10 +92,7 @@ namespace DualityEngine {
 
         hasInitialized = true;
 
-        GLenum glErr = glGetError();
-        if (glErr != GL_NO_ERROR) {
-            output << "<!>    glError detected after system init: " << gluErrorString(glErr) << std::endl;
-        }
+		System_Render_Master::checkError(output, "after Render_Console init");
 
         return true;
     }
@@ -126,9 +124,13 @@ namespace DualityEngine {
         sizeVertArray = (numBodyVerts + numCommVerts + 4 + 3) * 2;// +4 and +2 are for background quad.
         sizeIndexArray = (numBodyTris + numCommTris + 2 + 1) * 3;// +3 and +1 are for the cursor triangle.
 
-        DUA_float verts[sizeVertArray];
-        DUA_float UVs[sizeVertArray];
-        DUA_uint16 indices[sizeIndexArray];
+//        DUA_float verts[sizeVertArray];
+//        DUA_float UVs[sizeVertArray];
+//        DUA_uint16 indices[sizeIndexArray];
+
+		DUA_float* verts = new DUA_float[sizeVertArray];
+		DUA_float* UVs	 = new DUA_float[sizeVertArray];
+		DUA_uint16* indices = new DUA_uint16[sizeIndexArray];
 
         // fill the UV buffer with zeros for now.
         memset(UVs, 0, (size_t) sizeVertArray);
@@ -251,6 +253,10 @@ namespace DualityEngine {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeIndexArray * sizeof(DUA_uint16), indices, GL_STATIC_DRAW);
 
+		delete[] verts;
+		delete[] UVs;
+		delete[] indices;
+
         return true;
     }
     bool System_Render_Console::generateAndBufferFontAtlas(std::stringstream &output, const char *fontFile) {
@@ -285,8 +291,11 @@ namespace DualityEngine {
             return false;
         }
 
-        DUA_uint8 baseTexData[texBytes];
-        memset(baseTexData, 0x00, texBytes);
+//        DUA_uint8 baseTexData[texBytes];
+//        memset(baseTexData, 0x00, texBytes);
+
+		DUA_uint8* baseTexData = new DUA_uint8[texBytes];
+		memset(baseTexData, 0x00, texBytes);
 
         glGenTextures(1, &texture);
         glBindTexture(GL_TEXTURE_2D, texture);
@@ -296,12 +305,10 @@ namespace DualityEngine {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, panelWidth * numTexPanels, panelHeight, 0, GL_RED, GL_UNSIGNED_BYTE,
                      &baseTexData[0]);
 
-        GLenum glErr = glGetError();
-        if (glErr != GL_NO_ERROR) {
-            output << "glError after creating empty texture atlas.\n" << gluErrorString(glErr) << std::endl;
-        }
+		System_Render_Master::checkError(output, "after creating empty texture atlas");
 
-        DUA_colorByte firstPanel[panelWidth * panelHeight];
+//        DUA_colorByte firstPanel[panelWidth * panelHeight];
+		DUA_colorByte* firstPanel = new DUA_colorByte[panelWidth * panelHeight];
         for (int i = 0; i < panelHeight; i++) {
             for (int j = 0; j < panelWidth; j++) {
                 if (i == 0 || i == panelHeight - 1 || j == 0 || j == panelWidth - 1) {
@@ -344,7 +351,7 @@ namespace DualityEngine {
                                 bmp.buffer);
             }
 
-            glErr = glGetError();
+            GLenum glErr = glGetError();
             if (glErr != GL_NO_ERROR) {
 
                 xPanelStart = (i - firstAsciiChar + 1) * panelWidth + (panelWidth - bmpW);
@@ -364,6 +371,9 @@ namespace DualityEngine {
 
         FT_Done_Face(face);
         FT_Done_FreeType(library);
+
+		delete[] baseTexData;
+		delete[] firstPanel;
 
         return true;
     }

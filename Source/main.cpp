@@ -10,8 +10,7 @@
 /*************************************************
  * This looks simple enough, right?
  ************************************************/
-int main()
-{
+int main(int argc, char* argv[]) {
     DualityEngine::Game().Main();
     return 0;
 }

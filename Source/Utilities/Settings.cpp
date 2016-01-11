@@ -15,6 +15,7 @@ namespace DualityEngine {
             int whichMonitor = DUA_DEFUALT_WHICH_MONITOR;
             int monitorOffsetX = 0;
             int monitorOffsetY = 0;
+			bool vSync = false;
         }
         
         namespace Console{

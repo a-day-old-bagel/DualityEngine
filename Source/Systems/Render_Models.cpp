@@ -2,6 +2,7 @@
  * Galen Cochrane, 1 FEB 2015
  ****************************************************************/
 #include "Render_Models.h"
+#include "Render_Master.h"
 
 using namespace DualityEngine;
 
@@ -23,10 +24,7 @@ bool System_Render_Models::init(std::stringstream& engineOut)
         engineOut << "<!>    Unable to initialize graphics resources!" << std::endl;
         return false;
     }
-    GLenum glErr = glGetError();
-    if (glErr != GL_NO_ERROR) {
-        engineOut << "<!>    glError detected after system init: " << gluErrorString(glErr) << std::endl;
-    }
+	System_Render_Master::checkError(engineOut, "after Render_Models init");
     return true;
 }
 

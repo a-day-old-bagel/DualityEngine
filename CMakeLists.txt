@@ -23,6 +23,11 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -D_REENTRANT -Wall -g -O3")
 # Tell cMake where to look for the modules that search for SDL2 and Assimp (the others come with cMake)
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
+## Tell cMake where to look for third party libs (add to this for your own builds)
+#set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "C:/libs/SDL2-2.0.4" "C:/libs/glew-1.13.0" "C:/libs/freetype")
+#set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "C:/libs/SDL2-2.0.4/lib/x64" "C:/libs/glew-1.13.0/lib/Release/x64")
+
+
 # Find SDL 2.0
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIR})
@@ -58,6 +63,7 @@ set(DUA_INCLUDE_DIR
         Headers/Systems
         Headers/Utilities
         Headers/Math
+		Headers/Math/glm
         Headers/AssetManagement
         Headers/
     )
@@ -66,7 +72,6 @@ include_directories(${DUA_INCLUDE_DIR})
 # Find all the source files
 set(SOURCE_FILES
         Headers/AssetManagement/ProgrammaticAssets/DebugBackground.h
-#        Headers/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.h
         Headers/AssetManagement/ProgrammaticAssets/DebugCube.h
 
         Headers/Components/AmbientLight.h
@@ -121,6 +126,7 @@ set(SOURCE_FILES
         Headers/AssetManagement/TextureRepository.h
         Headers/Systems/UserInput.h
         Headers/Utilities/HelpDocs.h
+        Headers/Utilities/ToString.h
 
         Source/Entities/Box.cpp
         Source/Bank/ComponentBank.cpp
@@ -145,9 +151,9 @@ set(SOURCE_FILES
         Source/AssetManagement/ShaderRepository.cpp
         Source/Systems/UserInput.cpp
         Source/AssetManagement/ProgrammaticAssets/DebugBackground.cpp
-#        Source/AssetManagement/ProgrammaticAssets/GUI/GUI_Console.cpp
         Source/AssetManagement/ProgrammaticAssets/DebugCube.cpp
-        Source/Utilities/HelpDocs.cpp)
+        Source/Utilities/HelpDocs.cpp
+		Source/Utilities/ToString.cpp)
 
 # Make an executable called DualityEngine out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
