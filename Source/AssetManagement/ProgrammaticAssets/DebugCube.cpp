@@ -197,12 +197,12 @@ namespace DualityEngine {
         mvp = glm::mat4(1.0f);
     }
     DebugCube::~DebugCube() {
-        if (hasInitialized){
-            glDeleteBuffers (4, buffers);
-            glDeleteProgram (shdrLoc);
-            glDeleteTextures (1, &texture);
-            glDeleteVertexArrays (1, &VAOloc);
-        }
+    //    if (hasInitialized){
+    //        glDeleteBuffers (4, buffers);
+    //        glDeleteProgram (shdrLoc);
+    //        glDeleteTextures (1, &texture);
+    //        glDeleteVertexArrays (1, &VAOloc);
+    //    }
     }
     bool DebugCube::Init(std::stringstream& output) {
 

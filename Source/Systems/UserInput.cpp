@@ -22,7 +22,31 @@ System_UserInput::~System_UserInput(){
 }
 
 bool System_UserInput::init(std::stringstream& output){
-    
+
+    output << "SDL recognizes the following render drivers: ";
+    int numdrivers = SDL_GetNumRenderDrivers();
+    for (int i = 0; i < numdrivers; ++i) {
+        SDL_RendererInfo info;
+        SDL_GetRenderDriverInfo(i, &info);
+        output << info.name << ((i < numdrivers - 1)? ", " : "\n");
+    }
+
+    output << "\nSDL recognizes the following video drivers:\n";
+
+    numdrivers = SDL_GetNumVideoDrivers();
+    const char* drivername;
+    for (int i = 0; i < numdrivers; ++i) {
+        drivername = SDL_GetVideoDriver(i);
+        if (SDL_VideoInit(drivername) == 0) {
+            SDL_VideoQuit();
+            output << "\t\t   Driver " << drivername << " works.\n";
+        }
+        else {
+            printf("Driver %s doesn't work.\n", drivername);
+            output << "\t<!>\tDriver " << drivername << " DOES NOT WORK!\n";
+        }
+    }
+
     // Initialize SDL overall.
     // This needs to be done in this thread instead of in the graphics thread to prevent
     // massive event handing slowdowns. Will see if works in Windows.

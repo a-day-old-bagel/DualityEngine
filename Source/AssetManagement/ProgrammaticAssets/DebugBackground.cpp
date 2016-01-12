@@ -42,12 +42,12 @@ namespace DualityEngine {
         hasInitialized = false;
     }
     DebugBackground::~DebugBackground() {
-        if (hasInitialized) {
-            glDeleteBuffers(1, &vertices);
-            glDeleteProgram(shdrLoc);
-            glDeleteTextures(1, &texture);
-            glDeleteVertexArrays(1, &VAOloc);
-        }
+    //    if (hasInitialized) {
+    //        glDeleteBuffers(1, &vertices);
+    //        glDeleteProgram(shdrLoc);
+    //        glDeleteTextures(1, &texture);
+    //        glDeleteVertexArrays(1, &VAOloc);
+    //    }
     }
     bool DebugBackground::Init(std::stringstream &output) {
         output << "\nBeginning initialization of noCam background.\n";

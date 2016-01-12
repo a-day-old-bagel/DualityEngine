@@ -51,10 +51,16 @@ namespace DualityEngine {
         /*************
          * ENGINES (thread with accompanying SystemEngine) on which to run the systems
          *************/
+#ifdef DUA_SINGLE_THREAD
         SDL_Thread* graphicsThread; // run all graphics Systems
-        typedef SystemEngine<System_Render_Master*, System_Render_Background*, System_Render_Models*,
-                System_Render_Console*> DUA_graphicsEngine;
+        typedef SystemEngine<System_UserInput*, System_Control_SS*, System_PhysMove*, System_PhysCollide*, System_Render_Master*, System_Render_Background*, System_Render_Models*,
+                System_Render_Console*, System_Scripting*> DUA_graphicsEngine;
         DUA_graphicsEngine graphicsEngine;
+#else
+		SDL_Thread* graphicsThread; // run all graphics Systems
+		typedef SystemEngine<System_Render_Master*, System_Render_Background*, System_Render_Models*,
+			System_Render_Console*> DUA_graphicsEngine;
+		DUA_graphicsEngine graphicsEngine;
 
         SDL_Thread* physicsThread; // run all physics Systems (and physical control system)
         typedef SystemEngine<System_UserInput*, System_Control_SS*, System_PhysMove*, System_PhysCollide*> DUA_physicsEngine;
@@ -63,6 +69,7 @@ namespace DualityEngine {
         SDL_Thread* scriptingThread; // run the scripting systems
         typedef SystemEngine<System_Scripting*> DUA_scriptingEngine;
         DUA_scriptingEngine scriptingEngine;
+#endif
 
         /*************
          * DELEGATES to allow for inter-system/engine communication (they allow pretty much any function to be called

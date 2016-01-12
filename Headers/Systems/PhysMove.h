@@ -26,7 +26,8 @@ namespace DualityEngine {
     public:
         System_PhysMove(ComponentBank* bank);
         ~System_PhysMove();
-        void tick();
+        void tickImpl();
+		void tockImpl();
         bool init(std::stringstream& output);
     };
 

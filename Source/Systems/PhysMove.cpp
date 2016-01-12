@@ -7,7 +7,7 @@ System_PhysMove::System_PhysMove(ComponentBank* bank)
 {
     requiredComponents.at(0) = POSITION | LINVELOC ;
     requiredComponents.at(1) = ORIENTATION | ANGVELOC ;
-    
+	System::tockFreq = 1000;
 }
 
 System_PhysMove::~System_PhysMove()
@@ -20,7 +20,7 @@ bool System_PhysMove::init(std::stringstream& output)
     return true;
 }
 
-void System_PhysMove::tick()
+void System_PhysMove::tickImpl()
 {    
     for (auto ID : registeredIDs[0]){
         if (bank->getState(ID) & ACTIVE){
@@ -36,4 +36,10 @@ void System_PhysMove::tick()
     }
     
     SDL_Delay(5);
+}
+
+void System_PhysMove::tockImpl() {
+#ifdef DUA_DEBUG_THREADS
+	bank->dlgt->output("Physics Thread Running...\n");
+#endif
 }

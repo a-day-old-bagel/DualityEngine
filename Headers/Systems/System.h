@@ -40,6 +40,7 @@ namespace DualityEngine {
         std::vector<std::vector<DUA_id>> registeredIDs;   // These are collections so that a system can operate
         std::vector<DUA_compFlag> requiredComponents;     // on more than one kind of entity if it needs to.
         uint tockFreq; // every 'tockFreq' times 'tock' is called, it's code will execute. (periodic loop not linked to 'tick')
+		uint counter;
         
     public:        
         System(ComponentBank* bank, std::string name, int numRegisters);
@@ -76,6 +77,7 @@ namespace DualityEngine {
             requiredComponents.push_back(DUA_DEFAULT_COMPONENTS);
         }
         tockFreq = 1;
+		counter = 0;
     }
 
     template<typename Derived_System>
@@ -90,12 +92,16 @@ namespace DualityEngine {
 
     template<typename Derived_System>
     void System<Derived_System>::tick() {
-        sys().tick();
+        sys().tickImpl();
+		++counter %= tockFreq;
+		if (!counter) {
+			tock();
+		}
     }
 
     template<typename Derived_System>
     void System<Derived_System>::tock() {
-        sys().tock();
+        sys().tockImpl();
     }
 
     template<typename Derived_System>

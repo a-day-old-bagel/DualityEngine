@@ -25,7 +25,7 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 
 ## Tell cMake where to look for third party libs (add to this for your own builds)
 #set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "C:/libs/SDL2-2.0.4" "C:/libs/glew-1.13.0" "C:/libs/freetype")
-#set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "C:/libs/SDL2-2.0.4/lib/x64" "C:/libs/glew-1.13.0/lib/Release/x64")
+#set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "C:/libs/SDL2-2.0.4/lib/x86" "C:/libs/glew-1.13.0/lib/Release/win32")
 
 
 # Find SDL 2.0

@@ -29,16 +29,25 @@ Game::Game() :  bank(&bankDelegates),
                 spaceShipControlSystem(&bank),
                 userInputSystem(&bank),
                 scriptingSystem(&bank),
+#ifdef DUA_SINGLE_THREAD
                 graphicsEngine(&graphicsThread, "Duality Graphics Engine",
-                               &bankDelegates.output, &bankDelegates.quit, &renderMasterSystem, &renderBackgroundSystem,
-                               &renderModelsSystem, &renderConsoleSystem),
+                               &bankDelegates.output, &bankDelegates.quit, &userInputSystem, &spaceShipControlSystem, &physicsMoveSystem, &physicsCollisionSystem, &renderMasterSystem, &renderBackgroundSystem,
+                               &renderModelsSystem, &renderConsoleSystem, &scriptingSystem)
+#else
+				graphicsEngine(&graphicsThread, "Duality Graphics Engine",
+								&bankDelegates.output, &bankDelegates.quit, &renderMasterSystem, &renderBackgroundSystem,
+								&renderModelsSystem, &renderConsoleSystem),
                 physicsEngine(&physicsThread, "Duality Physics Engine", &bankDelegates.output, &bankDelegates.quit,
                               &userInputSystem, &spaceShipControlSystem, &physicsMoveSystem, &physicsCollisionSystem),
                 scriptingEngine(&scriptingThread, "Duality Scripting Engine",
-                                &bankDelegates.output, &bankDelegates.quit, &scriptingSystem) {
+                                &bankDelegates.output, &bankDelegates.quit, &scriptingSystem)
+#endif
+	{
     graphicsThread = NULL;
+#ifndef DUA_SINGLE_THREAD
     physicsThread = NULL;
     scriptingThread = NULL;
+#endif
 
     bankDelegates = {
             DELEGATE(&Game::systems_discover, this),
@@ -68,7 +77,8 @@ Game::Game() :  bank(&bankDelegates),
             DELEGATE(&Console::getCurrentLogLine, &console),
             DELEGATE(&Console::setState, &console),
             DELEGATE(&Console::traverseLog, &console),
-            DELEGATE(&System_Render_Background::queueSkyChange, &renderBackgroundSystem)};
+            DELEGATE(&System_Render_Background::queueSkyChange, &renderBackgroundSystem)
+	};
 }
 //endregion
 
@@ -98,24 +108,25 @@ void Game::Main(){
 
 	SDL_Delay(1000);
 
-	//bankDelegates.runScript("scene0");
-	bankDelegates.submitScriptCommand("newent player");
-	bankDelegates.submitScriptCommand("add position 1 0 0 0");
-	bankDelegates.submitScriptCommand("add orientation 1 0 0 0");
-	bankDelegates.submitScriptCommand("add freecam 1 1 0.5 1000 0 0 0 0 0 -1 0 1 0");
-	bankDelegates.submitScriptCommand("cam 1");
+	//bankDelegates.submitScriptCommand("newent player");
+	//bankDelegates.submitScriptCommand("add position 1 0 0 0");
+	//bankDelegates.submitScriptCommand("add orientation 1 0 0 0");
+	//bankDelegates.submitScriptCommand("add freecam 1 1 0.5 1000 0 0 0 0 0 -1 0 1 0");
+	//bankDelegates.submitScriptCommand("cam 1");
 
-	bankDelegates.submitScriptCommand("newent box");
-	bankDelegates.submitScriptCommand("add position 2 0 0 -4");
-	bankDelegates.submitScriptCommand("add orientation 2 0 0 0");
-	bankDelegates.submitScriptCommand("add model 2 foo");
-	bankDelegates.submitScriptCommand("add linveloc 2 0 0 0");
-	bankDelegates.submitScriptCommand("add angveloc 2 0 0.002 0");
+	//bankDelegates.submitScriptCommand("newent box");
+	//bankDelegates.submitScriptCommand("add position 2 0 0 -4");
+	//bankDelegates.submitScriptCommand("add orientation 2 0 0 0");
+	//bankDelegates.submitScriptCommand("add model 2 foo");
+	//bankDelegates.submitScriptCommand("add linveloc 2 0 0 0");
+	//bankDelegates.submitScriptCommand("add angveloc 2 0 0.002 0");
 
     // Wait for all game threads to exit, then the game is over.
-    SDL_WaitThread(physicsThread, NULL);
-    SDL_WaitThread(graphicsThread, NULL);
+	SDL_WaitThread(graphicsThread, NULL);
+#ifndef DUA_SINGLE_THREAD
+    SDL_WaitThread(physicsThread, NULL);    
     SDL_WaitThread(scriptingThread, NULL);
+#endif
 }
 //endregion
 
@@ -200,9 +211,10 @@ void Game::Quit(){
  * ENGAGE ENGINES
  *************************************/
 bool Game::engageEngines(){
-
+#ifndef DUA_SINGLE_THREAD
     physicsEngine.engage();
     scriptingEngine.engage();
+#endif
     graphicsEngine.engage();
     
     return true;
@@ -261,7 +273,7 @@ bool Game::pauseBankDependentSystems(){
     renderMasterSystem.pause();
     renderConsoleSystem.pause();
     spaceShipControlSystem.pause();
-    
+#ifndef DUA_SINGLE_THREAD
     if (waitForBankDependentSystemsToPause()){
         return true;
     } else {
@@ -269,6 +281,9 @@ bool Game::pauseBankDependentSystems(){
         resumeBankDependentSystems();
         return false;
     }
+#else
+	return true;
+#endif
 }
 //endregion
 

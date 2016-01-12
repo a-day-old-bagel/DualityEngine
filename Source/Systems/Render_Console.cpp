@@ -27,14 +27,14 @@ namespace DualityEngine {
     System_Render_Console::~System_Render_Console() {
         this->console = NULL;
 
-        if (hasInitialized) {
-            glDeleteBuffers(3, buffers);
-            glDeleteProgram(shdrLoc);
-            glDeleteTextures(1, &texture);
-            glDeleteVertexArrays(1, &VAOloc_text);
-            delete[] bodySubArray;
-            delete[] commSubArray;
-        }
+    //    if (hasInitialized) {
+    //        glDeleteBuffers(3, buffers);
+    //        glDeleteProgram(shdrLoc);
+    //        glDeleteTextures(1, &texture);
+    //        glDeleteVertexArrays(1, &VAOloc_text);
+    //        delete[] bodySubArray;
+    //        delete[] commSubArray;
+    //    }
     }
     bool System_Render_Console::init(std::stringstream &output) {
         this->console = console;

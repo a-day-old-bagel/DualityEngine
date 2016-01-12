@@ -16,6 +16,16 @@
 
 namespace DualityEngine {
 
+	bool isPositiveInteger(const char* str) {
+		std::string temp(str);
+		for (auto c : temp) {
+			if (c < '0' || c > '9') {
+				return false;
+			}
+		}
+		return true;
+	}
+
     template<typename T>
     T strTo(const char* str) {
         std::istringstream ss(str);
@@ -42,11 +52,13 @@ namespace DualityEngine {
             parseCommand(commandQueue.front());
             commandQueue.pop();
         }
+#ifndef DUA_SINGLE_THREAD
         SDL_Delay(20); // was 20
+#endif
     }
 
     void System_Scripting::submitScript(const std::string &fileName) {
-        std::string filePath = "C:/Users/Galen/Code/DualityEngine/vs/Debug/Assets/Scripts/" + fileName + ".dua";
+        std::string filePath = "Assets/Scripts/" + fileName + ".dua";
         std::vector<std::string> lines;
         std::string lineReader;
         std::ifstream infile(filePath, std::ios_base::in);
@@ -269,7 +281,7 @@ namespace DualityEngine {
                 } else {
                     handleBadUsage(args[0]);
                 }
-            } else if (args[1] == "=") {
+            } else if (numArgs > 1 && args[1] == "=") {
                 parseAssignment(args);
             } else if (args[0] == "sky") {
                 if (numArgs == 3) {
@@ -427,21 +439,35 @@ namespace DualityEngine {
 
     DUA_id System_Scripting::prsID(const std::string &IDstring) {
         DUA_id entID = DUA_NULL_ID;
-        try {
-            entID = strTo<DUA_id>(IDstring.c_str());
-            if (entID > std::numeric_limits<DUA_id>::max() || entID < 0) {
-                throw std::out_of_range("DUA_id");
-            }
-        } catch (
-                std::invalid_argument &invalidException) { // BAD BAD BAD - Should not use exceptions for normal operation - right now used every time a variable name is used in a script or in the console.
-            try {
-                entID = entityVariables.at(IDstring);
-            } catch (std::out_of_range &oorException) {
-                throw std::string("<!>    Not a valid ID or variable name: " + IDstring + "\n").c_str();
-            }
-        } catch (std::out_of_range &oorException) {
-            throw std::string("<!>    ID out of range: " + IDstring + "\n").c_str();
-        }
+		try {
+			if (isPositiveInteger(IDstring.c_str())) {
+				entID = strTo<DUA_id>(IDstring.c_str());
+				if (entID > std::numeric_limits<DUA_id>::max() || entID < 0) {
+					throw std::out_of_range("DUA_id");
+				}
+			}
+			else {
+				entID = entityVariables.at(IDstring);
+			}
+		}
+		catch (std::out_of_range &oorException) {
+			throw std::string("<!>    Not a valid ID or variable name: " + IDstring + "\n").c_str();
+		}
+        //try {
+        //    entID = strTo<DUA_id>(IDstring.c_str());
+        //    if (entID > std::numeric_limits<DUA_id>::max() || entID < 0) {
+        //        throw std::out_of_range("DUA_id");
+        //    }
+        //} catch (
+        //        std::invalid_argument &invalidException) { // BAD BAD BAD - Should not use exceptions for normal operation - right now used every time a variable name is used in a script or in the console.
+        //    try {
+        //        entID = entityVariables.at(IDstring);
+        //    } catch (std::out_of_range &oorException) {
+        //        throw std::string("<!>    Not a valid ID or variable name: " + IDstring + "\n").c_str();
+        //    }
+        //} catch (std::out_of_range &oorException) {
+        //    throw std::string("<!>    ID out of range: " + IDstring + "\n").c_str();
+        //}
         return entID;
     }
 
