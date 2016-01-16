@@ -15,19 +15,11 @@
 namespace DualityEngine {
 
     class System_PhysMove : public System<System_PhysMove>
-    {
-//        uint ticker = 0;
-        
-//        Position* positionPtr;
-//        LinearVelocity* linVelocPtr;
-//        Orientation* orientationPtr;
-//        AngularVelocity* angVelocPtr;
-        
+    {        
     public:
         System_PhysMove(ComponentBank* bank);
         ~System_PhysMove();
-        void tickImpl();
-		void tockImpl();
+		void tick();
         bool init(std::stringstream& output);
     };
 
