@@ -7,7 +7,6 @@
 
 #include <fstream>
 #include "Game.h"
-#include <windows.h>
 
 using namespace DualityEngine;
 
