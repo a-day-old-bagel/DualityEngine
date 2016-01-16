@@ -42,7 +42,6 @@ bool System_UserInput::init(std::stringstream& output){
             output << "\t\t   Driver " << drivername << " works.\n";
         }
         else {
-            printf("Driver %s doesn't work.\n", drivername);
             output << "\t<!>\tDriver " << drivername << " DOES NOT WORK!\n";
         }
     }
