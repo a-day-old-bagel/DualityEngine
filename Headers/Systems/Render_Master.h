@@ -23,7 +23,7 @@ namespace DualityEngine {
     {
     private:
 
-        SDL_Window* pWindow;
+//        SDL_Window* pWindow;
         SDL_GLContext context;
 
     public:

@@ -17,6 +17,7 @@ namespace DualityEngine {
     class System_UserInput : public System<System_UserInput>
     {
     private:
+
         SDL_Event sdlEvent;   
         bool consoleIsActive;
         bool MenuIsActive;

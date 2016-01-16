@@ -38,7 +38,7 @@ namespace DualityEngine {
 
 //    #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
-    #define DUA_SINGLE_THREAD
+//    #define DUA_SINGLE_THREAD
 
 //    #define DUA_DEBUG_THREADS
 

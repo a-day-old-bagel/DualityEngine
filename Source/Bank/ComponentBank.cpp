@@ -8,6 +8,7 @@ namespace DualityEngine {
 
 /* CONSTRUCTOR */
     ComponentBank::ComponentBank(BankDelegates *dlgt) {
+        pWindow = NULL;
         nextID = DUA_START_ID;
         this->dlgt = dlgt;
 

@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <sstream>
 #include <iostream>
+#include <SDL.h>
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
@@ -100,7 +101,9 @@ namespace DualityEngine {
         DUA_id generateID();
 
     public:        
-        
+
+        // The dang SDL window that doesn't want to go anywhere else.
+        SDL_Window* pWindow;
         // Constructor for new states
         ComponentBank(BankDelegates* dlgt);
         // Destructor
