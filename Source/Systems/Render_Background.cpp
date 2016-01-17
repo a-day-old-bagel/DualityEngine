@@ -37,12 +37,16 @@ bool System_Render_Background::setUpResources(std::stringstream& engineOut)
 {
     bool success = true;
     
+//    DUA_float corners[24] = {-1.0, -1.0, 0.5, 1.0,
+//                              1.0, -1.0, 0.5, 1.0,
+//                              1.0,  1.0, 0.5, 1.0,
+//                              1.0,  1.0, 0.5, 1.0,
+//                             -1.0,  1.0, 0.5, 1.0,
+//                             -1.0, -1.0, 0.5, 1.0};
+
     DUA_float corners[24] = {-1.0, -1.0, 0.5, 1.0,
-                              1.0, -1.0, 0.5, 1.0,
-                              1.0,  1.0, 0.5, 1.0,
-                              1.0,  1.0, 0.5, 1.0,
-                             -1.0,  1.0, 0.5, 1.0,
-                             -1.0, -1.0, 0.5, 1.0};
+                             3.0, -1.0, 0.5, 1.0,
+                             -1.0,  3.0, 0.5, 1.0};
     
     shdrLoc = loadShaders("Assets/Shaders/skyQuad.vert", "Assets/Shaders/skyQuad.frag", engineOut);
 
@@ -119,7 +123,7 @@ void System_Render_Background::tick()
         glUniform1i (unifLoc_txtur, 2);
         glBindVertexArray (VAOloc);
 
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, 3);
     
     } else {
         noCamBackground.render();
