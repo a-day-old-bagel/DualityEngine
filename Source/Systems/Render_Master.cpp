@@ -38,7 +38,7 @@ bool System_Render_Master::init(std::stringstream& engineOut){
 		engineOut << "GL context created.\n";
 	}
 
-	checkError(engineOut, "after creating GL context");
+	checkError(engineOut, "Render_Master.cpp", __LINE__);
 
     //Initialize GLEW (openGL Extensions Wrangler)
     glewExperimental = GL_TRUE;
@@ -52,7 +52,7 @@ bool System_Render_Master::init(std::stringstream& engineOut){
 		engineOut << "GLEW initialized.\n";
 	}
 
-	checkError(engineOut, "after initializing GLEW");
+	checkError(engineOut, "Render_Master.cpp", __LINE__);
 
     //Use Vsync
 	if (Settings::Display::vSync) {
@@ -73,7 +73,7 @@ bool System_Render_Master::init(std::stringstream& engineOut){
     glEnable (GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-	checkError(engineOut, "after GL configuration (at end of System_Render_Master::init()");
+	checkError(engineOut, "Render_Master.cpp", __LINE__);
 
     return true;
 }
@@ -82,24 +82,26 @@ bool System_Render_Master::init(std::stringstream& engineOut){
  * DO NOT call this function before the gl context has initialized.  It will make an infinite loop.
  * This is because glGetError always returns GL_INVALID_OPERATION before there exists a context.
  */
-void DualityEngine::System_Render_Master::checkError(std::stringstream& engineOut, const char* context) {
-	GLenum glErr = glGetError();
-	if (glErr != GL_NO_ERROR) {
-		std::stringstream tempOut;
-		tempOut << "<!>    GL error(s) detected " << context << ":\n";
-		int loopGuard = 0;
-		while (glErr != GL_NO_ERROR) {
-			if (++loopGuard <= 10) {
-				tempOut << "\t\t\t" << gluErrorString(glErr) << std::endl;
-				glErr = glGetError();
-			}
-			else {
-				tempOut << "\t\t\t<!> Suppressing further errors...\n";
-				break;
-			}
-		}
-		engineOut << tempOut.str();
-	}
+void DualityEngine::System_Render_Master::checkError(std::stringstream& engineOut, std::string context, int line /*= -1*/) {
+    GLenum glErr = glGetError();
+    if (glErr != GL_NO_ERROR) {
+        engineOut << "<!>    GL error(s) detected (file " << context;
+        if (line > 0) {
+            engineOut << " at line " << line;
+        }
+        engineOut << "):\n";
+        int loopGuard = 0;
+        while (glErr != GL_NO_ERROR) {
+            if (++loopGuard <= 10) {
+                engineOut << "\t\t\t" << gluErrorString(glErr) << std::endl;
+                glErr = glGetError();
+            }
+            else {
+                engineOut << "\t\t\t<!> Suppressing further errors...\n";
+                break;
+            }
+        }
+    }
 }
 
 void System_Render_Master::tick()

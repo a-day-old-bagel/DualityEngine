@@ -65,7 +65,7 @@ System_Render_BiTcubes::~System_Render_BiTcubes()
 //<editor-fold defaultstate="collapsed" desc="Init">
 bool System_Render_BiTcubes::init(std::stringstream& engineOut)
 {
-	System_Render_Master::checkError(engineOut, "after Render_BiTCubes init");
+	System_Render_Master::checkError(engineOut, "Render_BiTCubes.cpp", __LINE__);
     return true;
 }
 //</editor-fold>
