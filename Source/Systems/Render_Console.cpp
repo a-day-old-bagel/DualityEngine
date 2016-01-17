@@ -92,7 +92,7 @@ namespace DualityEngine {
 
         hasInitialized = true;
 
-		System_Render_Master::checkError(output, "after Render_Console init");
+		System_Render_Master::checkError(output, "Render_Console.cpp", __LINE__);
 
         return true;
     }
@@ -305,7 +305,7 @@ namespace DualityEngine {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, panelWidth * numTexPanels, panelHeight, 0, GL_RED, GL_UNSIGNED_BYTE,
                      &baseTexData[0]);
 
-		System_Render_Master::checkError(output, "after creating empty texture atlas");
+		System_Render_Master::checkError(output, "Render_Console.cpp", __LINE__);
 
 //        DUA_colorByte firstPanel[panelWidth * panelHeight];
 		DUA_colorByte* firstPanel = new DUA_colorByte[panelWidth * panelHeight];

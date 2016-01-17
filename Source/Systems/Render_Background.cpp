@@ -29,7 +29,7 @@ bool System_Render_Background::init(std::stringstream& engineOut)
         engineOut << "Unable to initialize noCam background!" << std::endl;
         return false;
     }
-	System_Render_Master::checkError(engineOut, "after Render_Background init");
+	System_Render_Master::checkError(engineOut, "Render_Background.cpp", __LINE__);
     return true;
 }
 

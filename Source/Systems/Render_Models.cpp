@@ -24,7 +24,7 @@ bool System_Render_Models::init(std::stringstream& engineOut)
         engineOut << "<!>    Unable to initialize graphics resources!" << std::endl;
         return false;
     }
-	System_Render_Master::checkError(engineOut, "after Render_Models init");
+	System_Render_Master::checkError(engineOut, "Render_Models.cpp", __LINE__);
     return true;
 }
 
