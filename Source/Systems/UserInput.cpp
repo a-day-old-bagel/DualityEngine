@@ -67,9 +67,6 @@ bool System_UserInput::init(std::stringstream& output){
     }
 #endif
 
-
-
-
     // struct for getting current display mode.
     SDL_DisplayMode display;
 
@@ -104,10 +101,16 @@ bool System_UserInput::init(std::stringstream& output){
     Settings::Console::width = Settings::Display::screenResX;
     Settings::Console::height = Settings::Display::screenResY / 2;
 
+    // Use only core features of gl version (deprecated features illegal)
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
     // Specify OpenGL version and profile
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, DUA_GLVERSION_MAJOR);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, DUA_GLVERSION_MINOR);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+    // Turn on double buffering with a 24bit Z buffer.
+    // You may need to change this to 16 or 32 for your system
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 
     // Create the SDL window
     bank->pWindow = SDL_CreateWindow("Duality Engine",

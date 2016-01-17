@@ -36,13 +36,6 @@ bool System_Render_Background::init(std::stringstream& engineOut)
 bool System_Render_Background::setUpResources(std::stringstream& engineOut)
 {
     bool success = true;
-    
-//    DUA_float corners[24] = {-1.0, -1.0, 0.5, 1.0,
-//                              1.0, -1.0, 0.5, 1.0,
-//                              1.0,  1.0, 0.5, 1.0,
-//                              1.0,  1.0, 0.5, 1.0,
-//                             -1.0,  1.0, 0.5, 1.0,
-//                             -1.0, -1.0, 0.5, 1.0};
 
     DUA_float corners[24] = {-1.0, -1.0, 0.5, 1.0,
                              3.0, -1.0, 0.5, 1.0,
