@@ -40,9 +40,8 @@ bool System_Render_Models::setUpResources(std::stringstream& engineOut)
 void System_Render_Models::tick()
 {    
     if (bank->activeFreeCameraID != DUA_NULL_ID){
-        
-        for (auto ID : registeredIDs[0]){
-            debugCube.render(bank->getModMat(ID), bank->pFreeCameraCurrent->viewProjection);
-        }
+		for (unsigned i = 0; i < registeredIDs[0].size(); ++i) {
+			debugCube.render(bank->getModMat(registeredIDs[0][i]), bank->pFreeCameraCurrent->viewProjection);
+		}
     }
 }

@@ -20,26 +20,21 @@ bool System_PhysMove::init(std::stringstream& output)
     return true;
 }
 
-void System_PhysMove::tickImpl()
+void System_PhysMove::tick()
 {    
-    for (auto ID : registeredIDs[0]){
-        if (bank->getState(ID) & ACTIVE){
-            bank->getPositionPtr(ID)->translate(bank->getLinearVelocPtr(ID)->velLinear);
-            bank->stateOn(ID, RECALCVIEWMAT);
+	for (unsigned i = 0; i < registeredIDs[0].size(); ++i) {
+        if (bank->getState(registeredIDs[0][i]) & ACTIVE){
+            bank->getPositionPtr(registeredIDs[0][i])->translate(bank->getLinearVelocPtr(registeredIDs[0][i])->velLinear);
+            bank->stateOn(registeredIDs[0][i], RECALCVIEWMAT);
         }
     }
-    for (auto ID : registeredIDs[1]){
-        if (bank->getState(ID) & ACTIVE){
-            bank->getOrientationPtr(ID)->rotate(bank->getAngularVelocPtr(ID)->velAngular);
-            bank->stateOn(ID, RECALCVIEWMAT);            
+	for (unsigned i = 0; i < registeredIDs[1].size(); ++i) {
+        if (bank->getState(registeredIDs[1][i]) & ACTIVE){
+            bank->getOrientationPtr(registeredIDs[1][i])->rotate(bank->getAngularVelocPtr(registeredIDs[1][i])->velAngular);
+            bank->stateOn(registeredIDs[1][i], RECALCVIEWMAT);
         }
     }
     
     SDL_Delay(5);
 }
 
-void System_PhysMove::tockImpl() {
-#ifdef DUA_DEBUG_THREADS
-	bank->dlgt->output("Physics Thread Running...\n");
-#endif
-}
