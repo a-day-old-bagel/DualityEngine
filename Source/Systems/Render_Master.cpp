@@ -17,7 +17,6 @@ System_Render_Master::~System_Render_Master()
 }
 
 bool System_Render_Master::init(std::stringstream& engineOut){
-
     // make sure SDL's video components are running...
     while(!SDL_WasInit(SDL_INIT_VIDEO) || bank->pWindow == NULL){
         // This loops until it is detected that SDL's video component has initialized.
@@ -74,7 +73,7 @@ bool System_Render_Master::init(std::stringstream& engineOut){
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	checkError(engineOut, "after GL configuration (at end of System_Render_Master::init()");
-
+	
     return true;
 }
 

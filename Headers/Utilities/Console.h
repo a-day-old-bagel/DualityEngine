@@ -31,6 +31,7 @@ namespace DualityEngine {
         int cursorPosition;
         int logLineTraverser;
         bool consoleIsActive;
+		bool consoleIsFresh;
         bool menuIsActive;
         bool bodyHasChangedVisually;
         bool commHasChangedVisually;

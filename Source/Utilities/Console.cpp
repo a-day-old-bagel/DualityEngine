@@ -6,6 +6,7 @@
  * 
  ******************************************************************************/
 #include "Console.h"
+#include <thread>
 using namespace DualityEngine;
 
 Console::Console() {
@@ -17,6 +18,7 @@ Console::Console() {
     logLineTraverser = 0;
     consoleIsActive = false;
     menuIsActive = false;
+	consoleIsFresh = true;
     bodyHasChangedVisually = true;
     commHasChangedVisually = true;
 }
@@ -74,15 +76,21 @@ void Console::setState(bool console, bool menu){
     menuIsActive = menu;
     commHasChangedVisually = true;
     if (menu) logLineTraverser = 0;
+	if (!console) {
+		consoleIsFresh = true;
+	}
 }
 
 void Console::addToCommand(const char* text){
-    pendingCommand.insert(cursorPosition, text);
-    cursorPosition += std::strlen(text);       
-    if (submitLineActive == submitLinePending){
-        submittedLines.at(submitLinePending) = pendingCommand;
-    }
-    commHasChangedVisually = true;
+	if (!(consoleIsFresh && text[0] == '`' ) ) {
+		pendingCommand.insert(cursorPosition, text);
+		cursorPosition += std::strlen(text);
+		if (submitLineActive == submitLinePending) {
+			submittedLines.at(submitLinePending) = pendingCommand;
+		}
+		commHasChangedVisually = true;
+	}
+	consoleIsFresh = false;
 }
 
 void Console::applyBackspace(){

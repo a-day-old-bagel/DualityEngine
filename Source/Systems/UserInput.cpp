@@ -117,6 +117,7 @@ bool System_UserInput::init(std::stringstream& output){
                                Settings::Display::monitorOffsetX + int((display.w - Settings::Display::screenResX) * 0.5),
                                Settings::Display::monitorOffsetY + int((display.h - Settings::Display::screenResY) * 0.5),
                                Settings::Display::screenResX, Settings::Display::screenResY,
+								//600, 600,
                                DUA_SDL_SCREENOPTIONS);
     // If the window couldn't be created for whatever reason
     if (bank->pWindow == NULL) {

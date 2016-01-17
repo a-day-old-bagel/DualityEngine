@@ -36,7 +36,7 @@ namespace DualityEngine {
     
 //    #define DUA_OLD_VIDEO_DRIVERS // openGL 3.0 will be used instead of 3.3
 
-    #define DUA_FULLSCREEN // engine will run in fullscreen mode
+   #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
 //    #define DUA_SINGLE_THREAD
 
