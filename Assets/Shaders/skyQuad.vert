@@ -1,4 +1,4 @@
-#version 140
+#version 150
 
 uniform mat4 projMat;
 uniform mat4 viewMat;
