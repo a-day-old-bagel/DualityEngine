@@ -252,6 +252,11 @@ void System_UserInput::handleKeyDown(SDL_Event& event){
                     bank->dlgt->appendToCommand(SDL_GetClipboardText());
                 }
                 return;
+			case(SDLK_q) :
+				if (SDL_GetModState() & KMOD_CTRL) {
+					bank->dlgt->quit();
+				}
+				return;
             default:
                 return;
         }

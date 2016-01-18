@@ -52,9 +52,7 @@ namespace DualityEngine {
             parseCommand(commandQueue.front());
             commandQueue.pop();
         }
-#ifndef DUA_SINGLE_THREAD
-        SDL_Delay(20); // was 20
-#endif
+        SDL_Delay(20);
     }
 
     void System_Scripting::submitScript(const std::string &fileName) {

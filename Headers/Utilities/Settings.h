@@ -28,7 +28,7 @@ namespace DualityEngine {
         
     /* SWITCHES AND QUICK SETTINGS  --MAY MODIFY--  ========================= */
     
-    #define DUA_DEBUG_CONSOLE_TO_COUT // all console output will be duplicated and sent to stdout
+//    #define DUA_DEBUG_CONSOLE_TO_COUT // all console output will be duplicated and sent to stdout
     
 //    #define DUA_DEBUG_MATRIX_PRINT // Matrix class will include a debug 'print' method to output to stdout
 
@@ -36,11 +36,7 @@ namespace DualityEngine {
     
 //    #define DUA_OLD_VIDEO_DRIVERS // openGL 3.0 will be used instead of 3.3
 
-   #define DUA_FULLSCREEN // engine will run in fullscreen mode
-
-//    #define DUA_SINGLE_THREAD
-
-//    #define DUA_DEBUG_THREADS
+    #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
     #define DUA_DEFUALT_WHICH_MONITOR 0
     
@@ -82,8 +78,7 @@ namespace DualityEngine {
      * whose bits are flags that store whether
      * or not the entity has a given component
      *****************************************/
-    enum DUA_componentFlags : DUA_compFlag
-    {
+    enum DUA_componentFlags : DUA_compFlag {
         VALID_COMPS     = 0x1,      // If this bit is 0, error code. Must be on for all souls.
         POSITION        = 0x2,      // Bit 1
         ORIENTATION     = 0x4,
@@ -107,8 +102,7 @@ namespace DualityEngine {
      * states, such as whether or not the
      * entity is experiencing a physics collision.
      *****************************************/
-    enum DUA_stateFlags : DUA_stateFlag
-    {
+    enum DUA_stateFlags : DUA_stateFlag {
         VALID_STATE     = 0x1,      // If this bit is 0, error code. Must be on for all souls.
         ACTIVE          = 0x2,      // Bit 1
         REMOVAL         = 0x4,      // Bit 2
@@ -123,28 +117,13 @@ namespace DualityEngine {
     #define DUA_DEFAULT_STATE VALID_STATE | ACTIVE  // State entities start with
     #define DUA_INVALID_STATE 0x0                   // For returning errors
     #define DUA_DEFAULT_COMPONENTS VALID_COMPS      // Components entities start with (none)
-    #define DUA_INVALID_COMPONENTS  0x0             // For returning error state
-    
-    
+    #define DUA_INVALID_COMPONENTS  0x0             // For returning error state    
     
     /* FUNCTIONAL MACROS */
-//    // This is the function used to convert strings to ID numbers (currently unsigned ints)
-//    #define DUA_STR_TO_ID(str, base) std::stoul(str, nullptr, base)
-//    // This is the function used to convert strings to DUA_dbl (currently just c++ doubles)
-//    #define DUA_STR_TO_DBL(str) std::stod(str)
-//    // This is the function used to convert strings to DUA_float (currently just c++ floats)
-//    #define DUA_STR_TO_FLOAT(str) std::stof(str)
-//    // This is the function used to convert strings to DUA_colorByte
-//    #define DUA_STR_TO_COLOR(str, base) std::stoul(str, nullptr, base)
-//    // This is the function used to convert strings to ints
-//    #define DUA_STR_TO_INT(str, base) std::stoi(str, nullptr, base)
     // This is used when passing buffer offsets to the GPU via openGL
-    #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))
-
-    
+    #define DUA_GL_BUFFER_OFFSET(i) ((char *)NULL + (i))    
 
     /* SETTING DEPENDENT META PROGRAMMING **DO NOT MODIFY**      */      
-    
     #define DUA_GLVERSION_MAJOR 3
     #ifndef DUA_OLD_VIDEO_DRIVERS
         #define DUA_GLVERSION_MINOR 3
