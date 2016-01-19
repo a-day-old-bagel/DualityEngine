@@ -79,7 +79,9 @@ namespace DualityEngine {
             {"save" , "save [save name]    (no spaces in names)"},
             {"load" , "load [save name]    (no spaces in names)"},
             {"run" , "run [script]"},
-            {"sky","sky [cubemap name] [cubemap file type]"}
+            {"sky", "sky [cubemap name] [cubemap file type]"}, 
+			{ "cls", "cls OR cls[number of lines]" },
+			{ "clear", "clear OR clear[number of lines]" }
     };
     const std::unordered_map<std::string, std::string> Docs::commandExamples = {
             {"newent" , "\"newent testEntity\" creates a new entity (new soul) named \"testEntity\""},
@@ -97,7 +99,9 @@ namespace DualityEngine {
             {"save" , "\"save myGame\" creates a new saved state called \"myGame\" that you can load later."},
             {"load" , "\"load myGame\" discards the current game state and instead loads the saved state named \"myGame\"."},
             {"run" , "\"run myScript\" executes the duality script named \"myScript\"."},
-            {"sky","\"sky mathy png\" loads the \"mathy\" cubemap of file type \"png\" into the skyquad."}
+            {"sky","\"sky mathy png\" loads the \"mathy\" cubemap of file type \"png\" into the skyquad."},
+			{ "cls","\"cls 15\" would clear 15 lines." },
+			{ "clear","\"clear 15\" would clear 15 lines." }
     };
     const std::unordered_map<std::string, std::string> Docs::commandHelps = {
             {"newent" , "creates a new entity, displaying its assigned ID (CTRL-C to copy the ID afterwards)."},
@@ -115,6 +119,8 @@ namespace DualityEngine {
             {"save" , "stores the current game state to the hard drive under a given name to be loaded later. Overwrites saves with the same name."},
             {"load" , "discards any current game state and presents the game state stored under a given name."},
             {"run" , "executes a script, regardless of current game state (scripted variable names may be overwritten, saves may be corrupted, etc). Use at your own peril."},
-            {"sky","sky replaces the cubemap currently rendered in the background (the 'skybox,' though it's not a box) with a cubemap of the user's choice."}
+            {"sky","sky replaces the cubemap currently rendered in the background (the 'skybox,' though it's not a box) with a cubemap of the user's choice."},
+			{ "cls","hides a portion of the console by inserting a number of carriage returns." },
+			{ "clear","hides a portion of the console by inserting a number of carriage returns." }
     };
 }

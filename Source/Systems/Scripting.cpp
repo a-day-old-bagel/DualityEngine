@@ -287,7 +287,30 @@ namespace DualityEngine {
                 } else {
                     handleBadUsage(args[0]);
                 }
-            } else {
+			}
+			else if (args[0] == "clear" || args[0] == "cls") {
+				if (numArgs == 2){
+					std::string::size_type sz;   // alias of size_t
+					int i_dec = 0;
+					try {
+						i_dec = std::stoi(args[1], &sz);
+					}
+					catch (...) {
+						bank->dlgt->outputStr("ERROR: ");
+					}
+					if (i_dec <= 0) {
+						bank->dlgt->outputStr(args[1] + " is not greater than 0.");
+					}
+					else {
+						for (int i = 0; i < i_dec; ++i) {
+							bank->dlgt->outputStr("\n");
+						}
+					}
+				}
+				else {
+					bank->dlgt->outputStr("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+				}
+			} else {
                 bank->dlgt->outputStr("<!>    Bad command: " + args[0] + ". Type \"help\" for a list of commands.\n");
             }
         } catch (const char *error) {
