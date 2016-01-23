@@ -15,7 +15,8 @@
 namespace DualityEngine {
 
     class System_PhysMove : public System<System_PhysMove>
-    {        
+    {
+        DUA_uint32 lastTime;
     public:
         System_PhysMove(ComponentBank* bank);
         ~System_PhysMove();

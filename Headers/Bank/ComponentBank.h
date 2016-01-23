@@ -16,6 +16,7 @@
 #include <cstdint>
 #include <sstream>
 #include <iostream>
+#include <vector>
 #include <SDL.h>
 
 #include <glm/gtc/matrix_transform.hpp>

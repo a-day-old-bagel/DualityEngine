@@ -8,7 +8,7 @@
 #ifndef MODEL_H
 #define	MODEL_H
 
-#include <vector>
+#include <string>
 #include "Component.h"
 
 namespace DualityEngine {
@@ -16,14 +16,11 @@ namespace DualityEngine {
     struct Model : public Component
     {
         Model(const char* fileName){
-            
+            meshFileName = fileName;
+            isDirty = true;
         }
-        //Mesh* mesh;
-        /*
-         * GLuint* shaders;
-         * Type* textures;
-         * GLuint etc
-         */
+        std::string meshFileName;
+        bool isDirty;
     };
 
 }

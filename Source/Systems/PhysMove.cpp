@@ -17,24 +17,35 @@ System_PhysMove::~System_PhysMove()
 
 bool System_PhysMove::init(std::stringstream& output)
 {
+    lastTime = SDL_GetTicks();
     return true;
 }
 
 void System_PhysMove::tick()
-{    
+{
+    DUA_uint32 currentTime = SDL_GetTicks();
+    DUA_uint32 delta = (currentTime - lastTime);
+    lastTime = currentTime;
 	for (unsigned i = 0; i < registeredIDs[0].size(); ++i) {
         if (bank->getState(registeredIDs[0][i]) & ACTIVE){
-            bank->getPositionPtr(registeredIDs[0][i])->translate(bank->getLinearVelocPtr(registeredIDs[0][i])->velLinear);
+            bank->getPositionPtr(registeredIDs[0][i])->translate(
+                bank->getLinearVelocPtr(registeredIDs[0][i])->velLinear.x * delta,
+                bank->getLinearVelocPtr(registeredIDs[0][i])->velLinear.y * delta,
+                bank->getLinearVelocPtr(registeredIDs[0][i])->velLinear.z * delta
+            );
             bank->stateOn(registeredIDs[0][i], RECALCVIEWMAT);
         }
     }
 	for (unsigned i = 0; i < registeredIDs[1].size(); ++i) {
         if (bank->getState(registeredIDs[1][i]) & ACTIVE){
-            bank->getOrientationPtr(registeredIDs[1][i])->rotate(bank->getAngularVelocPtr(registeredIDs[1][i])->velAngular);
+            bank->getOrientationPtr(registeredIDs[1][i])->rotate(
+                bank->getAngularVelocPtr(registeredIDs[1][i])->velAngular.x * delta,
+                bank->getAngularVelocPtr(registeredIDs[1][i])->velAngular.y * delta,
+                bank->getAngularVelocPtr(registeredIDs[1][i])->velAngular.z * delta
+            );
             bank->stateOn(registeredIDs[1][i], RECALCVIEWMAT);
         }
     }
-    
     SDL_Delay(5);
 }
 
