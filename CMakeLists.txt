@@ -27,6 +27,9 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
 #set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "C:/libs/SDL2-2.0.4" "C:/libs/glew-1.13.0" "C:/libs/freetype")
 #set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "C:/libs/SDL2-2.0.4/lib/x86" "C:/libs/glew-1.13.0/lib/Release/win32")
 
+#set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "C:/libs/assimp-3.2")
+#set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "C:/libs/assimp-3.2/libs/Release")
+
 
 # Find SDL 2.0
 find_package(SDL2 REQUIRED)
@@ -45,7 +48,7 @@ set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
 # Find Assimp
 find_package(Assimp REQUIRED)
-include_directories(${Assimp_INCLUDE_DIR}) # why can't 'Assimp' be 'ASSIMP' here? Throws weird error...
+include_directories(ASSIMP_INCLUDE_DIR)
 set(LIBS ${LIBS} ${ASSIMP_LIBRARIES})
 
 # Find Freetype2

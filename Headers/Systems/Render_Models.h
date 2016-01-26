@@ -18,6 +18,7 @@
 #include <glm/gtx/euler_angles.hpp>
 
 #include "System.h"
+#include "MeshRepository.h"
 #include "DebugCube.h"
 //</editor-fold>
 
@@ -27,7 +28,18 @@ namespace DualityEngine {
     {
     private:
 
+		MeshRepository repo;
         DebugCube debugCube;
+
+
+		DUA_id testBoxId;
+		GLuint shdrLoc;
+		GLuint attrLoc_verts;
+		GLuint attrLoc_norms;
+		GLuint attrLoc_uvCoo;
+		GLuint unifLoc_MVP;
+		GLuint unifLoc_M;
+
 
         bool setUpResources(std::stringstream& engineOut);
 

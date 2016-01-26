@@ -36,7 +36,7 @@ namespace DualityEngine {
     
 //    #define DUA_OLD_VIDEO_DRIVERS // openGL 3.0 will be used instead of 3.3
 
-    #define DUA_FULLSCREEN // engine will run in fullscreen mode
+//    #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
     #define DUA_DEFUALT_WHICH_MONITOR 0
     
@@ -68,6 +68,7 @@ namespace DualityEngine {
     typedef uint8_t         DUA_uint8;       // three uint types used when buffering to GPU and actual memory size matters.
     typedef uint16_t        DUA_uint16;
     typedef uint32_t        DUA_uint32;
+    typedef uint64_t        DUA_uint64;
     typedef float           DUA_float;       // wrapper for the 64 bitfloating point values used by the game
     typedef double          DUA_dbl;         // wrapper for the 32 bit floating point values used by the game
     typedef double          DUA_matrixVal;   // type used for matrix/vector values

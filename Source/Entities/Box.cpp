@@ -15,7 +15,7 @@ DUA_id ComponentBank::createBox(const char *name,
     DUA_id newEntityID = spawnEntity(name);
     if (newEntityID != DUA_NULL_ID){
     
-        addModel         (newEntityID, "placeHolderFileName");
+        addModel         (newEntityID, "Assets/Models/SimpleCube/cube.obj");
         addPosition      (newEntityID, posX, posY, posZ);
         addLinearVeloc   (newEntityID, velX, velY, velZ);
         addOrientation   (newEntityID, rotX, rotY, rotZ);

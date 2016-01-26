@@ -98,6 +98,7 @@ namespace DualityEngine {
     }
     void System_Render_Console::tick() {
         if (console->consoleIsActive || console->menuIsActive) {
+			glBindVertexArray(VAOloc_text);
             updateBuffersWithCurrentConsoleText();
 
             glActiveTexture(GL_TEXTURE1);
@@ -105,7 +106,6 @@ namespace DualityEngine {
 
             glUseProgram(shdrLoc);
             glUniform1i(txtrLoc, 1);
-            glBindVertexArray(VAOloc_text);
 
             glUniform3fv(unifLoc_color, 1, &localBackColor[0]);
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT,

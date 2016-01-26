@@ -1,50 +1,81 @@
-# Based on http://freya3d.org/browser/CMakeFind/FindAssimp.cmake
-# Based on http://www.daimi.au.dk/~cgd/code/extensions/Assimp/FindAssimp.cmake
-# - Try to find Assimp
-# Once done this will define
-#
-#  ASSIMP_FOUND - system has Assimp
-#  ASSIMP_INCLUDE_DIR - the Assimp include directory
-#  ASSIMP_LIBRARY - Link these to use Assimp
-#  ASSIMP_LIBRARIES
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+  set(ASSIMP_ARCHITECTURE "64")
+elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+  set(ASSIMP_ARCHITECTURE "32")
+endif(CMAKE_SIZEOF_VOID_P EQUAL 8)
 
-SET(ASSIMP_SEARCH_PATHS
-	${POLYCODE_RELEASE_DIR}/Framework/Tools/Dependencies/lib
-	${POLYCODE_RELEASE_DIR}/Framework/Tools/Dependencies/include/assimp
-	${POLYCODE_RELEASE_DIR}/Framework/Tools/Dependencies/include/
-)
+if(WIN32)
+  set(ASSIMP_ROOT_DIR CACHE PATH "ASSIMP root directory")
 
+  # Find path of each library
+  find_path(ASSIMP_INCLUDE_DIR
+          NAMES
+          assimp/anim.h
+          HINTS
+          ${ASSIMP_ROOT_DIR}/include
+          )
 
-find_path (ASSIMP_INCLUDE_DIR NAMES assimp.h
-	HINTS
-	NO_DEFAULT_PATH
-	NO_CMAKE_ENVIRONMENT_PATH
-	NO_CMAKE_SYSTEM_PATH
-	NO_SYSTEM_ENVIRONMENT_PATH
-	NO_CMAKE_PATH
-	CMAKE_FIND_FRAMEWORK NEVER
-	PATH_SUFFIXES lib lib64 win32/Dynamic_Release "Win32/${MSVC_YEAR_NAME}/x64/Release" "Win32/${MSVC_YEAR_NAME}/Win32/Release"
-	PATHS ${ASSIMP_SEARCH_PATHS}
-)
- 
-find_library (ASSIMP_LIBRARY_DEBUG NAMES assimpd libassimpd libassimp_d PATHS ${ASSIMP_SEARCH_PATHS})
-find_library (ASSIMP_LIBRARY_RELEASE NAMES assimp libassimp PATHS ${ASSIMP_SEARCH_PATHS})
+  if(MSVC12)
+    set(ASSIMP_MSVC_VERSION "vc120")
+  elseif(MSVC14)
+    set(ASSIMP_MSVC_VERSION "vc140")
+  endif(MSVC12)
 
-if (ASSIMP_INCLUDE_DIR AND ASSIMP_LIBRARY_RELEASE)
-  set(ASSIMP_FOUND TRUE)
-endif()
+  if(MSVC12 OR MSVC14)
 
-if (ASSIMP_LIBRARY_RELEASE)
-    set (ASSIMP_LIBRARY ${ASSIMP_LIBRARY_RELEASE})
-endif()
+    find_path(ASSIMP_LIBRARY_DIR
+            NAMES
+            assimp-${ASSIMP_MSVC_VERSION}-mt.lib
+            HINTS
+            ${ASSIMP_ROOT_DIR}/lib${ASSIMP_ARCHITECTURE}
+            )
 
-if (ASSIMP_LIBRARY_DEBUG AND ASSIMP_LIBRARY_RELEASE)
-    set (ASSIMP_LIBRARY debug ${ASSIMP_LIBRARY_DEBUG} optimized ${ASSIMP_LIBRARY_RELEASE} )
-endif()
+    find_library(ASSIMP_LIBRARY_RELEASE				assimp-${ASSIMP_MSVC_VERSION}-mt.lib 			PATHS ${ASSIMP_LIBRARY_DIR})
+    find_library(ASSIMP_LIBRARY_DEBUG				assimp-${ASSIMP_MSVC_VERSION}-mtd.lib			PATHS ${ASSIMP_LIBRARY_DIR})
 
+    set(ASSIMP_LIBRARY
+            optimized 	${ASSIMP_LIBRARY_RELEASE}
+            debug		${ASSIMP_LIBRARY_DEBUG}
+            )
 
-if (ASSIMP_FOUND)
-  MESSAGE("-- Found Assimp ${ASSIMP_LIBRARIES}")
-  mark_as_advanced (ASSIMP_INCLUDE_DIR ASSIMP_LIBRARY ASSIMP_LIBRARIES)
-endif()
+    set(ASSIMP_LIBRARIES "ASSIMP_LIBRARY_RELEASE" "ASSIMP_LIBRARY_DEBUG")
 
+    FUNCTION(ASSIMP_COPY_BINARIES TargetDirectory)
+      ADD_CUSTOM_TARGET(AssimpCopyBinaries
+              COMMAND ${CMAKE_COMMAND} -E copy ${ASSIMP_ROOT_DIR}/bin${ASSIMP_ARCHITECTURE}/assimp-${ASSIMP_MSVC_VERSION}-mtd.dll 	${TargetDirectory}/Debug/assimp-${ASSIMP_MSVC_VERSION}-mtd.dll
+              COMMAND ${CMAKE_COMMAND} -E copy ${ASSIMP_ROOT_DIR}/bin${ASSIMP_ARCHITECTURE}/assimp-${ASSIMP_MSVC_VERSION}-mt.dll 		${TargetDirectory}/Release/assimp-${ASSIMP_MSVC_VERSION}-mt.dll
+              COMMENT "Copying Assimp binaries to '${TargetDirectory}'"
+              VERBATIM)
+    ENDFUNCTION(ASSIMP_COPY_BINARIES)
+
+  endif()
+
+else(WIN32)
+
+  find_path(
+          assimp_INCLUDE_DIRS
+          NAMES postprocess.h scene.h version.h config.h cimport.h
+          PATHS /usr/local/include/
+  )
+
+  find_library(
+          assimp_LIBRARIES
+          NAMES assimp
+          PATHS /usr/local/lib/
+  )
+
+  if (assimp_INCLUDE_DIRS AND assimp_LIBRARIES)
+    SET(assimp_FOUND TRUE)
+  ENDIF (assimp_INCLUDE_DIRS AND assimp_LIBRARIES)
+
+  if (assimp_FOUND)
+    if (NOT assimp_FIND_QUIETLY)
+      message(STATUS "Found asset importer library: ${assimp_LIBRARIES}")
+    endif (NOT assimp_FIND_QUIETLY)
+  else (assimp_FOUND)
+    if (assimp_FIND_REQUIRED)
+      message(FATAL_ERROR "Could not find asset importer library")
+    endif (assimp_FIND_REQUIRED)
+  endif (assimp_FOUND)
+
+endif(WIN32)

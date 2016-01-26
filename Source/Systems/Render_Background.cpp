@@ -107,6 +107,8 @@ void System_Render_Background::tick()
     glDepthMask (GL_FALSE);
     if (bank->activeFreeCameraID != DUA_NULL_ID){
         
+		glBindVertexArray(VAOloc);
+
         glActiveTexture (GL_TEXTURE2);
         glBindTexture (GL_TEXTURE_CUBE_MAP, texture);
 
@@ -114,7 +116,6 @@ void System_Render_Background::tick()
         glUniformMatrix4fv (unifLoc_projM, 1, GL_FALSE, &(bank->pFreeCameraCurrent->projection)[0][0]);
         glUniformMatrix4fv (unifLoc_viewM, 1, GL_FALSE, &(bank->pFreeCameraCurrent->view)[0][0]);
         glUniform1i (unifLoc_txtur, 2);
-        glBindVertexArray (VAOloc);
 
         glDrawArrays(GL_TRIANGLES, 0, 3);
     

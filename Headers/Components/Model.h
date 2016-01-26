@@ -17,10 +17,10 @@ namespace DualityEngine {
     {
         Model(const char* fileName){
             meshFileName = fileName;
-            isDirty = true;
+            isRegistered = true;
         }
         std::string meshFileName;
-        bool isDirty;
+        bool isRegistered;
     };
 
 }

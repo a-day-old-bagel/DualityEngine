@@ -3,6 +3,7 @@
  ****************************************************************/
 #include "Render_Models.h"
 #include "Render_Master.h"
+#include "loadShaders.h"
 
 using namespace DualityEngine;
 
@@ -33,12 +34,34 @@ bool System_Render_Models::setUpResources(std::stringstream& engineOut)
     bool success = true;
     
     success &= debugCube.Init(engineOut);
+	success &= repo.init(engineOut);
+
+	//testBoxId = bank->createBox("testBox", 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.);
+	//success &= repo.registerModel(testBoxId, bank->getModelPtr(testBoxId), engineOut);
+
+	/*shdrLoc = loadShaders("Assets/Shaders/simpleCube.vert", "Assets/Shaders/simpleCube.frag", engineOut);
+	attrLoc_verts = glGetAttribLocation(shdrLoc, "Vertex");
+	attrLoc_norms = glGetAttribLocation(shdrLoc, "Normal");
+	attrLoc_uvCoo = glGetAttribLocation(shdrLoc, "UV");
+	unifLoc_MVP = glGetUniformLocation(shdrLoc, "MVP");
+	unifLoc_M = glGetUniformLocation(shdrLoc, "M");*/
              
     return success;
 }
 
 void System_Render_Models::tick()
-{    
+{
+	
+	/*if (bank->activeFreeCameraID != DUA_NULL_ID) {
+		glBindVertexArray(repo.vaoHandle);
+		glm::mat4 m = bank->getModMat(testBoxId);
+		glm::mat4 mvp = bank->pFreeCameraCurrent->viewProjection * m;
+		glUseProgram(shdrLoc);
+		glUniformMatrix4fv(unifLoc_MVP, 1, GL_FALSE, &mvp[0][0]);
+		glUniformMatrix4fv(unifLoc_M, 1, GL_FALSE, &m[0][0]);
+		glDrawArrays(GL_TRIANGLES, repo.activeMeshes.at(0).vboOffset, repo.activeMeshes.at(0).vboLength);
+	}	*/
+
     if (bank->activeFreeCameraID != DUA_NULL_ID){
 		for (unsigned i = 0; i < registeredIDs[0].size(); ++i) {
 			debugCube.render(bank->getModMat(registeredIDs[0][i]), bank->pFreeCameraCurrent->viewProjection);

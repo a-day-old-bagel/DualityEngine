@@ -92,7 +92,9 @@ void Game::Main(){
 
     engageEngines();
 
-	SDL_Delay(1000);
+	//bankDelegates.submitScriptCommand("run boxWall");
+	//SDL_Delay(5000);
+	//bankDelegates.quit();
 
     // Wait for all game threads to exit, then the game is over.
 	SDL_WaitThread(graphicsThread, NULL);

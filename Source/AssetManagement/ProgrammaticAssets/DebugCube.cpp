@@ -261,6 +261,9 @@ namespace DualityEngine {
         return true;
     }
     void DebugCube::render(const glm::mat4& m, const glm::mat4& vp) {
+
+		glBindVertexArray(VAOloc);
+
         mvp = vp * m;
 
         glActiveTexture (GL_TEXTURE0);
@@ -272,7 +275,6 @@ namespace DualityEngine {
         glUniform1i (txtrLoc_diffuse, 0);
         glUniform3fv(unifLoc_lightDir, 1, &lightDir[0]);
         glUniform3fv(unifLoc_lightClr, 1, &lightColor[0]);
-        glBindVertexArray (VAOloc);
 
         glDrawElements (GL_TRIANGLES, 36, GL_UNSIGNED_BYTE, 0);
     }

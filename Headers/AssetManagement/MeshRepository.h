@@ -10,6 +10,7 @@
 
 #include <vector>
 #include <string>
+#include <sstream>
 #include <glm/glm.hpp>
 #include <Settings.h>
 #include <unordered_map>
@@ -18,28 +19,36 @@
 namespace DualityEngine {
 
     struct Mesh {
-        glm::vec3 vertices;
-        glm::vec3 normals;
-        glm::vec2 uvs;
+        std::vector<float> vboCopy;
     };
 
     struct MeshTableEntry {
-        DUA_uint32 VBOoffset, VBOlength;
+        DUA_uint64 vboOffset, vboLength;
         std::vector<DUA_id> instances;
     };
+
+	struct ActiveMeshTableIndex {
+		DUA_uint64 entryIndex, instanceIndex;
+	};
 
     class MeshRepository
     {
     private:
         GLuint vboHandle;
+        DUA_uint64 vboSize, vboUsed;
 
         std::vector<Mesh> meshData;
-        std::unordered_map<std::string, DUA_uint32> tableEntryIndex;
-        DUA_uint32 VBOsize, VBOused;
+        std::unordered_map<std::string, DUA_uint64> fileToActiveMeshIndex;
+        std::unordered_map<DUA_id, ActiveMeshTableIndex> idToActiveMeshIndex;
     public:
+		GLuint vaoHandle;
         std::vector<MeshTableEntry> activeMeshes;
-        MeshRepository(DUA_uint32 initialVBOsizeInBytes = 8000000);
-        void RegisterModel(Model& model);
+
+        MeshRepository(DUA_uint64 initialVBOsizeInBytes = 8000000);
+		bool init(std::stringstream& output);
+		void preDrawStateCalls();
+        bool registerModel(DUA_id id, Model* model, std::stringstream& output);
+        bool deRegisterModel(DUA_id id, std::stringstream& output);
     };
 
 }
