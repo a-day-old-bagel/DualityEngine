@@ -38,8 +38,8 @@ set(LIBS ${LIBS} ${SDL2_LIBRARY})
 
 # Find GLEW
 find_package(GLEW REQUIRED)
-include_directories(${GLEW_INCLUDE_DIRS})
-set(LIBS ${LIBS} ${GLEW_LIBRARIES})
+include_directories(${GLEW_INCLUDE_PATH})
+set(LIBS ${LIBS} ${GLEW_LIBRARY})
 
 # Find OpenGL
 find_package(OpenGL REQUIRED)
@@ -48,8 +48,8 @@ set(LIBS ${LIBS} ${OPENGL_LIBRARIES})
 
 # Find Assimp
 find_package(Assimp REQUIRED)
-include_directories(ASSIMP_INCLUDE_DIR)
-set(LIBS ${LIBS} ${ASSIMP_LIBRARIES})
+include_directories(assimp_INCLUDE_DIRS)
+set(LIBS ${LIBS} ${assimp_LIBRARIES})
 
 # Find Freetype2
 find_package(Freetype REQUIRED)

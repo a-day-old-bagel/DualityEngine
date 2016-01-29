@@ -92,7 +92,7 @@ void Game::Main(){
 
     engageEngines();
 
-	//bankDelegates.submitScriptCommand("run boxWall");
+	bankDelegates.submitScriptCommand("run boxWall");
 	//SDL_Delay(5000);
 	//bankDelegates.quit();
 

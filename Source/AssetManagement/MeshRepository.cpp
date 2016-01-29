@@ -52,9 +52,7 @@ namespace DualityEngine {
 					// Create an instance of the Importer class
 					Assimp::Importer importer;
 					// And have it read the given file with some postprocessing
-					const aiScene* scene = importer.ReadFile(model->meshFileName,
-						aiProcess_Triangulate |
-						aiProcess_JoinIdenticalVertices);
+					const aiScene* scene = importer.ReadFile(model->meshFileName, NULL);
 
 					// If the import failed, report it
 					if (!scene) {
@@ -64,6 +62,8 @@ namespace DualityEngine {
 					// Now file's contents accessible - just look at the first mesh for now
 					// If there's more than one mesh in the file, not supported yet in Duality
 					aiMesh* m = scene->mMeshes[0];
+
+//                    output << m->;
 
 					// Do the interleaving
 					for (unsigned i = 0; i < m->mNumVertices; ++i) {
@@ -89,7 +89,8 @@ namespace DualityEngine {
 
 				// do VBO upload
 				glBindBuffer(GL_ARRAY_BUFFER, vboHandle);
-				glBufferSubData(vboHandle, newEntry.vboOffset, newEntry.vboLength, &pNewMesh->vboCopy[0]);
+				glBufferSubData(GL_ARRAY_BUFFER, newEntry.vboOffset, newEntry.vboLength, &pNewMesh->vboCopy[0]);
+
 				// add to activeMeshes
 				activeMeshes.push_back(newEntry);
 				// add to fileToActiveMeshIndex
