@@ -1,0 +1,27 @@
+# Duality Engine Script file created by Galen Cochrane
+
+DualityEngineScript v0.01.02
+
+player = newent player
+add freecam player 1 0.5 1000 0 0 0 0 0 -1 0 1 0
+add position player 0 0 4
+add orientation player 0 0 0
+add linveloc player 0 0 0
+add angveloc player 0 0 0
+add spacecontrol player 1e-4 0.0001 0.0001 0.0001 0.0001 0.0001 0.001 0.001 0.001 0.001 0.001 0.001
+add model player Assets/Models/SimpleCube/cube.obj
+
+box = newent box
+add position box 0 0 0
+add orientation box 0 0 0
+add linveloc box 0 0 0
+add angveloc box 0 0.001 0
+add model box Assets/Models/SimpleCube/cube.obj
+
+spider = newent spider
+add position spider -50 0 -100
+add orientation spider 0 1.57 0
+add model spider Assets/Models/Spider/spider.obj
+
+control player spaceship
+cam player

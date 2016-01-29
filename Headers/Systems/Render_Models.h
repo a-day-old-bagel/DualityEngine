@@ -27,27 +27,17 @@ namespace DualityEngine {
     class System_Render_Models : public System<System_Render_Models>
     {
     private:
-
 		MeshRepository repo;
-        DebugCube debugCube;
-
-
-		DUA_id testBoxId;
 		GLuint shdrLoc;
-		GLuint attrLoc_verts;
-		GLuint attrLoc_norms;
-		GLuint attrLoc_uvCoo;
 		GLuint unifLoc_MVP;
 		GLuint unifLoc_M;
-
-
-        bool setUpResources(std::stringstream& engineOut);
 
     public:
         System_Render_Models(ComponentBank* bank);
         ~System_Render_Models();
         void tick();
         bool init(std::stringstream& output);
+        void forceRemoveComp(const DUA_id& ID, const DUA_compFlag&);
     };
 
 }

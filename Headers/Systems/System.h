@@ -49,7 +49,7 @@ namespace DualityEngine {
         std::string getName();
         void discoverID (const DUA_id& ID);
         void scrutinizeID (const DUA_id& ID);
-        void forceRemoveComp(const DUA_id& ID, const DUA_compFlag&);
+        bool forceRemoveComp(const DUA_id &ID, const DUA_compFlag &);
         bool init(std::stringstream& output){ return false; }
         void tick();
         void tock();
@@ -148,16 +148,18 @@ namespace DualityEngine {
     }
 
     template<typename Derived_System>
-    void System<Derived_System>::forceRemoveComp(const DUA_id& ID, const DUA_compFlag& component){
+    bool System<Derived_System>::forceRemoveComp(const DUA_id &ID, const DUA_compFlag &component){
         for (uint i = 0; i < registeredIDs.size(); ++i){
             if (requiredComponents[i] & component){
                 std::vector<DUA_id>::iterator it =
                         std::find(registeredIDs[i].begin(), registeredIDs[i].end(), ID);
                 if (it != registeredIDs[i].end()){
                     registeredIDs[i].erase(it);    // remove that entity (ID) from the list
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     template<typename Derived_System>

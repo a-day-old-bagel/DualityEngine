@@ -23,7 +23,8 @@ namespace DualityEngine {
     };
 
     struct MeshTableEntry {
-        DUA_uint64 vboOffset, vboLength;
+        DUA_uint64 vboOffsetBytes, vboLengthBytes;
+		GLsizei vboOffsetVerts, vboLengthVerts;
         std::vector<DUA_id> instances;
     };
 
@@ -35,7 +36,7 @@ namespace DualityEngine {
     {
     private:
         GLuint vboHandle;
-        DUA_uint64 vboSize, vboUsed;
+        DUA_uint64 vboSizeBytes, vboUsedBytes, vboSizeVerts, vboUsedVerts;
 
         std::vector<Mesh> meshData;
         std::unordered_map<std::string, DUA_uint64> fileToActiveMeshIndex;
@@ -46,7 +47,6 @@ namespace DualityEngine {
 
         MeshRepository(DUA_uint64 initialVBOsizeInBytes = 8000000);
 		bool init(std::stringstream& output);
-		void preDrawStateCalls();
         bool registerModel(DUA_id id, Model* model, std::stringstream& output);
         bool deRegisterModel(DUA_id id, std::stringstream& output);
     };

@@ -10,8 +10,10 @@
 
 namespace DualityEngine {
     MeshRepository::MeshRepository(DUA_uint64 initialVBOsizeInBytes /*= 8000000*/){
-        vboSize = initialVBOsizeInBytes;
-        vboUsed = 0;
+        vboSizeBytes = initialVBOsizeInBytes;
+        vboSizeVerts = vboSizeBytes / (8 * sizeof(float));
+        vboUsedBytes = 0;
+        vboUsedVerts = 0;
     }
 
 	bool MeshRepository::init(std::stringstream& output) {
@@ -21,7 +23,7 @@ namespace DualityEngine {
 
 		glGenBuffers(1, &vboHandle);
 		glBindBuffer(GL_ARRAY_BUFFER, vboHandle);
-		glBufferData(GL_ARRAY_BUFFER, vboSize, NULL, GL_DYNAMIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, vboSizeBytes, NULL, GL_DYNAMIC_DRAW);
 
 		glEnableVertexAttribArray(0);
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), DUA_GL_BUFFER_OFFSET(0));
@@ -37,10 +39,6 @@ namespace DualityEngine {
 		return true;
 	}
 
-	void MeshRepository::preDrawStateCalls() {
-		glBindVertexArray(vaoHandle);
-	}
-
     bool MeshRepository::registerModel(DUA_id id, Model* model, std::stringstream& output) {
 		try {
 			// if there is no matching mesh already loaded - i.e. if no other entity yet uses this model...
@@ -52,44 +50,65 @@ namespace DualityEngine {
 					// Create an instance of the Importer class
 					Assimp::Importer importer;
 					// And have it read the given file with some postprocessing
-					const aiScene* scene = importer.ReadFile(model->meshFileName, NULL);
+					const aiScene* scene = importer.ReadFile(model->meshFileName, 0);
 
 					// If the import failed, report it
 					if (!scene) {
 						output << importer.GetErrorString() << std::endl;
 						return false;
 					}
-					// Now file's contents accessible - just look at the first mesh for now
-					// If there's more than one mesh in the file, not supported yet in Duality
-					aiMesh* m = scene->mMeshes[0];
 
-//                    output << m->;
+					// Now file's contents accessible - cement all meshes in file together for now.
+                    // This functionality may not be ideal in the future.
 
-					// Do the interleaving
-					for (unsigned i = 0; i < m->mNumVertices; ++i) {
-						pNewMesh->vboCopy.push_back(m->mVertices[i].x);
-						pNewMesh->vboCopy.push_back(m->mVertices[i].y);
-						pNewMesh->vboCopy.push_back(m->mVertices[i].z);
-						pNewMesh->vboCopy.push_back(m->mNormals[i].x);
-						pNewMesh->vboCopy.push_back(m->mNormals[i].y);
-						pNewMesh->vboCopy.push_back(m->mNormals[i].z);
-						if (m->HasTextureCoords(0)) {
-							pNewMesh->vboCopy.push_back(m->mTextureCoords[0][i].x);
-							pNewMesh->vboCopy.push_back(m->mTextureCoords[0][i].y);
-						} else {
-							pNewMesh->vboCopy.push_back(0.f);
-							pNewMesh->vboCopy.push_back(0.f);
-						}
-					}
+                    for (unsigned j = 0; j < scene->mNumMeshes; ++j) {
+                        aiMesh *m = scene->mMeshes[j];
+
+                        // Do the interleaving
+                        for (unsigned i = 0; i < m->mNumVertices; ++i) {
+                            pNewMesh->vboCopy.push_back(m->mVertices[i].x);
+                            pNewMesh->vboCopy.push_back(m->mVertices[i].y);
+                            pNewMesh->vboCopy.push_back(m->mVertices[i].z);
+                            pNewMesh->vboCopy.push_back(m->mNormals[i].x);
+                            pNewMesh->vboCopy.push_back(m->mNormals[i].y);
+                            pNewMesh->vboCopy.push_back(m->mNormals[i].z);
+                            if (m->HasTextureCoords(0)) {
+                                pNewMesh->vboCopy.push_back(m->mTextureCoords[0][i].x);
+                                pNewMesh->vboCopy.push_back(m->mTextureCoords[0][i].y);
+                            } else {
+                                pNewMesh->vboCopy.push_back(0.f);
+                                pNewMesh->vboCopy.push_back(0.f);
+                            }
+                        }
+                    }
 				}
 
 				MeshTableEntry newEntry;
-				newEntry.vboOffset = vboUsed;
-				newEntry.vboLength = pNewMesh->vboCopy.size() * sizeof(float);
+				newEntry.vboOffsetBytes = vboUsedBytes;
+                newEntry.vboOffsetVerts = (GLsizei)vboUsedVerts;
+				newEntry.vboLengthBytes = pNewMesh->vboCopy.size() * sizeof(float);
+                newEntry.vboLengthVerts = (GLsizei)pNewMesh->vboCopy.size() / 8;
+				vboUsedBytes += newEntry.vboLengthBytes;
+                vboUsedVerts += newEntry.vboLengthVerts;
+
+                if (vboUsedBytes >= vboSizeBytes) {
+                    // DO A VBO EXPANSION
+                    vboSizeBytes *= 2;
+                    vboSizeVerts *= 2;
+                    glBindBuffer(GL_ARRAY_BUFFER, vboHandle);
+                    glBufferData(GL_ARRAY_BUFFER, vboSizeBytes, NULL, GL_DYNAMIC_DRAW);
+                    unsigned long currentVboHead = 0;
+                    for (unsigned long i = 0; i < meshData.size(); ++i) {
+                        glBufferSubData(GL_ARRAY_BUFFER, currentVboHead, meshData.at(i).vboCopy.size() * sizeof(float),
+                                        &meshData.at(i).vboCopy[0]);
+                    }
+                    output << "\nVBO expanded.\n";
+                }
 
 				// do VBO upload
 				glBindBuffer(GL_ARRAY_BUFFER, vboHandle);
-				glBufferSubData(GL_ARRAY_BUFFER, newEntry.vboOffset, newEntry.vboLength, &pNewMesh->vboCopy[0]);
+				glBufferSubData(GL_ARRAY_BUFFER, newEntry.vboOffsetBytes, newEntry.vboLengthBytes,
+                                &pNewMesh->vboCopy[0]);
 
 				// add to activeMeshes
 				activeMeshes.push_back(newEntry);

@@ -17,7 +17,7 @@ namespace DualityEngine {
     {
         Model(const char* fileName){
             meshFileName = fileName;
-            isRegistered = true;
+            isRegistered = false;
         }
         std::string meshFileName;
         bool isRegistered;
