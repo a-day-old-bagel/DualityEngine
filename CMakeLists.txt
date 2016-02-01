@@ -151,9 +151,9 @@ set(SOURCE_FILES
         Source/AssetManagement/ShaderRepository.cpp
         Source/Systems/UserInput.cpp
         Source/AssetManagement/ProgrammaticAssets/DebugBackground.cpp
-        Source/AssetManagement/ProgrammaticAssets/DebugCube.cpp
         Source/Utilities/HelpDocs.cpp
-		Source/Utilities/ToString.cpp Source/AssetManagement/MeshRepository.cpp)
+		Source/Utilities/ToString.cpp
+		Source/AssetManagement/MeshRepository.cpp)
 
 # Make an executable called DualityEngine out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
