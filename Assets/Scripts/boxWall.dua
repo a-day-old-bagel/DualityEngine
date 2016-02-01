@@ -1,6 +1,6 @@
 # Duality Engine Script file created by Galen Cochrane on 29 August 2015
 
-DualityEngineScript v0.01.02
+DualityEngineScript v0.01.03
 
 player = newent player
 add freecam player 1 0.5 1000 0 0 0 0 0 -1 0 1 0
@@ -9,7 +9,7 @@ add orientation player 0 0 0
 add linveloc player 0 0 0
 add angveloc player 0 0 0
 add spacecontrol player 1e-4 0.0001 0.0001 0.0001 0.0001 0.0001 0.001 0.001 0.001 0.001 0.001 0.001
-add model player modelNameDoesNothingYet
+add model player Assets/Models/SimpleCube/cube.obj
 
 control player spaceship
 cam player
@@ -19,7 +19,7 @@ add position box 0 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -28,7 +28,7 @@ add position box 0 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -37,7 +37,7 @@ add position box 0 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -46,7 +46,7 @@ add position box 2 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -55,7 +55,7 @@ add position box 2 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -64,7 +64,7 @@ add position box 2 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -73,7 +73,7 @@ add position box -2 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -82,7 +82,7 @@ add position box -2 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -91,7 +91,7 @@ add position box -2 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -100,7 +100,7 @@ add position box 4 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -109,7 +109,7 @@ add position box 4 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -118,7 +118,7 @@ add position box 4 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -127,7 +127,7 @@ add position box -4 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -136,7 +136,7 @@ add position box -4 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -145,7 +145,7 @@ add position box -4 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -154,7 +154,7 @@ add position box 6 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -163,7 +163,7 @@ add position box 6 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -172,7 +172,7 @@ add position box 6 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -181,7 +181,7 @@ add position box -6 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -190,7 +190,7 @@ add position box -6 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -199,7 +199,7 @@ add position box -6 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -208,7 +208,7 @@ add position box 8 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -217,7 +217,7 @@ add position box 8 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -226,7 +226,7 @@ add position box 8 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -235,7 +235,7 @@ add position box -8 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -244,7 +244,7 @@ add position box -8 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -253,7 +253,7 @@ add position box -8 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -262,7 +262,7 @@ add position box 10 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -271,7 +271,7 @@ add position box 10 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -280,7 +280,7 @@ add position box 10 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -289,7 +289,7 @@ add position box -10 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -298,7 +298,7 @@ add position box -10 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -307,7 +307,7 @@ add position box -10 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -316,7 +316,7 @@ add position box 12 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -325,7 +325,7 @@ add position box 12 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -334,7 +334,7 @@ add position box 12 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -343,7 +343,7 @@ add position box -12 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -352,7 +352,7 @@ add position box -12 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -361,7 +361,7 @@ add position box -12 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -370,7 +370,7 @@ add position box 14 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -379,7 +379,7 @@ add position box 14 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -388,7 +388,7 @@ add position box 14 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -397,7 +397,7 @@ add position box -14 0 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -406,7 +406,7 @@ add position box -14 2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 
@@ -415,7 +415,7 @@ add position box -14 -2 0
 add orientation box 0 0 0
 add angveloc box 0 0.002 0
 add linveloc box 0 0 0
-add model box modelNameDoesNothingYet
+add model box Assets/Models/SimpleCube/cube.obj
 add spacecontrol box all 0.00005
 add freecam box 1 0.5 1000 0 0 0 0 0 -1 0 1 0
 

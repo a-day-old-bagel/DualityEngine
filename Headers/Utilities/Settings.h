@@ -36,7 +36,7 @@ namespace DualityEngine {
     
 //    #define DUA_OLD_VIDEO_DRIVERS // openGL 3.0 will be used instead of 3.3
 
-//    #define DUA_FULLSCREEN // engine will run in fullscreen mode
+    #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
     #define DUA_DEFUALT_WHICH_MONITOR 0
     
@@ -46,10 +46,10 @@ namespace DualityEngine {
     #define DUA_DEFAULT_CONSOLEWIDTH 800        // Defualt in-game console width (should be resized to fit screen anyway)
     #define DUA_DEFAULT_CONSOLEHEIGHT 600       // Defualt in-game console height (should be resized to fit screen anyway)
 
-    #define DUA_DEFAULT_SKYMAP "interstellar"   // Default skymap file name
-    #define DUA_DEFAULT_SKYFILETYPE "tga"       // Default skymap file format
+    #define DUA_DEFAULT_SKYMAP "stars"   // Default skymap file name
+    #define DUA_DEFAULT_SKYFILETYPE "png"       // Default skymap file format
 
-    #define DUA_VERSION "v0.01.02"  // This is checked against scripts when they are run.
+    #define DUA_VERSION "v0.01.03"  // This is checked against scripts when they are run.
 
     #define DUA_CONTROLSS_LINEAR_BRAKING_DEADZONE 1e-20
     #define DUA_CONTROLSS_ANGULAR_BRAKING_DEADZONE 1e-20

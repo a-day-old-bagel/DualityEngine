@@ -24,7 +24,7 @@ bool System_Render_Models::init(std::stringstream& engineOut)
         return false;
     }
 
-    shdrLoc = loadShaders("Assets/Shaders/simpleCube.vert", "Assets/Shaders/simpleCube.frag", engineOut);
+    shdrLoc = loadShaders("Assets/Shaders/repoDefault.vert", "Assets/Shaders/repoDefault.frag", engineOut);
     unifLoc_MVP = (GLuint)glGetUniformLocation(shdrLoc, "MVP");
     unifLoc_M = (GLuint)glGetUniformLocation(shdrLoc, "M");
 

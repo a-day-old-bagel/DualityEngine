@@ -9,7 +9,6 @@
 #define GLM_FORCE_RADIANS
 #endif
 
-//<editor-fold defaultstate="collapsed" desc="Includes">
 #include <SDL.h>
 #include <GL/glew.h>
 #include <SDL_opengl.h>
@@ -19,8 +18,6 @@
 
 #include "System.h"
 #include "MeshRepository.h"
-#include "DebugCube.h"
-//</editor-fold>
 
 namespace DualityEngine {
 

@@ -13,7 +13,7 @@ uniform mat4 MVP;
 void main(){
 
     normal = (M * vec4(Normal, 0.0)).xyz;
-    uv = vec2(-UV.x, -UV.y - 0.25);
+    uv = UV;
     gl_Position = MVP * vec4(Vertex, 1.0);
 
 }

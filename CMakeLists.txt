@@ -74,9 +74,6 @@ include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
 set(SOURCE_FILES
-        Headers/AssetManagement/ProgrammaticAssets/DebugBackground.h
-        Headers/AssetManagement/ProgrammaticAssets/DebugCube.h
-
         Headers/Components/AmbientLight.h
         Headers/Components/AngularVelocity.h
         Headers/Bank/BankDelegates.h
