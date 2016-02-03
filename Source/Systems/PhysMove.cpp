@@ -31,7 +31,8 @@ void System_PhysMove::tick()
             bank->getPositionPtr(registeredIDs[0][i])->translate(
                 bank->getLinearVelocPtr(registeredIDs[0][i])->velLinear.x * delta,
                 bank->getLinearVelocPtr(registeredIDs[0][i])->velLinear.y * delta,
-                bank->getLinearVelocPtr(registeredIDs[0][i])->velLinear.z * delta
+                bank->getLinearVelocPtr(registeredIDs[0][i])->velLinear.z * delta,
+                currentTime
             );
             bank->stateOn(registeredIDs[0][i], RECALCVIEWMAT);
         }

@@ -33,6 +33,11 @@ bool System_Render_Models::init(std::stringstream& engineOut)
     return true;
 }
 
+void vec3Interpolate(glm::vec3& lhs, glm::vec3& rhs, glm::vec3& result, float interp) {
+    glm::vec3 diff = rhs - lhs;
+    result = lhs + interp * diff;
+}
+
 void System_Render_Models::tick()
 {
     std::stringstream output;
@@ -48,11 +53,24 @@ void System_Render_Models::tick()
     if (bank->activeFreeCameraID != DUA_NULL_ID) {
         glBindVertexArray(repo.vaoHandle);
         glm::mat4 vp = bank->pFreeCameraCurrent->viewProjection;
+        DUA_uint32 time = SDL_GetTicks();
         for (unsigned long i = 0; i < repo.activeMeshes.size(); ++i) {
             MeshTableEntry* mesh = &repo.activeMeshes.at(i);
             for (unsigned long j = 0; j < mesh->instances.size(); ++j) {
                 DUA_id id = mesh->instances.at(j);
                 glm::mat4 m = bank->getModMat(id);
+
+                if (bank->getComponents(id) & DUA_componentFlags::LINVELOC) {
+                    Position *pos = bank->getPositionPtr(id);
+                    glm::vec3 interpolatedPosition;
+                    vec3Interpolate(pos->lastPosition, pos->position, interpolatedPosition,
+                                    (float) (time - pos->lastTimeStamp) /
+                                    (float) (pos->timeStamp - pos->lastTimeStamp));
+                    m[3][0] = interpolatedPosition.x;
+                    m[3][1] = interpolatedPosition.y;
+                    m[3][2] = interpolatedPosition.z;
+                }
+
                 glm::mat4 mvp = vp * m;
                 glUseProgram(shdrLoc);
                 glUniformMatrix4fv(unifLoc_MVP, 1, GL_FALSE, &mvp[0][0]);

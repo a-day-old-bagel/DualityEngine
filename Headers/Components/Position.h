@@ -18,6 +18,9 @@ namespace DualityEngine {
     {
         Position(const DUA_dbl &posX, const DUA_dbl &posY, const DUA_dbl &posZ){
             position = {posX, posY, posZ};
+            lastPosition = position;
+            timeStamp = 0;
+            lastTimeStamp = 0;
             matrixIsCurrent = false;
         }
         inline void updateMatrix(){
@@ -30,20 +33,24 @@ namespace DualityEngine {
             }
             return transform;
         }
-        inline void translate(const DUA_dbl &x, const DUA_dbl &y, const DUA_dbl &z){
+        inline void translate(const DUA_dbl &x, const DUA_dbl &y, const DUA_dbl &z, DUA_dbl time){
+            lastTimeStamp = timeStamp;
+            timeStamp = time;
+            lastPosition = position;
             position.x += x;
             position.y += y;
             position.z += z;
             matrixIsCurrent = false;
         }
-        inline void translate(const glm::vec3& translation){
-            translate(translation.x, translation.y, translation.z);            
+        inline void translate(const glm::vec3& translation, DUA_dbl timeStamp){
+            translate(translation.x, translation.y, translation.z, timeStamp);
         }
-        inline void translate(const glm::vec4& translation){
-            translate(translation.x, translation.y, translation.z);            
+        inline void translate(const glm::vec4& translation, DUA_dbl timeStamp){
+            translate(translation.x, translation.y, translation.z, timeStamp);
         }
-        
-        glm::vec3 position;
+
+        DUA_dbl timeStamp, lastTimeStamp;
+        glm::vec3 position, lastPosition;
         glm::mat4 transform;    // TOTAL sum including parents
         bool matrixIsCurrent;
     };

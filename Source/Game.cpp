@@ -18,6 +18,7 @@ using namespace DualityEngine;
  * constructor was actually pretty.
  *************************************/
 Game::Game() :  bank(&bankDelegates),
+                token(ceq.requestProducerToken()),
                 renderMasterSystem(&bank),
                 renderConsoleSystem(&bank, &console),
                 renderModelsSystem(&bank),
@@ -38,6 +39,7 @@ Game::Game() :  bank(&bankDelegates),
     graphicsThread = NULL;
     physicsThread = NULL;
     scriptingThread = NULL;
+    isAlive = true;
 
     bankDelegates = {
             DELEGATE(&Game::systems_discover, this),
@@ -83,7 +85,7 @@ Game::~Game() {
 }
 
 void Game::sayHi() {
-
+    bankDelegates.output("HI!\n");
 }
 
 /**************************************
@@ -96,15 +98,25 @@ void Game::Main(){
 
     engageEngines();
 
-    //ceq.newEvent(DELEGATE(&Game::sayHi, this))
-    while (ceq.isAlive()) {
-        ceq.handleEvents();
+    Delegate<void(void)> sayHiDelegate = DELEGATE(&Game::sayHi, this);
+    Event event;
+    event.type = Event::VOIDVOID;
+    event.voidVoid = sayHiDelegate;
+    ceq.newEvent(token, event);
+
+    // Start the event handling loop, to exit only when game exits
+    while (isAlive) {
+        handleEvents();
+        SDL_Delay(1);
     }
 
     // Wait for all game threads to exit, then the game is over.
 	SDL_WaitThread(graphicsThread, NULL);
     SDL_WaitThread(physicsThread, NULL);    
     SDL_WaitThread(scriptingThread, NULL);
+
+    // Handle any last events that are still laying around
+    handleEvents();
 }
 
 /****** INTERFACE METHODS ******/
@@ -167,7 +179,7 @@ void Game::Resume(){
  *************************************/
 void Game::Quit(){
     killSystems();
-    ceq.kill();
+    isAlive = false;
 }
 
 /****** INTERNAL METHODS ******/
@@ -329,4 +341,25 @@ void Game::systems_forceRemove(const DUA_id ID, const DUA_compFlag component){
     renderModelsSystem.forceRemoveComp(ID, component);
     physicsMoveSystem.forceRemoveComp(ID, component);
     physicsCollisionSystem.forceRemoveComp(ID, component);
+}
+void Game::handleEvents() {
+    Event currentEvent;
+    bool thereAreMoreEvents = ceq.getNext(currentEvent);
+    while (thereAreMoreEvents) {
+        switch(currentEvent.type) {
+            case Event::VOIDVOID:
+                currentEvent.voidVoid();
+                break;
+            case Event::VOIDCSTRING:
+                currentEvent.voidCstring("C-String Event");
+                break;
+            case Event::VOIDSTRING:
+                currentEvent.voidString("String Event");
+                break;
+
+            default:
+                break;
+        }
+        thereAreMoreEvents = ceq.getNext(currentEvent);
+    }
 }

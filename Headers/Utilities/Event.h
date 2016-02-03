@@ -9,35 +9,28 @@
 #include "Delegate.h"
 
 namespace DualityEngine {
-    enum ActionType {
-        VOIDVOID,
-        VOIDCSTRING,
-        VOIDSTRING,
-    };
-    struct Action {
-        ActionType type;
-        void* arguments;
+    typedef moodycamel::ProducerToken Token;
+    struct Event {
+        enum {
+            VOIDVOID,
+            VOIDCSTRING,
+            VOIDSTRING,
+        } type;
         union {
             Delegate<void()> voidVoid;
             Delegate<void(const char*)> voidCstring;
             Delegate<void(const std::string)> voidString;
         };
-        Action();
-    };
-    struct Event {
-        Action action;
         Event();
     };
     class EventQueue {
         moodycamel::ConcurrentQueue<Event> events;
         moodycamel::ConsumerToken queueToken;
-        bool isDead;
     public:
         EventQueue();
-        void newEvent(moodycamel::ProducerToken token, Event event);
-        void handleEvents();
-        bool isAlive();
-        void kill();
+        moodycamel::ProducerToken requestProducerToken();
+        void newEvent(moodycamel::ProducerToken& token, Event& event);
+        bool getNext(Event& event);
     };
 }
 

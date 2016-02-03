@@ -4,7 +4,6 @@
  *
  * Created on February 7, 2015, 1:14 PM
  *
- * Game is a 'singleton' class that creates and manages everything else.
  */
 
 #ifndef GAME_H
@@ -36,7 +35,12 @@ namespace DualityEngine {
          *************/
         ComponentBank bank;
 
+        /*************
+         * The Central Event Queue (CEQ) to provide a universal event queue to all systems
+         *************/
         EventQueue ceq;
+        Token token;        // this is used for the concurrent queue
+        bool isAlive;       // this is used to maintain or exit the main event loop
 
         /*************
          * SYSTEMS to operate on the components, providing game mechanics
@@ -99,6 +103,7 @@ namespace DualityEngine {
         void systems_discover(const DUA_id ID);
         void systems_scrutinize(const DUA_id ID);
         void systems_forceRemove(const DUA_id ID, const DUA_compFlag component);
+        void handleEvents();
         void sayHi();
         
     public:
