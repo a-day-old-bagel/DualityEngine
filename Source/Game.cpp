@@ -82,6 +82,10 @@ Game::~Game() {
     logFile.close();
 }
 
+void Game::sayHi() {
+
+}
+
 /**************************************
  * MAIN
  * called once from where the game is
@@ -92,7 +96,10 @@ void Game::Main(){
 
     engageEngines();
 
-	bankDelegates.submitScriptCommand("run assimpTest");
+    //ceq.newEvent(DELEGATE(&Game::sayHi, this))
+    while (ceq.isAlive()) {
+        ceq.handleEvents();
+    }
 
     // Wait for all game threads to exit, then the game is over.
 	SDL_WaitThread(graphicsThread, NULL);
@@ -160,6 +167,7 @@ void Game::Resume(){
  *************************************/
 void Game::Quit(){
     killSystems();
+    ceq.kill();
 }
 
 /****** INTERNAL METHODS ******/

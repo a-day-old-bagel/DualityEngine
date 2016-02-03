@@ -127,6 +127,9 @@ set(SOURCE_FILES
         Headers/Systems/UserInput.h
         Headers/Utilities/HelpDocs.h
         Headers/Utilities/ToString.h
+        Headers/Utilities/concurrentqueue.h
+        Headers/Utilities/readerwriterqueue.h
+        Headers/Utilities/Event.h
 
         Source/Entities/Box.cpp
         Source/Bank/ComponentBank.cpp
@@ -153,7 +156,8 @@ set(SOURCE_FILES
         Source/AssetManagement/ProgrammaticAssets/DebugBackground.cpp
         Source/Utilities/HelpDocs.cpp
 		Source/Utilities/ToString.cpp
-		Source/AssetManagement/MeshRepository.cpp)
+		Source/AssetManagement/MeshRepository.cpp
+		)
 
 # Make an executable called DualityEngine out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

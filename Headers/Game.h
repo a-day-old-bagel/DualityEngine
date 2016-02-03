@@ -25,6 +25,7 @@
 #include "Engine.h"
 #include "BankDelegates.h"
 #include "Console.h"
+#include "Event.h"
 
 namespace DualityEngine {
 
@@ -34,6 +35,8 @@ namespace DualityEngine {
          * bank of COMPONENTS and other constructs to hold all game state data
          *************/
         ComponentBank bank;
+
+        EventQueue ceq;
 
         /*************
          * SYSTEMS to operate on the components, providing game mechanics
@@ -96,6 +99,7 @@ namespace DualityEngine {
         void systems_discover(const DUA_id ID);
         void systems_scrutinize(const DUA_id ID);
         void systems_forceRemove(const DUA_id ID, const DUA_compFlag component);
+        void sayHi();
         
     public:
         Game();
