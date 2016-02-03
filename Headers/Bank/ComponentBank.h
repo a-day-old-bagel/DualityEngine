@@ -245,7 +245,7 @@ namespace DualityEngine {
         DUA_id activeFreeCameraID;
         CameraFree* pFreeCameraCurrent;
         CameraFree* pFreeCameraDummy;
-        bool updateActiveCamera();
+        bool updateActiveCamera(DUA_uint32 time);
         bool switchToCam(const DUA_id id);
         void scrutinizeCam(const DUA_id id);
         void defocusCam();
@@ -253,9 +253,9 @@ namespace DualityEngine {
         
         /* TRANSFORM MATRIX GETTERS */
         
-        glm::mat4 getPosMat(const DUA_id ID);     // translation matrix
+        glm::mat4 getPosMat(const DUA_id ID, DUA_uint32 time);     // translation matrix
         glm::mat4 getRotMat(const DUA_id ID);     // rotation matrix
-        glm::mat4 getModMat(const DUA_id ID);     // full model matrix (combines above two)
+        glm::mat4 getModMat(const DUA_id ID, DUA_uint32 time);     // full model matrix (combines above two)
     };
 
 }

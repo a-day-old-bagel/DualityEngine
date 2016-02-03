@@ -678,10 +678,10 @@ namespace DualityEngine {
  ******************************************************************************/
 
 
-    bool ComponentBank::updateActiveCamera() {
+    bool ComponentBank::updateActiveCamera(DUA_uint32 time) {
         if (activeFreeCameraID != DUA_NULL_ID) {
             if (getState(activeFreeCameraID) & RECALCVIEWMAT) {
-                pFreeCameraCurrent->updateView(getRotMat(activeFreeCameraID), getPosMat(activeFreeCameraID));
+                pFreeCameraCurrent->updateView(getRotMat(activeFreeCameraID), getPosMat(activeFreeCameraID, time));
             }
             if (getState(activeFreeCameraID) & RECALCPROJMAT) {
                 pFreeCameraCurrent->updateProjection();
@@ -804,10 +804,14 @@ namespace DualityEngine {
         pCtrlOrientCurrent = pCtrlOrientDummy;
     }
 
-    glm::mat4 ComponentBank::getPosMat(const DUA_id ID) {
+    glm::mat4 ComponentBank::getPosMat(const DUA_id ID, DUA_uint32 time) {
         try {
             if (getComponents(ID) & POSITION) {
-                return components_position.at(ID).getMatrix();
+                if (getComponents(ID) & LINVELOC) {
+
+                } else {
+                    return components_position.at(ID).getMatrix(time);
+                }
             } else {
                 return Constants::duaIdentMat4;
             }
@@ -832,7 +836,7 @@ namespace DualityEngine {
         return Constants::duaIdentMat4;
     }
 
-    glm::mat4 ComponentBank::getModMat(const DUA_id ID) {
-        return getPosMat(ID) * getRotMat(ID);
+    glm::mat4 ComponentBank::getModMat(const DUA_id ID, DUA_uint32 time) {
+        return getPosMat(ID, time) * getRotMat(ID);
     }
 }

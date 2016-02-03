@@ -130,6 +130,7 @@ set(SOURCE_FILES
         Headers/Utilities/concurrentqueue.h
         Headers/Utilities/readerwriterqueue.h
         Headers/Utilities/Event.h
+		Headers/Math/ExtendGlm.h
 
         Source/Entities/Box.cpp
         Source/Bank/ComponentBank.cpp
@@ -158,7 +159,7 @@ set(SOURCE_FILES
 		Source/Utilities/ToString.cpp
 		Source/AssetManagement/MeshRepository.cpp
         Source/Utilities/Event.cpp
-        )
+        Source/Math/ExtendGlm.cpp)
 
 # Make an executable called DualityEngine out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

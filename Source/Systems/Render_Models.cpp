@@ -4,6 +4,7 @@
 #include "Render_Models.h"
 #include "Render_Master.h"
 #include "loadShaders.h"
+#include "ExtendGlm.h"
 
 using namespace DualityEngine;
 
@@ -33,11 +34,6 @@ bool System_Render_Models::init(std::stringstream& engineOut)
     return true;
 }
 
-void vec3Interpolate(glm::vec3& lhs, glm::vec3& rhs, glm::vec3& result, float interp) {
-    glm::vec3 diff = rhs - lhs;
-    result = lhs + interp * diff;
-}
-
 void System_Render_Models::tick()
 {
     std::stringstream output;
@@ -58,7 +54,7 @@ void System_Render_Models::tick()
             MeshTableEntry* mesh = &repo.activeMeshes.at(i);
             for (unsigned long j = 0; j < mesh->instances.size(); ++j) {
                 DUA_id id = mesh->instances.at(j);
-                glm::mat4 m = bank->getModMat(id);
+                glm::mat4 m = bank->getModMat(id, time);
 
                 if (bank->getComponents(id) & DUA_componentFlags::LINVELOC) {
                     Position *pos = bank->getPositionPtr(id);

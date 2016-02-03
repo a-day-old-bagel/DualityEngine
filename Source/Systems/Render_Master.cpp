@@ -111,5 +111,5 @@ void System_Render_Master::tick()
     //...rendering to framebuffer starts again in other systems after this...
     
     // update view just once for all rendering systems this frame.
-    bank->updateActiveCamera();
+    bank->updateActiveCamera(SDL_GetTicks());
 }
