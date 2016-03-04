@@ -29,11 +29,6 @@ namespace DualityEngine {
 //            matrixIsCurrent = true;
 //        }
         inline glm::mat4 getMatrix(DUA_uint32 time){
-//            if (!matrixIsCurrent){
-//                updateMatrix();
-//            }
-//            return transform;
-
             glm::vec3 interp;
             vec3Interpolate(lastPosition, position, interp,
                             (float) (time - lastTimeStamp) /
@@ -41,6 +36,14 @@ namespace DualityEngine {
 
             return {{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f},
                     {0.f, 0.f, 1.f, 0.f}, {interp.x, interp.y, interp.z, 1.f}};
+        }
+        inline glm::mat4 getMatrix() {
+//            if (!matrixIsCurrent){
+//                updateMatrix();
+//            }
+//            return transform;
+            return {{1.f, 0.f, 0.f, 0.f}, {0.f, 1.f, 0.f, 0.f},
+                    {0.f, 0.f, 1.f, 0.f}, {position.x, position.y, position.z, 1.f}};
         }
         inline void translate(const DUA_dbl &x, const DUA_dbl &y, const DUA_dbl &z, DUA_uint32 time){
             lastTimeStamp = timeStamp;
@@ -51,10 +54,10 @@ namespace DualityEngine {
             position.z += z;
 //            matrixIsCurrent = false;
         }
-        inline void translate(const glm::vec3& translation, DUA_uint32 timeStamp){
+        inline void translate(const glm::vec3 &translation, DUA_uint32 timeStamp){
             translate(translation.x, translation.y, translation.z, timeStamp);
         }
-        inline void translate(const glm::vec4& translation, DUA_uint32 timeStamp){
+        inline void translate(const glm::vec4 &translation, DUA_uint32 timeStamp){
             translate(translation.x, translation.y, translation.z, timeStamp);
         }
 

@@ -80,7 +80,7 @@ set(SOURCE_FILES
         Headers/Components/CameraFree.h
         Headers/Components/Collision.h
         Headers/Components/Component.h
-        Headers/Bank/ComponentBank.h
+        Headers/Bank/Bank.h
         Headers/Utilities/Console.h
         Headers/Systems/Control_SS.h
         Headers/Bank/ControlTypes.h
@@ -90,7 +90,7 @@ set(SOURCE_FILES
         Headers/AssetManagement/FileIO.h
         Headers/Math/Functions.h
         Headers/Game.h
-        Headers/Bank/HashMap.h
+        Headers/Bank/KvMap.h
         Headers/Components/LinearVelocity.h
         Headers/AssetManagement/loadCubeMap.h
         Headers/AssetManagement/loadMesh.h
@@ -130,16 +130,16 @@ set(SOURCE_FILES
         Headers/Utilities/concurrentqueue.h
         Headers/Utilities/readerwriterqueue.h
         Headers/Utilities/Event.h
-		Headers/Math/ExtendGlm.h
+        Headers/Math/ExtendGlm.h
+        Headers/Utilities/TimePiece.h
 
         Source/Entities/Box.cpp
-        Source/Bank/ComponentBank.cpp
+        Source/Bank/Bank.cpp
         Source/Utilities/Console.cpp
         Source/Systems/Control_SS.cpp
         Source/AssetManagement/FileIO.cpp
         Source/Math/Functions.cpp
         Source/Game.cpp
-        Source/Bank/HashMap.cpp
         Source/AssetManagement/loadCubeMap.cpp
         Source/AssetManagement/loadShaders.cpp
         Source/main.cpp
@@ -159,7 +159,9 @@ set(SOURCE_FILES
 		Source/Utilities/ToString.cpp
 		Source/AssetManagement/MeshRepository.cpp
         Source/Utilities/Event.cpp
-        Source/Math/ExtendGlm.cpp)
+        Source/Math/ExtendGlm.cpp
+		Source/Utilities/TimePiece.cpp
+		)
 
 # Make an executable called DualityEngine out of all the above source files
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

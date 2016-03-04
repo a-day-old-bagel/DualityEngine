@@ -18,7 +18,7 @@ namespace DualityEngine {
     {
         DUA_uint32 lastTime;
     public:
-        System_PhysMove(ComponentBank* bank);
+        System_PhysMove(Bank * bank);
         ~System_PhysMove();
 		void tick();
         bool init(std::stringstream& output);

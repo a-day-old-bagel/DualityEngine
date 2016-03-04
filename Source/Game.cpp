@@ -162,6 +162,7 @@ void Game::Pause(){
     physicsMoveSystem.pause();
     physicsCollisionSystem.pause();
     spaceShipControlSystem.pause();
+    bank.timePiece.pause();
 }
 
 /**************************************
@@ -172,6 +173,7 @@ void Game::Resume(){
     physicsMoveSystem.resume();
     physicsCollisionSystem.resume();
     spaceShipControlSystem.resume();
+    bank.timePiece.resume();
 }
 
 /**************************************

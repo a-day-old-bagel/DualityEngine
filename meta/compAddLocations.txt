@@ -1,13 +1,13 @@
 [component].h
 Settings.h
 	compFlags
-ComponentBank.h
+Bank.h
 	includes
 	table declaration
 	getPtr func. dec.
 	add func. dec.
 	delete func. dec.
-ComponentBank.cpp
+Bank.cpp
 	clean func. body
 	getPtr func. body
 	add func. body

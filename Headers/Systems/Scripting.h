@@ -34,7 +34,7 @@ namespace DualityEngine {
         void handleBadUsage(const std::string& command);
 
     public:
-        System_Scripting(ComponentBank*);
+        System_Scripting(Bank *);
         ~System_Scripting();
         void tick();
         bool init(std::stringstream&);

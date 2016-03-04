@@ -27,7 +27,7 @@ namespace DualityEngine {
     private:
 
     public:
-        System_Render_BiTcubes(ComponentBank* bank);
+        System_Render_BiTcubes(Bank * bank);
         ~System_Render_BiTcubes();
         void tick();
         bool init(std::stringstream& output);

@@ -6,7 +6,7 @@
 
 using namespace DualityEngine;
 
-System_Control_SS::System_Control_SS(ComponentBank* bank)
+System_Control_SS::System_Control_SS(Bank * bank)
                          : System<System_Control_SS>(bank, "Space Ship Control System", 0)
 {
     

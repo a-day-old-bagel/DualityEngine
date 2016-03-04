@@ -34,7 +34,7 @@ namespace DualityEngine {
         return i;
     }
 
-    System_Scripting::System_Scripting(ComponentBank *bank)
+    System_Scripting::System_Scripting(Bank *bank)
             : System<System_Scripting>(bank, "Scripting System", 0) {
         entityVariables = {};
     }
@@ -167,7 +167,7 @@ namespace DualityEngine {
                             bank->dlgt->outputStr("<!>    No entities exist named \"" + args[1] + "\".\n");
                         }
                     } else {
-                        bank->dlgt->output("<!>    ERROR: ComponentBank::getID threw an exception!\n");
+                        bank->dlgt->output("<!>    ERROR: Bank::getID threw an exception!\n");
                     }
                 } else {
                     handleBadUsage(args[0]);
@@ -290,10 +290,11 @@ namespace DualityEngine {
 			}
 			else if (args[0] == "clear" || args[0] == "cls") {
 				if (numArgs == 2){
-					std::string::size_type sz;   // alias of size_t
+//					std::string::size_type sz;   // alias of size_t
 					int i_dec = 0;
 					try {
-						i_dec = std::stoi(args[1], &sz);
+//						i_dec = std::stoi(args[1], &sz);
+                        i_dec = prsInt(args[1]);
 					}
 					catch (...) {
 						bank->dlgt->outputStr("ERROR: ");

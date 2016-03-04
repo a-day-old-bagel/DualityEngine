@@ -5,7 +5,7 @@
 
 using namespace DualityEngine;
 
-System_Render_Master::System_Render_Master(ComponentBank* bank)
+System_Render_Master::System_Render_Master(Bank * bank)
                   : System<System_Render_Master>(bank, "Master Rendering System", 0)
 {
 
@@ -109,7 +109,4 @@ void System_Render_Master::tick()
     SDL_GL_SwapWindow(bank->pWindow);
     glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
     //...rendering to framebuffer starts again in other systems after this...
-    
-    // update view just once for all rendering systems this frame.
-    bank->updateActiveCamera(SDL_GetTicks());
 }

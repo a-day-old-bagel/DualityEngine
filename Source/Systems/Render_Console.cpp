@@ -17,7 +17,7 @@ namespace DualityEngine {
     const float System_Render_Console::texPanelAdvance = 1.f / (float) numTexPanels; // this is how far the GPU texture sampler will have to move to get to the next character in the texture atlas.
     const int System_Render_Console::numCharsY_comm = 1;   // don't change this for now - not completely supported.
 
-    System_Render_Console::System_Render_Console(ComponentBank *bank, Console *console)
+    System_Render_Console::System_Render_Console(Bank *bank, Console *console)
             : System<System_Render_Console>(bank, "Console Rendering System", 0) {
         this->console = console;
         hasInitialized = false;

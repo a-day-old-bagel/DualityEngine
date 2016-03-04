@@ -30,7 +30,7 @@ namespace DualityEngine {
 		GLuint unifLoc_M;
 
     public:
-        System_Render_Models(ComponentBank* bank);
+        System_Render_Models(Bank * bank);
         ~System_Render_Models();
         void tick();
         bool init(std::stringstream& output);

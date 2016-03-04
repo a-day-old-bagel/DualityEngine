@@ -33,7 +33,7 @@ namespace DualityEngine {
         /*************
          * bank of COMPONENTS and other constructs to hold all game state data
          *************/
-        ComponentBank bank;
+        Bank bank;
 
         /*************
          * The Central Event Queue (CEQ) to provide a universal event queue to all systems
@@ -104,6 +104,7 @@ namespace DualityEngine {
         void systems_scrutinize(const DUA_id ID);
         void systems_forceRemove(const DUA_id ID, const DUA_compFlag component);
         void handleEvents();
+        DUA_uint32 getTime();
         void sayHi();
         
     public:

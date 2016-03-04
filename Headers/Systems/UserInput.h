@@ -30,7 +30,7 @@ namespace DualityEngine {
         void keyPressed_backQuote();
         void keyPressed_esc();
     public:
-        System_UserInput(ComponentBank* bank);
+        System_UserInput(Bank * bank);
         ~System_UserInput();
         void tick();
         bool init(std::stringstream& output);

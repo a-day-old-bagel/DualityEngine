@@ -22,13 +22,11 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/euler_angles.hpp>
 
-#include "HashMap.h"
-#include "../../Source/Bank/HashMap.cpp"
-
+#include "KvMap.h"
 #include "ToString.h"
-
 #include "BankDelegates.h"
 #include "../Utilities/Settings.h"
+#include "TimePiece.h"
 
 #include "../Components/Soul.h"
 #include "../Components/Model.h"
@@ -57,36 +55,36 @@
 
 namespace DualityEngine {
 
-    class ComponentBank
-    {
+    class Bank {
+
         DUA_id nextID;
         
-        HashMap<DUA_id, Soul>              components_soul;
-        HashMap<DUA_id, Model>             components_model;
-        HashMap<DUA_id, Position>          components_position;
-        HashMap<DUA_id, SpatialChild>      components_spatialChild;
-        HashMap<DUA_id, SpatialParent>     components_spatialParent;
-        HashMap<DUA_id, LinearVelocity>    components_linearVeloc;
-        HashMap<DUA_id, Collision>         components_collision;
-        HashMap<DUA_id, Orientation>       components_orientation;
-        HashMap<DUA_id, AngularVelocity>   components_angularVeloc;
-        HashMap<DUA_id, SpaceControl>      components_spacecontrol;
-        HashMap<DUA_id, PointLight>        components_pointLight;
-        HashMap<DUA_id, DirectionalLight>  components_directionalLight;
-        HashMap<DUA_id, AmbientLight>      components_ambientLight;
-        HashMap<DUA_id, Owner>             components_owner;
-        HashMap<DUA_id, Score>             components_score;
-        HashMap<DUA_id, CameraFree>        components_freeCam;       
+        KvMap<DUA_id, Soul>             comps_soul;
+        KvMap<DUA_id, Model>            comps_model;
+        KvMap<DUA_id, Position>         comps_position;
+        KvMap<DUA_id, SpatialChild>     comps_spatChild;
+        KvMap<DUA_id, SpatialParent>    comps_spatParent;
+        KvMap<DUA_id, LinearVelocity>   comps_linVeloc;
+        KvMap<DUA_id, Collision>        comps_collision;
+        KvMap<DUA_id, Orientation>      comps_orientation;
+        KvMap<DUA_id, AngularVelocity>  comps_angVeloc;
+        KvMap<DUA_id, SpaceControl>     comps_spaceControl;
+        KvMap<DUA_id, PointLight>       comps_pntLight;
+        KvMap<DUA_id, DirectionalLight> comps_dirLight;
+        KvMap<DUA_id, AmbientLight>     comps_ambLight;
+        KvMap<DUA_id, Owner>            comps_owner;
+        KvMap<DUA_id, Score>            comps_score;
+        KvMap<DUA_id, CameraFree>       comps_freeCam;
         
-        /* COMPONENT POINTER GETTERS - A NECESSARY EVIL (SO SAYETH THE OPTIMIZER) */
+        /* COMPONENT POINTER GETTER */
         template<class componentType>
-        componentType* getComponentPtr(const DUA_id&, const char*, HashMap<DUA_id, componentType>&);
-        
+        componentType* getComponentPtr(const DUA_id&, const char*, KvMap<DUA_id, componentType>&);
+
         /* COMPONENT CREATION */
         bool tryAddFlagToSoul(const DUA_compFlag &flag, const DUA_id &ID);
 
         template<class componentType, typename ... types>
-        bool tryAddComponent(const DUA_id &ID, const char* compName, HashMap<DUA_id, componentType> &, const types& ... args);
+        bool tryAddComponent(const DUA_id &ID, const char* compName, KvMap<DUA_id, componentType> &, const types& ... args);
 
         bool addSoul(const DUA_id &ID, const char* name);
         
@@ -94,7 +92,7 @@ namespace DualityEngine {
         void tryRemoveFlagFromSoul(const DUA_compFlag &flag, const DUA_id &ID);
 
         template<class componentType>
-        bool tryRemoveComponent(const DUA_id &ID, const char* compName, const DUA_compFlag& compFlag, HashMap<DUA_id, componentType> &table);
+        bool tryRemoveComponent(const DUA_id &ID, const char* compName, const DUA_compFlag& compFlag, KvMap<DUA_id, componentType> &table);
 
         bool deleteSoul(const DUA_id &ID);
         
@@ -103,19 +101,15 @@ namespace DualityEngine {
 
     public:        
 
-        // The dang SDL window that doesn't want to go anywhere else.
-        SDL_Window* pWindow;
-        // Constructor for new states
-        ComponentBank(BankDelegates* dlgt);
-        // Destructor
-        ~ComponentBank();
+        Bank(BankDelegates* dlgt);
+        ~Bank();
         
         /* BANK MANAGEMENT */
         void clean();
         void save(const char* saveName);
         void load(const char* saveName);
         
-        /* COMPONENT POINTER GETTERS - I KNOW THESE ARE A BAD IDEA... */
+        /* COMPONENT POINTER GETTERS */
         Model* getModelPtr(const DUA_id ID);
         LinearVelocity* getLinearVelocPtr(const DUA_id ID);
         Position* getPositionPtr(const DUA_id ID);
@@ -205,21 +199,19 @@ namespace DualityEngine {
         std::string getEntityInfo(const DUA_id ID);
         
         /*****************************
-         * HEREAFTER FOLLOW VARIOUS HELPFUL CONSTRUCTS NOT FUNDAMENTAL TO COMPONENT BANK.
-         * MOST OF THEM ARE HERE TO BE SHARED BY ALL SYSTEMS, AND ARE THINGS UNSUITED FOR
-         * SETTINGS.H
+         * HEREAFTER FOLLOW VARIOUS HELPFUL CONSTRUCTS NOT FUNDAMENTAL TO COMPONENTS,
+         * BUT SHARED BY ALL SYSTEMS AS PART OF GAME STATE OR GAME FUNCTIONALITY
          *****************************/
+
+        // The dang SDL window that doesn't want to go anywhere else.
+        SDL_Window* pWindow;
         
         /* PUBLIC DELEGATES */
         BankDelegates* dlgt;
-        
-        /* CONTROL STUFF */
-//        namespace ControlTypes{
-//            enum type{
-//                NONE = 0,
-//                SPACE = 1
-//            };
-//        }
+
+        /* TIME PIECE */
+        static TimePiece timePiece;
+        DUA_uint32 getTime();
         
         bool switchToControl(const DUA_id id, ControlTypes::type controlType);
         void scrutinizeControl(const DUA_id id, ControlTypes::type controlType);

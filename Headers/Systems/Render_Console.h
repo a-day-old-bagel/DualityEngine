@@ -125,7 +125,7 @@ namespace DualityEngine {
         void updateBuffersWithCurrentConsoleText();
 
     public:
-        System_Render_Console(ComponentBank* bank, Console* console);
+        System_Render_Console(Bank * bank, Console* console);
         ~System_Render_Console();
         void tick();
         bool init(std::stringstream& output);

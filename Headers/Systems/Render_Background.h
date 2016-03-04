@@ -51,7 +51,7 @@ namespace DualityEngine {
         bool useCubeMap(std::string& fileName, std::string& fileType);
 
     public:
-        System_Render_Background(ComponentBank* bank);
+        System_Render_Background(Bank * bank);
         ~System_Render_Background();
         void tick();
         bool init(std::stringstream& output);

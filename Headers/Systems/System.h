@@ -19,7 +19,7 @@
 #include <string>
 #include <iostream>
 
-#include "ComponentBank.h"
+#include "Bank.h"
 
 namespace DualityEngine {
 
@@ -36,14 +36,14 @@ namespace DualityEngine {
         Derived_System& sys();
         
     protected:
-        ComponentBank* bank;
+        Bank * bank;
         std::vector<std::vector<DUA_id>> registeredIDs;   // These are collections so that a system can operate
         std::vector<DUA_compFlag> requiredComponents;     // on more than one kind of entity if it needs to.
         uint tockFreq; // every 'tockFreq' times 'tock' is called, it's code will execute. (periodic loop not linked to 'tick')
 		uint counter;
         
     public:        
-        System(ComponentBank* bank, std::string name, int numRegisters);
+        System(Bank * bank, std::string name, int numRegisters);
         ~System();
         void clean();
         std::string getName();
@@ -66,7 +66,7 @@ namespace DualityEngine {
     //  ***************************  IMPLEMENTATION  ***************************
 
     template<typename Derived_System>
-    System<Derived_System>::System(ComponentBank* bank, std::string name, int numRegisters){
+    System<Derived_System>::System(Bank * bank, std::string name, int numRegisters){
         escape = false;
         paused = false;
         pauseConfirmed = false;
@@ -92,11 +92,16 @@ namespace DualityEngine {
 
     template<typename Derived_System>
     void System<Derived_System>::tick() {
-        sys().tickImpl();
-		++counter %= tockFreq;
-		if (!counter) {
-			tock();
-		}
+        sys().tickWithTock();
+        ++counter;
+        if (counter % tockFreq == 0) {
+            counter = 0;
+            tock();
+        }
+//		++counter %= tockFreq;
+//		if (!counter) {
+//			tock();
+//		}
     }
 
     template<typename Derived_System>
@@ -106,9 +111,9 @@ namespace DualityEngine {
 
     template<typename Derived_System>
     void System<Derived_System>::clean(){
-        int numRegisters = registeredIDs.size();
+        unsigned long numRegisters = registeredIDs.size();
         registeredIDs = std::vector<std::vector<DUA_id>>();
-        for (int i = 0; i < numRegisters; i++){
+        for (unsigned long i = 0; i < numRegisters; ++i){
             registeredIDs.push_back(std::vector<DUA_id>());
         }
     }

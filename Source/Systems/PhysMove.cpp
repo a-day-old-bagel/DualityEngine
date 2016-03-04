@@ -2,12 +2,12 @@
 
 using namespace DualityEngine;
 
-System_PhysMove::System_PhysMove(ComponentBank* bank)
+System_PhysMove::System_PhysMove(Bank * bank)
                          : System<System_PhysMove>(bank, "Physics Movement System", 2)
 {
     requiredComponents.at(0) = POSITION | LINVELOC ;
     requiredComponents.at(1) = ORIENTATION | ANGVELOC ;
-	System::tockFreq = 1000;
+//	System::tockFreq = 1000;
 }
 
 System_PhysMove::~System_PhysMove()
@@ -17,13 +17,13 @@ System_PhysMove::~System_PhysMove()
 
 bool System_PhysMove::init(std::stringstream& output)
 {
-    lastTime = SDL_GetTicks();
+    lastTime = bank->getTime();
     return true;
 }
 
 void System_PhysMove::tick()
 {
-    DUA_uint32 currentTime = SDL_GetTicks();
+    DUA_uint32 currentTime = bank->getTime();
     DUA_uint32 delta = (currentTime - lastTime);
     lastTime = currentTime;
 	for (unsigned i = 0; i < registeredIDs[0].size(); ++i) {
@@ -47,6 +47,6 @@ void System_PhysMove::tick()
             bank->stateOn(registeredIDs[1][i], RECALCVIEWMAT);
         }
     }
-    SDL_Delay(5);
+    SDL_Delay(1);
 }
 

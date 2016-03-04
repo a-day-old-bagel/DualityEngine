@@ -12,7 +12,7 @@ using namespace DualityEngine;
 
 const std::string System_UserInput::menuText = "****************************************\n*  MENU - ENTER ONE OF THESE OPTIONS:  *\n*     new, load, save, exit, help      *\n****************************************\n";
 
-System_UserInput::System_UserInput(ComponentBank* bank)
+System_UserInput::System_UserInput(Bank * bank)
                   : System<System_UserInput>(bank, "User Input System", 0){
     consoleIsActive = false;
     MenuIsActive = false;

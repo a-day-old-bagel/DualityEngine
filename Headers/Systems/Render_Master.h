@@ -26,7 +26,7 @@ namespace DualityEngine {
         SDL_GLContext context;
 
     public:
-        System_Render_Master(ComponentBank* bank);
+        System_Render_Master(Bank * bank);
         ~System_Render_Master();
         void tick();
         bool init(std::stringstream& output);
