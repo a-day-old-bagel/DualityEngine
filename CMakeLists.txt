@@ -66,7 +66,6 @@ set(DUA_INCLUDE_DIR
         Headers/Systems
         Headers/Utilities
         Headers/Math
-		Headers/Math/glm
         Headers/AssetManagement
         Headers/
     )
