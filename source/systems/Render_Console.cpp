@@ -1,64 +1,70 @@
-//
-// Created by adayoldbagel on 1/8/16.
-//
-
-#include "settings.h"
-#include "GUI_Console.h"
+/****************************************************************
+ * Galen Cochrane, 1 FEB 2015
+ *
+ ****************************************************************/
+#include "Render_Console.h"
+#include "Render_Master.h"
 
 namespace DualityEngine {
 
-    const char GUI_Console::firstAsciiChar = ' ';
-    const char GUI_Console::lastAsciiChar = '~';
-    const std::string GUI_Console::commPromptNorm = ">: ";
-    const std::string GUI_Console::commPromptMenu = "MENU>: ";
-    const int GUI_Console::numTexPanels = lastAsciiChar - firstAsciiChar + 2; //+2 is for the 'unknown char/background' quad plus the off-by-one.
-    const float GUI_Console::texPanelAdvance = 1.0 / (float)numTexPanels; // this is how far the GPU texture sampler will have to move to get to the next character in the texture atlas.
-    const int GUI_Console::numCharsY_comm = 1;   // don't change this for now - not completely supported.
+    const glm::vec3 System_Render_Console::localTextColor = {0.5, 1.0, 0.3};
+    const glm::vec3 System_Render_Console::localBackColor = {0.05, 0.05, 0.05};
+    const char System_Render_Console::firstAsciiChar = ' ';
+    const char System_Render_Console::lastAsciiChar = '~';
+    const std::string System_Render_Console::commPromptNorm = ">: ";
+    const std::string System_Render_Console::commPromptMenu = "MENU>: ";
+    const int System_Render_Console::numTexPanels = lastAsciiChar - firstAsciiChar + 2; //+2 is for the 'unknown char/background' quad plus the off-by-one.
+    const float System_Render_Console::texPanelAdvance = 1.f / (float) numTexPanels; // this is how far the GPU texture sampler will have to move to get to the next character in the texture atlas.
+    const int System_Render_Console::numCharsY_comm = 1;   // don't change this for now - not completely supported.
 
-    GUI_Console::GUI_Console() {
+    System_Render_Console::System_Render_Console(Bank *bank, Console *console)
+            : System<System_Render_Console>(bank, "Console Rendering System", 0) {
+        this->console = console;
+        hasInitialized = false;
         numLinesCarried = 0;
         lineHasCarried = false;
     }
-    GUI_Console::~GUI_Console() {
-        glDeleteBuffers (3, buffers);
-        glDeleteProgram (shdrLoc);
-        glDeleteTextures (1, &texture);
-        glDeleteVertexArrays (1, &VAOloc_text);
-        delete[] bodySubArray;
-        delete[] commSubArray;
-    }
-    bool GUI_Console::Init(std::stringstream& output, Console* console, const char* fontFile,
-                           int locX, int locY, int width, int height, int charW, int charH,
-                           int spacingX, int spacingY, int marginX, int marginY){
+    System_Render_Console::~System_Render_Console() {
+        this->console = NULL;
 
-        output << "\nBeginning initialization of console GUI.\n";
+    //    if (hasInitialized) {
+    //        glDeleteBuffers(3, buffers);
+    //        glDeleteProgram(shdrLoc);
+    //        glDeleteTextures(1, &texture);
+    //        glDeleteVertexArrays(1, &VAOloc_text);
+    //        delete[] bodySubArray;
+    //        delete[] commSubArray;
+    //    }
+    }
+    bool System_Render_Console::init(std::stringstream &output) {
         this->console = console;
 
-        screenOffsetX =  locX;
-        screenOffsetY = -locY; // openGL flips y+ is up
+        screenOffsetX = Settings::Console::locX;
+        screenOffsetY = -Settings::Console::locY; // openGL flips y+ is up
 
-        charWidth =         charW;
-        charHeight = (-1) * charH;   // openGL flips y+ is up
+        charWidth = Settings::Console::charW;
+        charHeight = (-1) * Settings::Console::charH; // openGL flips y+ is up
 
-        charStepX = charWidth  + spacingX;
-        charStepY = charHeight - spacingY;
+        charStepX = charWidth + Settings::Console::spacingX;
+        charStepY = charHeight - Settings::Console::spacingY;
 
-        totalWidth = width;
-        totalHeight = -height;
-        innerWidth =         width  - marginX * 2;
-        innerHeight = (-1) * height + marginY * 2; // openGL flips y+ is up
+        totalWidth = Settings::Console::width;
+        totalHeight = -Settings::Console::height;
+        innerWidth = Settings::Console::width - Settings::Console::marginX * 2;
+        innerHeight = (-1) * Settings::Console::height + Settings::Console::marginY * 2; // openGL flips y+ is up
 
         numCharsX = innerWidth / charStepX;
         numCharsY_body = innerHeight / charStepY - numCharsY_comm;
 
-        marginWidth =         ( innerWidth  %  charStepX) / 2 + marginX;
-        marginHeight = (-1) * (-innerHeight % -charStepY) / 3 - marginY;    // openGL flips y+ is up
+        marginWidth = (innerWidth % charStepX) / 2 + Settings::Console::marginX;
+        marginHeight = (-1) * (-innerHeight % -charStepY) / 3 - Settings::Console::marginY; // openGL flips y+ is up
 
-        cursorHalfWidth = (float)charW / (float)Settings::Display::screenResX;
-        cursorHeight = (float)charH / (float)Settings::Display::screenResY;
-        cursorZeroPosX = (screenOffsetX + marginWidth) / ((float)Settings::Display::screenResX * 0.5f) - 1;
-        cursorAdvanceX = (charStepX) / ((float)Settings::Display::screenResX * 0.5f);
-        cursorPosY = (screenOffsetY + totalHeight - marginHeight) / ((float)Settings::Display::screenResY * 0.5f) + 1;
+        cursorHalfWidth = (float) Settings::Console::charW / (float) Settings::Display::screenResX;
+        cursorHeight = (float) Settings::Console::charH / (float) Settings::Display::screenResY;
+        cursorZeroPosX = (screenOffsetX + marginWidth/* + charStepX * commPromptNorm.size()*/) /
+                         ((float) Settings::Display::screenResX * 0.5f) - 1;
+        cursorAdvanceX = (charStepX) / ((float) Settings::Display::screenResX * 0.5);
+        cursorPosY = (screenOffsetY + totalHeight - marginHeight) / ((float) Settings::Display::screenResY * 0.5f) + 1;
 
         cursorSubArray[1] = cursorPosY;
         cursorSubArray[3] = cursorPosY - cursorHeight;
@@ -67,12 +73,15 @@ namespace DualityEngine {
         bodySubArray = new DUA_float[numCharsX * numCharsY_body * 8];
         commSubArray = new DUA_float[numCharsX * numCharsY_comm * 8];
 
-        attrLoc_verts   = glGetAttribLocation(shdrLoc, "Vertex");
-        attrLoc_uvCoo   = glGetAttribLocation(shdrLoc, "UV");
-        txtrLoc         = glGetUniformLocation(shdrLoc, "font_texture");
-        unifLoc_color   = glGetUniformLocation(shdrLoc, "penColor");
 
-        if (!generateAndBufferFontAtlas(output, fontFile)) return false;
+        shdrLoc = loadShaders("assets/shaders/GUI_Console.vert", "assets/shaders/GUI_Console.frag", output);
+
+        attrLoc_verts = glGetAttribLocation(shdrLoc, "Vertex");
+        attrLoc_uvCoo = glGetAttribLocation(shdrLoc, "UV");
+        txtrLoc = glGetUniformLocation(shdrLoc, "font_texture");
+        unifLoc_color = glGetUniformLocation(shdrLoc, "penColor");
+
+        if (!generateAndBufferFontAtlas(output, Settings::Console::fontName.c_str())) return false;
 
         // buffer part
         glGenVertexArrays(1, &VAOloc_text);
@@ -81,28 +90,32 @@ namespace DualityEngine {
 
         if (!generateAndBufferGeometry(output)) return false;
 
-        output << "Console GUI has initialized.\n\n";
+        hasInitialized = true;
+
+		System_Render_Master::checkError(output, "Render_Console.cpp", __LINE__);
+
         return true;
     }
-    void GUI_Console::render(){
-
-        if (console->consoleIsActive || console->menuIsActive){
+    void System_Render_Console::tick() {
+        if (console->consoleIsActive || console->menuIsActive) {
+			glBindVertexArray(VAOloc_text);
             updateBuffersWithCurrentConsoleText();
 
-            glActiveTexture (GL_TEXTURE1);
-            glBindTexture (GL_TEXTURE_2D, texture);
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, texture);
 
-            glUseProgram (shdrLoc);
-            glUniform1i (txtrLoc, 1);
-            glBindVertexArray (VAOloc_text);
+            glUseProgram(shdrLoc);
+            glUniform1i(txtrLoc, 1);
 
-            glUniform3fv(unifLoc_color, 1, &Settings::Console::backColor[0]);
-            glDrawElements (GL_TRIANGLES, 6, GL_UNSIGNED_SHORT, DUA_GL_BUFFER_OFFSET((sizeIndexArray - 6) * sizeof(DUA_uint16)));
-            glUniform3fv(unifLoc_color, 1, &Settings::Console::textColor[0]);
-            glDrawElements (GL_TRIANGLES, sizeIndexArray - 6, GL_UNSIGNED_SHORT, 0);
+            glUniform3fv(unifLoc_color, 1, &localBackColor[0]);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_SHORT,
+                           DUA_GL_BUFFER_OFFSET((sizeIndexArray - 6) * sizeof(DUA_uint16)));
+            glUniform3fv(unifLoc_color, 1, &localTextColor[0]);
+            glDrawElements(GL_TRIANGLES, sizeIndexArray - 6, GL_UNSIGNED_SHORT, 0);
         }
     }
-    bool GUI_Console::generateAndBufferGeometry(std::stringstream &output) {
+
+    bool System_Render_Console::generateAndBufferGeometry(std::stringstream &output) {
         int numBodyVerts = numCharsX * numCharsY_body * 4;
         int numCommVerts = numCharsX * numCharsY_comm * 4;
         int numBodyTris = numCharsX * numCharsY_body * 2;
@@ -111,12 +124,16 @@ namespace DualityEngine {
         sizeVertArray = (numBodyVerts + numCommVerts + 4 + 3) * 2;// +4 and +2 are for background quad.
         sizeIndexArray = (numBodyTris + numCommTris + 2 + 1) * 3;// +3 and +1 are for the cursor triangle.
 
-        DUA_float verts[sizeVertArray];
-        DUA_float UVs[sizeVertArray];
-        DUA_uint16 indices[sizeIndexArray];
+//        DUA_float verts[sizeVertArray];
+//        DUA_float UVs[sizeVertArray];
+//        DUA_uint16 indices[sizeIndexArray];
+
+		DUA_float* verts = new DUA_float[sizeVertArray];
+		DUA_float* UVs	 = new DUA_float[sizeVertArray];
+		DUA_uint16* indices = new DUA_uint16[sizeIndexArray];
 
         // fill the UV buffer with zeros for now.
-        memset(UVs, 0, sizeVertArray);
+        memset(UVs, 0, (size_t) sizeVertArray);
 
         // Generate the backgroud quad
         verts[sizeVertArray - 8] = screenOffsetX / ((float) Settings::Display::screenResX * 0.5f) - 1;
@@ -236,59 +253,65 @@ namespace DualityEngine {
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeIndexArray * sizeof(DUA_uint16), indices, GL_STATIC_DRAW);
 
+		delete[] verts;
+		delete[] UVs;
+		delete[] indices;
+
         return true;
     }
-    bool GUI_Console::generateAndBufferFontAtlas(std::stringstream& output, const char* fontFile){
-
+    bool System_Render_Console::generateAndBufferFontAtlas(std::stringstream &output, const char *fontFile) {
         FT_Library library;
-        FT_Face     face;
+        FT_Face face;
 
         int panelWidth = charWidth;
         int panelHeight = -charHeight;  // REMEMBER stupid openGL y flipping - texHeight is positive, charHeight is negative...
         const int baseline = panelHeight * 0.8; // 4/5th of panel height FROM THE TOP (stupid openGL)
-        int yOffset;    // this is how far each char will be drawn from the top side of its quad (based on offset from font 'baseline')
-        int xOffset;    // this is how far each char will be drawn from the left side of its quad.
-        float xPanelStart;
+        int yOffset = 0;    // this is how far each char will be drawn from the top side of its quad (based on offset from font 'baseline')
+        int xOffset = 0;    // this is how far each char will be drawn from the left side of its quad.
+        float xPanelStart = 0;
         int texBytes = numTexPanels * panelWidth * panelHeight;
 
-        FT_Error error = FT_Init_FreeType (&library);
-        if (error){
+        FT_Error error = FT_Init_FreeType(&library);
+        if (error) {
             output << "\nERROR initializing freeType library.\n";
             return false;
         }
-        error = FT_New_Face (library, fontFile, 0, &face);
-        if (error == FT_Err_Unknown_File_Format){
+        error = FT_New_Face(library, fontFile, 0, &face);
+        if (error == FT_Err_Unknown_File_Format) {
             output << "\nERROR loading font: unknown file format.\n";
             return false;
-        } else if (error){
+        } else if (error) {
             output << "\nERROR loading font.\n";
             return false;
         }
-        error = FT_Set_Pixel_Sizes (face, panelWidth * 1.8, panelHeight); // extra factor in width is just 'cause fonts were looking "skinny." Will need modification to use other fonts.
-        if (error){
+        error = FT_Set_Pixel_Sizes(face, panelWidth * 1.8,
+                                   panelHeight); // extra factor in width is just 'cause fonts were looking "skinny." Will need modification to use other fonts.
+        if (error) {
             output << "\nERROR setting font size.\n";
             return false;
         }
 
-        DUA_uint8 baseTexData[texBytes];
-        memset(baseTexData, 0x00, texBytes);
+//        DUA_uint8 baseTexData[texBytes];
+//        memset(baseTexData, 0x00, texBytes);
 
-        glGenTextures (1, &texture);
-        glBindTexture (GL_TEXTURE_2D, texture);
-        glPixelStorei (GL_UNPACK_ALIGNMENT, 1);
-        glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexImage2D (GL_TEXTURE_2D, 0, GL_RED, panelWidth * numTexPanels, panelHeight, 0, GL_RED, GL_UNSIGNED_BYTE, &baseTexData[0]);
+		DUA_uint8* baseTexData = new DUA_uint8[texBytes];
+		memset(baseTexData, 0x00, texBytes);
 
-        GLenum glErr = glGetError();
-        if (glErr != GL_NO_ERROR) {
-            output << "glError after creating empty texture atlas.\n" << gluErrorString(glErr) << std::endl;
-        }
+        glGenTextures(1, &texture);
+        glBindTexture(GL_TEXTURE_2D, texture);
+        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, panelWidth * numTexPanels, panelHeight, 0, GL_RED, GL_UNSIGNED_BYTE,
+                     &baseTexData[0]);
 
-        DUA_colorByte firstPanel[panelWidth * panelHeight];
-        for (int i = 0; i < panelHeight; i++){
-            for (int j = 0; j < panelWidth; j++){
-                if (i == 0 || i == panelHeight - 1 || j == 0 || j == panelWidth - 1){
+		System_Render_Master::checkError(output, "Render_Console.cpp", __LINE__);
+
+//        DUA_colorByte firstPanel[panelWidth * panelHeight];
+		DUA_colorByte* firstPanel = new DUA_colorByte[panelWidth * panelHeight];
+        for (int i = 0; i < panelHeight; i++) {
+            for (int j = 0; j < panelWidth; j++) {
+                if (i == 0 || i == panelHeight - 1 || j == 0 || j == panelWidth - 1) {
                     firstPanel[i * panelWidth + j] = 0xFF;
                 } else {
                     firstPanel[i * panelWidth + j] = 0xA0;
@@ -297,13 +320,14 @@ namespace DualityEngine {
         }
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, panelWidth, panelHeight, GL_RED, GL_UNSIGNED_BYTE, firstPanel);
 
-        for (char i = firstAsciiChar; i <= lastAsciiChar; i++){
-            FT_UInt glyph_index = FT_Get_Char_Index(face, (int)i);
+        for (char i = firstAsciiChar; i <= lastAsciiChar; i++) {
+            FT_UInt glyph_index = FT_Get_Char_Index(face, (int) i);
 
-            error = FT_Load_Glyph (face, glyph_index /*i*/, FT_LOAD_RENDER);
-            if (error){
+            error = FT_Load_Glyph(face, glyph_index /*i*/, FT_LOAD_RENDER);
+            if (error) {
                 output << "\nERROR loading font character " << i << std::endl;
-                glTexSubImage2D(GL_TEXTURE_2D, 0, (i - firstAsciiChar + 1) * panelWidth, 0, panelWidth, panelHeight, GL_RED, GL_UNSIGNED_BYTE, firstPanel);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, (i - firstAsciiChar + 1) * panelWidth, 0, panelWidth, panelHeight,
+                                GL_RED, GL_UNSIGNED_BYTE, firstPanel);
                 continue;
             }
 
@@ -311,47 +335,56 @@ namespace DualityEngine {
             int bmpW = bmp.width;
             int bmpH = bmp.rows;
 
-            if (bmp.buffer == NULL){
-                if (i != ' '){  // because why would there be a bitmap for 'space'?
+            if (bmp.buffer == NULL) {
+                if (i != ' ') {  // because why would there be a bitmap for 'space'?
                     output << "No bitmap loaded for character '" << i << "'.\n";
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - firstAsciiChar + 1) * panelWidth, 0, panelWidth, panelHeight, GL_RED, GL_UNSIGNED_BYTE, firstPanel);
+                    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - firstAsciiChar + 1) * panelWidth, 0, panelWidth, panelHeight,
+                                    GL_RED, GL_UNSIGNED_BYTE, firstPanel);
                     continue;
                 }
             } else {
                 yOffset = baseline - face->glyph->metrics.horiBearingY / 64; // units in 1/64 pixel (stupid freetype)
                 xOffset = face->glyph->metrics.horiBearingX / 64;
                 xPanelStart = (i - firstAsciiChar + 1) * panelWidth + xOffset;
-                glTexSubImage2D(GL_TEXTURE_2D, 0, xPanelStart, std::max(yOffset, 0),  bmpW, std::min({bmpH, panelHeight - yOffset, panelHeight}), GL_RED, GL_UNSIGNED_BYTE, bmp.buffer);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, xPanelStart, std::max(yOffset, 0), bmpW,
+                                std::min({bmpH, panelHeight - yOffset, panelHeight}), GL_RED, GL_UNSIGNED_BYTE,
+                                bmp.buffer);
             }
 
-            glErr = glGetError ();
-            if (glErr != GL_NO_ERROR){
+            GLenum glErr = glGetError();
+            if (glErr != GL_NO_ERROR) {
 
                 xPanelStart = (i - firstAsciiChar + 1) * panelWidth + (panelWidth - bmpW);
-                glTexSubImage2D(GL_TEXTURE_2D, 0, xPanelStart, std::max(yOffset, 0), bmpW, std::min({bmpH, panelHeight - yOffset, panelHeight}), GL_RED, GL_UNSIGNED_BYTE, bmp.buffer);
+                glTexSubImage2D(GL_TEXTURE_2D, 0, xPanelStart, std::max(yOffset, 0), bmpW,
+                                std::min({bmpH, panelHeight - yOffset, panelHeight}), GL_RED, GL_UNSIGNED_BYTE,
+                                bmp.buffer);
 
-                glErr = glGetError ();
-                if (glErr != GL_NO_ERROR){
-                    output << "glError while subbing texture for '" << i << "': " << gluErrorString (glErr) << std::endl;
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - firstAsciiChar + 1) * panelWidth, 0, panelWidth, panelHeight, GL_RED, GL_UNSIGNED_BYTE, firstPanel);
+                glErr = glGetError();
+                if (glErr != GL_NO_ERROR) {
+                    output << "glError while subbing texture for '" << i << "': " << gluErrorString(glErr) << std::endl;
+                    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - firstAsciiChar + 1) * panelWidth, 0, panelWidth, panelHeight,
+                                    GL_RED, GL_UNSIGNED_BYTE, firstPanel);
                     continue;
                 }
             }
         }
 
-        FT_Done_Face (face);
-        FT_Done_FreeType (library);
+        FT_Done_Face(face);
+        FT_Done_FreeType(library);
+
+		delete[] baseTexData;
+		delete[] firstPanel;
 
         return true;
     }
-    void GUI_Console::updateBuffersWithCurrentConsoleText(){
-        if (console->bodyHasChangedVisually){
+    void System_Render_Console::updateBuffersWithCurrentConsoleText() {
+        if (console->bodyHasChangedVisually) {
             console->bodyHasChangedVisually = false;
             numLinesCarried = 0;
             lineHasCarried = false;
             graphicalLine.clear();
-            for (int i = 0; i < numCharsY_body; i++){
-                if (lineHasCarried){
+            for (int i = 0; i < numCharsY_body; i++) {
+                if (lineHasCarried) {
                     lineHasCarried = false;
                     lineReader = carryOverLine;
                 } else {
@@ -359,47 +392,51 @@ namespace DualityEngine {
                 }
                 lineReaderSize = lineReader.length();
 
-                if (lineReaderSize > numCharsX){
+                if (lineReaderSize > numCharsX) {
                     lineHasCarried = true;
                     numLinesCarried++;
-                    for (multiLineIterator = 0; multiLineIterator + numCharsX < lineReaderSize; multiLineIterator += numCharsX);
+                    for (multiLineIterator = 0;
+                         multiLineIterator + numCharsX < lineReaderSize; multiLineIterator += numCharsX);
                     carryOverLine = lineReader.substr(0, multiLineIterator);
                     lineReader = lineReader.substr(multiLineIterator);
                 }
 
                 lineReaderSize = lineReader.length();
                 graphicalLine.replace(0, numCharsX, lineReader);
-                if (lineReaderSize < numCharsX){
+                if (lineReaderSize < numCharsX) {
                     graphicalLine.replace(lineReaderSize, numCharsX - lineReaderSize, numCharsX - lineReaderSize, ' ');
                 }
 
-                for (int j = 0; j < numCharsX; j++){
-                    bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 0] = (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance;
+                for (int j = 0; j < numCharsX; j++) {
+                    bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 0] =
+                            (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 1] = 0.0;
-                    bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 2] = (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance + texPanelAdvance;
+                    bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 2] =
+                            (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance + texPanelAdvance;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 3] = 0.0;
-                    bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 4] = (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance;
+                    bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 4] =
+                            (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 5] = 1.0;
-                    bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 6] = (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance + texPanelAdvance;
+                    bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 6] =
+                            (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance + texPanelAdvance;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 7] = 1.0;
                 }
             }
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
             glBufferSubData(GL_ARRAY_BUFFER, 0, numCharsX * numCharsY_body * 8 * sizeof(DUA_float), &bodySubArray[0]);
         }
-        if (console->commHasChangedVisually){           // COMMAND LINE UPDATES NOT READY FOR MULTI-LINE !!!
+        if (console->commHasChangedVisually) {           // COMMAND LINE UPDATES NOT READY FOR MULTI-LINE !!!
             console->commHasChangedVisually = false;
             graphicalLine.clear();
 
-            if (console->menuIsActive){
+            if (console->menuIsActive) {
                 currentCommLineLength = numCharsX - commPromptMenu.length();
             } else {
                 currentCommLineLength = numCharsX - commPromptNorm.length();
             }
 
 
-
-            if (console->cursorPosition > currentCommLineLength - 2){
+            if (console->cursorPosition > currentCommLineLength - 2) {
                 graphicalCommOffset = console->cursorPosition - (currentCommLineLength - 2);
                 lineReader = (console->getPendingCommand()).substr(graphicalCommOffset);
             } else {
@@ -411,7 +448,8 @@ namespace DualityEngine {
 
             graphicalLine.replace(0, currentCommLineLength, lineReader);
             if (lineReaderSize < currentCommLineLength) {
-                graphicalLine.replace(lineReaderSize, currentCommLineLength - lineReaderSize, currentCommLineLength - lineReaderSize, ' ');
+                graphicalLine.replace(lineReaderSize, currentCommLineLength - lineReaderSize,
+                                      currentCommLineLength - lineReaderSize, ' ');
             }
             graphicalLine.insert(0, console->menuIsActive ? commPromptMenu : commPromptNorm);
             for (int j = 0; j < numCharsX; j++) {
@@ -426,15 +464,18 @@ namespace DualityEngine {
             }
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferSubData(GL_ARRAY_BUFFER, numCharsX * numCharsY_body * 8 * sizeof(DUA_float), numCharsX * numCharsY_comm * 8 * sizeof(DUA_float), &commSubArray[0]);
+            glBufferSubData(GL_ARRAY_BUFFER, numCharsX * numCharsY_body * 8 * sizeof(DUA_float),
+                            numCharsX * numCharsY_comm * 8 * sizeof(DUA_float), &commSubArray[0]);
 
-            cursorSubArray[0] = cursorZeroPosX + (console->cursorPosition - graphicalCommOffset + (console->menuIsActive ? commPromptMenu.length() : commPromptNorm.size())) * cursorAdvanceX;
+            cursorSubArray[0] = cursorZeroPosX + (console->cursorPosition - graphicalCommOffset +
+                                                  (console->menuIsActive ? commPromptMenu.length()
+                                                                         : commPromptNorm.size())) * cursorAdvanceX;
             cursorSubArray[2] = cursorSubArray[0] - cursorHalfWidth;
             cursorSubArray[4] = cursorSubArray[0] + cursorHalfWidth;
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-            glBufferSubData(GL_ARRAY_BUFFER, (sizeVertArray - 14) * sizeof(DUA_float), 6 * sizeof(DUA_float), &cursorSubArray[0]);
+            glBufferSubData(GL_ARRAY_BUFFER, (sizeVertArray - 14) * sizeof(DUA_float), 6 * sizeof(DUA_float),
+                            &cursorSubArray[0]);
         }
     }
 }
-

@@ -1,7 +1,7 @@
 #ifndef DEBUGCUBE_H
 #define DEBUGCUBE_H
 
-#include "Settings.h"
+#include "settings.h"
 
 namespace DualityEngine {
 

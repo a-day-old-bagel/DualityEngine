@@ -11,25 +11,11 @@ cmake_minimum_required(VERSION 3.3)
 # Declare the project in question
 project(DualityEngine)
 
-# Tell cMake where to put the generated libraries and executable...
-# Evidently cLion confuses these next three calls, but they should be useful outside of cLion.
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
-#set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
-
 # Make sure the project compiles with the c++11 and thread safety flags
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -D_REENTRANT -Wall -g -O3")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -D_REENTRANT -Wall -O3")
 
 # Tell cMake where to look for the modules that search for SDL2 and Assimp (the others come with cMake)
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/Modules/")
-
-## Tell cMake where to look for third party libs (add to this for your own builds)
-#set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "C:/libs/SDL2-2.0.4" "C:/libs/glew-1.13.0" "C:/libs/freetype")
-#set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "C:/libs/SDL2-2.0.4/lib/x86" "C:/libs/glew-1.13.0/lib/Release/win32")
-
-#set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} "C:/libs/assimp-3.2")
-#set(CMAKE_LIBRARY_PATH ${CMAKE_LIBRARY_PATH} "C:/libs/assimp-3.2/libs/Release")
-
+set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake")
 
 # Find SDL 2.0
 find_package(SDL2 REQUIRED)
@@ -58,108 +44,82 @@ include_directories(${FREETYPE_INCLUDE_DIR_freetype2})
 set(LIBS ${LIBS} ${FREETYPE_LIBRARIES})
 
 set(DUA_INCLUDE_DIR
-        Headers/AssetManagement/ProgrammaticAssets/GUI
-        Headers/AssetManagement/ProgrammaticAssets
-        Headers/Components
-        Headers/Bank
-        Headers/Admin
-        Headers/Systems
-        Headers/Utilities
-        Headers/Math
-        Headers/AssetManagement
-        Headers/
+		source/assetManagement/ProgrammaticAssets/GUI
+		source/assetManagement/ProgrammaticAssets
+		source/components
+		source/bank
+		source/Admin
+		source/systems
+		source/utilities
+		source/math
+		source/assetManagement
+		source/
     )
 include_directories(${DUA_INCLUDE_DIR})
 
 # Find all the source files
 set(SOURCE_FILES
-        Headers/Components/AmbientLight.h
-        Headers/Components/AngularVelocity.h
-        Headers/Bank/BankDelegates.h
-        Headers/Components/CameraFree.h
-        Headers/Components/Collision.h
-        Headers/Components/Component.h
-        Headers/Bank/Bank.h
-        Headers/Utilities/Console.h
-        Headers/Systems/Control_SS.h
-        Headers/Bank/ControlTypes.h
-        Headers/Utilities/Delegate.h
-        Headers/Components/DirectionalLight.h
-        Headers/Utilities/Engine.h
-        Headers/AssetManagement/FileIO.h
-        Headers/Math/Functions.h
-        Headers/Game.h
-        Headers/Bank/KvMap.h
-        Headers/Components/LinearVelocity.h
-        Headers/AssetManagement/loadCubeMap.h
-        Headers/AssetManagement/loadMesh.h
-        Headers/AssetManagement/loadShaders.h
-        Headers/AssetManagement/loadTexture.h
-        Headers/Math/Matrix.h
-        Headers/AssetManagement/MeshRepository.h
-        Headers/Components/Model.h
-        Headers/Components/Orientation.h
-        Headers/Components/OrientationEuler.h
-        Headers/Components/Owner.h
-        Headers/Systems/PhysCollide.h
-        Headers/Systems/PhysMove.h
-        Headers/Components/PointLight.h
-        Headers/Components/Position.h
-        Headers/Components/PositionChild.h
-        Headers/Components/PositionParent.h
-        Headers/Systems/Render_Background.h
-        Headers/Systems/Render_BiTcubes.h
-        Headers/Systems/Render_Console.h
-        Headers/Systems/Render_Master.h
-        Headers/Systems/Render_Models.h
-        Headers/Components/RotationVelocEuler.h
-        Headers/Components/Score.h
-        Headers/Systems/Scripting.h
-        Headers/Utilities/Settings.h
-        Headers/AssetManagement/ShaderRepository.h
-        Headers/Components/Soul.h
-        Headers/AssetManagement/SoundRepository.h
-        Headers/Components/SpaceControl.h
-        Headers/AssetManagement/stb_image.h
-        Headers/Systems/System.h
-        Headers/AssetManagement/TextureRepository.h
-        Headers/Systems/UserInput.h
-        Headers/Utilities/HelpDocs.h
-        Headers/Utilities/ToString.h
-        Headers/Utilities/concurrentqueue.h
-        Headers/Utilities/readerwriterqueue.h
-        Headers/Utilities/Event.h
-        Headers/Math/ExtendGlm.h
-        Headers/Utilities/TimePiece.h
-
-        Source/Entities/Box.cpp
-        Source/Bank/Bank.cpp
-        Source/Utilities/Console.cpp
-        Source/Systems/Control_SS.cpp
-        Source/AssetManagement/FileIO.cpp
-        Source/Math/Functions.cpp
-        Source/Game.cpp
-        Source/AssetManagement/loadCubeMap.cpp
-        Source/AssetManagement/loadShaders.cpp
-        Source/main.cpp
-        Source/Systems/PhysCollide.cpp
-        Source/Systems/PhysMove.cpp
-        Source/Systems/Render_Background.cpp
-        Source/Systems/Render_BiTcubes.cpp
-        Source/Systems/Render_Console.cpp
-        Source/Systems/Render_Master.cpp
-        Source/Systems/Render_Models.cpp
-        Source/Systems/Scripting.cpp
-        Source/Utilities/Settings.cpp
-        Source/AssetManagement/ShaderRepository.cpp
-        Source/Systems/UserInput.cpp
-        Source/AssetManagement/ProgrammaticAssets/DebugBackground.cpp
-        Source/Utilities/HelpDocs.cpp
-		Source/Utilities/ToString.cpp
-		Source/AssetManagement/MeshRepository.cpp
-        Source/Utilities/Event.cpp
-        Source/Math/ExtendGlm.cpp
-		Source/Utilities/TimePiece.cpp
+		main.cpp
+		source/components/AmbientLight.h
+		source/components/AngularVelocity.h
+		source/bank/BankDelegates.h
+		source/components/CameraFree.h
+		source/components/Collision.h
+		source/components/Component.h
+		source/bank/controlTypes.h
+		source/utilities/Delegate.h
+		source/components/DirectionalLight.h
+		source/utilities/Engine.h
+		source/bank/KvMap.h
+		source/components/LinearVelocity.h
+		source/assetManagement/loadMesh.h
+		source/assetManagement/loadTexture.h
+		source/math/Matrix.h
+		source/components/Model.h
+		source/components/Orientation.h
+		source/components/OrientationEuler.h
+		source/components/Owner.h
+		source/components/PointLight.h
+		source/components/Position.h
+		source/components/PositionChild.h
+		source/components/PositionParent.h
+		source/components/RotationVelocEuler.h
+		source/components/Score.h
+		source/components/Soul.h
+		source/assetManagement/SoundRepository.h
+		source/components/SpaceControl.h
+		source/assetManagement/stb_image.h
+		source/systems/System.h
+		source/assetManagement/TextureRepository.h
+		source/utilities/concurrentqueue.h
+		source/utilities/readerwriterqueue.h
+		source/entities/Box.cpp
+		source/bank/Bank.cpp source/bank/Bank.h
+		source/utilities/Console.cpp source/utilities/Console.h
+		source/systems/Control_SS.cpp source/systems/Control_SS.h
+		source/assetManagement/fileIO.cpp source/assetManagement/fileIO.h
+		source/math/functions.cpp source/math/functions.h
+		source/Game.cpp source/Game.h
+		source/assetManagement/loadCubeMap.cpp source/assetManagement/loadCubeMap.h
+		source/assetManagement/loadShaders.cpp source/assetManagement/loadShaders.h
+		source/systems/PhysCollide.cpp source/systems/PhysCollide.h
+		source/systems/PhysMove.cpp source/systems/PhysMove.h
+		source/systems/Render_Background.cpp source/systems/Render_Background.h
+		source/systems/Render_BiTcubes.cpp source/systems/Render_BiTcubes.h
+		source/systems/Render_Console.cpp source/systems/Render_Console.h
+		source/systems/Render_Master.cpp source/systems/Render_Master.h
+		source/systems/Render_Models.cpp source/systems/Render_Models.h
+		source/systems/Scripting.cpp source/systems/Scripting.h
+		source/utilities/settings.cpp source/utilities/settings.h
+		source/assetManagement/ShaderRepository.cpp source/assetManagement/ShaderRepository.h
+		source/systems/UserInput.cpp source/systems/UserInput.h
+		source/assetManagement/ProgrammaticAssets/DebugBackground.cpp source/assetManagement/ProgrammaticAssets/DebugBackground.h
+		source/utilities/helpDocs.cpp source/utilities/helpDocs.h
+		source/utilities/toString.cpp source/utilities/toString.h
+		source/assetManagement/MeshRepository.cpp source/assetManagement/MeshRepository.h
+		source/utilities/Event.cpp source/utilities/Event.h
+		source/math/extendGlm.cpp source/math/extendGlm.h
+		source/utilities/TimePiece.cpp source/utilities/TimePiece.h
 		)
 
 # Make an executable called DualityEngine out of all the above source files
@@ -171,5 +131,5 @@ target_link_libraries(${PROJECT_NAME} ${LIBS})
 # Copy asset tree into build tree
 add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E copy_directory
-        ${CMAKE_SOURCE_DIR}/Assets
-        $<TARGET_FILE_DIR:${PROJECT_NAME}>/Assets)
+        ${CMAKE_SOURCE_DIR}/assets
+        $<TARGET_FILE_DIR:${PROJECT_NAME}>/assets)
