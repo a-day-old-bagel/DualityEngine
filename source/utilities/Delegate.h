@@ -10,7 +10,7 @@ namespace DualityEngine {
     // Given a method that returns float and takes an int and a char, a delegate type would be:
     // Delegate<float(int, char)>
     
-    // The following defines are all you need to make delegates.  Usage:    
+    // The following defines are all you need to make delegates.  Usage:
     // DELEGATE(func, instRef) makes a delegate to a member method, taking the method and instance, like so:
     // Given:       int MyClass::myMethod(const char) {...}     example usage would be:
     // Delegate<int(const char)> myDelegate = DELEGATE(&MyClass::myMethod, &myClassInstance)
