@@ -22,8 +22,8 @@
 :: enter a local scope in which to set variables
 setlocal
 
-:: set variable 'batdir' to be the directory in which this file resides (VulkanBoilerplate)
-set "batdir=%~dp0"
+:: set variable 'top' to be the directory in which this file resides (VulkanBoilerplate)
+set "top=%~dp0"
 
 :: call the batch file that sets up the VS developer console environment
 call "%VS140COMNTOOLS%VsDevCmd.bat"
@@ -31,45 +31,45 @@ call "%VS140COMNTOOLS%VsDevCmd.bat"
 :: compile
 cl /c /I"%GLEW_PATH%\include" /I"%SDL2_PATH%\include" /I"%ASSIMP_PATH%\include" ^
  /I"%FREETYPE_PATH%\include" /I"%FREETYPE_PATH%\include\freetype2" ^
- /I"%batdir%source"                                     ^
- /I"%batdir%source\assetManagement"                     ^
- /I"%batdir%source\assetManagement\programmaticAssets"  ^
- /I"%batdir%source\bank"                                ^
- /I"%batdir%source\components"                          ^
- /I"%batdir%source\entities"                            ^
- /I"%batdir%source\math"                                ^
- /I"%batdir%source\systems"                             ^
- /I"%batdir%source\utilities"                           ^
+ /I"%top%source"                                     ^
+ /I"%top%source\assetManagement"                     ^
+ /I"%top%source\assetManagement\programmaticAssets"  ^
+ /I"%top%source\bank"                                ^
+ /I"%top%source\components"                          ^
+ /I"%top%source\entities"                            ^
+ /I"%top%source\math"                                ^
+ /I"%top%source\systems"                             ^
+ /I"%top%source\utilities"                           ^
  /nologo /W1 /WX- /O2 /Ob2 /Oy- /D WIN32 /D _WINDOWS /D _REENTRANT /D NDEBUG /D _MBCS /Zi /Gm /EHsc /MD /GS ^
  /Zc:wchar_t /Zc:forScope /Zc:inline /Gd /TP /analyze-                      ^
- "%batdir%main.cpp"                                                         ^
- "%batdir%source\Game.cpp"                                                  ^
- "%batdir%source\assetManagement\fileIO.cpp"                                ^
- "%batdir%source\assetManagement\loadCubeMap.cpp"                           ^
- "%batdir%source\assetManagement\loadShaders.cpp"                           ^
- "%batdir%source\assetManagement\MeshRepository.cpp"                        ^
- "%batdir%source\assetManagement\ShaderRepository.cpp"                      ^
- "%batdir%source\assetManagement\programmaticAssets\DebugBackground.cpp"    ^
- "%batdir%source\bank\bank.cpp"                                             ^
- "%batdir%source\entities\Box.cpp"                                          ^
- "%batdir%source\math\extendGlm.cpp"                                        ^
- "%batdir%source\math\functions.cpp"                                        ^
- "%batdir%source\systems\Control_SS.cpp"                                    ^
- "%batdir%source\systems\PhysCollide.cpp"                                   ^
- "%batdir%source\systems\PhysMove.cpp"                                      ^
- "%batdir%source\systems\Render_Background.cpp"                             ^
- "%batdir%source\systems\Render_BiTcubes.cpp"                               ^
- "%batdir%source\systems\Render_Console.cpp"                                ^
- "%batdir%source\systems\Render_Master.cpp"                                 ^
- "%batdir%source\systems\Render_Models.cpp"                                 ^
- "%batdir%source\systems\Scripting.cpp"                                     ^
- "%batdir%source\systems\UserInput.cpp"                                     ^
- "%batdir%source\utilities\Console.cpp"                                     ^
- "%batdir%source\utilities\Event.cpp"                                       ^
- "%batdir%source\utilities\helpDocs.cpp"                                    ^
- "%batdir%source\utilities\settings.cpp"                                    ^
- "%batdir%source\utilities\TimePiece.cpp"                                   ^
- "%batdir%source\utilities\toString.cpp"
+ "%top%main.cpp"                                                         ^
+ "%top%source\Game.cpp"                                                  ^
+ "%top%source\assetManagement\fileIO.cpp"                                ^
+ "%top%source\assetManagement\loadCubeMap.cpp"                           ^
+ "%top%source\assetManagement\loadShaders.cpp"                           ^
+ "%top%source\assetManagement\MeshRepository.cpp"                        ^
+ "%top%source\assetManagement\ShaderRepository.cpp"                      ^
+ "%top%source\assetManagement\programmaticAssets\DebugBackground.cpp"    ^
+ "%top%source\bank\bank.cpp"                                             ^
+ "%top%source\entities\Box.cpp"                                          ^
+ "%top%source\math\extendGlm.cpp"                                        ^
+ "%top%source\math\functions.cpp"                                        ^
+ "%top%source\systems\Control_SS.cpp"                                    ^
+ "%top%source\systems\PhysCollide.cpp"                                   ^
+ "%top%source\systems\PhysMove.cpp"                                      ^
+ "%top%source\systems\Render_Background.cpp"                             ^
+ "%top%source\systems\Render_BiTcubes.cpp"                               ^
+ "%top%source\systems\Render_Console.cpp"                                ^
+ "%top%source\systems\Render_Master.cpp"                                 ^
+ "%top%source\systems\Render_Models.cpp"                                 ^
+ "%top%source\systems\Scripting.cpp"                                     ^
+ "%top%source\systems\UserInput.cpp"                                     ^
+ "%top%source\utilities\Console.cpp"                                     ^
+ "%top%source\utilities\Event.cpp"                                       ^
+ "%top%source\utilities\helpDocs.cpp"                                    ^
+ "%top%source\utilities\settings.cpp"                                    ^
+ "%top%source\utilities\TimePiece.cpp"                                   ^
+ "%top%source\utilities\toString.cpp"
 
 :: link
 link /OUT:DualityEngine.exe /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ^
@@ -117,7 +117,7 @@ xcopy /h/y/Q "%FREETYPE_PATH%\bin\freetype6.dll"                "."
 xcopy /h/y/Q "%FREETYPE_PATH%\bin\zlib1.dll"                    "."
 
 :: copy assets tree to build location
-xcopy /s/e/h/y/I/Q "%batdir%assets" ".\assets"
+xcopy /s/e/h/y/I/Q "%top%assets" ".\assets"
 
 :: leave the local scope
 endlocal
