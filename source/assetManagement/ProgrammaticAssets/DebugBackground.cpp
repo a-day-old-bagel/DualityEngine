@@ -5,10 +5,6 @@
 #include "settings.h"
 #include "DebugBackground.h"
 
-// these define the colored pixels that will be used in the bitmap data below.
-#define BG0 0x00, 0x00, 0x00 // black
-#define CL7 0x40, 0x40, 0x40 // grey
-
 namespace DualityEngine {
 
     // corners of the quad in the middle of the screen
@@ -19,7 +15,10 @@ namespace DualityEngine {
             1.0, 1.0, 0.5, 1.0,
             -1.0, 1.0, 0.5, 1.0,
             -1.0, -1.0, 0.5, 1.0};
-    // raw bitmap data for the texture:
+
+    // these define the colored pixels that will be used in the bitmap data below.
+    #define BG0 0x00, 0x00, 0x00 // black
+    #define CL7 0x40, 0x40, 0x40 // grey
     const DUA_colorByte DebugBackground::rawTexture[768] = { // 16 x 16 x 3 (width x height x [RGB]) = 768 elements
             BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0,
             BG0, BG0, BG0, CL7, BG0, BG0, BG0, CL7, BG0, CL7, CL7, CL7, CL7, BG0, BG0, BG0,
@@ -38,6 +37,9 @@ namespace DualityEngine {
             BG0, CL7, CL7, CL7, BG0, CL7, BG0, BG0, CL7, BG0, CL7, BG0, BG0, BG0, CL7, BG0,
             BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0, BG0,
     };
+    #undef BG0
+    #undef CL7
+
     DebugBackground::DebugBackground() {
         hasInitialized = false;
     }

@@ -55,7 +55,7 @@ if( NOT WIN32 )
     set( CMAKE_CXX_FLAGS_RELWITHDEBINFO  "${CMAKE_CXX_FLAGS} -Og -ggdb3 -Wall -std=c++11 -D_REENTRANT" )
 endif()
 
-# Make an executable called DualityEngine out of all the above source files
+# Make an executable called DualityEngine out of all the source files
 add_executable( ${PROJECT_NAME} ${SOURCE_FILES} )
 
 # Link to external libraries that were found above
