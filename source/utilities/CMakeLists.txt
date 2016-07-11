@@ -1,8 +1,4 @@
 
-# Galen Cochrane
-# Copyright (C) 2016
-# This code is licensed under the MIT license (MIT) (http://opensource.org/licenses/MIT)
-
 # set DIR to point to current directory (relative to top level)
 set( DIR ${CMAKE_CURRENT_LIST_DIR} )
 
