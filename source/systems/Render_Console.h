@@ -39,7 +39,7 @@
 #include "System.h"
 #include "Console.h"
 #include "settings.h"
-#include "loadShaders.h"
+#include "loaders/loadShaders.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
@@ -93,9 +93,9 @@ namespace DualityEngine {
         float cursorHeight;
         
         // These are arrays to hold data that's buffered to the GPU each draw.
-        DUA_float* bodySubArray;
-        DUA_float* commSubArray;
-        DUA_float cursorSubArray[6];
+        std::vector<DUA_float> bodySubArray;
+        std::vector<DUA_float> commSubArray;
+        std::vector<DUA_float> cursorSubArray;
         
         // These are set upon initialization and should be cleaned up some time...
         int charWidth;

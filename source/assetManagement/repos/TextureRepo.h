@@ -10,7 +10,7 @@
 
 namespace DualityEngine {
 
-    class TextureRepository
+    class TextureRepo
     {
 
     };

@@ -3,7 +3,7 @@
  ****************************************************************/
 #include "Render_Models.h"
 #include "Render_Master.h"
-#include "loadShaders.h"
+#include "loaders/loadShaders.h"
 #include "extendGlm.h"
 
 using namespace DualityEngine;

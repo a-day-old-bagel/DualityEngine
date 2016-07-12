@@ -10,7 +10,7 @@
 
 #include <sstream>
 #include "settings.h"
-#include "loadShaders.h"
+#include "loaders/loadShaders.h"
 
 namespace DualityEngine {
     

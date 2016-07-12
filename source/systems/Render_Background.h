@@ -18,8 +18,8 @@
 //#include <glm/gtx/euler_angles.hpp>
 
 #include "System.h"
-#include "loadShaders.h"
-#include "loadCubeMap.h"
+#include "loaders/loadShaders.h"
+#include "loaders/loadCubeMap.h"
 #include "DebugBackground.h"
 
 //</editor-fold>

@@ -8,6 +8,7 @@ add_subdirectory( components )
 add_subdirectory( entities )
 add_subdirectory( math )
 add_subdirectory( systems )
+add_subdirectory( ui )
 add_subdirectory( utilities )
 
 # include the current directory

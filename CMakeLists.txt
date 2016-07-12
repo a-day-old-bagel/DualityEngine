@@ -45,7 +45,7 @@ add_subdirectory( source )
 include_directories( ${INCLUDE_DIRS} )
 
 # include all headers/source in current directory
-set( SOURCE_FILES ${SOURCE_FILES} "main.cpp" )
+set( SOURCE_FILES ${SOURCE_FILES} "main.cpp" source/assetManagement/repos/SoundRepo.cpp source/assetManagement/repos/TextureRepo.cpp source/assetManagement/repos/FontRepo.cpp source/assetManagement/repos/FontRepo.h)
 
 # Set compiler flags
 if( NOT WIN32 )

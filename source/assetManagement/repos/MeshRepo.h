@@ -32,7 +32,7 @@ namespace DualityEngine {
 		DUA_uint64 entryIndex, instanceIndex;
 	};
 
-    class MeshRepository
+    class MeshRepo
     {
     private:
         GLuint vboHandle;
@@ -45,7 +45,7 @@ namespace DualityEngine {
 		GLuint vaoHandle;
         std::vector<MeshTableEntry> activeMeshes;
 
-        MeshRepository(DUA_uint64 initialVBOsizeInBytes = 8000000);
+        MeshRepo(DUA_uint64 initialVBOsizeInBytes = 8000000);
 		bool init(std::stringstream& output);
         bool registerModel(DUA_id id, Model* model, std::stringstream& output);
         bool deRegisterModel(DUA_id id, std::stringstream& output);

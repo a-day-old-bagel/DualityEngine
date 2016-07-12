@@ -17,14 +17,14 @@
 #include <glm/gtx/euler_angles.hpp>
 
 #include "System.h"
-#include "MeshRepository.h"
+#include "repos/MeshRepo.h"
 
 namespace DualityEngine {
 
     class System_Render_Models : public System<System_Render_Models>
     {
     private:
-		MeshRepository repo;
+		MeshRepo repo;
 		GLuint shdrLoc;
 		GLuint unifLoc_MVP;
 		GLuint unifLoc_M;

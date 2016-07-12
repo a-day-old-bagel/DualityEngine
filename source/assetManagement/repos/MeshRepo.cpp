@@ -2,21 +2,21 @@
 // Created by adayoldbagel on 1/22/16.
 //
 
-#include "MeshRepository.h"
+#include "MeshRepo.h"
 #include "Render_Master.h"
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
 
 namespace DualityEngine {
-    MeshRepository::MeshRepository(DUA_uint64 initialVBOsizeInBytes /*= 8000000*/){
+    MeshRepo::MeshRepo(DUA_uint64 initialVBOsizeInBytes /*= 8000000*/){
         vboSizeBytes = initialVBOsizeInBytes;
         vboSizeVerts = vboSizeBytes / (8 * sizeof(float));
         vboUsedBytes = 0;
         vboUsedVerts = 0;
     }
 
-	bool MeshRepository::init(std::stringstream& output) {
+	bool MeshRepo::init(std::stringstream& output) {
 		output << "Beginning initialization of mesh repository...\n";
 		glGenVertexArrays(1, &vaoHandle);
 		glBindVertexArray(vaoHandle);
@@ -34,12 +34,12 @@ namespace DualityEngine {
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), DUA_GL_BUFFER_OFFSET(6 * sizeof(float)));
 
-		System_Render_Master::checkError(output, "MeshRepository.cpp", __LINE__);
+		System_Render_Master::checkError(output, "MeshRepo.cpp", __LINE__);
 		output << "Initialization of mesh repository has finished.\n";
 		return true;
 	}
 
-    bool MeshRepository::registerModel(DUA_id id, Model* model, std::stringstream& output) {
+    bool MeshRepo::registerModel(DUA_id id, Model* model, std::stringstream& output) {
 		try {
 			// if there is no matching mesh already loaded - i.e. if no other entity yet uses this model...
 			if (!fileToActiveMeshIndex.count(model->meshFileName)) {
@@ -131,7 +131,7 @@ namespace DualityEngine {
 		}
     }
 
-    bool MeshRepository::deRegisterModel(DUA_id id, std::stringstream& output) {
+    bool MeshRepo::deRegisterModel(DUA_id id, std::stringstream& output) {
 		try {
 			std::vector<DUA_id>* instanceList = &activeMeshes.at(idToActiveMeshIndex.at(id).entryIndex).instances;
 			DUA_uint64 instanceIndex = idToActiveMeshIndex.at(id).instanceIndex;

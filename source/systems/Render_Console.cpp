@@ -66,13 +66,13 @@ namespace DualityEngine {
         cursorAdvanceX = (charStepX) / ((float) Settings::Display::screenResX * 0.5);
         cursorPosY = (screenOffsetY + totalHeight - marginHeight) / ((float) Settings::Display::screenResY * 0.5f) + 1;
 
+        bodySubArray.resize((unsigned long)(numCharsX * numCharsY_body * 8));
+        commSubArray.resize((unsigned long)(numCharsX * numCharsY_comm * 8));
+        cursorSubArray.resize((unsigned long)6);
+
         cursorSubArray[1] = cursorPosY;
         cursorSubArray[3] = cursorPosY - cursorHeight;
         cursorSubArray[5] = cursorPosY - cursorHeight;
-
-        bodySubArray = new DUA_float[numCharsX * numCharsY_body * 8];
-        commSubArray = new DUA_float[numCharsX * numCharsY_comm * 8];
-
 
         shdrLoc = loadShaders("assets/shaders/GUI_Console.vert", "assets/shaders/GUI_Console.frag", output);
 
@@ -156,12 +156,12 @@ namespace DualityEngine {
         UVs[sizeVertArray - 2] = offSetToCenterX / numTexPanels;
         UVs[sizeVertArray - 1] = offSetToCenterY;
 
-        indices[sizeIndexArray - 6] = sizeVertArray / 2 - 4;
-        indices[sizeIndexArray - 5] = sizeVertArray / 2 - 2;
-        indices[sizeIndexArray - 4] = sizeVertArray / 2 - 1;
-        indices[sizeIndexArray - 3] = sizeVertArray / 2 - 4;
-        indices[sizeIndexArray - 2] = sizeVertArray / 2 - 1;
-        indices[sizeIndexArray - 1] = sizeVertArray / 2 - 3;
+        indices[sizeIndexArray - 6] = (DUA_uint16)(sizeVertArray / 2 - 4);
+        indices[sizeIndexArray - 5] = (DUA_uint16)(sizeVertArray / 2 - 2);
+        indices[sizeIndexArray - 4] = (DUA_uint16)(sizeVertArray / 2 - 1);
+        indices[sizeIndexArray - 3] = (DUA_uint16)(sizeVertArray / 2 - 4);
+        indices[sizeIndexArray - 2] = (DUA_uint16)(sizeVertArray / 2 - 1);
+        indices[sizeIndexArray - 1] = (DUA_uint16)(sizeVertArray / 2 - 3);
 
         // Generate the cursor triangle
         verts[sizeVertArray - 14] = cursorZeroPosX;
@@ -423,7 +423,7 @@ namespace DualityEngine {
                 }
             }
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-            glBufferSubData(GL_ARRAY_BUFFER, 0, numCharsX * numCharsY_body * 8 * sizeof(DUA_float), &bodySubArray[0]);
+            glBufferSubData(GL_ARRAY_BUFFER, 0, numCharsX * numCharsY_body * 8 * sizeof(DUA_float), bodySubArray.data());
         }
         if (console->commHasChangedVisually) {           // COMMAND LINE UPDATES NOT READY FOR MULTI-LINE !!!
             console->commHasChangedVisually = false;
@@ -465,7 +465,7 @@ namespace DualityEngine {
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
             glBufferSubData(GL_ARRAY_BUFFER, numCharsX * numCharsY_body * 8 * sizeof(DUA_float),
-                            numCharsX * numCharsY_comm * 8 * sizeof(DUA_float), &commSubArray[0]);
+                            numCharsX * numCharsY_comm * 8 * sizeof(DUA_float), commSubArray.data());
 
             cursorSubArray[0] = cursorZeroPosX + (console->cursorPosition - graphicalCommOffset +
                                                   (console->menuIsActive ? commPromptMenu.length()
@@ -475,7 +475,7 @@ namespace DualityEngine {
 
             glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
             glBufferSubData(GL_ARRAY_BUFFER, (sizeVertArray - 14) * sizeof(DUA_float), 6 * sizeof(DUA_float),
-                            &cursorSubArray[0]);
+                            cursorSubArray.data());
         }
     }
 }

@@ -29,7 +29,7 @@
 
 #include <sstream>
 #include "settings.h"
-#include "loadShaders.h"
+#include "loaders/loadShaders.h"
 #include "Console.h"
 #include <ft2build.h>
 #include FT_FREETYPE_H
