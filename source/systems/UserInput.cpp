@@ -338,6 +338,12 @@ void System_UserInput::handleControlKeys(const Uint8* keyStates){
             if (keyStates[SDL_SCANCODE_C]) {
                 bank->pSpaceControlCurrent->applyInput(ControlSS::ANGBRAKE, 1);
             }
+            if (keyStates[SDL_SCANCODE_LEFTBRACKET]) {
+                bank->pSpaceControlCurrent->rotSenseMod = 0.99f;
+            }
+            if (keyStates[SDL_SCANCODE_RIGHTBRACKET]) {
+                bank->pSpaceControlCurrent->rotSenseMod = 1.01f;
+            }
             break;
         case ControlTypes::NONE:
             break;

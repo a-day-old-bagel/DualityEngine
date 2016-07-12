@@ -32,7 +32,7 @@ namespace DualityEngine {
     
 //    #define DUA_DEBUG_MATRIX_PRINT // Matrix class will include a debug 'print' method to output to stdout
 
-    #define DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE // prevents use of SDL's relative mouse mode which grabs mouse control.
+//    #define DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE // prevents use of SDL's relative mouse mode which grabs mouse control.
     
 
 //    #define DUA_OLD_VIDEO_DRIVERS // openGL 3.0 will be used instead of 3.3

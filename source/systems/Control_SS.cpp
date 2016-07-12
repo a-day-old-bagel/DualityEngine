@@ -134,14 +134,20 @@ void System_Control_SS::tick()
             );
             
             bank->getAngularVelocPtr(bank->activeControlID)->applyImpulse(
-                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::PITCHPOS], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::PITCHPOS])
-              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::PITCHNEG], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::PITCHNEG]),
-                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::YAWPOS  ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::YAWPOS  ])
-              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::YAWNEG  ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::YAWNEG  ]),
-                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::ROLLPOS ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::ROLLPOS ])
-              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::ROLLNEG ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::ROLLNEG ])
-            );            
-            
+                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::PITCHPOS], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::PITCHPOS] * bank->pSpaceControlCurrent->rotSense)
+              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::PITCHNEG], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::PITCHNEG] * bank->pSpaceControlCurrent->rotSense),
+                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::YAWPOS  ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::YAWPOS  ] * bank->pSpaceControlCurrent->rotSense)
+              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::YAWNEG  ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::YAWNEG  ] * bank->pSpaceControlCurrent->rotSense),
+                (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::ROLLPOS ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::ROLLPOS ] * bank->pSpaceControlCurrent->rotSense)
+              - (std::min(bank->pSpaceControlCurrent->throttle[ControlSS::ROLLNEG ], 1.f) * bank->pSpaceControlCurrent->thrust[ControlSS::ROLLNEG ] * bank->pSpaceControlCurrent->rotSense)
+            );
+
+            // update the the rotational sensetivity if it has been modified
+            if (bank->pSpaceControlCurrent->rotSenseMod != 1) {
+                bank->pSpaceControlCurrent->rotSense *= bank->pSpaceControlCurrent->rotSenseMod;
+                bank->pSpaceControlCurrent->rotSenseMod = 1;
+            }
+
             // zero the control component's input information after use.
             bank->pSpaceControlCurrent->zeroInputs();
         }
