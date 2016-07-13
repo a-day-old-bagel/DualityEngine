@@ -30,7 +30,7 @@ namespace DualityEngine {
         ~System_Render_Master();
         void tick();
         bool init(std::stringstream& output);
-		static void checkError(std::stringstream& output, std::string context, int line = -1);
+
     };
 
 }

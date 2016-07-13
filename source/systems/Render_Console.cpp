@@ -3,18 +3,14 @@
  *
  ****************************************************************/
 #include "Render_Console.h"
-#include "Render_Master.h"
+#include "errorChecks.h"
 
 namespace DualityEngine {
 
     const glm::vec3 System_Render_Console::localTextColor = {0.5, 1.0, 0.3};
     const glm::vec3 System_Render_Console::localBackColor = {0.05, 0.05, 0.05};
-    const char System_Render_Console::firstAsciiChar = ' ';
-    const char System_Render_Console::lastAsciiChar = '~';
     const std::string System_Render_Console::commPromptNorm = ">: ";
     const std::string System_Render_Console::commPromptMenu = "MENU>: ";
-    const int System_Render_Console::numTexPanels = lastAsciiChar - firstAsciiChar + 2; //+2 is for the 'unknown char/background' quad plus the off-by-one.
-    const float System_Render_Console::texPanelAdvance = 1.f / (float) numTexPanels; // this is how far the GPU texture sampler will have to move to get to the next character in the texture atlas.
     const int System_Render_Console::numCharsY_comm = 1;   // don't change this for now - not completely supported.
 
     System_Render_Console::System_Render_Console(Bank *bank, Console *console)
@@ -81,7 +77,9 @@ namespace DualityEngine {
         txtrLoc = glGetUniformLocation(shdrLoc, "font_texture");
         unifLoc_color = glGetUniformLocation(shdrLoc, "penColor");
 
-        if (!generateAndBufferFontAtlas(output, Settings::Console::fontName.c_str())) return false;
+        font.stretchMultW = Settings::Console::fontStretchX;
+        font.stretchMultH = Settings::Console::fontStretchY;
+        fontRepo.request(Settings::Console::fontName.c_str(), font, output);
 
         // buffer part
         glGenVertexArrays(1, &VAOloc_text);
@@ -92,7 +90,7 @@ namespace DualityEngine {
 
         hasInitialized = true;
 
-		System_Render_Master::checkError(output, "Render_Console.cpp", __LINE__);
+		checkError(output, "Render_Console.cpp", __LINE__);
 
         return true;
     }
@@ -102,7 +100,7 @@ namespace DualityEngine {
             updateBuffersWithCurrentConsoleText();
 
             glActiveTexture(GL_TEXTURE1);
-            glBindTexture(GL_TEXTURE_2D, texture);
+            glBindTexture(GL_TEXTURE_2D, font.texture);
 
             glUseProgram(shdrLoc);
             glUniform1i(txtrLoc, 1);
@@ -147,13 +145,13 @@ namespace DualityEngine {
 
         const float offSetToCenterX = ((float) charWidth - 2) / (float) charWidth;
         const float offSetToCenterY = ((float) charHeight + 2) / (float) charHeight;
-        UVs[sizeVertArray - 8] = (1.f - offSetToCenterX) / numTexPanels;
+        UVs[sizeVertArray - 8] = (1.f - offSetToCenterX) / font.getNumTexPanels();
         UVs[sizeVertArray - 7] = 1.f - offSetToCenterY;
-        UVs[sizeVertArray - 6] = offSetToCenterX / numTexPanels;
+        UVs[sizeVertArray - 6] = offSetToCenterX / font.getNumTexPanels();;
         UVs[sizeVertArray - 5] = 1.f - offSetToCenterY;
-        UVs[sizeVertArray - 4] = (1.f - offSetToCenterX) / numTexPanels;
+        UVs[sizeVertArray - 4] = (1.f - offSetToCenterX) / font.getNumTexPanels();;
         UVs[sizeVertArray - 3] = offSetToCenterY;
-        UVs[sizeVertArray - 2] = offSetToCenterX / numTexPanels;
+        UVs[sizeVertArray - 2] = offSetToCenterX / font.getNumTexPanels();;
         UVs[sizeVertArray - 1] = offSetToCenterY;
 
         indices[sizeIndexArray - 6] = (DUA_uint16)(sizeVertArray / 2 - 4);
@@ -171,11 +169,11 @@ namespace DualityEngine {
         verts[sizeVertArray - 10] = cursorZeroPosX + cursorHalfWidth;
         verts[sizeVertArray - 9] = cursorPosY - cursorHeight;
 
-        UVs[sizeVertArray - 14] = (1.f - offSetToCenterX) / numTexPanels;
+        UVs[sizeVertArray - 14] = (1.f - offSetToCenterX) / font.getNumTexPanels();;
         UVs[sizeVertArray - 13] = 1.f - offSetToCenterY;
-        UVs[sizeVertArray - 12] = offSetToCenterX / numTexPanels;
+        UVs[sizeVertArray - 12] = offSetToCenterX / font.getNumTexPanels();;
         UVs[sizeVertArray - 11] = 1.f - offSetToCenterY;
-        UVs[sizeVertArray - 10] = (1.f - offSetToCenterX) / numTexPanels;
+        UVs[sizeVertArray - 10] = (1.f - offSetToCenterX) / font.getNumTexPanels();;
         UVs[sizeVertArray - 9] = offSetToCenterY;
 
         indices[sizeIndexArray - 9] = sizeVertArray / 2 - 7;
@@ -259,125 +257,8 @@ namespace DualityEngine {
 
         return true;
     }
-    bool System_Render_Console::generateAndBufferFontAtlas(std::stringstream &output, const char *fontFile) {
-        FT_Library library;
-        FT_Face face;
-
-        int panelWidth = charWidth;
-        int panelHeight = -charHeight;  // REMEMBER stupid openGL y flipping - texHeight is positive, charHeight is negative...
-        const int baseline = panelHeight * 0.8; // 4/5th of panel height FROM THE TOP (stupid openGL)
-        int yOffset = 0;    // this is how far each char will be drawn from the top side of its quad (based on offset from font 'baseline')
-        int xOffset = 0;    // this is how far each char will be drawn from the left side of its quad.
-        float xPanelStart = 0;
-        int texBytes = numTexPanels * panelWidth * panelHeight;
-
-        FT_Error error = FT_Init_FreeType(&library);
-        if (error) {
-            output << "\nERROR initializing freeType library.\n";
-            return false;
-        }
-        error = FT_New_Face(library, fontFile, 0, &face);
-        if (error == FT_Err_Unknown_File_Format) {
-            output << "\nERROR loading font: unknown file format.\n";
-            return false;
-        } else if (error) {
-            output << "\nERROR loading font.\n";
-            return false;
-        }
-        error = FT_Set_Pixel_Sizes(face, panelWidth * 1.8,
-                                   panelHeight); // extra factor in width is just 'cause fonts were looking "skinny." Will need modification to use other fonts.
-        if (error) {
-            output << "\nERROR setting font size.\n";
-            return false;
-        }
-
-//        DUA_uint8 baseTexData[texBytes];
-//        memset(baseTexData, 0x00, texBytes);
-
-		DUA_uint8* baseTexData = new DUA_uint8[texBytes];
-		memset(baseTexData, 0x00, texBytes);
-
-        glGenTextures(1, &texture);
-        glBindTexture(GL_TEXTURE_2D, texture);
-        glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, panelWidth * numTexPanels, panelHeight, 0, GL_RED, GL_UNSIGNED_BYTE,
-                     &baseTexData[0]);
-
-		System_Render_Master::checkError(output, "Render_Console.cpp", __LINE__);
-
-//        DUA_colorByte firstPanel[panelWidth * panelHeight];
-		DUA_colorByte* firstPanel = new DUA_colorByte[panelWidth * panelHeight];
-        for (int i = 0; i < panelHeight; i++) {
-            for (int j = 0; j < panelWidth; j++) {
-                if (i == 0 || i == panelHeight - 1 || j == 0 || j == panelWidth - 1) {
-                    firstPanel[i * panelWidth + j] = 0xFF;
-                } else {
-                    firstPanel[i * panelWidth + j] = 0xA0;
-                }
-            }
-        }
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, panelWidth, panelHeight, GL_RED, GL_UNSIGNED_BYTE, firstPanel);
-
-        for (char i = firstAsciiChar; i <= lastAsciiChar; i++) {
-            FT_UInt glyph_index = FT_Get_Char_Index(face, (int) i);
-
-            error = FT_Load_Glyph(face, glyph_index /*i*/, FT_LOAD_RENDER);
-            if (error) {
-                output << "\nERROR loading font character " << i << std::endl;
-                glTexSubImage2D(GL_TEXTURE_2D, 0, (i - firstAsciiChar + 1) * panelWidth, 0, panelWidth, panelHeight,
-                                GL_RED, GL_UNSIGNED_BYTE, firstPanel);
-                continue;
-            }
-
-            FT_Bitmap bmp = face->glyph->bitmap;
-            int bmpW = bmp.width;
-            int bmpH = bmp.rows;
-
-            if (bmp.buffer == NULL) {
-                if (i != ' ') {  // because why would there be a bitmap for 'space'?
-                    output << "No bitmap loaded for character '" << i << "'.\n";
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - firstAsciiChar + 1) * panelWidth, 0, panelWidth, panelHeight,
-                                    GL_RED, GL_UNSIGNED_BYTE, firstPanel);
-                    continue;
-                }
-            } else {
-                yOffset = baseline - face->glyph->metrics.horiBearingY / 64; // units in 1/64 pixel (stupid freetype)
-                xOffset = face->glyph->metrics.horiBearingX / 64;
-                xPanelStart = (i - firstAsciiChar + 1) * panelWidth + xOffset;
-                glTexSubImage2D(GL_TEXTURE_2D, 0, xPanelStart, std::max(yOffset, 0), bmpW,
-                                std::min({bmpH, panelHeight - yOffset, panelHeight}), GL_RED, GL_UNSIGNED_BYTE,
-                                bmp.buffer);
-            }
-
-            GLenum glErr = glGetError();
-            if (glErr != GL_NO_ERROR) {
-
-                xPanelStart = (i - firstAsciiChar + 1) * panelWidth + (panelWidth - bmpW);
-                glTexSubImage2D(GL_TEXTURE_2D, 0, xPanelStart, std::max(yOffset, 0), bmpW,
-                                std::min({bmpH, panelHeight - yOffset, panelHeight}), GL_RED, GL_UNSIGNED_BYTE,
-                                bmp.buffer);
-
-                glErr = glGetError();
-                if (glErr != GL_NO_ERROR) {
-                    output << "glError while subbing texture for '" << i << "': " << gluErrorString(glErr) << std::endl;
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - firstAsciiChar + 1) * panelWidth, 0, panelWidth, panelHeight,
-                                    GL_RED, GL_UNSIGNED_BYTE, firstPanel);
-                    continue;
-                }
-            }
-        }
-
-        FT_Done_Face(face);
-        FT_Done_FreeType(library);
-
-		delete[] baseTexData;
-		delete[] firstPanel;
-
-        return true;
-    }
     void System_Render_Console::updateBuffersWithCurrentConsoleText() {
+        float panelAdvance = font.getPanelAdvance();
         if (console->bodyHasChangedVisually) {
             console->bodyHasChangedVisually = false;
             numLinesCarried = 0;
@@ -409,16 +290,16 @@ namespace DualityEngine {
 
                 for (int j = 0; j < numCharsX; j++) {
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 0] =
-                            (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance;
+                            (graphicalLine[j] - font.firstChar + 1) * panelAdvance;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 1] = 0.0;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 2] =
-                            (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance + texPanelAdvance;
+                            (graphicalLine[j] - font.firstChar + 1) * panelAdvance + panelAdvance;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 3] = 0.0;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 4] =
-                            (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance;
+                            (graphicalLine[j] - font.firstChar + 1) * panelAdvance;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 5] = 1.0;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 6] =
-                            (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance + texPanelAdvance;
+                            (graphicalLine[j] - font.firstChar + 1) * panelAdvance + panelAdvance;
                     bodySubArray[(numCharsY_body - i - 1) * numCharsX * 8 + j * 8 + 7] = 1.0;
                 }
             }
@@ -453,13 +334,13 @@ namespace DualityEngine {
             }
             graphicalLine.insert(0, console->menuIsActive ? commPromptMenu : commPromptNorm);
             for (int j = 0; j < numCharsX; j++) {
-                commSubArray[j * 8 + 0] = (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance;
+                commSubArray[j * 8 + 0] = (graphicalLine[j] - font.firstChar + 1) * panelAdvance;
                 commSubArray[j * 8 + 1] = 0.0;
-                commSubArray[j * 8 + 2] = (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance + texPanelAdvance;
+                commSubArray[j * 8 + 2] = (graphicalLine[j] - font.firstChar + 1) * panelAdvance + panelAdvance;
                 commSubArray[j * 8 + 3] = 0.0;
-                commSubArray[j * 8 + 4] = (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance;
+                commSubArray[j * 8 + 4] = (graphicalLine[j] - font.firstChar + 1) * panelAdvance;
                 commSubArray[j * 8 + 5] = 1.0;
-                commSubArray[j * 8 + 6] = (graphicalLine[j] - firstAsciiChar + 1) * texPanelAdvance + texPanelAdvance;
+                commSubArray[j * 8 + 6] = (graphicalLine[j] - font.firstChar + 1) * panelAdvance + panelAdvance;
                 commSubArray[j * 8 + 7] = 1.0;
             }
 

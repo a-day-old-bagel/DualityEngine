@@ -33,9 +33,9 @@ cl /c /I"%GLEW_PATH%\include" /I"%SDL2_PATH%\include" /I"%ASSIMP_PATH%\include" 
  /I"%FREETYPE_PATH%\include" /I"%FREETYPE_PATH%\include\freetype2" ^
  /I"%top%source"                                     ^
  /I"%top%source\assetManagement"                     ^
- /I"%top%source\assetManagement\loaders"  	     ^
+ /I"%top%source\assetManagement\loaders"  	         ^
  /I"%top%source\assetManagement\programmaticAssets"  ^
- /I"%top%source\assetManagement\repos"  	     ^
+ /I"%top%source\assetManagement\repos"  	         ^
  /I"%top%source\bank"                                ^
  /I"%top%source\components"                          ^
  /I"%top%source\entities"                            ^
@@ -49,12 +49,13 @@ cl /c /I"%GLEW_PATH%\include" /I"%SDL2_PATH%\include" /I"%ASSIMP_PATH%\include" 
  "%top%source\Game.cpp"                                                  ^
  "%top%source\assetManagement\fileIO.cpp"                                ^
  "%top%source\assetManagement\loaders\loadCubeMap.cpp"                   ^
+ "%top%source\assetManagement\loaders\loadFont.cpp"                      ^
  "%top%source\assetManagement\loaders\loadShaders.cpp"                   ^
  "%top%source\assetManagement\programmaticAssets\DebugBackground.cpp"    ^
- "%top%source\assetManagement\repos\FontRepo.cpp"                	 ^
- "%top%source\assetManagement\repos\MeshRepo.cpp"                  	 ^
- "%top%source\assetManagement\repos\ShaderRepo.cpp"                	 ^
- "%top%source\assetManagement\repos\SoundRepo.cpp"                	 ^
+ "%top%source\assetManagement\repos\FontRepo.cpp"                	     ^
+ "%top%source\assetManagement\repos\MeshRepo.cpp"                  	     ^
+ "%top%source\assetManagement\repos\ShaderRepo.cpp"                	     ^
+ "%top%source\assetManagement\repos\SoundRepo.cpp"                	     ^
  "%top%source\assetManagement\repos\TextureRepo.cpp"                	 ^
  "%top%source\bank\bank.cpp"                                             ^
  "%top%source\entities\Box.cpp"                                          ^
@@ -72,6 +73,7 @@ cl /c /I"%GLEW_PATH%\include" /I"%SDL2_PATH%\include" /I"%ASSIMP_PATH%\include" 
  "%top%source\systems\UserInput.cpp"                                     ^
  "%top%source\ui\TextLine.cpp"                                           ^
  "%top%source\utilities\Console.cpp"                                     ^
+ "%top%source\utilities\errorChecks.cpp"                                 ^
  "%top%source\utilities\Event.cpp"                                       ^
  "%top%source\utilities\helpDocs.cpp"                                    ^
  "%top%source\utilities\settings.cpp"                                    ^
@@ -91,6 +93,7 @@ link /OUT:DualityEngine.exe /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi3
  Game.obj                  ^
  fileIO.obj                ^
  loadCubeMap.obj           ^
+ loadFont.obj              ^
  loadShaders.obj           ^
  DebugBackground.obj       ^
  FontRepo.obj              ^
@@ -112,8 +115,9 @@ link /OUT:DualityEngine.exe /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi3
  Render_Models.obj         ^
  Scripting.obj             ^
  UserInput.obj             ^
- TextLine.obj		   ^
+ TextLine.obj		       ^
  Console.obj               ^
+ errorChecks.obj           ^
  Event.obj                 ^
  helpDocs.obj              ^
  settings.obj              ^

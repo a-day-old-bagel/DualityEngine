@@ -76,11 +76,15 @@ namespace DualityEngine {
         // forward, backward, right, left, up, down roll, pitch, yaw, linear break, angular break
         // all input values range from 0 - 1.
         DUA_float throttle[14] = {0};
-        DUA_float rotSense = 1.f;
-        DUA_float rotSenseMod = 1.f;
-        DUA_float thrust[12] = {1.0};  // lacks breaks, which use the 6 directional thrusts and 6 angular torques respectively.
+        DUA_float thrust[12] = {1.0};  // lacks brakes, which use the 6 directional thrusts and 6 angular torques respectively.
         bool autoBrakeLinear = true;
         bool autoBrakeAngular = true;
+
+        uint32_t angBrakeEngageCounter = 0;
+
+        // These modify the sensitivity of the gyro controls (so mouse sensetivity, probably)
+        DUA_float rotSense = 1.f;
+        DUA_float rotSenseMod = 1.f;
         
     };
 

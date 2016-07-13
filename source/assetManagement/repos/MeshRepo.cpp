@@ -3,10 +3,10 @@
 //
 
 #include "MeshRepo.h"
-#include "Render_Master.h"
 #include <assimp/Importer.hpp>      // C++ importer interface
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
+#include "errorChecks.h"
 
 namespace DualityEngine {
     MeshRepo::MeshRepo(DUA_uint64 initialVBOsizeInBytes /*= 8000000*/){
@@ -34,7 +34,7 @@ namespace DualityEngine {
 		glEnableVertexAttribArray(2);
 		glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), DUA_GL_BUFFER_OFFSET(6 * sizeof(float)));
 
-		System_Render_Master::checkError(output, "MeshRepo.cpp", __LINE__);
+		checkError(output, "MeshRepo.cpp", __LINE__);
 		output << "Initialization of mesh repository has finished.\n";
 		return true;
 	}

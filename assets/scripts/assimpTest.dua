@@ -8,6 +8,7 @@ add position player 0 0 4
 add orientation player 0 0 0
 add linveloc player 0 0 0
 add angveloc player 0 0 0
+# add spacecontrol player 0.0001 0.0001 0.0001 0.0001 0.0001 0.0001 0.00003 0.00003 0.00003 0.00003 0.00003 0.00003
 add spacecontrol player all 0.0001
 add model player assets/models/BiTCube/bCube.obj
 

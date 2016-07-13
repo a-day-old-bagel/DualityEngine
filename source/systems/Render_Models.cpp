@@ -2,7 +2,7 @@
  * Galen Cochrane, 1 FEB 2015
  ****************************************************************/
 #include "Render_Models.h"
-#include "Render_Master.h"
+#include "errorChecks.h"
 #include "loaders/loadShaders.h"
 #include "extendGlm.h"
 
@@ -29,7 +29,7 @@ bool System_Render_Models::init(std::stringstream& engineOut)
     unifLoc_MVP = (GLuint)glGetUniformLocation(shdrLoc, "MVP");
     unifLoc_M = (GLuint)glGetUniformLocation(shdrLoc, "M");
 
-	System_Render_Master::checkError(engineOut, "Render_Models.cpp", __LINE__);
+	checkError(engineOut, "Render_Models.cpp", __LINE__);
 
     return true;
 }

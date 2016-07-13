@@ -34,16 +34,11 @@
 #define GLM_FORCE_RADIANS
 #endif
 
-//<editor-fold defaultstate="collapsed" desc="Includes">
-
 #include "System.h"
 #include "Console.h"
 #include "settings.h"
-#include "loaders/loadShaders.h"
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
-//</editor-fold>
+#include "loadShaders.h"
+#include "FontRepo.h"
 
 namespace DualityEngine {
 
@@ -52,19 +47,14 @@ namespace DualityEngine {
     private:
         static const glm::vec3 localTextColor;
         static const glm::vec3 localBackColor;
-        static const char firstAsciiChar;    // this is the first ascii char representable
-        static const char lastAsciiChar;     // and this is the last (look at ascii table)
         static const std::string commPromptNorm; // this appears as the prompt for the console when not in the menu
         static const std::string commPromptMenu; // this appears as the prompt when in the menu
-        static const int numTexPanels;
-        static const float texPanelAdvance;    // this is how far the GPU texture sampler will have to move to get to the next character in the texture atlas.
         static const int numCharsY_comm;
 
         bool hasInitialized;
         
         // All of these are openGL-specific fields required to render the console
         GLuint buffers[3];
-        GLuint texture;
         GLuint VAOloc_text;
         GLuint shdrLoc;
         GLuint txtrLoc;
@@ -114,12 +104,13 @@ namespace DualityEngine {
         int sizeIndexArray;        
         int marginWidth;
         int marginHeight;
+
+        FontDescriptor font;
+        FontRepo fontRepo;
+
         
         // Called once upon initialization, sets vertex positions for the character quads, background quad, and cursor triangle.
         bool generateAndBufferGeometry (std::stringstream& output);
-        
-        // Called once upon init, creates the texture (image) of the font atlas that is then given to the GPU.
-        bool generateAndBufferFontAtlas(std::stringstream& output, const char* fontFile);
         
         // called each draw (as long as text has changed), this calculates the new texture atlas UVs for each char quad.
         void updateBuffersWithCurrentConsoleText();

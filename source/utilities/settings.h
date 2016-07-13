@@ -37,9 +37,9 @@ namespace DualityEngine {
 
 //    #define DUA_OLD_VIDEO_DRIVERS // openGL 3.0 will be used instead of 3.3
 
-//    #define DUA_FULLSCREEN // engine will run in fullscreen mode
+    #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
-    #define DUA_DEFUALT_WHICH_MONITOR 0
+    #define DUA_DEFUALT_WHICH_MONITOR 1
     
     #define DUA_DEFAULT_SCREENRES_X 1024    // Defualt screen resolution X
     #define DUA_DEFAULT_SCREENRES_Y 768     // Defualt screen resolution Y
@@ -54,6 +54,10 @@ namespace DualityEngine {
 
     #define DUA_CONTROLSS_LINEAR_BRAKING_DEADZONE 1e-20
     #define DUA_CONTROLSS_ANGULAR_BRAKING_DEADZONE 1e-20
+    #define DUA_CONTROLSS_ANGULAR_BRAKING_ENGAGE_COUNT 20
+    #define DUA_CONTROLSS_ANGULAR_BRAKING_THROTTLE 0.25f
+    #define DUA_CONTROLSS_ANGULAR_SENSE_MAX 10.f
+    #define DUA_CONTROLSS_ANGULAR_SENSE_MIN 0.1f
     
     /* ====================================================================== */
     
@@ -141,27 +145,34 @@ namespace DualityEngine {
 
     /* RUN-TIME MUTABLE SETTINGS *AKA GLOBAL VARIABLES* */
     
-    namespace Settings{
+    namespace Settings {
         
-        namespace Systems{
-            extern uint systemsPauseTimeout;
+        namespace Systems {
+            extern uint32_t systemsPauseTimeout;
         }
         
-        namespace Display{
+        namespace Display {
             extern int screenResX, screenResY;
             extern float screenAspectRatio;
             extern int whichMonitor, monitorOffsetX, monitorOffsetY;
 			extern bool vSync;
         }
         
-        namespace Console{
-            extern int locX, locY, width, height, charW, charH, marginX, marginY, spacingX, spacingY;
+        namespace Console {
+            extern int locX, locY, width, height, marginX, marginY, spacingX, spacingY;
+            extern uint32_t charW, charH;
+            extern float baseLineFromTop, fontStretchX, fontStretchY;
+            extern char firstChar, lastChar;
             extern std::string fontName;
             extern glm::vec3 backColor;
             extern glm::vec3 textColor;
         }
+
+        namespace Font {
+            extern std::string assetDirPrefix;
+        }
         
-        namespace Sky{
+        namespace Sky {
             extern std::string fileName, fileType;
         }
     }

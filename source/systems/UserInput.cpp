@@ -339,10 +339,10 @@ void System_UserInput::handleControlKeys(const Uint8* keyStates){
                 bank->pSpaceControlCurrent->applyInput(ControlSS::ANGBRAKE, 1);
             }
             if (keyStates[SDL_SCANCODE_LEFTBRACKET]) {
-                bank->pSpaceControlCurrent->rotSenseMod = 0.99f;
+                bank->pSpaceControlCurrent->rotSenseMod = -0.01f;
             }
             if (keyStates[SDL_SCANCODE_RIGHTBRACKET]) {
-                bank->pSpaceControlCurrent->rotSenseMod = 1.01f;
+                bank->pSpaceControlCurrent->rotSenseMod = 0.01f;
             }
             break;
         case ControlTypes::NONE:
@@ -365,6 +365,7 @@ void System_UserInput::handleMouseMotion(int x, int y){
             } else {
                 bank->pSpaceControlCurrent->applyInput(ControlSS::PITCHPOS, y * -0.06f);
             }
+            bank->pSpaceControlCurrent->angBrakeEngageCounter = 0;
             break;
         case ControlTypes::NONE:
             break;

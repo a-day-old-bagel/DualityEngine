@@ -2,6 +2,7 @@
  * Galen Cochrane, 1 FEB 2015
  ****************************************************************/
 #include "Render_Master.h"
+#include "errorChecks.h"
 
 using namespace DualityEngine;
 
@@ -75,32 +76,6 @@ bool System_Render_Master::init(std::stringstream& engineOut){
 	checkError(engineOut, "after GL configuration (at end of System_Render_Master::init()");
 	
     return true;
-}
-
-/*
- * DO NOT call this function before the gl context has initialized.  It will make an infinite loop.
- * This is because glGetError always returns GL_INVALID_OPERATION before there exists a context.
- */
-void DualityEngine::System_Render_Master::checkError(std::stringstream& engineOut, std::string context, int line /*= -1*/) {
-    GLenum glErr = glGetError();
-    if (glErr != GL_NO_ERROR) {
-        engineOut << "<!>    GL error(s) detected (file " << context;
-        if (line > 0) {
-            engineOut << " at line " << line;
-        }
-        engineOut << "):\n";
-        int loopGuard = 0;
-        while (glErr != GL_NO_ERROR) {
-            if (++loopGuard <= 10) {
-                engineOut << "\t\t\t" << gluErrorString(glErr) << std::endl;
-                glErr = glGetError();
-            }
-            else {
-                engineOut << "\t\t\t<!> Suppressing further errors...\n";
-                break;
-            }
-        }
-    }
 }
 
 void System_Render_Master::tick()

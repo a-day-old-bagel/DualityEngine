@@ -17,7 +17,6 @@ namespace DualityEngine{
 
     glm::vec3 operator * (glm::vec3 vec, float scalar);
 
-
     DUA_matrixVal dotVec4(DualityEngine::Vec4& mat1, DualityEngine::Vec4& mat2);
     DUA_matrixVal dotVec3(DualityEngine::Vec3& mat1, DualityEngine::Vec3& mat2);
 
@@ -36,6 +35,22 @@ namespace DualityEngine{
                              DUA_matrixVal zFar);
     void transformMatrixTranslate(DualityEngine::Mat4x4& mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z);
     void transformMatrixScale(DualityEngine::Mat4x4& mat, DUA_matrixVal X, DUA_matrixVal Y, DUA_matrixVal Z);
+
+    // if values are equal, favors 0, then 1, then 2 as tiebreaker.
+    template<typename T>
+    T max(T&& t0, T&& t1, T&& t2) {
+        if (t0 >= t1) {
+            if (t0 >= t2) {
+                return t0;
+            } else {
+                return t2;
+            }
+        } else if (t1 >= t2) {
+            return t1;
+        } else {
+            return t2;
+        }
+    }
 
 } // namespace DualityEngine
 
