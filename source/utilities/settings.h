@@ -160,16 +160,22 @@ namespace DualityEngine {
         
         namespace Console {
             extern int locX, locY, width, height, marginX, marginY, spacingX, spacingY;
-            extern uint32_t charW, charH;
+            extern std::string fontName;
+            extern uint32_t panelW, panelH;
             extern float baseLineFromTop, fontStretchX, fontStretchY;
             extern char firstChar, lastChar;
-            extern std::string fontName;
             extern glm::vec3 backColor;
             extern glm::vec3 textColor;
         }
 
         namespace Font {
             extern std::string assetDirPrefix;
+            namespace Default {
+                extern std::string fontName;
+                extern uint32_t charW, charH;
+                extern float baseLineFromTop, fontStretchX, fontStretchY;
+                extern char firstChar, lastChar;
+            }
         }
         
         namespace Sky {

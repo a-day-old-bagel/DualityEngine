@@ -7,6 +7,6 @@ set( INCLUDE_DIRS ${INCLUDE_DIRS} ${DIR} PARENT_SCOPE )
 
 # include all headers/source in current directory
 set( SOURCE_FILES ${SOURCE_FILES}
-        "${DIR}/TextLine.cpp"        "${DIR}/TextLine.h"
+        "${DIR}/TextField.cpp"        "${DIR}/TextField.h"
         PARENT_SCOPE
         )

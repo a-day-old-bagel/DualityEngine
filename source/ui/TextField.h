@@ -7,9 +7,13 @@
 
 //glGetIntegerv(GL_MAX_TEXTURE_IMAGE_UNITS, &texture_units);
 
-namespace DualityEngine {
-    class TextLine {
+#include "FontRepo.h"
 
+namespace DualityEngine {
+    class TextField {
+        FontDescriptor font;`
+    public:
+        TextField();
     };
 }
 

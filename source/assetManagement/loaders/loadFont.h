@@ -13,8 +13,8 @@
 namespace DualityEngine {
     struct FontDescriptor {
         GLuint texture;
-        uint32_t panelW = Settings::Console::charW;
-        uint32_t panelH = Settings::Console::charH;
+        uint32_t panelW = Settings::Console::panelW;
+        uint32_t panelH = Settings::Console::panelH;
         float baseLineFromTop = Settings::Console::baseLineFromTop;
         float stretchMultW = 1.f;
         float stretchMultH = 1.f;

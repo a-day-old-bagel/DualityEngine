@@ -38,8 +38,8 @@ namespace DualityEngine {
         screenOffsetX = Settings::Console::locX;
         screenOffsetY = -Settings::Console::locY; // openGL flips y+ is up
 
-        charWidth = Settings::Console::charW;
-        charHeight = (-1) * Settings::Console::charH; // openGL flips y+ is up
+        charWidth = Settings::Console::panelW;
+        charHeight = (-1) * Settings::Console::panelH; // openGL flips y+ is up
 
         charStepX = charWidth + Settings::Console::spacingX;
         charStepY = charHeight - Settings::Console::spacingY;
@@ -55,8 +55,8 @@ namespace DualityEngine {
         marginWidth = (innerWidth % charStepX) / 2 + Settings::Console::marginX;
         marginHeight = (-1) * (-innerHeight % -charStepY) / 3 - Settings::Console::marginY; // openGL flips y+ is up
 
-        cursorHalfWidth = (float) Settings::Console::charW / (float) Settings::Display::screenResX;
-        cursorHeight = (float) Settings::Console::charH / (float) Settings::Display::screenResY;
+        cursorHalfWidth = (float) Settings::Console::panelW / (float) Settings::Display::screenResX;
+        cursorHeight = (float) Settings::Console::panelH / (float) Settings::Display::screenResY;
         cursorZeroPosX = (screenOffsetX + marginWidth/* + charStepX * commPromptNorm.size()*/) /
                          ((float) Settings::Display::screenResX * 0.5f) - 1;
         cursorAdvanceX = (charStepX) / ((float) Settings::Display::screenResX * 0.5);

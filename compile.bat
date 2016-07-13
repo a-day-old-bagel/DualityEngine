@@ -71,7 +71,7 @@ cl /c /I"%GLEW_PATH%\include" /I"%SDL2_PATH%\include" /I"%ASSIMP_PATH%\include" 
  "%top%source\systems\Render_Models.cpp"                                 ^
  "%top%source\systems\Scripting.cpp"                                     ^
  "%top%source\systems\UserInput.cpp"                                     ^
- "%top%source\ui\TextLine.cpp"                                           ^
+ "%top%source\ui\TextField.cpp"                                          ^
  "%top%source\utilities\Console.cpp"                                     ^
  "%top%source\utilities\errorChecks.cpp"                                 ^
  "%top%source\utilities\Event.cpp"                                       ^
@@ -115,7 +115,7 @@ link /OUT:DualityEngine.exe /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi3
  Render_Models.obj         ^
  Scripting.obj             ^
  UserInput.obj             ^
- TextLine.obj		       ^
+ TextField.obj		       ^
  Console.obj               ^
  errorChecks.obj           ^
  Event.obj                 ^

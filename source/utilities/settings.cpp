@@ -23,24 +23,35 @@ namespace DualityEngine {
             int locY = 0;
             int width = DUA_DEFAULT_CONSOLEWIDTH;
             int height = DUA_DEFAULT_CONSOLEHEIGHT;
-            uint32_t charW = 10;
-            uint32_t charH = 20;
             int marginX = 10;
             int marginY = 5;
             int spacingX = 2;
             int spacingY = 5;
+            std::string fontName = "Inconsolata-LGC.otf";
+            uint32_t panelW = 10;
+            uint32_t panelH = 20;
             float baseLineFromTop = 0.8;
             float fontStretchX = 1.8f;
             float fontStretchY = 1.f;
             char firstChar = ' ';
             char lastChar = '~';
-            std::string fontName = "Inconsolata-LGC.otf";
             glm::vec3 backColor = {0.05, 0.05, 0.05};
             glm::vec3 textColor = {0.5, 1.0, 0.3};
         }
 
         namespace Font {
             std::string assetDirPrefix = "assets/fonts/";
+
+            namespace Default {
+                std::string fontName = "Inconsolata-LGC.otf";
+                uint32_t charW = 10;
+                uint32_t charH = 20;
+                float baseLineFromTop = 0.8;
+                float fontStretchX = 1.8f;
+                float fontStretchY = 1.f;
+                char firstChar = ' ';
+                char lastChar = '~';
+            }
         }
         
         namespace Sky{
