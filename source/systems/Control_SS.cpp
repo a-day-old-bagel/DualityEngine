@@ -146,7 +146,7 @@ void System_Control_SS::tick()
             bank->pSpaceControlCurrent->rotSense = DUA_CONTROLSS_ANGULAR_SENSE_MAX;
         }
         bank->pSpaceControlCurrent->rotSenseMod = 0;
-        std::cout << bank->pSpaceControlCurrent->rotSense << std::endl;
+//        std::cout << bank->pSpaceControlCurrent->rotSense << std::endl;
     }
 
     // zero the control component's input information after use.

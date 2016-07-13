@@ -6,7 +6,7 @@
 #include "loadFont.h"
 #include "errorChecks.h"
 
-namespace DualityEngine{
+namespace DualityEngine {
 
     int FontDescriptor::getBaseLineFromTopPix() {
         return (int)(panelH * baseLineFromTop);
@@ -85,8 +85,8 @@ namespace DualityEngine{
         checkError(output, "Render_Console.cpp", __LINE__);
 
         DUA_colorByte* firstPanel = new DUA_colorByte[font.getNumPanelPix()];
-        for (int i = 0; i < font.panelH; i++) {
-            for (int j = 0; j < font.panelW; j++) {
+        for (uint32_t i = 0; i < font.panelH; i++) {
+            for (uint32_t j = 0; j < font.panelW; j++) {
                 if (i == 0 || i == font.panelH - 1 || j == 0 || j == font.panelW - 1) {
                     firstPanel[i * font.panelW + j] = 0xFF;
                 } else {

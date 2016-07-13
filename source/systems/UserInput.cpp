@@ -159,6 +159,11 @@ void System_UserInput::tick(){
                     }
                 }
                 break;
+            case(SDL_MOUSEWHEEL):
+                if (consoleIsActive) {
+                    bank->dlgt->logTraverse(sdlEvent.wheel.y);
+                }
+                break;
             case(SDL_QUIT):
                 bank->dlgt->quit();
                 bank->dlgt->output("\n<!>    FORCED EXIT\n\n");

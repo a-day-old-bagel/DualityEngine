@@ -39,7 +39,7 @@ namespace DualityEngine {
 
     #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
-    #define DUA_DEFUALT_WHICH_MONITOR 1
+    #define DUA_DEFUALT_WHICH_MONITOR 0
     
     #define DUA_DEFAULT_SCREENRES_X 1024    // Defualt screen resolution X
     #define DUA_DEFAULT_SCREENRES_Y 768     // Defualt screen resolution Y
