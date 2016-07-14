@@ -39,7 +39,7 @@ namespace DualityEngine {
 
     #define DUA_FULLSCREEN // engine will run in fullscreen mode
 
-    #define DUA_DEFUALT_WHICH_MONITOR 0
+    #define DUA_DEFUALT_WHICH_MONITOR 1
     
     #define DUA_DEFAULT_SCREENRES_X 1024    // Defualt screen resolution X
     #define DUA_DEFAULT_SCREENRES_Y 768     // Defualt screen resolution Y
@@ -162,7 +162,7 @@ namespace DualityEngine {
             extern int locX, locY, width, height, marginX, marginY, spacingX, spacingY;
             extern std::string fontName;
             extern uint32_t panelW, panelH;
-            extern float baseLineFromTop, fontStretchX, fontStretchY;
+            extern float baseLineFromTop, stretchMultW, stretchMultH;
             extern char firstChar, lastChar;
             extern glm::vec3 backColor;
             extern glm::vec3 textColor;
@@ -172,9 +172,15 @@ namespace DualityEngine {
             extern std::string assetDirPrefix;
             namespace Default {
                 extern std::string fontName;
-                extern uint32_t charW, charH;
-                extern float baseLineFromTop, fontStretchX, fontStretchY;
+                extern uint32_t panelW, panelH;
+                extern float baseLineFromTop, stretchMultW, stretchMultH;
                 extern char firstChar, lastChar;
+            }
+        }
+
+        namespace TextField {
+            namespace Default {
+
             }
         }
         

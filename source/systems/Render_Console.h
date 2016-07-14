@@ -50,8 +50,6 @@ namespace DualityEngine {
         static const std::string commPromptNorm; // this appears as the prompt for the console when not in the menu
         static const std::string commPromptMenu; // this appears as the prompt when in the menu
         static const int numCharsY_comm;
-
-        bool hasInitialized;
         
         // All of these are openGL-specific fields required to render the console
         GLuint buffers[3];
@@ -64,6 +62,8 @@ namespace DualityEngine {
         
         // This is a pointer to a Console object whose text will be rendered by this system.
         Console* console;
+
+        bool hasInitialized;
         
         // All of these are re-used each draw as temporary variables to help in the positioning of the char quads
         // and the reading of text from the console object.

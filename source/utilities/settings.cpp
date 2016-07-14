@@ -31,8 +31,8 @@ namespace DualityEngine {
             uint32_t panelW = 10;
             uint32_t panelH = 20;
             float baseLineFromTop = 0.8;
-            float fontStretchX = 1.8f;
-            float fontStretchY = 1.f;
+            float stretchMultW = 1.8f;
+            float stretchMultH = 1.f;
             char firstChar = ' ';
             char lastChar = '~';
             glm::vec3 backColor = {0.05, 0.05, 0.05};
@@ -44,11 +44,11 @@ namespace DualityEngine {
 
             namespace Default {
                 std::string fontName = "Inconsolata-LGC.otf";
-                uint32_t charW = 10;
-                uint32_t charH = 20;
+                uint32_t panelW = 10;
+                uint32_t panelH = 20;
                 float baseLineFromTop = 0.8;
-                float fontStretchX = 1.8f;
-                float fontStretchY = 1.f;
+                float stretchMultW = 1.8f;
+                float stretchMultH = 1.f;
                 char firstChar = ' ';
                 char lastChar = '~';
             }

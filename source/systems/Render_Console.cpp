@@ -14,11 +14,15 @@ namespace DualityEngine {
     const int System_Render_Console::numCharsY_comm = 1;   // don't change this for now - not completely supported.
 
     System_Render_Console::System_Render_Console(Bank *bank, Console *console)
-            : System<System_Render_Console>(bank, "Console Rendering System", 0) {
-        this->console = console;
-        hasInitialized = false;
-        numLinesCarried = 0;
-        lineHasCarried = false;
+            : System<System_Render_Console>(bank, "Console Rendering System", 0), console(console),
+              hasInitialized(false), numLinesCarried(0), lineHasCarried(false) {
+        font.panelW             = Settings::Console::panelW;
+        font.panelH             = Settings::Console::panelH;
+        font.baseLineFromTop    = Settings::Console::baseLineFromTop;
+        font.stretchMultW       = Settings::Console::stretchMultW;
+        font.stretchMultH       = Settings::Console::stretchMultH;
+        font.firstChar          = Settings::Console::firstChar;
+        font.lastChar           = Settings::Console::lastChar;
     }
     System_Render_Console::~System_Render_Console() {
         this->console = NULL;
@@ -33,7 +37,8 @@ namespace DualityEngine {
     //    }
     }
     bool System_Render_Console::init(std::stringstream &output) {
-        this->console = console;
+
+        fontRepo.request(Settings::Console::fontName.c_str(), font, output);
 
         screenOffsetX = Settings::Console::locX;
         screenOffsetY = -Settings::Console::locY; // openGL flips y+ is up
@@ -76,10 +81,6 @@ namespace DualityEngine {
         attrLoc_uvCoo = glGetAttribLocation(shdrLoc, "UV");
         txtrLoc = glGetUniformLocation(shdrLoc, "font_texture");
         unifLoc_color = glGetUniformLocation(shdrLoc, "penColor");
-
-        font.stretchMultW = Settings::Console::fontStretchX;
-        font.stretchMultH = Settings::Console::fontStretchY;
-        fontRepo.request(Settings::Console::fontName.c_str(), font, output);
 
         // buffer part
         glGenVertexArrays(1, &VAOloc_text);

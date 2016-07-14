@@ -11,15 +11,18 @@
 #include "settings.h"
 
 namespace DualityEngine {
+
     struct FontDescriptor {
+
         GLuint texture;
-        uint32_t panelW = Settings::Console::panelW;
-        uint32_t panelH = Settings::Console::panelH;
-        float baseLineFromTop = Settings::Console::baseLineFromTop;
-        float stretchMultW = 1.f;
-        float stretchMultH = 1.f;
-        char firstChar = Settings::Console::firstChar;
-        char lastChar = Settings::Console::lastChar;
+
+        uint32_t panelW         = Settings::Font::Default::panelW;
+        uint32_t panelH         = Settings::Font::Default::panelH;
+        float baseLineFromTop   = Settings::Font::Default::baseLineFromTop;
+        float stretchMultW      = Settings::Font::Default::stretchMultW;
+        float stretchMultH      = Settings::Font::Default::stretchMultH;
+        char firstChar          = Settings::Font::Default::firstChar;
+        char lastChar           = Settings::Font::Default::lastChar;
 
         int getBaseLineFromTopPix();
         float getPanelAdvance();
@@ -31,7 +34,9 @@ namespace DualityEngine {
         uint32_t getAtlasHeight();
         uint32_t getNumPanelPix();
     };
+
     int loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output);
+
 }
 
 #endif //DUALITYENGINE_LOADFONT_H
