@@ -39,6 +39,19 @@ namespace DualityEngine {
     bool System_Render_Console::init(std::stringstream &output) {
 
         fontRepo.request(Settings::Console::fontName.c_str(), font, output);
+        TextFieldParams bodyParams;
+//        bodyParams.initType     = TextFieldParams::CHAR_NUM_CHAR_SIZE;
+//        bodyParams.numChars     = {30   , 10  };
+        bodyParams.initType     = TextFieldParams::FIELD_SIZE_CHAR_SIZE;
+        bodyParams.fieldSize    = { 0.5 ,  0.5 };
+        bodyParams.charSize     = { 0.01,  0.02};
+        bodyParams.spacing      = { 0.1 ,  0.1 };
+        bodyParams.repo         = &fontRepo;
+        bodyParams.out          = &output;
+        bodyParams.fontName     = Settings::Console::fontName.c_str();
+        bodyParams.screenResX   = (uint32_t)Settings::Display::screenResX;
+        bodyParams.screenResY   = (uint32_t)Settings::Display::screenResY;
+        body.init(bodyParams);
 
         screenOffsetX = Settings::Console::locX;
         screenOffsetY = -Settings::Console::locY; // openGL flips y+ is up
@@ -112,6 +125,7 @@ namespace DualityEngine {
             glUniform3fv(unifLoc_color, 1, &localTextColor[0]);
             glDrawElements(GL_TRIANGLES, sizeIndexArray - 6, GL_UNSIGNED_SHORT, 0);
         }
+        body.draw();
     }
 
     bool System_Render_Console::generateAndBufferGeometry(std::stringstream &output) {
@@ -122,10 +136,6 @@ namespace DualityEngine {
 
         sizeVertArray = (numBodyVerts + numCommVerts + 4 + 3) * 2;// +4 and +2 are for background quad.
         sizeIndexArray = (numBodyTris + numCommTris + 2 + 1) * 3;// +3 and +1 are for the cursor triangle.
-
-//        DUA_float verts[sizeVertArray];
-//        DUA_float UVs[sizeVertArray];
-//        DUA_uint16 indices[sizeIndexArray];
 
 		DUA_float* verts = new DUA_float[sizeVertArray];
 		DUA_float* UVs	 = new DUA_float[sizeVertArray];
@@ -148,11 +158,11 @@ namespace DualityEngine {
         const float offSetToCenterY = ((float) charHeight + 2) / (float) charHeight;
         UVs[sizeVertArray - 8] = (1.f - offSetToCenterX) / font.getNumTexPanels();
         UVs[sizeVertArray - 7] = 1.f - offSetToCenterY;
-        UVs[sizeVertArray - 6] = offSetToCenterX / font.getNumTexPanels();;
+        UVs[sizeVertArray - 6] = offSetToCenterX / font.getNumTexPanels();
         UVs[sizeVertArray - 5] = 1.f - offSetToCenterY;
-        UVs[sizeVertArray - 4] = (1.f - offSetToCenterX) / font.getNumTexPanels();;
+        UVs[sizeVertArray - 4] = (1.f - offSetToCenterX) / font.getNumTexPanels();
         UVs[sizeVertArray - 3] = offSetToCenterY;
-        UVs[sizeVertArray - 2] = offSetToCenterX / font.getNumTexPanels();;
+        UVs[sizeVertArray - 2] = offSetToCenterX / font.getNumTexPanels();
         UVs[sizeVertArray - 1] = offSetToCenterY;
 
         indices[sizeIndexArray - 6] = (DUA_uint16)(sizeVertArray / 2 - 4);

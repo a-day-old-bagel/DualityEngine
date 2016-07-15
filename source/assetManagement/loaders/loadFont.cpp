@@ -88,7 +88,7 @@ namespace DualityEngine {
         for (uint32_t i = 0; i < font.panelH; i++) {
             for (uint32_t j = 0; j < font.panelW; j++) {
                 if (i == 0 || i == font.panelH - 1 || j == 0 || j == font.panelW - 1) {
-                    firstPanel[i * font.panelW + j] = 0xFF;
+                    firstPanel[i * font.panelW + j] = 0x80;
                 } else {
                     firstPanel[i * font.panelW + j] = 0xA0;
                 }

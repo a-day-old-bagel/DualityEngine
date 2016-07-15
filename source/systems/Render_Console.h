@@ -39,6 +39,7 @@
 #include "settings.h"
 #include "loadShaders.h"
 #include "FontRepo.h"
+#include "TextField.h"
 
 namespace DualityEngine {
 
@@ -107,7 +108,7 @@ namespace DualityEngine {
 
         FontDescriptor font;
         FontRepo fontRepo;
-
+        TextField body;
         
         // Called once upon initialization, sets vertex positions for the character quads, background quad, and cursor triangle.
         bool generateAndBufferGeometry (std::stringstream& output);

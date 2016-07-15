@@ -19,12 +19,12 @@ namespace DualityEngine {
         uint32_t screenResY;
 
         struct {
-            unsigned float x;
-            unsigned float y;
+            float x;
+            float y;
         } spacing;  // portion of char size
         struct {
-            unsigned float w;
-            unsigned float h;
+            float w;
+            float h;
         } charSize; // portion of screen size
 
         enum {
@@ -43,14 +43,29 @@ namespace DualityEngine {
             } numChars;
         };
 
-        float getAdvanceX();
-        float getAdvanceY();
+        float getAdvX();
+        float getAdvY();
+        float getSpaceX();
+        float getSpaceY();
     };
 
     class TextField {
         FontDescriptor font;
+        GLuint buffers[3];
+        GLuint vaoLoc;
+        GLuint shdrLoc;
+        GLint txtrLoc_chars;
+        GLint attrLoc_verts;
+        GLint attrLoc_uvCoo;
+        GLint unifLoc_postn;
+        GLint unifLoc_color;
+        uint64_t numIndicesToDraw;
+        glm::vec2 position = {0.f, 0.f};
+        glm::vec3 color = {1.f, 1.f, 1.f};
     public:
         bool init(TextFieldParams& params);
+        void setPosition(float x, float y);
+        void draw();
     };
 }
 
