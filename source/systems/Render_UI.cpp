@@ -20,18 +20,21 @@ namespace DualityEngine {
 
     bool System_Render_UI::init(std::stringstream &output) {
 
-        TextFieldParams bodyParams;
-        bodyParams.initType     = TextFieldParams::FIELD_SIZE_CHAR_SIZE;
-        bodyParams.fieldSize    = { 1.0 ,  0.5 };
-        bodyParams.charSize     = { 0.01,  0.02};
-        bodyParams.spacing      = { 0.1 ,  0.1 };
-        bodyParams.repo         = &fontRepo;
-        bodyParams.out          = &output;
-        bodyParams.fontName     = Settings::Console::fontName.c_str();
-        bodyParams.screenResX   = (uint32_t)Settings::Display::screenResX;
-        bodyParams.screenResY   = (uint32_t)Settings::Display::screenResY;
+        float stdCharW = 0.01f / Settings::Display::screenAspectRatio;
+        float stdCharH = 0.02f;
 
-        if (!consoleDrawer.init(bodyParams, console)) {
+        TextFieldParams consoleParams;
+        consoleParams.initType      = TextFieldParams::FIELD_SIZE_CHAR_SIZE;
+        consoleParams.fieldSize     = {  1.0f   ,   0.5f   };   // with relation to window width/height
+        consoleParams.charSize      = { stdCharW, stdCharH };   // with relation to window width/height
+        consoleParams.spacing       = {  0.1f   ,   0.1f   };   // with relation to CHARACTER width/height
+        consoleParams.repo          = &fontRepo;
+        consoleParams.out           = &output;
+        consoleParams.fontName      = Settings::Console::fontName.c_str();
+        consoleParams.screenResX    = (uint32_t)Settings::Display::windowResX;
+        consoleParams.screenResY    = (uint32_t)Settings::Display::windowResY;
+
+        if (!consoleDrawer.init(consoleParams, console)) {
             return false;
         }
         consoleDrawer.setPosition(0.f, 0.5f);

@@ -8,8 +8,6 @@ using namespace DualityEngine;
 
 GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFilePath, std::stringstream& engineOut)
 {
-    engineOut << std::endl; // Just some spacing for console output.
-    
     // Create the empty shaders
     GLuint vertShaderID = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragShaderID = glCreateShader(GL_FRAGMENT_SHADER);
@@ -20,31 +18,30 @@ GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFil
     int infoLogLength;
     
     std::string vertShaderCode;
-    std::ifstream vertShaderStream(vertFilePath, std::ios::in);
+    std::ifstream vertShaderStream(std::string("assets/shaders/") + vertFilePath, std::ios::in);
     if(vertShaderStream.is_open()) {
         std::string Line = "";
         while(getline(vertShaderStream, Line))
                 vertShaderCode += "\n" + Line;
         vertShaderStream.close();
     } else {
-        engineOut << "\n<!>    Cannot open " << vertFilePath << std::endl;
+        engineOut << DUA_ERR << "Cannot open " << vertFilePath << std::endl << DUA_ERREND;
         return GL_FALSE;
     }
 
     std::string fragShaderCode;
-    std::ifstream fragShaderStream(fragFilePath, std::ios::in);
+    std::ifstream fragShaderStream(std::string("assets/shaders/") + fragFilePath, std::ios::in);
     if(fragShaderStream.is_open()) {
         std::string Line = "";
         while(getline(fragShaderStream, Line))
                 fragShaderCode += "\n" + Line;
         fragShaderStream.close();
     } else {
-        engineOut << "\n<!>    Cannot open " << fragFilePath << std::endl;
+        engineOut << DUA_ERR << "Cannot open " << fragFilePath << std::endl << DUA_ERREND;
         return GL_FALSE;
     }
     
     // Compile Vertex Shader
-    engineOut << "Compiling vertex shader : " << vertFilePath;
     char const * vertSourcePointer = vertShaderCode.c_str();
     glShaderSource(vertShaderID, 1, &vertSourcePointer , NULL);
     glCompileShader(vertShaderID);
@@ -55,18 +52,15 @@ GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFil
     if (infoLogLength > 0) {
         std::vector<char> vertShaderErrorMessage(infoLogLength + 1);
         glGetShaderInfoLog(vertShaderID, infoLogLength, NULL, &vertShaderErrorMessage[0]);
-        engineOut << std::endl << &vertShaderErrorMessage[0];
+        engineOut << DUA_ERR << vertFilePath << ": " << &vertShaderErrorMessage[0] << std::endl << DUA_ERREND;
     }
     if (result == GL_FALSE) {
-        engineOut << vertFilePath << "\n<!>    VERTEX SHADER DID NOT COMPILE!\n\n";
+        engineOut << DUA_ERR << vertFilePath << " did not compile!\n" << DUA_ERREND;
 		glDeleteShader(vertShaderID);
         return GL_FALSE;
-    } else {
-        engineOut << vertFilePath << " compiled successfully.\n\n";
     }
 
     // Compile Fragment Shader
-    engineOut << "Compiling fragment shader : " << fragFilePath;
     char const * fragSourcePointer = fragShaderCode.c_str();
     glShaderSource(fragShaderID, 1, &fragSourcePointer , NULL);
     glCompileShader(fragShaderID);
@@ -77,18 +71,14 @@ GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFil
     if (infoLogLength > 0) {
         std::vector<char> fragShaderErrorMessage(infoLogLength + 1);
         glGetShaderInfoLog(fragShaderID, infoLogLength, NULL, &fragShaderErrorMessage[0]);
-        engineOut << std::endl << &fragShaderErrorMessage[0];
+        engineOut << DUA_ERR << fragFilePath << ": " << &fragShaderErrorMessage[0] << std::endl << DUA_ERREND;
     }
     if (result == GL_FALSE) {
-        engineOut << fragFilePath << "\n<!>    FRAGMENT SHADER DID NOT COMPILE!\n\n";
+        engineOut << DUA_ERR << fragFilePath << " did not compile!\n" << DUA_ERREND;
 		glDeleteShader(vertShaderID);
 		glDeleteShader(fragShaderID);
         return GL_FALSE;
-    } else {
-        engineOut << fragFilePath << " compiled successfully.\n\n";
     }
-    
-    engineOut << "Linking Program...\n";
     
     glAttachShader(progID, vertShaderID);
     glAttachShader(progID, fragShaderID);
@@ -101,13 +91,14 @@ GLuint DualityEngine::loadShaders(const char * vertFilePath,const char * fragFil
     if (infoLogLength > 0) {
         std::vector<char> progErrorMessage(infoLogLength + 1);
         glGetProgramInfoLog(progID, infoLogLength, NULL, &progErrorMessage[0]);
-        engineOut << std::endl << &progErrorMessage[0];
+        engineOut << DUA_ERR << vertFilePath << ", " << fragFilePath << ": ";
+        engineOut << &progErrorMessage[0] << std::endl << DUA_ERREND;
     }
 
     glDeleteShader(vertShaderID);
     glDeleteShader(fragShaderID);
 
-    engineOut << "shader program successfully loaded and given ID " << progID << std::endl;
+    engineOut << "Shader program [" << vertFilePath << ", " << fragFilePath << "] loaded @" << progID << std::endl;
     return progID;
 }
 

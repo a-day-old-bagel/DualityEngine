@@ -143,6 +143,10 @@ namespace DualityEngine {
     #define DUA_SDL_SCREENOPTIONS SDL_WINDOW_OPENGL
     #endif
 
+    #define DUA_ERR     Settings::Console::errPreText
+    #define DUA_ERREND  Settings::Console::errPostText
+    #define DUA_TAB     Settings::Console::stdTab
+
     /* RUN-TIME MUTABLE SETTINGS *AKA GLOBAL VARIABLES* */
     
     namespace Settings {
@@ -152,7 +156,7 @@ namespace DualityEngine {
         }
         
         namespace Display {
-            extern int screenResX, screenResY;
+            extern int windowResX, windowResY;
             extern float screenAspectRatio;
             extern int whichMonitor, monitorOffsetX, monitorOffsetY;
 			extern bool vSync;
@@ -166,7 +170,7 @@ namespace DualityEngine {
             extern char firstChar, lastChar;
             extern glm::vec3 backColor;
             extern glm::vec3 textColor;
-            extern std::string consolePrompt, menuPrompt;
+            extern std::string consolePrompt, menuPrompt, errPreText, errPostText, stdTab;
         }
 
         namespace Font {

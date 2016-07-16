@@ -7,6 +7,7 @@
 
 #include <string>
 #include <sstream>
+#include <settings.h>
 
 namespace DualityEngine {
     void checkError(std::stringstream& output, std::string context, int line = -1);

@@ -81,7 +81,7 @@ namespace DualityEngine {
         }
 
         // Load the shader and pull references to its attributes and uniforms
-        shdrLoc = loadShaders("assets/shaders/textField.vert", "assets/shaders/textField.frag", *params.out);
+        shdrLoc = loadShaders("textField.vert", "textField.frag", *params.out);
         attrLoc_verts = glGetAttribLocation(shdrLoc, "Vertex");
         attrLoc_uvCoo = glGetAttribLocation(shdrLoc, "UV");
         txtrLoc_chars = glGetUniformLocation(shdrLoc, "font_texture");

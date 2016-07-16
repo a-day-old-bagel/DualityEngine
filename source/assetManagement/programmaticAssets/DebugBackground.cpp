@@ -73,7 +73,7 @@ namespace DualityEngine {
         output << "\nBeginning initialization of noCam background.\n";
 
         // shader part
-        shdrLoc = loadShaders("assets/shaders/noCam.vert", "assets/shaders/noCam.frag", output);
+        shdrLoc = loadShaders("noCam.vert", "noCam.frag", output);
         attrLoc_verts = glGetAttribLocation(shdrLoc, "Vertex");
         txtrLoc = glGetUniformLocation(shdrLoc, "texPosition");
 

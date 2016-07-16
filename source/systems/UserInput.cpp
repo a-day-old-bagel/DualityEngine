@@ -67,39 +67,31 @@ bool System_UserInput::init(std::stringstream& output){
     }
 #endif
 
-    // struct for getting current display mode.
-    SDL_DisplayMode display;
-
-    // This block of stuff figures out which monitor to put the window on (or use as fullscreen display).
-    // rendering across multiple monitors in fullscreen is something I have not yet investigated.
-    int monitorUsed;
-    for (monitorUsed = 0; monitorUsed <= Settings::Display::whichMonitor; ++monitorUsed){
-        if (SDL_GetCurrentDisplayMode(monitorUsed, &display)){
-            output << "<!>    Could not get display mode for monitor " << monitorUsed << ": " << SDL_GetError() << std::endl;
-            if (monitorUsed > 0){
-                output << "Attempting to use display " << monitorUsed - 1 << std::endl;
-                --monitorUsed;
-                break;
-            } else {
-                return false;
-            }
+    SDL_DisplayMode dm;
+    int numDisps = SDL_GetNumVideoDisplays();
+    if (SDL_GetDesktopDisplayMode(Settings::Display::whichMonitor, &dm) || Settings::Display::whichMonitor > numDisps) {
+        Settings::Display::whichMonitor = 0;
+        if (SDL_GetDesktopDisplayMode(Settings::Display::whichMonitor, &dm)) {
+            output << "<!>    SDL cannot find any displays!";
+            return false;
         } else {
-            output << "Display " << monitorUsed << " reports: " << display.w << "x" << display.h << "@" << display.refresh_rate << std::endl;
-            if (monitorUsed == Settings::Display::whichMonitor){
-#ifdef DUA_FULLSCREEN
-                Settings::Display::screenResX = display.w;
-                    Settings::Display::screenResY = display.h;
-#endif
-                Settings::Display::screenAspectRatio = (float) Settings::Display::screenResX / (float) Settings::Display::screenResY;
-                output << "Running on display " << monitorUsed << std::endl;
-            } else {
-                Settings::Display::monitorOffsetX += display.w;
-            }
+            output << "<!>    Requested display " << Settings::Display::whichMonitor << " could not be found!\n";
+            output << "Using display 0 instead.\n";
         }
+    } else {
+        output << "Using display " << Settings::Display::whichMonitor << std::endl;
     }
+    Settings::Display::monitorOffsetX = SDL_WINDOWPOS_CENTERED_DISPLAY(Settings::Display::whichMonitor);
+    Settings::Display::monitorOffsetY = SDL_WINDOWPOS_CENTERED_DISPLAY(Settings::Display::whichMonitor);
 
-    Settings::Console::width = Settings::Display::screenResX;
-    Settings::Console::height = Settings::Display::screenResY / 2;
+#ifdef DUA_FULLSCREEN
+    Settings::Display::windowResX = dm.w;
+    Settings::Display::windowResY = dm.h;
+#endif
+    Settings::Display::screenAspectRatio = (float) Settings::Display::windowResX / (float) Settings::Display::windowResY;
+
+    Settings::Console::width = Settings::Display::windowResX;
+    Settings::Console::height = Settings::Display::windowResY / 2;
 
     // Use only core features of gl version (deprecated features illegal)
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -114,9 +106,9 @@ bool System_UserInput::init(std::stringstream& output){
 
     // Create the SDL window
     bank->pWindow = SDL_CreateWindow("Duality Engine",
-                               Settings::Display::monitorOffsetX + int((display.w - Settings::Display::screenResX) * 0.5),
-                               Settings::Display::monitorOffsetY + int((display.h - Settings::Display::screenResY) * 0.5),
-                               Settings::Display::screenResX, Settings::Display::screenResY,
+                               Settings::Display::monitorOffsetX,
+                               Settings::Display::monitorOffsetY,
+                               Settings::Display::windowResX, Settings::Display::windowResY,
 								//600, 600,
                                DUA_SDL_SCREENOPTIONS);
     // If the window couldn't be created for whatever reason

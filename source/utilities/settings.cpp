@@ -9,9 +9,9 @@ namespace DualityEngine {
         }
         
         namespace Display{
-            int screenResX = DUA_DEFAULT_SCREENRES_X;
-            int screenResY = DUA_DEFAULT_SCREENRES_Y;
-            float screenAspectRatio = ((float)screenResX / (float)screenResY);
+            int windowResX = DUA_DEFAULT_SCREENRES_X;
+            int windowResY = DUA_DEFAULT_SCREENRES_Y;
+            float screenAspectRatio = ((float)windowResX / (float)windowResY);
             int whichMonitor = DUA_DEFUALT_WHICH_MONITOR;
             int monitorOffsetX = 0;
             int monitorOffsetY = 0;
@@ -39,6 +39,9 @@ namespace DualityEngine {
             glm::vec3 textColor = {0.5, 1.0, 0.3};
             std::string consolePrompt = ">: ";
             std::string menuPrompt = "MENU>: ";
+            std::string errPreText = "<!>    ";
+            std::string errPostText = "";
+            std::string stdTab = "    ";
         }
 
         namespace Font {

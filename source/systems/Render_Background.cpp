@@ -22,11 +22,11 @@ bool System_Render_Background::init(std::stringstream& engineOut)
 {
     // Load graphics assets and buffer them to GPU
     if(!setUpResources(engineOut)) {
-        engineOut << "Unable to initialize sky resources!" << std::endl;
+        engineOut << DUA_ERR << "Unable to initialize sky resources!" << std::endl << DUA_ERREND;
         return false;
     }
     if(!noCamBackground.Init(engineOut)){
-        engineOut << "Unable to initialize noCam background!" << std::endl;
+        engineOut << DUA_ERR << "Unable to initialize noCam background!" << std::endl  << DUA_ERREND;
         return false;
     }
 	checkError(engineOut, "Render_Background.cpp", __LINE__);
@@ -41,7 +41,7 @@ bool System_Render_Background::setUpResources(std::stringstream& engineOut)
                              3.0, -1.0, 0.5, 1.0,
                              -1.0,  3.0, 0.5, 1.0};
     
-    shdrLoc = loadShaders("assets/shaders/skyQuad.vert", "assets/shaders/skyQuad.frag", engineOut);
+    shdrLoc = loadShaders("skyQuad.vert", "skyQuad.frag", engineOut);
 
     attrLoc_verts = glGetAttribLocation(shdrLoc, "Vertex");
     unifLoc_txtur = glGetUniformLocation(shdrLoc, "cubeTexture");

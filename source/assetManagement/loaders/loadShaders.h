@@ -15,6 +15,7 @@
 #include <string.h>
 #include <sstream>
 #include <GL/glew.h>
+#include "settings.h"
 
 namespace DualityEngine {
 

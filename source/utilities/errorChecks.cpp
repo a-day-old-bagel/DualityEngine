@@ -13,7 +13,7 @@ namespace DualityEngine {
     void checkError(std::stringstream& engineOut, std::string context, int line /*= -1*/) {
         GLenum glErr = glGetError();
         if (glErr != GL_NO_ERROR) {
-            engineOut << "<!>    GL error(s) detected (file " << context;
+            engineOut << DUA_ERR << "GL error(s) detected (file " << context;
             if (line > 0) {
                 engineOut << " at line " << line;
             }
@@ -21,14 +21,15 @@ namespace DualityEngine {
             int loopGuard = 0;
             while (glErr != GL_NO_ERROR) {
                 if (++loopGuard <= 10) {
-                    engineOut << "\t\t\t" << gluErrorString(glErr) << std::endl;
+                    engineOut << DUA_TAB << DUA_TAB << gluErrorString(glErr) << std::endl;
                     glErr = glGetError();
                 }
                 else {
-                    engineOut << "\t\t\t<!> Suppressing further errors...\n";
+                    engineOut << DUA_TAB << DUA_TAB << DUA_ERR << "Suppressing further errors...\n";
                     break;
                 }
             }
+            engineOut << DUA_ERREND;
         }
     }
 }

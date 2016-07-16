@@ -31,7 +31,8 @@ bool System_Render_Master::init(std::stringstream& engineOut){
     //Create context
     context = SDL_GL_CreateContext(bank->pWindow);
     if(context == NULL) {
-        engineOut << "<!>    OpenGL context was not created! SDL Error: " << SDL_GetError() << std::endl;
+        engineOut << DUA_ERR << "OpenGL context was not created! SDL Error: ";
+        engineOut << SDL_GetError() << std::endl << DUA_ERREND;
         return false;
 	}
 	else {
@@ -45,7 +46,8 @@ bool System_Render_Master::init(std::stringstream& engineOut){
     GLenum glewError = glewInit();  // GL enumerator error is thrown here when using openGL versions 3.2+ It's fine.
                                     // see https://www.opengl.org/wiki/OpenGL_Loading_Library
     if(glewError != GLEW_OK) {
-        engineOut << "<!>    Could not initialize GLEW! " << glewGetErrorString(glewError) << std::endl;
+        engineOut << DUA_ERR << "Could not initialize GLEW! ";
+        engineOut << glewGetErrorString(glewError) << std::endl << DUA_ERREND;
         return false;
 	}
 	else {
@@ -57,7 +59,8 @@ bool System_Render_Master::init(std::stringstream& engineOut){
     //Use Vsync
 	if (Settings::Display::vSync) {
 		if (SDL_GL_SetSwapInterval(1) < 0) {
-			engineOut << "<!>    Warning: Unable to set VSync! SDL Error: " << SDL_GetError() << std::endl;
+			engineOut << DUA_ERR << "Warning: Unable to set VSync! SDL Error: ";
+            engineOut << SDL_GetError() << std::endl << DUA_ERREND;
 			// Do not return
 		}
 		else {
