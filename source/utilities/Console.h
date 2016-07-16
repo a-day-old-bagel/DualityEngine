@@ -24,6 +24,7 @@ namespace DualityEngine {
         std::string pendingCommand;
         int submitLinePending;
         int submitLineActive;
+        int numCharsPerLine;
         
         void refreshPendingCommand();
     public:
@@ -56,6 +57,7 @@ namespace DualityEngine {
         void rightCursor();
         void traverseLog(int numLines);
         std::string submitCommand();
+        void wrapCharsPerLine(int charsPerLine);
     };
 }
 

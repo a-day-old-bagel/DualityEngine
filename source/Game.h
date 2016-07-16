@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "Render_Master.h"
-#include "Render_Console.h"
+#include "Render_UI.h"
 #include "Render_Models.h"
 #include "Render_Background.h"
 #include "PhysMove.h"
@@ -33,43 +33,70 @@ namespace DualityEngine {
         /*************
          * bank of COMPONENTS and other constructs to hold all game state data
          *************/
-        Bank bank;
+        Bank bank = Bank(&bankDelegates);
 
         /*************
          * The Central Event Queue (CEQ) to provide a universal event queue to all systems
          *************/
         EventQueue ceq;
-        Token token;        // this is used for the concurrent queue
-        bool isAlive;       // this is used to maintain or exit the main event loop
+        Token token = Token(ceq.requestProducerToken());
+        bool isAlive = true;
 
         /*************
          * SYSTEMS to operate on the components, providing game mechanics
          *************/
-        System_Render_Master renderMasterSystem; // render all graphical components (manages openGL calls)
-        System_Render_Console renderConsoleSystem; // render the in-game console
-        System_Render_Models renderModelsSystem; // render any 3d models present
-        System_Render_Background renderBackgroundSystem; // render the background (usually skybox)
-        System_PhysMove physicsMoveSystem; // update all spatial components according to motion components
-        System_PhysCollide physicsCollisionSystem; // check collisions between entities via collision components
-        System_Control_SS spaceShipControlSystem; // apply user's key presses to current spaceShipControl component
-        System_UserInput userInputSystem; // handle user input
-        System_Scripting scriptingSystem; // handle scripting commands
+        System_Render_Master renderMasterSystem         = System_Render_Master(&bank);
+        System_Render_UI renderConsoleSystem       = System_Render_UI(&bank, &console);
+        System_Render_Models renderModelsSystem         = System_Render_Models(&bank);
+        System_Render_Background renderBackgroundSystem = System_Render_Background(&bank);
+        System_PhysMove physicsMoveSystem               = System_PhysMove(&bank);
+        System_PhysCollide physicsCollisionSystem       = System_PhysCollide(&bank);
+        System_Control_SS spaceShipControlSystem        = System_Control_SS(&bank);
+        System_UserInput userInputSystem                = System_UserInput(&bank);
+        System_Scripting scriptingSystem                = System_Scripting(&bank);
 
         /*************
          * ENGINES (thread with accompanying SystemEngine) on which to run the systems
          *************/
-		SDL_Thread* graphicsThread; // run all graphics systems
-		typedef SystemEngine<System_Render_Master*, System_Render_Background*, System_Render_Models*,
-			System_Render_Console*> DUA_graphicsEngine;
-		DUA_graphicsEngine graphicsEngine;
+		typedef SystemEngine <
+                System_Render_Master*,
+                System_Render_Background*,
+                System_Render_Models*,
+                System_Render_UI*
+        > DUA_graphicsEngine;
 
-        SDL_Thread* physicsThread; // run all physics systems (and physical control system)
-        typedef SystemEngine<System_UserInput*, System_Control_SS*, System_PhysMove*, System_PhysCollide*> DUA_physicsEngine;
-        DUA_physicsEngine physicsEngine;
+        SDL_Thread* graphicsThread = NULL;
+		DUA_graphicsEngine graphicsEngine = DUA_graphicsEngine (
+                &graphicsThread, "Duality Graphics Engine", &bankDelegates.output, &bankDelegates.quit,
+                &renderMasterSystem,
+                &renderBackgroundSystem,
+                &renderModelsSystem,
+                &renderConsoleSystem
+        );
 
-        SDL_Thread* scriptingThread; // run the scripting systems
-        typedef SystemEngine<System_Scripting*> DUA_scriptingEngine;
-        DUA_scriptingEngine scriptingEngine;
+        typedef SystemEngine <
+                System_UserInput*,
+                System_Control_SS*,
+                System_PhysMove*,
+                System_PhysCollide*
+        > DUA_physicsEngine;
+
+        SDL_Thread* physicsThread = NULL;
+        DUA_physicsEngine physicsEngine = DUA_physicsEngine (
+                &physicsThread, "Duality Physics Engine", &bankDelegates.output, &bankDelegates.quit,
+                &userInputSystem,
+                &spaceShipControlSystem,
+                &physicsMoveSystem,
+                &physicsCollisionSystem);
+
+        typedef SystemEngine <
+                System_Scripting*
+        > DUA_scriptingEngine;
+
+        SDL_Thread* scriptingThread = NULL;
+        DUA_scriptingEngine scriptingEngine = DUA_scriptingEngine (
+                &scriptingThread, "Duality Scripting Engine", &bankDelegates.output, &bankDelegates.quit,
+                &scriptingSystem);
 
         /*************
          * DELEGATES to allow for inter-system/engine communication (they allow pretty much any function to be called
@@ -77,8 +104,37 @@ namespace DualityEngine {
          * All delegates are contained in the BankDelegates struct, to which bank has a public pointer.
          * This is so that anything with access to the bank has access to the delegates.
          *************/
-        BankDelegates bankDelegates;
-        
+        BankDelegates bankDelegates = {
+                DELEGATE(&Game::systems_discover, this),
+                DELEGATE(&Game::systems_scrutinize, this),
+                DELEGATE(&Game::systems_forceRemove, this),
+                DELEGATE(&Game::Quit, this),
+                DELEGATE(&Game::NewGame, this),
+                DELEGATE(&Game::Pause, this),
+                DELEGATE(&Game::Resume, this),
+                DELEGATE(&System_Scripting::submitScript, &scriptingSystem),
+                DELEGATE(&Game::pauseBankDependentSystems, this),
+                DELEGATE(&Game::waitForBankDependentSystemsToPause, this),
+                DELEGATE(&Game::resumeBankDependentSystems, this),
+                DELEGATE(&Console::applyBackspace, &console),
+                DELEGATE(&Console::applyDelete, &console),
+                DELEGATE(&Console::clearCommand, &console),
+                DELEGATE(&Console::upOneCommand, &console),
+                DELEGATE(&Console::downOneCommand, &console),
+                DELEGATE(&Console::leftCursor, &console),
+                DELEGATE(&Console::rightCursor, &console),
+                DELEGATE(&Console::output, &console),
+                DELEGATE(&Console::outputStr, &console),
+                DELEGATE(&Console::addToCommand, &console),
+                DELEGATE(&Console::submitCommand, &console),
+                DELEGATE(&System_Scripting::submitCommand, &scriptingSystem),
+                DELEGATE(&Console::getLogLineFromBack, &console),
+                DELEGATE(&Console::getCurrentLogLine, &console),
+                DELEGATE(&Console::setState, &console),
+                DELEGATE(&Console::traverseLog, &console),
+                DELEGATE(&System_Render_Background::queueSkyChange, &renderBackgroundSystem)
+        };;
+
         /*************
          * An in-game CONSOLE and output logging device
          *************/

@@ -3,6 +3,7 @@
 //
 
 #include <vector>
+#include <limits>
 #include "TextField.h"
 #include "loadShaders.h"
 #include "errorChecks.h"
@@ -17,22 +18,15 @@ namespace DualityEngine {
         return charSize.h + charSize.h * spacing.y;
     }
 
-    float TextFieldParams::getSpaceX() {
-        return charSize.w * spacing.x;
-    }
-
-    float TextFieldParams::getSpaceY() {
-        return charSize.h * spacing.y;
-    }
-
-
     bool TextField::init(TextFieldParams& params) {
 
+        // These metrics will be used to generate geometry
         float fieldW, fieldH;
         float bodyW, bodyH;
         float marginW, marginH;
         uint_fast32_t numCharsX, numCharsY;
 
+        // Depending on whether the user provided field size or number of characters, define the variables above.
         switch(params.initType) {
             case TextFieldParams::FIELD_SIZE_CHAR_SIZE:
                 fieldW = params.fieldSize.w;
@@ -60,15 +54,18 @@ namespace DualityEngine {
                 return false;
         }
 
+        // Calculate values that will be used below
         uint_fast32_t numPanelVerts  = numCharsX * numCharsY * 4;
         uint_fast32_t numPanelTris   = numPanelVerts / 2;
         uint_fast32_t sizeVertArray  = numPanelVerts * 2;
         uint_fast32_t sizeIndxArray  = numPanelTris  * 3;
 
+        // Allocate temporary vectors to hold the vertex, index, and uv data as it's generated
         std::vector<float> verts(sizeVertArray);
         std::vector<float> uvs  (sizeVertArray, 0.f);
         std::vector<uint32_t> indices(sizeIndxArray);
 
+        // Generate all of the vertex and index data, leaving the uv data as zeros for now
         for (uint_fast32_t y = 0; y < numCharsY; ++y) {
             for (uint_fast32_t x = 0; x < numCharsX; ++x) {
                 uint_fast32_t vStride = (y * numCharsX * 8) + (x * 8);
@@ -83,6 +80,7 @@ namespace DualityEngine {
             }
         }
 
+        // Load the shader and pull references to its attributes and uniforms
         shdrLoc = loadShaders("assets/shaders/textField.vert", "assets/shaders/textField.frag", *params.out);
         attrLoc_verts = glGetAttribLocation(shdrLoc, "Vertex");
         attrLoc_uvCoo = glGetAttribLocation(shdrLoc, "UV");
@@ -90,32 +88,38 @@ namespace DualityEngine {
         unifLoc_postn = glGetUniformLocation(shdrLoc, "Position");
         unifLoc_color = glGetUniformLocation(shdrLoc, "penColor");
 
+        // Generate the VAO and VBOs
         glGenVertexArrays(1, &vaoLoc);
         glBindVertexArray(vaoLoc);
         glGenBuffers(3, buffers);
 
         // buffer the vertex data to GPU
         glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-        glBufferData(GL_ARRAY_BUFFER, sizeVertArray * sizeof(DUA_float), verts.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeVertArray * sizeof(float), verts.data(), GL_STATIC_DRAW);
         glEnableVertexAttribArray((GLuint)attrLoc_verts);
         glVertexAttribPointer((GLuint)attrLoc_verts, 2, GL_FLOAT, GL_FALSE, 0, 0);
-        // buffer the empty UV data to GPU
+        // buffer the zero'd UV data to GPU
         glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-        glBufferData(GL_ARRAY_BUFFER, sizeVertArray * sizeof(DUA_float), uvs.data(), GL_DYNAMIC_DRAW);
+        glBufferData(GL_ARRAY_BUFFER, sizeVertArray * sizeof(float), uvs.data(), GL_DYNAMIC_DRAW);
         glEnableVertexAttribArray((GLuint)attrLoc_uvCoo);
         glVertexAttribPointer((GLuint)attrLoc_uvCoo, 2, GL_FLOAT, GL_FALSE, 0, 0);
-        // buffer the triangle index data to GPU
+        // buffer the index data to GPU
         glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeIndxArray * sizeof(DUA_uint32), indices.data(), GL_STATIC_DRAW);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeIndxArray * sizeof(uint32_t), indices.data(), GL_STATIC_DRAW);
 
+        // See if any of the above calls made errors
         checkError(*params.out, "TextField.cpp", __LINE__);
 
-        // factor of 0.5 because screen is actually 2 units wide and 2 units tall, not 1. (1 - (-1) = 2)
-        font.panelW = (uint32_t)(params.screenResX * params.charSize.w * 0.5f);
-        font.panelH = (uint32_t)(params.screenResY * params.charSize.h * 0.5f);
+        // Request the font texture from the repository
+        font.panelW = (uint32_t)(params.screenResX * params.charSize.w);
+        font.panelH = (uint32_t)(params.screenResY * params.charSize.h);
         params.repo->request(params.fontName.c_str(), font, *params.out);
 
+        // set these member variables for later use
         numIndicesToDraw = sizeIndxArray;
+        numLines = (uint32_t)numCharsY;
+        numCharsPerLine = (uint32_t)numCharsX;
+        numCharsTotal = (uint32_t)(numCharsX * numCharsY);
 
         return true;
     }
@@ -124,9 +128,36 @@ namespace DualityEngine {
         position = {x, y};
     }
 
+    void TextField::updateText(uint32_t start, const char* text) {
+        std::string textStr(text);
+        uint32_t end = (uint32_t)std::min((uint32_t)textStr.length(), numCharsTotal - start);
+        std::vector<float> charOffsets(end * 8);
+        for (uint32_t i = 0; i < end; ++i) {
+            for (int j = 0; j < 8; j += 2) {
+                charOffsets[i * 8 + j + 0] = (textStr[i] - font.firstChar + font.getOffsetToFirstChar() +
+                                             (j == 2 || j == 6)) * font.getPanelAdvance();
+                charOffsets[i * 8 + j + 1] = j / 4;
+            }
+        }
+        glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+        glBufferSubData(GL_ARRAY_BUFFER, start * 8 * sizeof(float), charOffsets.size() * sizeof(float),
+                        charOffsets.data());
+    }
+
+    void TextField::updateTextBack(uint32_t rStart, const char* text) {
+        updateText(numCharsTotal - rStart, text);
+    }
+
+    void TextField::updateTextLine(uint32_t line, const char* text) {
+        updateText(line * numCharsPerLine, text);
+    }
+
+    void TextField::updateTextLineBack(uint32_t rLine, const char* text) {
+        updateTextBack((rLine + 1) * numCharsPerLine, text);
+    }
+
     void TextField::draw() {
         glBindVertexArray(vaoLoc);
-        //updateBuffersWithCurrentConsoleText();
 
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, font.texture);
@@ -139,6 +170,13 @@ namespace DualityEngine {
         glDrawElements(GL_TRIANGLES, (GLsizei)numIndicesToDraw, GL_UNSIGNED_INT, 0);
     }
 
+    uint32_t TextField::getNumLines() {
+        return numLines;
+    }
+
+    uint32_t TextField::getCharsPerLine() {
+        return numCharsPerLine;
+    }
 
 }
 

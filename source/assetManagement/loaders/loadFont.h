@@ -33,6 +33,7 @@ namespace DualityEngine {
         uint32_t getAtlasWidth();
         uint32_t getAtlasHeight();
         uint32_t getNumPanelPix();
+        uint32_t getOffsetToFirstChar();
     };
 
     int loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output);

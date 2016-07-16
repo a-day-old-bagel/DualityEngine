@@ -166,6 +166,7 @@ namespace DualityEngine {
             extern char firstChar, lastChar;
             extern glm::vec3 backColor;
             extern glm::vec3 textColor;
+            extern std::string consolePrompt, menuPrompt;
         }
 
         namespace Font {

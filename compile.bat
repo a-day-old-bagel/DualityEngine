@@ -66,11 +66,12 @@ cl /c /I"%GLEW_PATH%\include" /I"%SDL2_PATH%\include" /I"%ASSIMP_PATH%\include" 
  "%top%source\systems\PhysMove.cpp"                                      ^
  "%top%source\systems\Render_Background.cpp"                             ^
  "%top%source\systems\Render_BiTcubes.cpp"                               ^
- "%top%source\systems\Render_Console.cpp"                                ^
  "%top%source\systems\Render_Master.cpp"                                 ^
  "%top%source\systems\Render_Models.cpp"                                 ^
+ "%top%source\systems\Render_UI.cpp"                                     ^
  "%top%source\systems\Scripting.cpp"                                     ^
  "%top%source\systems\UserInput.cpp"                                     ^
+ "%top%source\ui\ConsoleDrawer.cpp"                                      ^
  "%top%source\ui\TextField.cpp"                                          ^
  "%top%source\utilities\Console.cpp"                                     ^
  "%top%source\utilities\errorChecks.cpp"                                 ^
@@ -110,11 +111,12 @@ link /OUT:DualityEngine.exe /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi3
  PhysMove.obj              ^
  Render_Background.obj     ^
  Render_BiTcubes.obj       ^
- Render_Console.obj        ^
  Render_Master.obj         ^
  Render_Models.obj         ^
+ Render_UI.obj             ^
  Scripting.obj             ^
  UserInput.obj             ^
+ ConsoleDrawer.obj         ^
  TextField.obj		       ^
  Console.obj               ^
  errorChecks.obj           ^

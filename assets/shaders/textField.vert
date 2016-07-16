@@ -7,8 +7,7 @@ out vec2 uv;
 
 uniform vec2 Position;
 
-void main(){
-
+void main() {
     uv = UV;
     gl_Position = vec4(Vertex + Position, -1.0, 1.0);
 }

@@ -37,6 +37,8 @@ namespace DualityEngine {
             char lastChar = '~';
             glm::vec3 backColor = {0.05, 0.05, 0.05};
             glm::vec3 textColor = {0.5, 1.0, 0.3};
+            std::string consolePrompt = ">: ";
+            std::string menuPrompt = "MENU>: ";
         }
 
         namespace Font {

@@ -17,60 +17,8 @@ using namespace DualityEngine;
  * for some c++11 features, this
  * constructor was actually pretty.
  *************************************/
-Game::Game() :  bank(&bankDelegates),
-                token(ceq.requestProducerToken()),
-                renderMasterSystem(&bank),
-                renderConsoleSystem(&bank, &console),
-                renderModelsSystem(&bank),
-                renderBackgroundSystem(&bank),
-                physicsMoveSystem(&bank),
-                physicsCollisionSystem(&bank),
-                spaceShipControlSystem(&bank),
-                userInputSystem(&bank),
-                scriptingSystem(&bank),
-				graphicsEngine(&graphicsThread, "Duality Graphics Engine",
-								&bankDelegates.output, &bankDelegates.quit, &renderMasterSystem, &renderBackgroundSystem,
-								&renderModelsSystem, &renderConsoleSystem),
-                physicsEngine(&physicsThread, "Duality Physics Engine", &bankDelegates.output, &bankDelegates.quit,
-                              &userInputSystem, &spaceShipControlSystem, &physicsMoveSystem, &physicsCollisionSystem),
-                scriptingEngine(&scriptingThread, "Duality Scripting Engine",
-                                &bankDelegates.output, &bankDelegates.quit, &scriptingSystem)
-	{
-    graphicsThread = NULL;
-    physicsThread = NULL;
-    scriptingThread = NULL;
-    isAlive = true;
-
-    bankDelegates = {
-            DELEGATE(&Game::systems_discover, this),
-            DELEGATE(&Game::systems_scrutinize, this),
-            DELEGATE(&Game::systems_forceRemove, this),
-            DELEGATE(&Game::Quit, this),
-            DELEGATE(&Game::NewGame, this),
-            DELEGATE(&Game::Pause, this),
-            DELEGATE(&Game::Resume, this),
-            DELEGATE(&System_Scripting::submitScript, &scriptingSystem),
-            DELEGATE(&Game::pauseBankDependentSystems, this),
-            DELEGATE(&Game::waitForBankDependentSystemsToPause, this),
-            DELEGATE(&Game::resumeBankDependentSystems, this),
-            DELEGATE(&Console::applyBackspace, &console),
-            DELEGATE(&Console::applyDelete, &console),
-            DELEGATE(&Console::clearCommand, &console),
-            DELEGATE(&Console::upOneCommand, &console),
-            DELEGATE(&Console::downOneCommand, &console),
-            DELEGATE(&Console::leftCursor, &console),
-            DELEGATE(&Console::rightCursor, &console),
-            DELEGATE(&Console::output, &console),
-            DELEGATE(&Console::outputStr, &console),
-            DELEGATE(&Console::addToCommand, &console),
-            DELEGATE(&Console::submitCommand, &console),
-            DELEGATE(&System_Scripting::submitCommand, &scriptingSystem),
-            DELEGATE(&Console::getLogLineFromBack, &console),
-            DELEGATE(&Console::getCurrentLogLine, &console),
-            DELEGATE(&Console::setState, &console),
-            DELEGATE(&Console::traverseLog, &console),
-            DELEGATE(&System_Render_Background::queueSkyChange, &renderBackgroundSystem)
-	};
+Game::Game() {
+    console.wrapCharsPerLine(50);
 }
 
 /**************************************
@@ -112,7 +60,7 @@ void Game::Main(){
 
     // Wait for all game threads to exit, then the game is over.
 	SDL_WaitThread(graphicsThread, NULL);
-    SDL_WaitThread(physicsThread, NULL);    
+    SDL_WaitThread(physicsThread, NULL);
     SDL_WaitThread(scriptingThread, NULL);
 
     // Handle any last events that are still laying around

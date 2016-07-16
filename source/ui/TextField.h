@@ -45,8 +45,6 @@ namespace DualityEngine {
 
         float getAdvX();
         float getAdvY();
-        float getSpaceX();
-        float getSpaceY();
     };
 
     class TextField {
@@ -60,12 +58,22 @@ namespace DualityEngine {
         GLint unifLoc_postn;
         GLint unifLoc_color;
         uint64_t numIndicesToDraw;
+        uint32_t numLines;
+        uint32_t numCharsPerLine;
+        uint32_t numCharsTotal;
         glm::vec2 position = {0.f, 0.f};
         glm::vec3 color = {1.f, 1.f, 1.f};
     public:
         bool init(TextFieldParams& params);
         void setPosition(float x, float y);
+        void updateText(uint32_t start, const char* text);
+        void updateTextBack(uint32_t rStart, const char* text);
+        void updateTextLine(uint32_t line, const char* text);
+        void updateTextLineBack(uint32_t rLine, const char* text);
         void draw();
+
+        uint32_t getNumLines();
+        uint32_t getCharsPerLine();
     };
 }
 

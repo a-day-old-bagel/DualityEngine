@@ -45,6 +45,10 @@ namespace DualityEngine {
         return 1.f / getNumTexPanels();
     }
 
+    uint32_t FontDescriptor::getOffsetToFirstChar() {
+        return 1;
+    }
+
 
     int loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output) {
         FT_Library library;
