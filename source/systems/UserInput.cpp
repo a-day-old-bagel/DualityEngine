@@ -30,25 +30,23 @@ System_UserInput::~System_UserInput(){
 bool System_UserInput::init(std::stringstream& output){
 
     output << "SDL recognizes the following render drivers: ";
-    int numdrivers = SDL_GetNumRenderDrivers();
-    for (int i = 0; i < numdrivers; ++i) {
+    int numDrivers = SDL_GetNumRenderDrivers();
+    for (int i = 0; i < numDrivers; ++i) {
         SDL_RendererInfo info;
         SDL_GetRenderDriverInfo(i, &info);
-        output << info.name << ((i < numdrivers - 1)? ", " : "\n");
+        output << info.name << ((i < numDrivers - 1)? ", " : "\n");
     }
-
     output << "\nSDL recognizes the following video drivers:\n";
-
-    numdrivers = SDL_GetNumVideoDrivers();
-    const char* drivername;
-    for (int i = 0; i < numdrivers; ++i) {
-        drivername = SDL_GetVideoDriver(i);
-        if (SDL_VideoInit(drivername) == 0) {
+    numDrivers = SDL_GetNumVideoDrivers();
+    const char* driverName;
+    for (int i = 0; i < numDrivers; ++i) {
+        driverName = SDL_GetVideoDriver(i);
+        if (SDL_VideoInit(driverName) == 0) {
             SDL_VideoQuit();
-            output << "\t\t   Driver " << drivername << " works.\n";
+            output << DUA_TAB << DUA_TAB << "Driver " << driverName << " works.\n";
         }
         else {
-            output << "\t<!>\tDriver " << drivername << " DOES NOT WORK!\n";
+            output << DUA_TAB << DUA_ERR << "Driver " << driverName << " fails.\n" << DUA_ERREND;
         }
     }
 
@@ -56,13 +54,13 @@ bool System_UserInput::init(std::stringstream& output){
     // This needs to be done in this thread instead of in the graphics thread to prevent
     // massive event handing slowdowns. Will see if works in Windows.
     if (SDL_Init(SDL_INIT_VIDEO) < 0) {
-        output << "<!>    SDL did not initialize! SDL Error: " << SDL_GetError() << std::endl;
+        output << DUA_ERR << "SDL did not initialize! SDL Error: " << SDL_GetError() << std::endl << DUA_ERREND;
         return false;
     }
     
 #ifndef DUA_DEBUG_DISABLE_SDL_RELATIVE_MOUSE
     if (SDL_SetRelativeMouseMode(SDL_TRUE) < 0) {
-        output << "<!>    SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl;
+        output << DUA_ERR << "SDL could not enable relative mouse mode: " << SDL_GetError() << std::endl << DUA_ERREND;
         return false;
     }
 #endif
@@ -70,13 +68,14 @@ bool System_UserInput::init(std::stringstream& output){
     SDL_DisplayMode dm;
     int numDisps = SDL_GetNumVideoDisplays();
     if (SDL_GetDesktopDisplayMode(Settings::Display::whichMonitor, &dm) || Settings::Display::whichMonitor > numDisps) {
+        int failedDisplay = Settings::Display::whichMonitor;
         Settings::Display::whichMonitor = 0;
         if (SDL_GetDesktopDisplayMode(Settings::Display::whichMonitor, &dm)) {
-            output << "<!>    SDL cannot find any displays!";
+            output << DUA_ERR << "SDL cannot find any displays!\n" << DUA_ERREND;
             return false;
         } else {
-            output << "<!>    Requested display " << Settings::Display::whichMonitor << " could not be found!\n";
-            output << "Using display 0 instead.\n";
+            output << DUA_ERR << "Requested display " << failedDisplay;
+            output << " could not be found!\n" << DUA_ERREND << "Using display 0 instead.\n";
         }
     } else {
         output << "Using display " << Settings::Display::whichMonitor << std::endl;
@@ -113,7 +112,7 @@ bool System_UserInput::init(std::stringstream& output){
                                DUA_SDL_SCREENOPTIONS);
     // If the window couldn't be created for whatever reason
     if (bank->pWindow == NULL) {
-        output << "<!>    SDL window was not created! SDL Error: " << SDL_GetError() << std::endl;
+        output << DUA_ERR << "SDL window was not created! SDL Error: " << SDL_GetError() << std::endl << DUA_ERREND;
         return false;
     }
     else {
@@ -158,7 +157,7 @@ void System_UserInput::tick(){
                 break;
             case(SDL_QUIT):
                 bank->dlgt->quit();
-                bank->dlgt->output("\n<!>    FORCED EXIT\n\n");
+                bank->dlgt->outputStr(DUA_ERR + "FORCED EXIT" + DUA_ERREND);
                 break;
             default:
                 break;
@@ -184,7 +183,9 @@ void System_UserInput::parseMenuCommand(const std::string& command){
     } else if (arg0 == "help"){        
         bank->dlgt->submitScriptCommand(command);
     } else {
-        bank->dlgt->outputStr("<!>    Not a menu option: " + arg0 + ". Only commands 'new', 'load', 'save', 'exit', and 'help' may be accessed from the menu. Press ESC to leave the menu. ~ key accesses console during play.");
+        bank->dlgt->outputStr(DUA_ERR + "Not a menu option: " + arg0 +
+             ". Only commands 'new', 'load', 'save', 'exit', and 'help' may be accessed from the menu. " +
+             "Press ESC to leave the menu. ~ key accesses console during play." + DUA_ERREND);
     }
 }
 

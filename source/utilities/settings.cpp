@@ -39,7 +39,7 @@ namespace DualityEngine {
             glm::vec3 textColor = {0.5, 1.0, 0.3};
             std::string consolePrompt = ">: ";
             std::string menuPrompt = "MENU>: ";
-            std::string errPreText = "<!>    ";
+            std::string errPreText = "<!> ";
             std::string errPostText = "";
             std::string stdTab = "    ";
         }
