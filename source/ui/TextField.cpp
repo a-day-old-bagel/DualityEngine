@@ -115,6 +115,9 @@ namespace DualityEngine {
         font.panelH = (uint32_t)(params.screenResY * params.charSize.h);
         params.repo->request(params.fontName.c_str(), font, *params.out);
 
+        *params.out << "\n    HHHHEEEERRRREEEE::::  " << (uint32_t)(params.screenResX * params.charSize.w) << " " << (uint32_t)(params.screenResY * params.charSize.h) << std::endl;
+        *params.out << "    " << font.getFTpixelSizeW() << " " << font.getFTpixelSizeH() << std::endl << std::endl;
+
         // set these member variables for later use
         numIndicesToDraw = sizeIndxArray;
         numLines = (uint32_t)numCharsY;

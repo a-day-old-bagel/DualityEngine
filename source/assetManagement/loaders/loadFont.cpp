@@ -83,19 +83,17 @@ namespace DualityEngine {
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, font.getAtlasWidth(), font.getAtlasHeight(), 0, GL_RED, GL_UNSIGNED_BYTE,
                      &baseTexData[0]);
 
         checkError(output, "Render_Console.cpp", __LINE__);
 
         DUA_colorByte* firstPanel = new DUA_colorByte[font.getNumPanelPix()];
-        for (uint32_t i = 0; i < font.panelH; i++) {
-            for (uint32_t j = 0; j < font.panelW; j++) {
-                if (i == 0 || i == font.panelH - 1 || j == 0 || j == font.panelW - 1) {
-                    firstPanel[i * font.panelW + j] = 0x80;
-                } else {
-                    firstPanel[i * font.panelW + j] = 0xA0;
-                }
+        for (uint32_t i = 2; i < font.panelH - 2; ++i) {
+            for (uint32_t j = 2; j < font.panelW - 2; ++j) {
+                firstPanel[i * font.panelW + j] = 0xA0;
             }
         }
         glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, font.panelW, font.panelH, GL_RED, GL_UNSIGNED_BYTE, firstPanel);

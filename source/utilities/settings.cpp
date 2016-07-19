@@ -31,7 +31,7 @@ namespace DualityEngine {
             uint32_t panelW = 10;
             uint32_t panelH = 20;
             float baseLineFromTop = 0.8;
-            float stretchMultW = 1.8f;
+            float stretchMultW = 1.7f;
             float stretchMultH = 1.f;
             char firstChar = ' ';
             char lastChar = '~';
@@ -52,7 +52,7 @@ namespace DualityEngine {
                 uint32_t panelW = 10;
                 uint32_t panelH = 20;
                 float baseLineFromTop = 0.8;
-                float stretchMultW = 1.8f;
+                float stretchMultW = 1.7f;
                 float stretchMultH = 1.f;
                 char firstChar = ' ';
                 char lastChar = '~';

@@ -9,7 +9,7 @@ add angveloc boxOne 0 0.002 0
 add linveloc boxOne 0 0 0
 add model boxOne assets/models/SimpleCube/cube.obj
 add spacecontrol boxOne all 0.00005
-add freecam boxOne 1 0.5 1000 0 0 0 0 0 -1 0 1 0
+add freecam boxOne 1 0.1 1000 0 0 0 0 0 -1 0 1 0
 
 bitCube = newent bitCube
 add position bitCube 0 0 0
@@ -20,7 +20,7 @@ add angveloc bitCube 0 0.001 0
 add model bitCube assets/models/BiTCube/bCube.obj
 
 player = newent player
-add freecam player 1 0.1 1000 0 1 4 0 1 -1 0 1 0
+add freecam player 1 0.1 1000 0 0 0 0 0 -1 0 1 0
 add position player 0 0 4
 add orientation player 0 0 0
 add linveloc player 0 0 0
