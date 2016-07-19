@@ -39,20 +39,16 @@ namespace DualityEngine {
         Bank * bank;
         std::vector<std::vector<DUA_id>> registeredIDs;   // These are collections so that a system can operate
         std::vector<DUA_compFlag> requiredComponents;     // on more than one kind of entity if it needs to.
-        uint tockFreq; // every 'tockFreq' times 'tock' is called, it's code will execute. (periodic loop not linked to 'tick')
-		uint counter;
         
     public:        
         System(Bank * bank, std::string name, int numRegisters);
-        ~System();
         void clean();
         std::string getName();
-        void discoverID (const DUA_id& ID);
-        void scrutinizeID (const DUA_id& ID);
+        void discoverID(const DUA_id& ID);
+        void scrutinizeID(const DUA_id& ID);
         bool forceRemoveComp(const DUA_id &ID, const DUA_compFlag &);
-        bool init(std::stringstream& output){ return false; }
+        bool init(std::stringstream& output);
         void tick();
-        void tock();
         void pause();
         void resume();
         void confirmPaused();
@@ -76,13 +72,6 @@ namespace DualityEngine {
             registeredIDs.push_back(std::vector<DUA_id>());
             requiredComponents.push_back(DUA_DEFAULT_COMPONENTS);
         }
-        tockFreq = 1;
-		counter = 0;
-    }
-
-    template<typename Derived_System>
-    System<Derived_System>::~System(){
-        bank = NULL;
     }
 
     template<typename Derived_System>
@@ -91,26 +80,18 @@ namespace DualityEngine {
     }
 
     template<typename Derived_System>
-    void System<Derived_System>::tick() {
-        sys().tickWithTock();
-        ++counter;
-        if (counter % tockFreq == 0) {
-            counter = 0;
-            tock();
-        }
-//		++counter %= tockFreq;
-//		if (!counter) {
-//			tock();
-//		}
+    bool System<Derived_System>::init(std::stringstream& output) {
+        return sys().onInit(output);
     }
 
     template<typename Derived_System>
-    void System<Derived_System>::tock() {
-        sys().tockImpl();
+    void System<Derived_System>::tick() {
+        sys().onTick();
     }
 
     template<typename Derived_System>
     void System<Derived_System>::clean(){
+        sys().onClean();
         unsigned long numRegisters = registeredIDs.size();
         registeredIDs = std::vector<std::vector<DUA_id>>();
         for (unsigned long i = 0; i < numRegisters; ++i){

@@ -22,15 +22,14 @@
 
 namespace DualityEngine {
 
-    class System_Render_BiTcubes : public System<System_Render_BiTcubes>
-    {
+    class System_Render_BiTcubes : public System<System_Render_BiTcubes> {
     private:
 
     public:
         System_Render_BiTcubes(Bank * bank);
-        ~System_Render_BiTcubes();
-        void tick();
-        bool init(std::stringstream& output);
+        void onTick();
+        bool onInit(std::stringstream& output);
+        void onClean();
     };
 
 }

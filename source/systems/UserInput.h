@@ -32,8 +32,9 @@ namespace DualityEngine {
     public:
         System_UserInput(Bank * bank);
         ~System_UserInput();
-        void tick();
-        bool init(std::stringstream& output);
+        void onTick();
+        bool onInit(std::stringstream& output);
+        void onClean();
     };
 
 }

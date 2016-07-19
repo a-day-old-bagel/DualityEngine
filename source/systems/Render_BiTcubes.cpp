@@ -4,9 +4,7 @@
 #include "errorChecks.h"
 #include "Render_BiTcubes.h"
 
-using namespace DualityEngine;
-
-
+namespace DualityEngine {
 
 #define vUN  0.0 ,  0.5 , -0.25
 #define vUS  0.0 ,  0.5 ,  0.25
@@ -49,29 +47,19 @@ using namespace DualityEngine;
 #define nDSW   -0.577350269  , -0.577350269  ,  0.577350269
 
 
-//<editor-fold defaultstate="collapsed" desc="Constructor">
-System_Render_BiTcubes::System_Render_BiTcubes(Bank * bank)
-                  : System<System_Render_BiTcubes>(bank, "BiTCube Rendering System", 0)
-{
-    
+    System_Render_BiTcubes::System_Render_BiTcubes(Bank* bank)
+            : System<System_Render_BiTcubes>(bank, "BiTCube Rendering System", 0) { }
+
+    bool System_Render_BiTcubes::onInit(std::stringstream& engineOut) {
+        checkError(engineOut, "Render_BiTCubes.cpp", __LINE__);
+        return true;
+    }
+
+    void System_Render_BiTcubes::onTick() {
+
+    }
+
+    void System_Render_BiTcubes::onClean() {
+
+    }
 }
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Destructor">
-System_Render_BiTcubes::~System_Render_BiTcubes()
-{
-    
-}
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Init">
-bool System_Render_BiTcubes::init(std::stringstream& engineOut)
-{
-    checkError(engineOut, "Render_BiTCubes.cpp", __LINE__);
-    return true;
-}
-//</editor-fold>
-//<editor-fold defaultstate="collapsed" desc="Tick">
-void System_Render_BiTcubes::tick()
-{    
-    
-}
-//</editor-fold>

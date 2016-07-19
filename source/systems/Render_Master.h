@@ -27,10 +27,9 @@ namespace DualityEngine {
 
     public:
         System_Render_Master(Bank * bank);
-        ~System_Render_Master();
-        void tick();
-        bool init(std::stringstream& output);
-
+        void onTick();
+        bool onInit(std::stringstream& output);
+        void onClean();
     };
 
 }

@@ -3,7 +3,6 @@
  *
  ****************************************************************/
 #include "Render_UI.h"
-#include "errorChecks.h"
 
 namespace DualityEngine {
 
@@ -18,7 +17,7 @@ namespace DualityEngine {
         font.lastChar           = Settings::Console::lastChar;
     }
 
-    bool System_Render_UI::init(std::stringstream &output) {
+    bool System_Render_UI::onInit(std::stringstream &output) {
 
         float stdCharW = 0.01f / Settings::Display::screenAspectRatio;
         float stdCharH = 0.02f;
@@ -41,9 +40,12 @@ namespace DualityEngine {
 
         return true;
     }
-    void System_Render_UI::tick() {
+    void System_Render_UI::onTick() {
         if (console->consoleIsActive || console->menuIsActive) {
             consoleDrawer.draw();
         }
+    }
+    void System_Render_UI::onClean() {
+
     }
 }

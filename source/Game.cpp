@@ -251,10 +251,14 @@ bool Game::killSystems(){
  *************************************/
 bool Game::cleanGameData(){
     renderModelsSystem.clean();
+    renderConsoleSystem.clean();
+    renderMasterSystem.clean();
     renderBackgroundSystem.clean();
     physicsMoveSystem.clean();
     physicsCollisionSystem.clean();
     userInputSystem.clean();
+    scriptingSystem.clean();
+    spaceShipControlSystem.clean();
     
     bank.clean();
     return true;

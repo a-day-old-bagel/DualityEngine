@@ -55,8 +55,9 @@ namespace DualityEngine {
 
     public:
         System_Render_UI(Bank * bank, Console* console);
-        void tick();
-        bool init(std::stringstream& output);
+        void onTick();
+        bool onInit(std::stringstream& output);
+        void onClean();
     };
 
 }

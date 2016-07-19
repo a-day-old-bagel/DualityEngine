@@ -35,9 +35,9 @@ namespace DualityEngine {
 
     public:
         System_Scripting(Bank *);
-        ~System_Scripting();
-        void tick();
-        bool init(std::stringstream&);
+        void onTick();
+        bool onInit(std::stringstream&);
+        void onClean();
         void submitCommand(const std::string&);
         void submitScript(const std::string&);
     };

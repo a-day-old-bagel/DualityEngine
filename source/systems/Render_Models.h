@@ -31,9 +31,9 @@ namespace DualityEngine {
 
     public:
         System_Render_Models(Bank * bank);
-        ~System_Render_Models();
-        void tick();
-        bool init(std::stringstream& output);
+        void onTick();
+        bool onInit(std::stringstream& output);
+		void onClean();
         void forceRemoveComp(const DUA_id& ID, const DUA_compFlag&);
     };
 

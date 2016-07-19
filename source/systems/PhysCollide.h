@@ -17,9 +17,9 @@ namespace DualityEngine {
     {
     public:
         System_PhysCollide(Bank * bank);
-        ~System_PhysCollide();
-        void tick();
-        bool init(std::stringstream& output);
+        void onTick();
+        bool onInit(std::stringstream& output);
+        void onClean();
     };
 
 }

@@ -17,9 +17,9 @@ namespace DualityEngine {
     {  
     public:
         System_Control_SS(Bank * bank);
-        ~System_Control_SS();
-        void tick();
-        bool init(std::stringstream& output);
+        void onTick();
+        bool onInit(std::stringstream& output);
+        void onClean();
     };
 
 }

@@ -10,8 +10,6 @@
 #include <fstream>
 #include "Scripting.h"
 
-#include "controlTypes.h"
-
 #define DUA_COMPCOLL(x, y) std::get<y>(Docs::componentCollections[x])
 
 namespace DualityEngine {
@@ -39,20 +37,20 @@ namespace DualityEngine {
         entityVariables = {};
     }
 
-    System_Scripting::~System_Scripting() {
-
-    }
-
-    bool System_Scripting::init(std::stringstream &output) {
+    bool System_Scripting::onInit(std::stringstream &output) {
         return true;
     }
 
-    void System_Scripting::tick() {
+    void System_Scripting::onTick() {
         while (!commandQueue.empty()) {
             parseCommand(commandQueue.front());
             commandQueue.pop();
         }
         SDL_Delay(20);
+    }
+
+    void System_Scripting::onClean() {
+        entityVariables.clear();
     }
 
     void System_Scripting::submitScript(const std::string &fileName) {
@@ -121,7 +119,7 @@ namespace DualityEngine {
             args.push_back(temp);
             temp.clear();
         }
-        const int numArgs = args.size();
+        const int numArgs = (int)args.size();
         if (numArgs < 1) return;
 
         try {
@@ -175,8 +173,8 @@ namespace DualityEngine {
             } else if (args[0] == "help") {
                 if (numArgs == 1) {
                     bank->dlgt->output("Here are the existing commands:\n");
-                    for (auto command : Docs::commandUsages) {
-                        bank->dlgt->outputStr("    " + command.second);
+                    for (auto cmdUsages : Docs::commandUsages) {
+                        bank->dlgt->outputStr("    " + cmdUsages.second);
                     }
                     bank->dlgt->output(
                             "Type \"help components\" to see a list of available components, \"help [command]\" for command-specific help. ~ key accesses console during play. Use PageUp/PageDown or SHIFT + up/down arrow to scroll.");
@@ -320,7 +318,7 @@ namespace DualityEngine {
     }
 
     void System_Scripting::parseAssignment(const std::vector<std::string> &args) {
-        int numRhsArgs = args.size() - 2;
+        int numRhsArgs = (int)args.size() - 2;
         if (args[2] == "newent") {
             if (numRhsArgs == 2) {
                 DUA_id newID = bank->spawnEntity(args[0].c_str());
@@ -343,7 +341,7 @@ namespace DualityEngine {
     void System_Scripting::parseAddCommand(const std::vector<std::string> &args) {
 
         try {
-            int numCompArgs = args.size() - 3;
+            int numCompArgs = (int)args.size() - 3;
             if (Docs::componentHelps.count(args[1])) {
                 if (numCompArgs != Docs::componentArgs.at(args[1]).second) {
                     if (numCompArgs == 2 && args[3] == "all") {
@@ -405,7 +403,7 @@ namespace DualityEngine {
         try {
             DUA_id entID = prsID(args[2]);
             if (args[1] == DUA_COMPCOLL(9, 1)) {
-                DUA_dbl pwr = prsDbl(args[4]);
+                float pwr = prsFlt(args[4]);
                 bank->addSpaceControl(entID, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr, pwr);
             } else {
                 bank->dlgt->outputStr("<!>    \"all\" keyword not supported for component: " + args[1] + "\n");
@@ -460,7 +458,7 @@ namespace DualityEngine {
     }
 
     DUA_id System_Scripting::prsID(const std::string &IDstring) {
-        DUA_id entID = DUA_NULL_ID;
+        DUA_id entID;
 		try {
 			if (isPositiveInteger(IDstring.c_str())) {
 				entID = strTo<DUA_id>(IDstring.c_str());
@@ -506,7 +504,7 @@ namespace DualityEngine {
     }
 
     DUA_dbl System_Scripting::prsDbl(const std::string &dblString) {
-        DUA_dbl dbl = -1;
+        DUA_dbl dbl;
         try {
             dbl = strTo<DUA_dbl>(dblString.c_str());
 //        if (dbl > std::numeric_limits<DUA_dbl>::max() || dbl > std::numeric_limits<DUA_dbl>::min()) {
@@ -521,7 +519,7 @@ namespace DualityEngine {
     }
 
     DUA_float System_Scripting::prsFlt(const std::string &floatString) {
-        DUA_float flt = -1;
+        DUA_float flt;
         try {
             flt = strTo<DUA_float>(floatString.c_str());
         } catch (std::invalid_argument &invalidException) {
@@ -533,7 +531,7 @@ namespace DualityEngine {
     }
 
     DUA_colorByte System_Scripting::prsClr(const std::string &colorValue) {
-        DUA_colorByte colorVal = -1;
+        DUA_colorByte colorVal;
         try {
             colorVal = strTo<DUA_colorByte>(colorValue.c_str());
             if (colorVal > 255 || colorVal < 0) {
@@ -552,4 +550,5 @@ namespace DualityEngine {
                               "\" for more info. Correct usage is:");
         bank->dlgt->outputStr("    " + Docs::commandUsages.at(command));
     }
+
 }
