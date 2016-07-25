@@ -47,7 +47,6 @@ namespace DualityEngine {
     class System_Render_UI : public System<System_Render_UI>
     {
     private:
-        FontDescriptor font;
         FontRepo fontRepo;
 
         Console* console;

@@ -50,7 +50,7 @@ namespace DualityEngine {
     }
 
 
-    int loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output) {
+    bool loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output) {
         FT_Library library;
         FT_Face face;
 
@@ -157,6 +157,6 @@ namespace DualityEngine {
         delete[] firstPanel;
         delete[] baseTexData;
 
-        return 0;
+        return true;
     }
 }
