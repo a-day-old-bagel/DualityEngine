@@ -6,6 +6,7 @@
  * 
  ******************************************************************************/
 
+#include <SDL_video.h>
 #include "UserInput.h"
 
 namespace DualityEngine {
@@ -82,6 +83,7 @@ namespace DualityEngine {
         } else {
             output << "Using display " << Settings::Display::whichMonitor << std::endl;
         }
+        output << "Display reports " << dm.w << "x" << dm.h << "@" << dm.refresh_rate << std::endl;
         Settings::Display::monitorOffsetX = SDL_WINDOWPOS_CENTERED_DISPLAY(Settings::Display::whichMonitor);
         Settings::Display::monitorOffsetY = SDL_WINDOWPOS_CENTERED_DISPLAY(Settings::Display::whichMonitor);
 
