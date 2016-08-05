@@ -15,7 +15,7 @@ namespace DualityEngine {
         typedef std::unordered_map<std::string, FontDescriptor>::const_iterator loadedFontIterator;
         std::unordered_map<std::string, FontDescriptor> loadedFonts;
         std::string assembleKey(const char* fontName, FontDescriptor& font);
-        void add(const char* fontName, FontDescriptor& font, std::stringstream& out);
+        bool add(const char* fontName, FontDescriptor& font, std::stringstream& out);
     public:
         FontRepo();
         ~FontRepo();

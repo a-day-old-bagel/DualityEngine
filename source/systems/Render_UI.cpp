@@ -7,15 +7,7 @@
 namespace DualityEngine {
 
     System_Render_UI::System_Render_UI(Bank *bank, Console *console)
-            : System<System_Render_UI>(bank, "Console Rendering System", 0), console(console) {
-        font.panelW             = Settings::Console::panelW;
-        font.panelH             = Settings::Console::panelH;
-        font.baseLineFromTop    = Settings::Console::baseLineFromTop;
-        font.stretchMultW       = Settings::Console::stretchMultW;
-        font.stretchMultH       = Settings::Console::stretchMultH;
-        font.firstChar          = Settings::Console::firstChar;
-        font.lastChar           = Settings::Console::lastChar;
-    }
+            : System<System_Render_UI>(bank, "Console Rendering System", 0), console(console) { }
 
     bool System_Render_UI::onInit(std::stringstream &output) {
 

@@ -36,7 +36,7 @@ namespace DualityEngine {
         uint32_t getOffsetToFirstChar();
     };
 
-    int loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output);
+    bool loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output);
 
 }
 
