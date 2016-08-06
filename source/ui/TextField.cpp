@@ -136,9 +136,14 @@ namespace DualityEngine {
         uint32_t end = (uint32_t)std::min((uint32_t)textStr.length(), numCharsTotal - start);
         std::vector<float> charOffsets(end * 8);
         for (uint32_t i = 0; i < end; ++i) {
+            int offsetToChar;
+            if (textStr[i] < font.firstChar || textStr[i] > font.lastChar) { // display error char
+                offsetToChar = 0;
+            } else {
+                offsetToChar = textStr[i] - font.firstChar + font.getOffsetToFirstChar();
+            }
             for (int j = 0; j < 8; j += 2) {
-                charOffsets[i * 8 + j + 0] = (textStr[i] - font.firstChar + font.getOffsetToFirstChar() +
-                                             (j == 2 || j == 6)) * font.getPanelAdvance();
+                charOffsets[i * 8 + j + 0] = (offsetToChar + (j == 2 || j == 6)) * font.getPanelAdvance();
                 charOffsets[i * 8 + j + 1] = j / 4;
             }
         }

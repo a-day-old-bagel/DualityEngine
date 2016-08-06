@@ -8,6 +8,7 @@
 #include <sstream>
 #include <ft2build.h>
 #include FT_FREETYPE_H
+#include FT_GLYPH_H
 #include "settings.h"
 
 namespace DualityEngine {
@@ -37,6 +38,7 @@ namespace DualityEngine {
     };
 
     bool loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output);
+    bool loadSDFfont(FontDescriptor& font, const char* fontFile, std::stringstream& output);
 
 }
 

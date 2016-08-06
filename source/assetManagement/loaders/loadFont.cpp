@@ -13,7 +13,7 @@ namespace DualityEngine {
     }
 
     uint32_t FontDescriptor::getNumTexPanels() {
-        // extra panel for the 'unknown char' character
+        // +1 for the 'unknown char' character and +1 for including first and last in count
         return (uint32_t)(lastChar - firstChar) + 2;
     }
 
@@ -50,6 +50,20 @@ namespace DualityEngine {
     }
 
 
+    static bool uploadTexture() {
+        return false;
+    }
+
+    static bool uploadUnknownChar() {
+        return true;
+    }
+
+#define LOAD_UNKNOWN_CHAR_INSTEAD \
+    output << "\nERROR loading font character " << i << std::endl;                                          \
+    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - font.firstChar + 1) * font.panelW, 0, font.panelW, font.panelH,  \
+    GL_RED, GL_UNSIGNED_BYTE, unknownCharPanel);                                                            \
+    continue
+
     bool loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output) {
         FT_Library library;
         FT_Face face;
@@ -68,15 +82,12 @@ namespace DualityEngine {
             output << "\nERROR loading font.\n";
             return false;
         }
-        // extra factor in width is just 'cause fonts were looking "skinny." Will need modification to use other fonts.
+
         error = FT_Set_Pixel_Sizes(face, font.getFTpixelSizeW(), font.getFTpixelSizeH());
         if (error) {
             output << "\nERROR setting font size.\n";
             return false;
         }
-
-        DUA_uint8* baseTexData = new DUA_uint8[font.getNumTexBytes()];
-        memset(baseTexData, 0x00, font.getNumTexBytes());
 
         glGenTextures(1, &font.texture);
         glBindTexture(GL_TEXTURE_2D, font.texture);
@@ -86,45 +97,38 @@ namespace DualityEngine {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, font.getAtlasWidth(), font.getAtlasHeight(), 0, GL_RED, GL_UNSIGNED_BYTE,
-                     &baseTexData[0]);
+                     NULL);
 
-        checkError(output, "Render_Console.cpp", __LINE__);
+        checkError(output, "loadFont.cpp", __LINE__);
 
-        DUA_colorByte* firstPanel = new DUA_colorByte[font.getNumPanelPix()];
-        for (uint32_t i = 2; i < font.panelH - 2; ++i) {
-            for (uint32_t j = 2; j < font.panelW - 2; ++j) {
-                firstPanel[i * font.panelW + j] = 0xA0;
-            }
-        }
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, font.panelW, font.panelH, GL_RED, GL_UNSIGNED_BYTE, firstPanel);
+        DUA_colorByte* unknownCharPanel = new DUA_colorByte[font.getNumPanelPix()];
+        memset(unknownCharPanel, 0x60, font.getNumPanelPix());
+        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, font.panelW, font.panelH, GL_RED, GL_UNSIGNED_BYTE, unknownCharPanel);
 
         FT_Pos xOffset = 0;
         FT_Pos yOffset = 0;
         FT_Pos xPanelStart;
+        FT_Glyph glyph;
         for (char i = font.firstChar; i <= font.lastChar; i++) {
-            FT_UInt glyph_index = FT_Get_Char_Index(face, (int) i);
+            FT_UInt glyph_index = FT_Get_Char_Index(face, (FT_ULong) i);
 
-            error = FT_Load_Glyph(face, glyph_index /*i*/, FT_LOAD_RENDER);
-            if (error) {
-                output << "\nERROR loading font character " << i << std::endl;
-                glTexSubImage2D(GL_TEXTURE_2D, 0, (i - font.firstChar + 1) * font.panelW, 0, font.panelW, font.panelH,
-                                GL_RED, GL_UNSIGNED_BYTE, firstPanel);
-                continue;
-            }
+            error = FT_Load_Glyph(face, glyph_index, FT_LOAD_DEFAULT);
+            if (error) { LOAD_UNKNOWN_CHAR_INSTEAD; }
 
-            FT_Bitmap bmp = face->glyph->bitmap;
+            error = FT_Get_Glyph( face->glyph, &glyph );
+            if (error) { LOAD_UNKNOWN_CHAR_INSTEAD; }
+            error = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_MONO, NULL, 1);
+            if (error) { LOAD_UNKNOWN_CHAR_INSTEAD; }
+            FT_BitmapGlyph bmpGlyph = reinterpret_cast<FT_BitmapGlyph>(glyph);
+
+            FT_Bitmap bmp = bmpGlyph->bitmap;
             int bmpW = bmp.width;
             int bmpH = bmp.rows;
 
             if (bmp.buffer == NULL) {
-                if (i != ' ') {  // because why would there be a bitmap for 'space'?
-                    output << "No bitmap loaded for character '" << i << "'.\n";
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - font.firstChar + 1) * font.panelW, 0,
-                                    font.panelW, font.panelH, GL_RED, GL_UNSIGNED_BYTE, firstPanel);
-                    continue;
-                }
+                if (i != ' ') { LOAD_UNKNOWN_CHAR_INSTEAD; }
             } else {
-                // units in 1/64 pixel (stupid freetype)
+                // units in 1/64 pixel
                 yOffset = font.getBaseLineFromTopPix() - face->glyph->metrics.horiBearingY / 64;
                 xOffset = face->glyph->metrics.horiBearingX / 64;
                 xPanelStart = (i - font.firstChar + 1) * font.panelW + xOffset;
@@ -143,20 +147,24 @@ namespace DualityEngine {
 
                 glErr = glGetError();
                 if (glErr != GL_NO_ERROR) {
-                    output << "glError while subbing texture for '" << i << "': " << gluErrorString(glErr) << std::endl;
-                    glTexSubImage2D(GL_TEXTURE_2D, 0, (i - font.firstChar + 1) * font.panelW, 0,
-                                    font.panelW, font.panelW, GL_RED, GL_UNSIGNED_BYTE, firstPanel);
-                    continue;
+                    output << gluErrorString(glErr) << ": " << std::endl;
+                    LOAD_UNKNOWN_CHAR_INSTEAD;
                 }
             }
         }
 
+        FT_Done_Glyph(glyph);
         FT_Done_Face(face);
         FT_Done_FreeType(library);
 
-        delete[] firstPanel;
-        delete[] baseTexData;
+        delete[] unknownCharPanel;
 
         return true;
     }
+
+    bool loadSDFfont(FontDescriptor& font, const char* fontFile, std::stringstream& output) {
+
+    }
+
+#undef LOAD_UNKNOWN_CHAR_INSTEAD
 }

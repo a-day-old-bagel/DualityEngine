@@ -11,8 +11,8 @@ namespace DualityEngine {
 
     bool System_Render_UI::onInit(std::stringstream &output) {
 
-        float stdCharW = 0.01f / Settings::Display::screenAspectRatio;
-        float stdCharH = 0.02f;
+        float stdCharW = 0.02f / Settings::Display::screenAspectRatio;
+        float stdCharH = 0.04f;
 
         TextFieldParams consoleParams;
         consoleParams.initType      = TextFieldParams::FIELD_SIZE_CHAR_SIZE;
