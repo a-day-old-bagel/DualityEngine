@@ -25,6 +25,8 @@ namespace DualityEngine {
         int submitLinePending;
         int submitLineActive;
         int numCharsPerLine;
+        std::stringstream preWrapReadyBuffer;
+        bool wrapReady;
         
         void refreshPendingCommand();
     public:

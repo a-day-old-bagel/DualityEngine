@@ -18,7 +18,7 @@ using namespace DualityEngine;
  * constructor was actually pretty.
  *************************************/
 Game::Game() {
-    console.wrapCharsPerLine(50);
+//    console.wrapCharsPerLine(50);
 }
 
 /**************************************
@@ -65,6 +65,8 @@ void Game::Main(){
 
     // Handle any last events that are still laying around
     handleEvents();
+
+    console.output("Shut-down successful.\n");
 }
 
 /****** INTERFACE METHODS ******/

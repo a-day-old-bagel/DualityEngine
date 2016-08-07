@@ -22,14 +22,18 @@ Console::Console() {
 	consoleIsFresh = true;
     bodyHasChangedVisually = true;
     commHasChangedVisually = true;
+    wrapReady = false;
 }
 Console::~Console() {
 
 }
 
 void Console::output(const char* text) {
-    if (logLines.size() > 10000) {
-        std::cout << "CONSOLE OVERLOAD!\n";
+#ifdef DUA_DEBUG_CONSOLE_TO_COUT
+    std::cout << text;
+#endif
+    if (!wrapReady) {
+        preWrapReadyBuffer << text;
         return;
     }
     std::stringstream temp(text);
@@ -45,10 +49,6 @@ void Console::output(const char* text) {
         }
     }
     bodyHasChangedVisually = true;
-
-#ifdef DUA_DEBUG_CONSOLE_TO_COUT
-    std::cout << text;
-#endif
 }
 
 void Console::outputStr(const std::string& text) {
@@ -56,11 +56,12 @@ void Console::outputStr(const std::string& text) {
 }
 
 std::string Console::getLog() {
-    std::string out;
-    for(auto line:logLines){
-        out += line + '\n';
+    std::stringstream out;
+    out << preWrapReadyBuffer.str();
+    for(auto line : logLines){
+        out << line;
     }
-    return out;
+    return out.str();
 }
 
 std::string Console::getLogLine(int line) {
@@ -189,6 +190,9 @@ std::string Console::submitCommand() {
 
 void Console::wrapCharsPerLine(int charsPerLine) {
     numCharsPerLine = charsPerLine;
+    wrapReady = true;
+    outputStr(preWrapReadyBuffer.str());
+    preWrapReadyBuffer.clear();
 }
 
 

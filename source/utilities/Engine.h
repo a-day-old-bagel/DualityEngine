@@ -166,7 +166,7 @@ namespace DualityEngine {
     inline typename std::enable_if<I < sizeof...(Sys_Types), void>::type
     do_ticks(std::stringstream& tempOut, Delegate<void()>* quitGame, bool& escape, std::tuple<Sys_Types...>& systems) {
         if (std::get<I>(systems)->isQuit()){
-            tempOut << std::get<I>(systems)->getName() << " aknowledges the call to exit.\n";
+            tempOut << std::get<I>(systems)->getName() << " is dead.\n";
         } else if (std::get<I>(systems)->isPaused()){
             escape = false;
             if (!std::get<I>(systems)->isPauseConfirmed()){
@@ -177,10 +177,10 @@ namespace DualityEngine {
             try{
                 std::get<I>(systems)->tick();             // THIS IS THE IMPORTANT LINE
             } catch (const char* err) {
-                tempOut << "<!>    ERROR in " << std::get<I>(systems)->getName() << ".tick : " << err << std::endl;
+                tempOut << "<!>    ERROR in " << std::get<I>(systems)->getName() << " : " << err << std::endl;
                 (*quitGame)();
             } catch (...) {
-                tempOut << "<!>    EXCEPTION thrown in " << std::get<I>(systems)->getName() << ".tick : ";
+                tempOut << "<!>    EXCEPTION thrown in " << std::get<I>(systems)->getName() << " : ";
                 std::exception_ptr eptr = std::current_exception();
                 try {
                     std::rethrow_exception(eptr);
@@ -210,8 +210,8 @@ namespace DualityEngine {
         std::stringstream tempOut;  // This serves as a log for stuff happening in this thread
         std::string threadName = *(threadData->threadName);
 
-        std::string initBlockText_Begin = "@============@  " + threadName + " initialization log BEGINS  @============@\n\n";
-        std::string initBlockText_End   = "\n@============@  " + threadName + " initialization log ENDS  @============@\n\n";
+        std::string initBlockText_Begin = "@============@  " + threadName + " init @============@\n\n";
+        std::string initBlockText_End   = "\n" + threadName + " init complete.\n\n";
 
         // Log the beginning of systems' initialization steps
         tempOut << initBlockText_Begin;

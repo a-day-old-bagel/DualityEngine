@@ -117,7 +117,7 @@ namespace DualityEngine {
 
             error = FT_Get_Glyph( face->glyph, &glyph );
             if (error) { LOAD_UNKNOWN_CHAR_INSTEAD; }
-            error = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_MONO, NULL, 1);
+            error = FT_Glyph_To_Bitmap(&glyph, FT_RENDER_MODE_NORMAL, NULL, 1);
             if (error) { LOAD_UNKNOWN_CHAR_INSTEAD; }
             FT_BitmapGlyph bmpGlyph = reinterpret_cast<FT_BitmapGlyph>(glyph);
 
@@ -163,7 +163,7 @@ namespace DualityEngine {
     }
 
     bool loadSDFfont(FontDescriptor& font, const char* fontFile, std::stringstream& output) {
-
+        return false;
     }
 
 #undef LOAD_UNKNOWN_CHAR_INSTEAD
