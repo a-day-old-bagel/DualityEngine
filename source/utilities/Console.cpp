@@ -59,7 +59,7 @@ std::string Console::getLog() {
     std::stringstream out;
     out << preWrapReadyBuffer.str();
     for(auto line : logLines){
-        out << line;
+        out << line << std::endl;
     }
     return out.str();
 }
@@ -192,6 +192,7 @@ void Console::wrapCharsPerLine(int charsPerLine) {
     numCharsPerLine = charsPerLine;
     wrapReady = true;
     outputStr(preWrapReadyBuffer.str());
+    preWrapReadyBuffer.str("");
     preWrapReadyBuffer.clear();
 }
 

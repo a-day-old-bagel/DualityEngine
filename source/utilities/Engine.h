@@ -166,7 +166,8 @@ namespace DualityEngine {
     inline typename std::enable_if<I < sizeof...(Sys_Types), void>::type
     do_ticks(std::stringstream& tempOut, Delegate<void()>* quitGame, bool& escape, std::tuple<Sys_Types...>& systems) {
         if (std::get<I>(systems)->isQuit()){
-            tempOut << std::get<I>(systems)->getName() << " is dead.\n";
+            // do nothing - escape will remain true unless set to false by other systems
+//            tempOut << std::get<I>(systems)->getName() << " is dead.\n";
         } else if (std::get<I>(systems)->isPaused()){
             escape = false;
             if (!std::get<I>(systems)->isPauseConfirmed()){
@@ -211,7 +212,7 @@ namespace DualityEngine {
         std::string threadName = *(threadData->threadName);
 
         std::string initBlockText_Begin = "@============@  " + threadName + " init @============@\n\n";
-        std::string initBlockText_End   = "\n" + threadName + " init complete.\n\n";
+        std::string initBlockText_End   = "";
 
         // Log the beginning of systems' initialization steps
         tempOut << initBlockText_Begin;
