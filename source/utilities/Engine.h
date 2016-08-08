@@ -223,7 +223,7 @@ namespace DualityEngine {
 
         if (systemsInitializedCorrectly){
             // Add initialization success message to end of log
-            tempOut << threadName << " is entering main loop...\n" << initBlockText_End;
+            tempOut << threadName << " is entering main loop...\n\n" << initBlockText_End;
             // Output the thread's log to Game console.
             (*output)(tempOut.str().c_str());
             // Clear the thread's log.
@@ -238,7 +238,7 @@ namespace DualityEngine {
                 // (this line unrolls into a code block for each system)
                 do_ticks(tempOut, quitGame, escape, systems);
             }
-            tempOut << "Terminating " << threadName << "\n\n";
+            tempOut << "Terminating " << threadName << "\n";
             // Output the thread's reports to Game console
             (*output)(tempOut.str().c_str());
 

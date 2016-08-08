@@ -23,7 +23,7 @@ namespace DualityEngine {
         glGenBuffers(2, buffers);
 
         float halfW = (font->lastChar - font->firstChar) / 2;
-        float halfH = 0.5f;
+        float halfH = 1.f;
         std::vector<float> verts = {
                 -halfW, -halfH, 0.f,
                  halfW, -halfH, 0.f,

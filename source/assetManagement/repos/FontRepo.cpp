@@ -22,7 +22,7 @@ namespace DualityEngine {
     }
 
     bool FontRepo::add(const char* fontName, FontDescriptor& font, std::stringstream& out) {
-        if (loadFont(font, fontName, out)) {
+        if (loadSDFfont(font, fontName, out)) {
             loadedFonts.emplace(assembleKey(fontName, font), font);
             return true;
         }
