@@ -11,6 +11,7 @@
 #include "loadFont.h"
 
 namespace DualityEngine {
+
     class FontRepo {
         typedef std::unordered_map<std::string, FontDescriptor>::const_iterator loadedFontIterator;
         std::unordered_map<std::string, FontDescriptor> loadedFonts;

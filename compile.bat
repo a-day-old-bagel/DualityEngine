@@ -52,6 +52,7 @@ cl /c /I"%GLEW_PATH%\include" /I"%SDL2_PATH%\include" /I"%ASSIMP_PATH%\include" 
  "%top%source\assetManagement\loaders\loadFont.cpp"                      ^
  "%top%source\assetManagement\loaders\loadShaders.cpp"                   ^
  "%top%source\assetManagement\programmaticAssets\DebugBackground.cpp"    ^
+ "%top%source\assetManagement\programmaticAssets\TextureView.cpp"        ^
  "%top%source\assetManagement\repos\FontRepo.cpp"                	     ^
  "%top%source\assetManagement\repos\MeshRepo.cpp"                  	     ^
  "%top%source\assetManagement\repos\ShaderRepo.cpp"                	     ^
@@ -97,6 +98,7 @@ link /OUT:DualityEngine.exe /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi3
  loadFont.obj              ^
  loadShaders.obj           ^
  DebugBackground.obj       ^
+ TextureView.obj           ^
  FontRepo.obj              ^
  MeshRepo.obj              ^
  ShaderRepo.obj            ^

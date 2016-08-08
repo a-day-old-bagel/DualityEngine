@@ -42,6 +42,7 @@ namespace DualityEngine {
             glBindVertexArray(repo.vaoHandle);
             DUA_uint32 time = bank->getTime();
             bank->updateActiveCamera(time); // Camera now updated here for all rendering systems
+            // TODO: examine this for race conditions
             glm::mat4 vp = bank->pFreeCameraCurrent->viewProjection;
             for (unsigned long i = 0; i < repo.activeMeshes.size(); ++i) {
                 MeshTableEntry* mesh = &repo.activeMeshes.at(i);
@@ -64,7 +65,7 @@ namespace DualityEngine {
 
 
     void System_Render_Models::onClean() {
-
+        repo.clean();
     }
 
     void System_Render_Models::forceRemoveComp(const DUA_id& ID, const DUA_compFlag& component) {

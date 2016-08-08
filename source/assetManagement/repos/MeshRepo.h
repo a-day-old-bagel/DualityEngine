@@ -49,6 +49,7 @@ namespace DualityEngine {
 		bool init(std::stringstream& output);
         bool registerModel(DUA_id id, Model* model, std::stringstream& output);
         bool deRegisterModel(DUA_id id, std::stringstream& output);
+		void clean();
     };
 
 }

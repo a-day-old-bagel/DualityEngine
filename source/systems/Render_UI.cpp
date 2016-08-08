@@ -30,9 +30,16 @@ namespace DualityEngine {
         }
         consoleDrawer.setPosition(0.f, 0.5f);
 
+        FontDescriptor viewFont;
+        viewFont.panelW = (uint32_t)(consoleParams.screenResX * consoleParams.charSize.w);
+        viewFont.panelH = (uint32_t)(consoleParams.screenResY * consoleParams.charSize.h);
+        consoleParams.repo->request(consoleParams.fontName.c_str(), viewFont, output);
+        textureView.init(&viewFont, output);
+
         return true;
     }
     void System_Render_UI::onTick() {
+        textureView.draw(bank->pFreeCameraCurrent);
         if (console->consoleIsActive || console->menuIsActive) {
             consoleDrawer.draw();
         }

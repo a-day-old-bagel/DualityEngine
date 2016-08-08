@@ -29,9 +29,9 @@ namespace DualityEngine {
     bool System_Render_Background::setUpResources(std::stringstream& engineOut) {
         bool success = true;
 
-        DUA_float corners[24] = {-1.0f, -1.0f, 0.5f, 1.0f,
-                                  3.0f, -1.0f, 0.5f, 1.0f,
-                                 -1.0f,  3.0f, 0.5f, 1.0f};
+        DUA_float corners[24] = {-1.0f, -1.0f, 1.0f, 1.0f,
+                                  3.0f, -1.0f, 1.0f, 1.0f,
+                                 -1.0f,  3.0f, 1.0f, 1.0f};
 
         shdrLoc = loadShaders("skyQuad.vert", "skyQuad.frag", engineOut);
 
@@ -96,7 +96,6 @@ namespace DualityEngine {
     }
 
     void System_Render_Background::onTick() {
-        glDepthMask(GL_FALSE);
         if (bank->activeFreeCameraID != DUA_NULL_ID) {
 
             glBindVertexArray(VAOloc);
@@ -106,6 +105,7 @@ namespace DualityEngine {
 
             glUseProgram(shdrLoc);
             glUniformMatrix4fv(unifLoc_projM, 1, GL_FALSE, &(bank->pFreeCameraCurrent->projection)[0][0]);
+            // TODO: this line possibly causing the flickering (race condition)
             glUniformMatrix4fv(unifLoc_viewM, 1, GL_FALSE, &(bank->pFreeCameraCurrent->view)[0][0]);
             glUniform1i(unifLoc_txtur, 2);
 
@@ -114,7 +114,6 @@ namespace DualityEngine {
         } else {
             noCamBackground.render();
         }
-        glDepthMask(GL_TRUE);
 
         if (queuedFileName) {
             if (queuedFileType) {

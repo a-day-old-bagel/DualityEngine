@@ -9,12 +9,12 @@ namespace DualityEngine {
 
     // corners of the quad in the middle of the screen
     const DUA_float DebugBackground::corners[24] = { // 24 elements
-            -1.0, -1.0, 0.5, 1.0,
-            1.0, -1.0, 0.5, 1.0,
-            1.0, 1.0, 0.5, 1.0,
-            1.0, 1.0, 0.5, 1.0,
-            -1.0, 1.0, 0.5, 1.0,
-            -1.0, -1.0, 0.5, 1.0};
+            -1.f, -1.f, 1.f, 1.f,
+            1.f, -1.f, 1.f, 1.f,
+            1.f, 1.f, 1.f, 1.f,
+            1.f, 1.f, 1.f, 1.f,
+            -1.f, 1.f, 1.f, 1.f,
+            -1.f, -1.f, 1.f, 1.f};
 
     // these define the colored pixels that will be used in the bitmap data below.
     #define BG0 0x00, 0x00, 0x00 // black

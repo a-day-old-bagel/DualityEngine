@@ -8,6 +8,8 @@
 #ifndef CAMERA_FREE_H
 #define	CAMERA_FREE_H
 
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
 #include <glm/glm.hpp>
 #include "settings.h"
 #include "Component.h"

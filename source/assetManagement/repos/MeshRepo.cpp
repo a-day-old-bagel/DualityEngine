@@ -144,4 +144,13 @@ namespace DualityEngine {
 			return false;
 		}
     }
+
+	void MeshRepo::clean() {
+		vboUsedBytes = 0;
+		vboUsedVerts = 0;
+		meshData.clear();
+        activeMeshes.clear();
+        fileToActiveMeshIndex.clear();
+        idToActiveMeshIndex.clear();
+	}
 }
