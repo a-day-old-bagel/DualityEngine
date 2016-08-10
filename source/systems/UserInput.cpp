@@ -291,6 +291,8 @@ namespace DualityEngine {
                 case (SDLK_ESCAPE):
                     keyPressed_esc();
                     return;
+                case SDLK_F12:
+                    bank->dlgt->screenShot();
                 default:
                     break;
             }

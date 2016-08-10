@@ -18,6 +18,7 @@ namespace DualityEngine {
         void setPosition(float x, float y);
         void updateText();
         void draw();
+        FontDescriptor getFont();
     };
 }
 

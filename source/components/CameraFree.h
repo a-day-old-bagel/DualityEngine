@@ -34,16 +34,17 @@ namespace DualityEngine {
             view = glm::lookAt(glm::vec3(transform * eyeOrig), glm::vec3(transform * focusOrig), glm::vec3(rotation * upOrig));            
         }
         inline void updateProjection(){
-            projection = glm::perspective(fov, Settings::Display::screenAspectRatio, zNear, zFar);
+            projection = glm::perspective(fov, aspect, zNear, zFar);
         }
         inline void updateViewProjection(){
             viewProjection = projection * view;
         }
-        
+
         DUA_float fov;
+        DUA_float aspect = Settings::Display::screenAspectRatio;
         DUA_float zNear;
         DUA_float zFar;
-        
+
         glm::vec4 eyeOrig;
         glm::vec4 focusOrig;
         glm::vec4 upOrig;
@@ -51,9 +52,6 @@ namespace DualityEngine {
         glm::mat4 view;
         glm::mat4 projection;
         glm::mat4 viewProjection;
-        
-//        bool viewRecompute = true;
-//        bool projRecompute = true;
     };
 
 }

@@ -14,6 +14,10 @@
 
 namespace DualityEngine {
 
+    struct SdfData {
+        float fuzzRadiusRatio   = Settings::Font::Sdf::Default::fuzzRadiusRatio;
+    };
+
     struct FontDescriptor {
 
         GLuint texture;
@@ -25,17 +29,27 @@ namespace DualityEngine {
         float stretchMultH      = Settings::Font::Default::stretchMultH;
         char firstChar          = Settings::Font::Default::firstChar;
         char lastChar           = Settings::Font::Default::lastChar;
+        bool sdf                = false;
+        SdfData sdfData;
 
         int getBaseLineFromTopPix();
         float getPanelAdvance();
-        uint32_t getNumTexPanels();
-        uint32_t getNumTexBytes();
+        uint32_t getNumPanels();
+        uint32_t getNumPixTotal();
         uint32_t getFTpixelSizeW();
         uint32_t getFTpixelSizeH();
         uint32_t getAtlasWidth();
         uint32_t getAtlasHeight();
         uint32_t getNumPanelPix();
         uint32_t getOffsetToFirstChar();
+
+        uint32_t getNumPixTotalSdf();
+        uint32_t getNumPanelPixSdf();
+        uint32_t getPanelWSdf();
+        uint32_t getPanelHSdf();
+        uint32_t getPixOffsetXSdf();
+        uint32_t getPixOffsetYSdf();
+        uint32_t getAtlasWidthSdf();
     };
 
     bool loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output);

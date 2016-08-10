@@ -9,7 +9,7 @@
 #include "CameraFree.h"
 
 namespace DualityEngine {
-    class TextureView {
+    class DebugFontView {
         GLuint buffers[2];
         GLuint vaoLoc;
         GLuint shdrLoc;
@@ -17,11 +17,14 @@ namespace DualityEngine {
         GLint  attrLoc_uvCoo;
         GLint  unifLoc_mvpMx;
         GLint  unifLoc_txtre;
+        GLint  unifLoc_pxAdvX;
+        GLint  unifLoc_pxAdvY;
+        GLint  unifLoc_fzzRad;
 
         FontDescriptor* font;
 
     public:
-        bool init(FontDescriptor *loadedFont, std::stringstream &out);
+        bool init(FontDescriptor *loadedFont, std::stringstream &out, float x, float y, float z);
         void draw(CameraFree* camera);
     };
 }

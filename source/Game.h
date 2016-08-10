@@ -132,8 +132,9 @@ namespace DualityEngine {
                 DELEGATE(&Console::getCurrentLogLine, &console),
                 DELEGATE(&Console::setState, &console),
                 DELEGATE(&Console::traverseLog, &console),
-                DELEGATE(&System_Render_Background::queueSkyChange, &renderBackgroundSystem)
-        };;
+                DELEGATE(&System_Render_Background::queueSkyChange, &renderBackgroundSystem),
+                DELEGATE(&System_Render_Master::takeScreenShot, &renderMasterSystem),
+        };
 
         /*************
          * An in-game CONSOLE and output logging device

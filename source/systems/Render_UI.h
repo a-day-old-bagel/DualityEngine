@@ -41,7 +41,7 @@
 #include "FontRepo.h"
 #include "TextField.h"
 #include "ConsoleDrawer.h"
-#include "TextureView.h"
+#include "DebugFontView.h"
 
 namespace DualityEngine {
 
@@ -53,7 +53,11 @@ namespace DualityEngine {
         Console* console;
         ConsoleDrawer consoleDrawer;
 
-        TextureView textureView;
+        DebugFontView consoleFontView;
+        FontDescriptor consoleFont;
+
+        DebugFontView sdfView;
+        FontDescriptor sdfFont;
 
     public:
         System_Render_UI(Bank * bank, Console* console);

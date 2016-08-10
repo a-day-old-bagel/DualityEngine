@@ -17,6 +17,7 @@ namespace DualityEngine {
         std::string fontName;
         uint32_t screenResX;
         uint32_t screenResY;
+        bool sdf = false;
 
         struct {
             float x;
@@ -74,6 +75,7 @@ namespace DualityEngine {
 
         uint32_t getNumLines();
         uint32_t getCharsPerLine();
+        FontDescriptor getFont();
     };
 }
 

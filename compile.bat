@@ -36,6 +36,7 @@ cl /c /I"%GLEW_PATH%\include" /I"%SDL2_PATH%\include" /I"%ASSIMP_PATH%\include" 
  /I"%top%source\assetManagement\loaders"  	         ^
  /I"%top%source\assetManagement\programmaticAssets"  ^
  /I"%top%source\assetManagement\repos"  	         ^
+ /I"%top%source\assetManagement\savers"              ^
  /I"%top%source\bank"                                ^
  /I"%top%source\components"                          ^
  /I"%top%source\entities"                            ^
@@ -52,7 +53,7 @@ cl /c /I"%GLEW_PATH%\include" /I"%SDL2_PATH%\include" /I"%ASSIMP_PATH%\include" 
  "%top%source\assetManagement\loaders\loadFont.cpp"                      ^
  "%top%source\assetManagement\loaders\loadShaders.cpp"                   ^
  "%top%source\assetManagement\programmaticAssets\DebugBackground.cpp"    ^
- "%top%source\assetManagement\programmaticAssets\TextureView.cpp"        ^
+ "%top%source\assetManagement\programmaticAssets\DebugFontView.cpp"      ^
  "%top%source\assetManagement\repos\FontRepo.cpp"                	     ^
  "%top%source\assetManagement\repos\MeshRepo.cpp"                  	     ^
  "%top%source\assetManagement\repos\ShaderRepo.cpp"                	     ^
@@ -78,6 +79,7 @@ cl /c /I"%GLEW_PATH%\include" /I"%SDL2_PATH%\include" /I"%ASSIMP_PATH%\include" 
  "%top%source\utilities\errorChecks.cpp"                                 ^
  "%top%source\utilities\Event.cpp"                                       ^
  "%top%source\utilities\helpDocs.cpp"                                    ^
+ "%top%source\utilities\ScreenShot.cpp"                                  ^
  "%top%source\utilities\settings.cpp"                                    ^
  "%top%source\utilities\TimePiece.cpp"                                   ^
  "%top%source\utilities\toString.cpp"
@@ -98,7 +100,7 @@ link /OUT:DualityEngine.exe /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi3
  loadFont.obj              ^
  loadShaders.obj           ^
  DebugBackground.obj       ^
- TextureView.obj           ^
+ DebugFontView.obj         ^
  FontRepo.obj              ^
  MeshRepo.obj              ^
  ShaderRepo.obj            ^
@@ -124,6 +126,7 @@ link /OUT:DualityEngine.exe /INCREMENTAL:NO /NOLOGO kernel32.lib user32.lib gdi3
  errorChecks.obj           ^
  Event.obj                 ^
  helpDocs.obj              ^
+ ScreenShot.obj			   ^
  settings.obj              ^
  TimePiece.obj             ^
  toString.obj

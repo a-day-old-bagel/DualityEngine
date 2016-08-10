@@ -57,11 +57,23 @@ namespace DualityEngine {
                 char firstChar = ' ';
                 char lastChar = '~';
             }
+
+            namespace Sdf {
+
+                namespace Default {
+                    float fuzzRadiusRatio = 0.3f;
+                }
+            }
         }
         
         namespace Sky{
             std::string fileName = DUA_DEFAULT_SKYMAP;
             std::string fileType = DUA_DEFAULT_SKYFILETYPE;
+        }
+
+        namespace ScreenShot {
+            uint32_t width = 1920;
+            uint32_t height = 1080;
         }
     }
     

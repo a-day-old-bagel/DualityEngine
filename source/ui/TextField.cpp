@@ -19,6 +19,7 @@ namespace DualityEngine {
     }
 
     bool TextField::init(TextFieldParams& params) {
+        font.sdf = params.sdf;
 
         // These metrics will be used to generate geometry
         float fieldW, fieldH;
@@ -184,6 +185,10 @@ namespace DualityEngine {
 
     uint32_t TextField::getCharsPerLine() {
         return numCharsPerLine;
+    }
+
+    FontDescriptor TextField::getFont() {
+        return font;
     }
 
 }

@@ -181,6 +181,11 @@ namespace DualityEngine {
                 extern float baseLineFromTop, stretchMultW, stretchMultH;
                 extern char firstChar, lastChar;
             }
+            namespace Sdf {
+                namespace Default {
+                    extern float fuzzRadiusRatio;
+                }
+            }
         }
 
         namespace TextField {
@@ -191,6 +196,10 @@ namespace DualityEngine {
         
         namespace Sky {
             extern std::string fileName, fileType;
+        }
+
+        namespace ScreenShot {
+            extern uint32_t width, height;
         }
     }
     

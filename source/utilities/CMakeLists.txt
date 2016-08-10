@@ -14,6 +14,7 @@ set( SOURCE_FILES ${SOURCE_FILES}
         "${DIR}/Event.cpp"          "${DIR}/Event.h"
         "${DIR}/helpDocs.cpp"       "${DIR}/helpDocs.h"
                                     "${DIR}/readerwriterqueue.h"
+        "${DIR}/ScreenShot.cpp"     "${DIR}/ScreenShot.h"
         "${DIR}/settings.cpp"       "${DIR}/settings.h"
         "${DIR}/TimePiece.cpp"      "${DIR}/TimePiece.h"
         "${DIR}/toString.cpp"       "${DIR}/toString.h"

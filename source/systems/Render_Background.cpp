@@ -29,9 +29,9 @@ namespace DualityEngine {
     bool System_Render_Background::setUpResources(std::stringstream& engineOut) {
         bool success = true;
 
-        DUA_float corners[24] = {-1.0f, -1.0f, 1.0f, 1.0f,
-                                  3.0f, -1.0f, 1.0f, 1.0f,
-                                 -1.0f,  3.0f, 1.0f, 1.0f};
+        DUA_float corners[24] = {-1.0f, -1.0f, 1.f, 1.0f,
+                                  3.0f, -1.0f, 1.f, 1.0f,
+                                 -1.0f,  3.0f, 1.f, 1.0f};
 
         shdrLoc = loadShaders("skyQuad.vert", "skyQuad.frag", engineOut);
 

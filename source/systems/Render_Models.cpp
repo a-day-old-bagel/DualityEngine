@@ -40,15 +40,13 @@ namespace DualityEngine {
 
         if (bank->activeFreeCameraID != DUA_NULL_ID) {
             glBindVertexArray(repo.vaoHandle);
-            DUA_uint32 time = bank->getTime();
-            bank->updateActiveCamera(time); // Camera now updated here for all rendering systems
             // TODO: examine this for race conditions
             glm::mat4 vp = bank->pFreeCameraCurrent->viewProjection;
             for (unsigned long i = 0; i < repo.activeMeshes.size(); ++i) {
                 MeshTableEntry* mesh = &repo.activeMeshes.at(i);
                 for (unsigned long j = 0; j < mesh->instances.size(); ++j) {
                     DUA_id id = mesh->instances.at(j);
-                    glm::mat4 m = bank->getModMat(id, time);
+                    glm::mat4 m = bank->getModMat(id, bank->getCurrRenderTime());
                     glm::mat4 mvp = vp * m;
                     glUseProgram(shdrLoc);
                     glUniformMatrix4fv(unifLoc_MVP, 1, GL_FALSE, &mvp[0][0]);

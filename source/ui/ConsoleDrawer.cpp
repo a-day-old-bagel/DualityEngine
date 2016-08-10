@@ -57,5 +57,9 @@ namespace DualityEngine {
         text.draw();
     }
 
+    FontDescriptor ConsoleDrawer::getFont() {
+        return text.getFont();
+    }
+
 }
 

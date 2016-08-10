@@ -3,6 +3,8 @@
  ****************************************************************/
 #include "Render_Master.h"
 #include "errorChecks.h"
+#include <ctime>
+#include <iomanip>
 
 namespace DualityEngine {
 
@@ -70,17 +72,38 @@ namespace DualityEngine {
 
         checkError(engineOut, "after GL configuration (at end of System_Render_Master::init()");
 
+        screenShotTaker.init(Settings::ScreenShot::width, Settings::ScreenShot::height);
+
         return true;
     }
 
     void System_Render_Master::onTick() {
-        //...rendering to framebuffer is finished already in other systems...
-        SDL_GL_SwapWindow(bank->pWindow);
-        glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
-        //...rendering to framebuffer starts again in other systems after this...
+        if (screenShotInProgress) {
+            screenShotInProgress = false;
+            auto t = std::time(nullptr);
+            auto tm = *std::localtime(&t);
+            std::stringstream fileNameStream;
+            fileNameStream << "screenshot" << std::put_time(&tm, "%Y%m%d%H%M%S") << ".png";
+            screenShotTaker.writeImageToFile(fileNameStream.str().c_str());
+            screenShotTaker.revertScreenShotState();
+        } else if (screenShotQueued) {
+            screenShotQueued = false;
+            screenShotInProgress = true;
+            screenShotTaker.injectScreenShotState(*bank);
+        } else {
+            //...rendering to framebuffer is finished already in other systems...
+            SDL_GL_SwapWindow(bank->pWindow);
+            glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+            //...rendering to framebuffer starts again in other systems after this...
+        }
+        bank->updateActiveCamera(bank->updateRenderTime()); // Camera updated here for all rendering systems
     }
 
     void System_Render_Master::onClean() {
 
+    }
+
+    void System_Render_Master::takeScreenShot() {
+        screenShotQueued = true;
     }
 }

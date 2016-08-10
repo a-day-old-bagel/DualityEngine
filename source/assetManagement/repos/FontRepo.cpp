@@ -17,12 +17,13 @@ namespace DualityEngine {
     std::string FontRepo::assembleKey(const char* fontName, FontDescriptor& font) {
         std::stringstream keyBuilder;
         keyBuilder << fontName;
-        keyBuilder << font.panelW << font.panelH;
+        keyBuilder << " " << font.panelW << "x" << font.panelH;
+        keyBuilder << (font.sdf ? "_sdf" : "");
         return keyBuilder.str();
     }
 
     bool FontRepo::add(const char* fontName, FontDescriptor& font, std::stringstream& out) {
-        if (loadSDFfont(font, fontName, out)) {
+        if (font.sdf ? loadSDFfont(font, fontName, out) : loadFont(font, fontName, out)) {
             loadedFonts.emplace(assembleKey(fontName, font), font);
             return true;
         }
@@ -33,13 +34,13 @@ namespace DualityEngine {
         loadedFontIterator result = loadedFonts.find(assembleKey(fontName, font));
         if (result == loadedFonts.end()) {
             if (add(fontName, font, out)) {
-                out << "Font " << fontName << " loaded into repo.\n";
+                out << "Font '" << assembleKey(fontName, font) << "' loaded into repo.\n";
                 return 1;
             } else {
-                out << "Font " << fontName << " could not be loaded!\n";
+                out << "Font '" << assembleKey(fontName, font) << "' could not be loaded!\n";
             }
         } else {
-            out << "Font " << fontName << " retrieved from repo.\n";
+            out << "Font '" << assembleKey(fontName, font) << "' retrieved from repo.\n";
             font = result->second;
         }
         return 0;

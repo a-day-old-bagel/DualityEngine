@@ -15,6 +15,7 @@
 #include <SDL_opengl.h>
 
 #include "System.h"
+#include "ScreenShot.h"
 //</editor-fold>
 
 namespace DualityEngine {
@@ -24,12 +25,16 @@ namespace DualityEngine {
     private:
 
         SDL_GLContext context;
+        ScreenShotTaker screenShotTaker;
+        bool screenShotQueued = false;
+        bool screenShotInProgress = false;
 
     public:
         System_Render_Master(Bank * bank);
         void onTick();
         bool onInit(std::stringstream& output);
         void onClean();
+        void takeScreenShot();
     };
 
 }

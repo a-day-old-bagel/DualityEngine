@@ -211,7 +211,10 @@ namespace DualityEngine {
 
         /* TIME PIECE */
         static TimePiece timePiece;
+        DUA_uint32 currRenderTime;
         DUA_uint32 getTime();
+        DUA_uint32 updateRenderTime();
+        DUA_uint32 getCurrRenderTime();
         
         bool switchToControl(const DUA_id id, ControlTypes::type controlType);
         void scrutinizeControl(const DUA_id id, ControlTypes::type controlType);

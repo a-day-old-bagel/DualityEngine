@@ -30,16 +30,20 @@ namespace DualityEngine {
         }
         consoleDrawer.setPosition(0.f, 0.5f);
 
-        FontDescriptor viewFont;
-        viewFont.panelW = (uint32_t)(consoleParams.screenResX * consoleParams.charSize.w);
-        viewFont.panelH = (uint32_t)(consoleParams.screenResY * consoleParams.charSize.h);
-        consoleParams.repo->request(consoleParams.fontName.c_str(), viewFont, output);
-        textureView.init(&viewFont, output);
+        consoleFont = consoleDrawer.getFont();
+        consoleFontView.init(&consoleFont, output, 0, 5.5, 0);
+
+        sdfFont.panelW = (uint32_t)(consoleParams.screenResX * consoleParams.charSize.w);
+        sdfFont.panelH = (uint32_t)(consoleParams.screenResY * consoleParams.charSize.h);
+        sdfFont.sdf = true;
+        fontRepo.request(consoleParams.fontName.c_str(), sdfFont, output);
+        sdfView.init(&sdfFont, output, 0, 3, 0);
 
         return true;
     }
     void System_Render_UI::onTick() {
-        textureView.draw(bank->pFreeCameraCurrent);
+        sdfView.draw(bank->pFreeCameraCurrent);
+        consoleFontView.draw(bank->pFreeCameraCurrent);
         if (console->consoleIsActive || console->menuIsActive) {
             consoleDrawer.draw();
         }

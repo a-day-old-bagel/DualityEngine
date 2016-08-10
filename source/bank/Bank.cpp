@@ -829,4 +829,13 @@ namespace DualityEngine {
     DUA_uint32 Bank::getTime() {
         return timePiece.getTime();
     }
+
+    DUA_uint32 Bank::updateRenderTime() {
+        currRenderTime = getTime();
+        return currRenderTime;
+    }
+
+    DUA_uint32 Bank::getCurrRenderTime() {
+        return currRenderTime;
+    }
 }
