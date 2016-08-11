@@ -33,8 +33,8 @@ namespace DualityEngine {
         consoleFont = consoleDrawer.getFont();
         consoleFontView.init(&consoleFont, output, 0, 5.5, 0);
 
-        sdfFont.panelW = (uint32_t)(consoleParams.screenResX * consoleParams.charSize.w);
-        sdfFont.panelH = (uint32_t)(consoleParams.screenResY * consoleParams.charSize.h);
+        sdfFont.panelW = 16;
+        sdfFont.panelH = 32;
         sdfFont.sdf = true;
         fontRepo.request(consoleParams.fontName.c_str(), sdfFont, output);
         sdfView.init(&sdfFont, output, 0, 3, 0);

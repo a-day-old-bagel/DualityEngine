@@ -28,7 +28,12 @@ namespace DualityEngine {
         glBindVertexArray(vaoLoc);
         glGenBuffers(2, buffers);
 
-        float halfW = (float)font->getAtlasWidth() / (float)font->getAtlasHeight();
+        float halfW;
+        if (font->sdf) {
+            halfW = (float) font->getAtlasWidthSdf() / (float) font->getAtlasHeightSdf();
+        } else {
+            halfW = (float) font->getAtlasWidth() / (float) font->getAtlasHeight();
+        }
         float halfH = 1.f;
         std::vector<float> verts = {
                 x + -halfW, y + -halfH, z + 0.f,
@@ -67,9 +72,9 @@ namespace DualityEngine {
         glUniform1i(unifLoc_txtre, 1);
         glUniformMatrix4fv(unifLoc_mvpMx, 1, GL_FALSE, &camera->viewProjection[0][0]);
         if (font->sdf) {
-            glUniform1f(unifLoc_pxAdvX, 1.f / font->getAtlasWidth());
-            glUniform1f(unifLoc_pxAdvY, 1.f / font->getAtlasHeight());
-            glUniform1i(unifLoc_fzzRad, 6);
+            glUniform1f(unifLoc_pxAdvX, 1.f / font->getAtlasWidthSdf());
+            glUniform1f(unifLoc_pxAdvY, 1.f / font->getAtlasHeightSdf());
+            glUniform1i(unifLoc_fzzRad, (int) font->getFuzzRadiusPixY());
         }
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, font->texture);

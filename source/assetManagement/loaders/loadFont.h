@@ -47,9 +47,10 @@ namespace DualityEngine {
         uint32_t getNumPanelPixSdf();
         uint32_t getPanelWSdf();
         uint32_t getPanelHSdf();
-        uint32_t getPixOffsetXSdf();
-        uint32_t getPixOffsetYSdf();
+        uint32_t getFuzzRadiusPixX();
+        uint32_t getFuzzRadiusPixY();
         uint32_t getAtlasWidthSdf();
+        uint32_t getAtlasHeightSdf();
     };
 
     bool loadFont(FontDescriptor& font, const char* fontFile, std::stringstream& output);

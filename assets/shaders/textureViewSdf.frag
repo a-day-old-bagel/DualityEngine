@@ -24,12 +24,13 @@ float neighborVal(int blockOrder, vec2 uv) {
 
 float getDistFrom(int blockOrder) {
     vec2 neighborCoord = getCoordFromCenter(blockOrder);
-    return sqrt(pow(neighborCoord.x, 2) + pow(neighborCoord.y, 2));
+//    return sqrt(pow(neighborCoord.x, 2) + pow(neighborCoord.y, 2));
+    return max(abs(neighborCoord.x), abs(neighborCoord.y));
 }
 
 float nearestDist(vec2 uv) {
     float dist = fuzzRadius;
-    for (int i = 0; i < pow(fuzzRadius * 2, 2); ++i) {
+    for (int i = 0; i < pow(fuzzRadius * 2 + 1, 2); ++i) {
         dist = mix(dist, min(dist, getDistFrom(i)), step(1.0, neighborVal(i, uv)));
     }
     return dist;

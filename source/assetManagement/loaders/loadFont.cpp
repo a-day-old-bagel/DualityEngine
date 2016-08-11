@@ -60,23 +60,27 @@ namespace DualityEngine {
     }
 
     uint32_t FontDescriptor::getPanelWSdf() {
-        return panelW + 2 * getPixOffsetXSdf();
+        return panelW + 2 * getFuzzRadiusPixX();
     }
 
     uint32_t FontDescriptor::getPanelHSdf() {
-        return panelH + 2 * getPixOffsetYSdf();
+        return panelH + 2 * getFuzzRadiusPixY();
     }
 
-    uint32_t FontDescriptor::getPixOffsetXSdf() {
+    uint32_t FontDescriptor::getFuzzRadiusPixX() {
         return (uint32_t)ceil(sdfData.fuzzRadiusRatio * panelW);
     }
 
-    uint32_t FontDescriptor::getPixOffsetYSdf() {
+    uint32_t FontDescriptor::getFuzzRadiusPixY() {
         return (uint32_t)ceil(sdfData.fuzzRadiusRatio * panelH);
     }
 
     uint32_t FontDescriptor::getAtlasWidthSdf() {
         return getPanelWSdf() * getNumPanels();
+    }
+
+    uint32_t FontDescriptor::getAtlasHeightSdf() {
+        return getPanelHSdf();
     }
 
 #define LOAD_UNKNOWN_CHAR_INSTEAD \
@@ -224,7 +228,7 @@ namespace DualityEngine {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST); //GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, font.getAtlasWidth(), font.getAtlasHeight(), 0, GL_RED, GL_FLOAT,
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, font.getAtlasWidthSdf(), font.getAtlasHeightSdf(), 0, GL_RED, GL_FLOAT,
                      zeroedTexData.data());
 
         checkError(output, "loadFont.cpp", __LINE__);
@@ -238,8 +242,8 @@ namespace DualityEngine {
                 unknownCharPanel[i * font.panelW + j] = 1.f;
             }
         }
-        glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, font.panelW, font.panelH, GL_RED, GL_FLOAT,
-                        unknownCharPanel.data());
+        glTexSubImage2D(GL_TEXTURE_2D, 0, font.getFuzzRadiusPixX(), font.getFuzzRadiusPixY(), font.panelW, font.panelH,
+                        GL_RED, GL_FLOAT, unknownCharPanel.data());
 
         for (char i = font.firstChar; i <= font.lastChar; i++) {
             if (i == ' ') { continue; }
@@ -265,9 +269,10 @@ namespace DualityEngine {
                 bytesFromBits.push_back((uint8_t)((bmpBits.buffer[j / 8] & (1 << (7 - (j % 8)))) == 0 ? 0.f : 1.f));
             }
             // units in 1/64 pixel
-            FT_Pos yOffset = font.getBaseLineFromTopPix() - face->glyph->metrics.horiBearingY / 64;
+            FT_Pos yOffset = font.getBaseLineFromTopPix() - face->glyph->metrics.horiBearingY / 64 +
+                    font.getFuzzRadiusPixY();
             FT_Pos xOffset = face->glyph->metrics.horiBearingX / 64;
-            FT_Pos xPanelStart = (i - font.firstChar + 1) * font.panelW + xOffset;
+            FT_Pos xPanelStart = (i - font.firstChar + 1) * font.getPanelWSdf() + xOffset + font.getFuzzRadiusPixX();
             glTexSubImage2D(GL_TEXTURE_2D, 0, (GLint)xPanelStart, (GLint)std::max(yOffset, (FT_Pos)0), bmpW, bmpH,
                             GL_RED, GL_FLOAT, bytesFromBits.data());
 
