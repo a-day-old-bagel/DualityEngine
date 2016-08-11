@@ -12,7 +12,7 @@ namespace DualityEngine {
         font = loadedFont;
 
         if (font->sdf) {
-            shdrLoc = loadShaders("textureViewSdf.vert", "textureViewSdf.frag", out);
+            shdrLoc = loadShaders("genSdfFontTexture.vert", "genSdfFontTexture.frag", out);
             unifLoc_pxAdvX = glGetUniformLocation(shdrLoc, "pxAdvX");
             unifLoc_pxAdvY = glGetUniformLocation(shdrLoc, "pxAdvY");
             unifLoc_fzzRad = glGetUniformLocation(shdrLoc, "fuzzRadius");
@@ -74,7 +74,7 @@ namespace DualityEngine {
         if (font->sdf) {
             glUniform1f(unifLoc_pxAdvX, 1.f / font->getAtlasWidthSdf());
             glUniform1f(unifLoc_pxAdvY, 1.f / font->getAtlasHeightSdf());
-            glUniform1i(unifLoc_fzzRad, (int) font->getFuzzRadiusPixY());
+            glUniform1i(unifLoc_fzzRad, (int) std::max(font->getFuzzRadiusPixY(), font->getFuzzRadiusPixX()));
         }
         glActiveTexture(GL_TEXTURE1);
         glBindTexture(GL_TEXTURE_2D, font->texture);

@@ -5,7 +5,7 @@
 #include "settings.h"
 #include "ScreenShot.h"
 
-#define STB_IMAGE_WRITE_IMPLEMENTATION
+//#define STB_IMAGE_WRITE_IMPLEMENTATION
 #include "stb_image_write.h"
 
 #define CHECK_ERROR(context) GLenum error = glGetError(); if (error != GL_NO_ERROR) { fprintf(stderr, context " 0x%04x\n", error); }
