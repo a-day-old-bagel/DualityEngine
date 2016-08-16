@@ -16,6 +16,8 @@ namespace DualityEngine {
 
     struct SdfData {
         float fuzzRadiusRatio   = Settings::Font::Sdf::Default::fuzzRadiusRatio;
+        uint32_t inputW         = Settings::Font::Sdf::Default::inputW;
+        uint32_t inputH         = Settings::Font::Sdf::Default::inputH;
     };
 
     struct FontDescriptor {

@@ -46,13 +46,14 @@ float getDistSmoothFine(int blockOrder) {
 float nearestDist() {
     float dist = fuzzRadius;
     for (int i = 0; i < pow(fuzzRadius * 2 + 1, 2); ++i) {
-        dist = mix(dist, min(dist, getDistSmoothCrude(i)), step(0.001, neighborVal(i)));
+        dist = mix(dist, min(dist, getDistSharpCrude(i)), step(0.001, neighborVal(i)));
     }
     return dist;
 }
 
 void main() {
     float dist = 1.0 - nearestDist() / fuzzRadius;
-//    fragColor = vec4(0.0, step(0.9, dist), step(0.6, dist), 1.0);
     fragColor = vec4(0.0, dist, 0.0, 1.0);
+//    fragColor = vec4(0.0, step(0.9, dist), step(0.6, dist), 1.0);
+//    fragColor = vec4(0.0, texture(tex, uv).r, texture(tex, uv).r, 1.0);
 }

@@ -62,6 +62,8 @@ namespace DualityEngine {
 
                 namespace Default {
                     float fuzzRadiusRatio = 0.3f;
+                    uint32_t inputW = 4096;
+                    uint32_t inputH = 4096;
                 }
             }
         }

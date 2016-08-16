@@ -184,6 +184,7 @@ namespace DualityEngine {
             namespace Sdf {
                 namespace Default {
                     extern float fuzzRadiusRatio;
+                    extern uint32_t inputW, inputH;
                 }
             }
         }
