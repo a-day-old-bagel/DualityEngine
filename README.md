@@ -45,12 +45,12 @@ It also makes saving and loading game states naturally very simple.
 
 Duality Engine also aims to investigate the worlds of **Physically Based Rendering** and procedurally generated destructible terrains and objects, possibly via **non-cubic voxels.** And what would an amature WIP game engine be without taking a swing at **machine learning** and **neural net AI** for good measure?
 ----------
-###If we think of any other schmoozy buzzwords to stick in, this section may be expanded...
-####[shmooze] LOCK FREE
-####[shmooze] um... ORGANIC?
+### If we think of any other schmoozy buzzwords to stick in, this section may be expanded...
+#### [shmooze] LOCK FREE
+#### [shmooze] um... ORGANIC?
 
 _____________________
-##**Setup Guide using CMake**
+## **Setup Guide using CMake**
 Make sure the following are installed: SDL2, OPENGL version 3.3+, GLEW, Open Asset Importer, FreeType2, CMake version 3.3+
 On windows, you'll need to add the above as environment variables. eg: name:SDL2 value: "C:\Program Files (x86)\SDL2-2.0.3"
 
@@ -59,7 +59,7 @@ On windows, you'll need to add the above as environment variables. eg: name:SDL2
 * run make from that same build directory
 
 _____________________
-##**Setup Guide for CLion**
+## **Setup Guide for CLion**
 Make sure the following are installed: SDL2, OPENGL version 3.3+, GLEW, Open Asset Importer, FreeType2
 ### On Debian linux run:
 
@@ -73,10 +73,10 @@ Make sure the following are installed: SDL2, OPENGL version 3.3+, GLEW, Open Ass
 
 * sudo apt-get install libglm-dev
 
-####Open the project in CLion
-####Build the project, set the target to DualityEngine, and then click run.
+#### Open the project in CLion
+#### Build the project, set the target to DualityEngine, and then click run.
 _____________________
-###**Controls**
-####use  ~  (tilde) to access the in-game console, into which you may type "help" to see a listing of available commands.
-####Given an entity possessing camera, position, orientation, linear velocity, angular velocity, and control components (currently limited to spaceship-style controls), movement inputs are set up in the standard WASD-mouse configuration (or arrow keys to rotate view also work for now).
-####TL;DR : once running ("no cam" should be visible in black window), hit ~, type "run scene0", fiddle.
+### **Controls**
+#### use  ~  (tilde) to access the in-game console, into which you may type "help" to see a listing of available commands.
+#### Given an entity possessing camera, position, orientation, linear velocity, angular velocity, and control components (currently limited to spaceship-style controls), movement inputs are set up in the standard WASD-mouse configuration (or arrow keys to rotate view also work for now).
+#### TL;DR : once running ("no cam" should be visible in black window), hit ~, type "run scene0", fiddle.
