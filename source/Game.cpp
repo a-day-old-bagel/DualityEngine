@@ -59,7 +59,7 @@ void Game::Main(){
     }
 
     // Wait for all game threads to exit, then the game is over.
-	SDL_WaitThread(graphicsThread, NULL);
+	  SDL_WaitThread(graphicsThread, NULL);
     SDL_WaitThread(physicsThread, NULL);
     SDL_WaitThread(scriptingThread, NULL);
 
@@ -75,9 +75,9 @@ void Game::Main(){
  * NEW GAME : Game Initializer
  * sets up game
  *************************************/
-void Game::NewGame(){ 
+void Game::NewGame(){
     if (pauseBankDependentSystems()){
-        cleanGameData();    
+        cleanGameData();
         resumeBankDependentSystems();
         bankDelegates.output("World cleared.\n");
     }
@@ -143,7 +143,7 @@ bool Game::engageEngines(){
     physicsEngine.engage();
     scriptingEngine.engage();
     graphicsEngine.engage();
-    
+
     return true;
 }
 
@@ -155,7 +155,7 @@ bool Game::engageEngines(){
  * paused before returning.
  *************************************/
 bool Game::waitForBankDependentSystemsToPause(){
-    
+
     int startTime = SDL_GetTicks();
     bool done = false;
     while(!done){
@@ -166,9 +166,9 @@ bool Game::waitForBankDependentSystemsToPause(){
         done &= renderMasterSystem.isPauseConfirmed();
         done &= renderConsoleSystem.isPauseConfirmed();
         done &= physicsCollisionSystem.isPauseConfirmed();  //PROBLEMS WITH THIS BEING EXECUTED FROM CONTROL SYS... THREAD LOCKS
-        done &= userInputSystem.isPauseConfirmed();         
+        done &= userInputSystem.isPauseConfirmed();
         done &= spaceShipControlSystem.isPauseConfirmed();
-        
+
         if (SDL_GetTicks() - startTime > Settings::Systems::systemsPauseTimeout){
             return false;
         }
@@ -220,8 +220,8 @@ bool Game::resumeBankDependentSystems(){
     renderConsoleSystem.resume();
     renderModelsSystem.resume();
     renderBackgroundSystem.resume();
-    userInputSystem.resume();    
-    
+    userInputSystem.resume();
+
     return true;
 }
 
@@ -261,7 +261,7 @@ bool Game::cleanGameData(){
     userInputSystem.clean();
     scriptingSystem.clean();
     spaceShipControlSystem.clean();
-    
+
     bank.clean();
     return true;
 }

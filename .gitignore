@@ -3,3 +3,4 @@
 build*
 clionBuild
 vs
+cmake-build-*

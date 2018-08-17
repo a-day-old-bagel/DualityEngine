@@ -5,12 +5,16 @@
 
 # No lesser version of cMake may be used.
 cmake_minimum_required( VERSION 3.3 )
+set( LIBS ${LIBS} duality_extern)
 
 # Declare the project in question
 project( DualityEngine )
 
 # Tell cMake where to look for the modules that search for SDL2 and Assimp (the others come with cMake)
 set( CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake" )
+
+# Build and assemble third-party submodule dependencies
+add_subdirectory( "./extern" )
 
 # Find SDL 2.0
 find_package( SDL2 REQUIRED )
@@ -27,12 +31,8 @@ find_package( OpenGL REQUIRED )
 include_directories( ${OPENGL_INCLUDE_DIR} )
 set( LIBS ${LIBS} ${OPENGL_LIBRARIES} )
 
-# Find Assimp
-find_package( Assimp REQUIRED )
-include_directories( assimp_INCLUDE_DIRS )
-set( LIBS ${LIBS} ${assimp_LIBRARIES} )
-
 # Find Freetype2
+set(FREETYPE_LIBRARY "$ENV{FREETYPE_DIR}/win64/freetype.lib")
 find_package( Freetype REQUIRED )
 include_directories( ${FREETYPE_INCLUDE_DIR_ft2build} )
 include_directories( ${FREETYPE_INCLUDE_DIR_freetype2} )
