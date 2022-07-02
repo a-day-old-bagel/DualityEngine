@@ -1,3 +1,12 @@
+# THIS PROJECT IS DISCONTINUED AS OF 2018
+#### It was a fun learning experience, but is not fit for public consumption.
+
+$~$
+
+$~$
+
+$~$
+
 # Duality, yet another WIP 3D Game Engine
 #### An amature venture with the goals of learning and having fun
 > Duality Engine is written in **C++**
